@@ -56,28 +56,37 @@ const KTP = (() => {
     return skor <= Math.max(1, Math.floor(n.length / bagi)) ? terbaik : null;
   }
 
-  // Foto -> teks. Gambar diperkecil & dibuat hitam-putih dulu agar lebih terbaca.
+  // Pembaca disiapkan sekali (unduh + muat), lalu dipakai berulang agar cepat.
+  let pekerja = null, lapor = () => {};
+  function siapkan() {
+    if (!pekerja) pekerja = Tesseract.createWorker('ind', 1, {
+      workerPath: '/ocr/worker.min.js', corePath: '/ocr/core', langPath: '/ocr/lang', workerBlobURL: false,
+      logger: (m) => { if (m.status === 'recognizing text') lapor(m.progress); },
+    }).then(async (w) => { await w.setParameters({ tessedit_pageseg_mode: '6', preserve_interword_spaces: '1' }); return w; })
+      .catch((e) => { pekerja = null; throw e; });
+    return pekerja;
+  }
+
+  // Foto -> teks. Gambar diperkecil & dibuat hitam-putih dulu agar cepat dan lebih terbaca.
   async function baca(berkas, kemajuan) {
     const gbr = await createImageBitmap(berkas);
-    const skala = Math.min(1, 1800 / Math.max(gbr.width, gbr.height));
+    const skala = Math.min(1, 1280 / gbr.width);
     const kanvas = document.createElement('canvas');
     kanvas.width = Math.round(gbr.width * skala); kanvas.height = Math.round(gbr.height * skala);
     const c = kanvas.getContext('2d', { willReadFrequently: true });
     c.filter = 'grayscale(1) contrast(1.6)';
     c.drawImage(gbr, 0, 0, kanvas.width, kanvas.height);
     gbr.close();
-    const worker = await Tesseract.createWorker('ind', 1, {
-      workerPath: '/ocr/worker.min.js', corePath: '/ocr/core', langPath: '/ocr/lang', workerBlobURL: false,
-      logger: (m) => { if (m.status === 'recognizing text') kemajuan(m.progress); },
-    });
     try {
-      const { data } = await worker.recognize(kanvas);
+      const w = await siapkan();
+      lapor = kemajuan;
+      const { data } = await w.recognize(kanvas);
       return data.text;
     } finally {
-      await worker.terminate();
+      lapor = () => {};
       c.clearRect(0, 0, kanvas.width, kanvas.height); kanvas.width = kanvas.height = 0;
     }
   }
-  return { urai, cocokkan, baca, judul };
+  return { urai, cocokkan, baca, judul, siapkan };
 })();
 if (typeof module !== 'undefined') module.exports = KTP;

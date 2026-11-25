@@ -1,7 +1,7 @@
 // Pendaftaran jamaah baru: foto KTP -> isi otomatis -> periksa -> simpan.
 // Foto KTP hanya diproses di perangkat ini; tidak dikirim, tidak disimpan. NIK tidak diambil.
 const $ = (id) => document.getElementById(id);
-let semuaKec = [], semuaDesa = [], kecBoleh = null, dobelDiperiksa = '';
+let semuaKec = [], semuaDesa = [], kecBoleh = null, dobelDiperiksa = '', siapBaca = false;
 const ISIAN = ['nama', 'kecamatan', 'desa', 'alamat', 'umur', 'pekerjaan'];
 
 const pesan = (t) => { $('pesan').textContent = t; };
@@ -82,7 +82,7 @@ function jepret() {
   const skala = Math.max(l.width / v.videoWidth, l.height / v.videoHeight);
   const geserX = (v.videoWidth * skala - l.width) / 2, geserY = (v.videoHeight * skala - l.height) / 2;
   const sx = (b.left - l.left + geserX) / skala, sy = (b.top - l.top + geserY) / skala;
-  const sw = b.width / skala, sh = b.height / skala;
+  const sw = (b.width / skala) * 0.72, sh = b.height / skala; // kiri 72%: tulisan KTP; foto di kanan tidak perlu dibaca
   const k = document.createElement('canvas');
   k.width = Math.round(sw); k.height = Math.round(sh);
   k.getContext('2d').drawImage(v, sx, sy, sw, sh, 0, 0, k.width, k.height);
@@ -97,7 +97,7 @@ $('kamera-layar').addEventListener('keydown', (e) => { if (e.key === 'Escape') t
 async function bacaGambar(berkas) {
   pesan('');
   $('membaca').hidden = false;
-  $('membaca-teks').textContent = 'Menyiapkan pembaca KTP...'; $('membaca-persen').textContent = ''; $('bilah-isi').style.width = '5%';
+  $('membaca-teks').textContent = siapBaca ? 'Membaca KTP...' : 'Menyiapkan pembaca KTP...'; $('membaca-persen').textContent = ''; $('bilah-isi').style.width = '5%';
   for (const b of document.querySelectorAll('.foto-pilih label, .foto-pilih button')) b.setAttribute('aria-disabled', 'true');
   try {
     const teks = await KTP.baca(berkas, (p) => {
@@ -184,5 +184,7 @@ $('form').addEventListener('submit', async (e) => {
     $('kecamatan').innerHTML += kec.filter((k) => !kecBoleh || kecBoleh.has(k.id)).map((k) => `<option value="${k.id}">${hurufAman(k.nama)}</option>`).join('');
     $('mursyid').innerHTML += murs.map((m) => `<option value="${m.id}">${hurufAman(m.nama)}</option>`).join('');
     kosongkan();
+    // siapkan pembaca KTP di latar belakang selagi petugas bersiap memotret
+    KTP.siapkan().then(() => { siapBaca = true; }).catch(() => {});
   } catch (e) { tanganiGalat(e, pesan); }
 })();
