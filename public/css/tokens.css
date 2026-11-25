@@ -1,4 +1,6 @@
-/* Sistem warna resmi SILSILAH (dari KTA). Satu sumber untuk semua halaman. */
+/* Sistem warna dan huruf resmi SILSILAH (warna dari KTA). Satu sumber untuk semua halaman. */
+@font-face{font-family:"Plus Jakarta Sans";src:url("/fonts/plus-jakarta-sans.woff2") format("woff2");
+  font-weight:200 800;font-style:normal;font-display:swap}
 :root{
   --hijau-jamiyyah:#0B6B2E; /* header, menu, tombol utama */
   --hijau-daun:#1E9E3A;     /* tombol kedua, ikon, berhasil */
@@ -10,5 +12,7 @@
   /* warna kelompok modul: hanya ikon & label kecil */
   --grup-pondasi:#1E9E3A; --grup-ruhani:#1E6FB8; --grup-kepedulian:#C99A00; --grup-amanah:#B3261E;
   --radius:14px; --gap:16px;
-  --font:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif;
+  --font:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  /* skala huruf: tidak ada yang di bawah 16px (aturan 12) */
+  --fs-isi:1rem; --fs-isian:1.0625rem; --fs-judul:1.5rem; --fs-sub:1.125rem;
 }

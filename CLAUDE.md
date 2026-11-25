@@ -69,6 +69,7 @@ supabase/migrations/  file migrasi database
 ```
 
 ## Cara kerja
+- Huruf: Plus Jakarta Sans (OFL, `public/fonts/`), skala huruf di `tokens.css` (`--fs-*`), tidak ada di bawah 16px.
 - Logo resmi: `public/icons/` (dibuat dari logo Jam'iyyah, 9 bintang emas).
 - Setiap ganti file yang di-cache, naikkan `VERSI` di `public/sw.js` DAN angka `?v=` pada link CSS/JS di semua HTML (kalau tidak, HP memakai CSS lama).
 - Sebelum lapor selesai: coba di lebar layar HP 360px, tablet 768px, dan laptop 1280px, cek Supabase advisors, pastikan tidak ada rahasia di repo.
