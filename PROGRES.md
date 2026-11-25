@@ -23,10 +23,10 @@ Mulai: 2026-11-25 (Kang Salman: "Bismillah").
 - Langkah 3/3b disetujui Kang 2026-11-25 ("lanjut langkah 4").
 
 ## Sedang dikerjakan
-- **Langkah 4, Data Jamaah** (mulai 2026-11-25): `jamaah.html` (cari nama/10 angka nomor, saring kecamatan/desa/status, 20 per halaman, tabel jadi kartu di HP), `jamaah-isi.html` (rincian, tambah, ubah, status Aktif/Tidak aktif/Wafat + tanggal wafat), beranda bermenu sesuai peran. Nomor Anggota otomatis (`nomor_anggota_seq`, mulai 1165105645; migrasi `20261125040000`). Fungsi `cek_login_anggota` lama sudah dihapus. Menunggu uji Kang.
+- **Langkah 4, Data Jamaah** (mulai 2026-11-25): `jamaah.html` (cari nama/10 angka nomor, saring kecamatan/desa/status, 20 per halaman, tabel jadi kartu di HP), `jamaah-isi.html` (rincian, tambah, ubah, status Aktif/Tidak aktif/Wafat + tanggal wafat), beranda bermenu sesuai peran. Nomor Anggota otomatis (`nomor_anggota_seq`, mulai 1165105645; migrasi `20261125040000`). Fungsi `cek_login_anggota` lama sudah dihapus. Kang lanjut ke Langkah 5 (2026-11-25). Tambahan atas permintaan Kang: kolom No urut, info 20 per halaman, status berwarna (Aktif hijau, Tidak aktif kuning, Wafat merah), semua kolom di laptop.
+- **Langkah 5, Pendaftaran** (mulai 2026-11-25): `pendaftaran.html` + `js/ktp.js`. Foto KTP dibaca di perangkat (Tesseract.js 5.1.1, disimpan sendiri di `public/ocr/`, bahasa Indonesia best_int), foto tidak dikirim/disimpan, baris NIK dibuang sebelum diurai. Isi otomatis: nama, umur (dari tanggal lahir), alamat+RT/RW, desa, kecamatan (dicocokkan ke daftar, boleh sedikit salah ketik), pekerjaan (dicocokkan ke daftar baku KTP). Peringatan dobel (nama mirip di desa sama). CSP: `wasm-unsafe-eval`, `worker-src 'self'`, `img-src blob:`. Menunggu uji Kang.
 
 ## Berikutnya (satu per satu, tunggu persetujuan Kang)
-5. **Pendaftaran**: formulir jamaah baru dengan scan KTP untuk isi otomatis; foto KTP dan NIK langsung dibuang.
 6. **KTA Digital**: tampilan seperti kartu asli, QR baru aman (kunci di admin pusat), PIN 6 angka, bisa dicetak, halaman publik "Cek Keaslian KTA"; KTA lama tetap berlaku.
 7. **Portal Anggota**: jamaah login lalu melihat KTA dan datanya sendiri.
 

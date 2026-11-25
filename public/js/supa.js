@@ -83,6 +83,10 @@ async function dbHalaman(jalur, dari, sampai) {
 // Profil akun yang sedang masuk: { nama, peran, jamaah_id }
 async function profilSaya() {
   const [p] = await dbGet(`pengguna?select=nama,peran,jamaah_id&user_id=eq.${await idSaya()}`);
+  // tampilkan menu sesuai peran
+  const nav = (id, boleh) => { const el = document.getElementById(id); if (el) el.hidden = !boleh; };
+  nav('nav-jamaah', p && PERAN_LIHAT_JAMAAH.includes(p.peran));
+  nav('nav-daftar', p && PERAN_UBAH_JAMAAH.includes(p.peran));
   return p || null;
 }
 

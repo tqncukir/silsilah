@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pendaftaran · SILSILAH TQN Cukir</title>
+<meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=17">
+<link rel="stylesheet" href="/css/app.css?v=17">
+</head>
+<body class="hal-app">
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <a href="/beranda.html">Beranda</a>
+      <a href="/jamaah.html">Data Jamaah</a>
+      <a href="/pendaftaran.html" aria-current="page">Pendaftaran</a>
+    </nav>
+    <button class="app-keluar" id="keluar" type="button">Keluar</button>
+  </div>
+</header>
+
+<main class="app-isi app-sempit">
+  <div class="judul-baris">
+    <div>
+      <h1>Pendaftaran Jamaah</h1>
+      <p class="judul-sub">Foto KTP agar data terisi otomatis, lalu periksa sebelum disimpan.</p>
+    </div>
+  </div>
+  <p id="pesan" class="pesan" role="alert"></p>
+
+  <section id="tahap-foto" class="panel" aria-label="Foto KTP">
+    <div class="privasi">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6l7-3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <p><strong>Foto KTP dibaca di perangkat ini saja.</strong> Foto tidak dikirim, tidak disimpan, dan NIK tidak dicatat.</p>
+    </div>
+    <div class="foto-pilih">
+      <label class="btn btn-utama btn-pas" for="kamera">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        Foto KTP
+      </label>
+      <input id="kamera" type="file" accept="image/*" capture="environment" class="sr-only">
+      <label class="btn btn-kedua btn-pas" for="galeri">Pilih dari galeri</label>
+      <input id="galeri" type="file" accept="image/*" class="sr-only">
+      <button type="button" class="tautan" id="manual">Isi manual tanpa KTP</button>
+    </div>
+    <ul class="tips">
+      <li>Letakkan KTP di meja yang terang, tidak silau.</li>
+      <li>Seluruh kartu masuk foto dan tulisannya tegak.</li>
+    </ul>
+    <div id="membaca" class="membaca" hidden>
+      <p><span id="membaca-teks">Menyiapkan pembaca KTP...</span> <span id="membaca-persen" class="angka"></span></p>
+      <div class="bilah" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-labelledby="membaca-teks"><span id="bilah-isi"></span></div>
+    </div>
+  </section>
+
+  <form id="form" class="panel form" hidden novalidate aria-labelledby="f-judul">
+    <h2 id="f-judul" class="form-judul">Data jamaah baru</h2>
+    <p class="judul-sub" id="f-sub">Nomor Anggota dibuat otomatis setelah disimpan.</p>
+    <p class="hasil-baca" id="hasil-baca" hidden>Isian bertanda hijau dibaca dari KTP. Periksa lagi, hasil baca bisa keliru.</p>
+    <div class="form-kisi">
+      <div class="isian lebar">
+        <label for="nama">Nama lengkap <span class="wajib">wajib</span></label>
+        <input id="nama" maxlength="120" required autocapitalize="words">
+      </div>
+      <div class="isian">
+        <label for="kecamatan">Kecamatan <span class="wajib">wajib</span></label>
+        <select id="kecamatan" required><option value="">Pilih kecamatan</option></select>
+      </div>
+      <div class="isian">
+        <label for="desa">Desa <span class="wajib">wajib</span></label>
+        <select id="desa" required disabled><option value="">Pilih kecamatan dulu</option></select>
+      </div>
+      <div class="isian lebar">
+        <label for="alamat">Alamat</label>
+        <input id="alamat" maxlength="160" aria-describedby="k-alamat">
+        <p class="ket" id="k-alamat">Dusun, RT/RW. Tanpa nomor HP.</p>
+      </div>
+      <div class="isian">
+        <label for="umur">Umur saat mendaftar</label>
+        <input id="umur" inputmode="numeric" maxlength="3">
+      </div>
+      <div class="isian">
+        <label for="pekerjaan">Pekerjaan</label>
+        <input id="pekerjaan" maxlength="60" autocapitalize="words">
+      </div>
+      <div class="isian">
+        <label for="mursyid">Mursyid</label>
+        <select id="mursyid"><option value="">Belum diisi</option></select>
+      </div>
+      <div class="isian">
+        <label for="tanggal">Tanggal daftar</label>
+        <input id="tanggal" type="date">
+      </div>
+    </div>
+    <div id="dobel" class="dobel" hidden role="alert">
+      <p><strong>Mungkin sudah terdaftar.</strong> Jamaah dengan nama mirip di desa yang sama:</p>
+      <ul id="dobel-daftar"></ul>
+      <p class="ket">Kalau memang orang yang berbeda, tekan Simpan lagi.</p>
+    </div>
+    <p id="pesan-form" class="pesan" role="alert"></p>
+    <div class="tombol-baris">
+      <button type="button" class="btn btn-kedua btn-pas" id="ulang">Foto ulang</button>
+      <button type="submit" class="btn btn-utama btn-pas btn-masuk" id="simpan"><span class="putar" aria-hidden="true"></span><span class="teks">Simpan</span></button>
+    </div>
+  </form>
+
+  <section id="selesai" class="panel selesai" hidden aria-live="polite">
+    <div class="selesai-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="32" height="32"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <h2>Alhamdulillah, sudah terdaftar</h2>
+    <p id="selesai-teks"></p>
+    <div class="tombol-baris tengah">
+      <a class="btn btn-kedua btn-pas" id="lihat-data" href="/jamaah.html">Lihat data</a>
+      <button type="button" class="btn btn-utama btn-pas" id="lagi">Daftarkan jamaah lain</button>
+    </div>
+  </section>
+</main>
+<script src="/js/supa.js?v=17" defer></script>
+<script src="/ocr/tesseract.min.js" defer></script>
+<script src="/js/ktp.js?v=17" defer></script>
+<script src="/js/pendaftaran.js?v=17" defer></script>
+</body>
+</html>

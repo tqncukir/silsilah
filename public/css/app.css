@@ -237,3 +237,28 @@ body:has(.kol-luas) .app-atas-isi{max-width:1280px}
 .menu-ikon{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:12px}
 .grup-pondasi{background:#E5F4E3;color:var(--grup-pondasi)}
 .menu-ubin[hidden],.app-nav a[hidden]{display:none}
+
+/* Pendaftaran */
+.privasi{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:12px;background:var(--hijau-pupus);color:var(--hijau-jamiyyah)}
+.privasi svg{flex:none;margin-top:2px}
+.privasi p{margin:0;color:var(--hitam);font-size:var(--fs-kecil)}
+.privasi strong{font-weight:600}
+.foto-pilih{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:16px 0 8px}
+.foto-pilih label[aria-disabled],.foto-pilih button[aria-disabled]{opacity:.5;pointer-events:none}
+.foto-pilih input:focus-visible + label,.foto-pilih label:focus-within{outline:3px solid var(--kuning-rosyid);outline-offset:2px}
+.tips{margin:4px 0 0;padding-left:20px;color:var(--abu);font-size:var(--fs-kecil)}
+.membaca{margin-top:16px}
+.membaca p{margin:0 0 6px;font-size:var(--fs-kecil);font-weight:600;display:flex;justify-content:space-between}
+.bilah{height:8px;border-radius:999px;background:#E6EEDC;overflow:hidden}
+.bilah span{display:block;height:100%;width:5%;background:var(--hijau-daun);border-radius:999px;transition:width .2s}
+.form-judul{margin:0;font-size:var(--fs-sub);color:var(--hijau-jamiyyah)}
+.hasil-baca{margin:12px 0 0;padding:8px 12px;border-radius:10px;background:#E6F4E1;font-size:var(--fs-kecil)}
+.form .otomatis{border-color:var(--hijau-daun);background:#F3FAEF}
+.dobel{margin:4px 0 12px;padding:12px 14px;border-radius:12px;background:#FFF6CC;border:1px solid #E3C443;font-size:var(--fs-kecil)}
+.dobel p{margin:0 0 6px}
+.dobel ul{margin:0 0 6px;padding-left:20px}
+.dobel a{color:var(--hijau-jamiyyah);font-weight:600}
+.selesai{text-align:center;padding:32px 20px}
+.selesai-ikon{display:grid;place-items:center;width:64px;height:64px;margin:0 auto 12px;border-radius:50%;background:#E6F4E1;color:var(--hijau-jamiyyah)}
+.selesai h2{color:var(--hijau-jamiyyah)}
+.tombol-baris.tengah{justify-content:center;border-top:0}
