@@ -8,15 +8,17 @@ Mulai: 2026-11-25 (Kang Salman: "Bismillah").
 
 - **Langkah 2, Database Jamaah dan Hak Akses** (2026-11-25): tabel `kabupaten`, `kecamatan`, `desa`, `mursyid`, `jamaah`, `pengguna` (peran), `pengguna_wilayah` (wilayah koordinator), `log_perubahan` (jejak audit otomatis). RLS diuji: admin/ketua semua; bendahara & petugas scan baca saja; koordinator hanya kecamatannya; anggota hanya dirinya; tanpa peran/tamu tidak melihat apa pun; jamaah tidak bisa dihapus. 50 data contoh (`supabase/seed_contoh.sql`). Supabase advisors keamanan: bersih.
 
-## Sedang dikerjakan
-- **Langkah 3, Login** (2026-11-25), menunggu uji Kang:
+- **Langkah 3, Login** (2026-11-25, diuji Kang: anggota & admin berhasil):
   - Halaman `masuk.html` (tab Anggota & Pengurus) dan `beranda.html`; `js/supa.js` (sesi tanpa library besar).
   - Anggota: Edge Function `login-anggota` (Turnstile + `cek_login_anggota`; 5x salah per nomor / 20x per IP dalam 15 menit = terkunci). Akun auth anggota dibuat otomatis `<nomor>@anggota.silsilah.invalid`, tanpa email asli. JWT verify OFF (fungsi cek sendiri).
   - PIN disimpan hash bcrypt di `private.jamaah_pin`. Data contoh: 9990000021 / Cukir / PIN 271145 (yang lain acak).
   - Pengurus: tautan email (magic link). Email jtccukir2022@gmail.com otomatis jadi admin_pusat (trigger `private.pengguna_baru`).
   - Turnstile widget "SILSILAH login" (akun Cloudflare jtccukir2022), rahasia di Supabase secret `TURNSTILE_SECRET`.
   - Supabase Auth: Site URL https://silsilah-tqn.pages.dev, redirect https://silsilah-tqn.pages.dev/**.
-  - TODO setelah admin berhasil masuk: matikan "Allow new users to sign up" di Supabase Auth.
+  - Pendaftaran akun baru di Supabase Auth DIMATIKAN; pengurus baru dibuat admin (Langkah 4/13).
+
+## Sedang dikerjakan
+- Langkah 3 menunggu persetujuan Kang. Langkah 4 dimulai setelah Kang setuju.
 
 ## Berikutnya (satu per satu, tunggu persetujuan Kang)
 4. **Data Jamaah**: halaman pengurus untuk cari, lihat, tambah, ubah, ubah status Aktif/Wafat; filter desa dan kecamatan; pagination.

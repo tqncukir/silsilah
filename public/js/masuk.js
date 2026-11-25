@@ -51,7 +51,7 @@ $('form-pengurus').addEventListener('submit', async (e) => {
   try {
     const r = await fetch(`${SB_URL}/auth/v1/otp?redirect_to=${encodeURIComponent(location.origin + '/beranda.html')}`, {
       method: 'POST', headers: { 'Content-Type': 'application/json', apikey: SB_KEY },
-      body: JSON.stringify({ email, create_user: true }),
+      body: JSON.stringify({ email, create_user: false }),
     });
     if (!r.ok) throw new Error(r.status === 429 ? 'Terlalu sering. Tunggu beberapa menit lalu coba lagi.' : 'Email belum bisa dikirim. Coba lagi nanti.');
     pesan('Tautan masuk sudah dikirim. Silakan buka email Kang.', true);
