@@ -41,7 +41,7 @@ const KTP = (() => {
     h.kecamatan = ambil(baris, /^KECAMATAN\s*[:;]?\s*([A-Z .]+)$/);
     h.pekerjaan = ambil(baris, /^PEKERJAAN\s*[:;]?\s*([A-Z .\/]+)$/);
     for (const k of ['kabupaten', 'nama', 'tempat_lahir', 'desa', 'kecamatan', 'pekerjaan']) if (h[k]) h[k] = judul(h[k]);
-    if (h.pekerjaan) { const p = cocokkan(h.pekerjaan, PEKERJAAN.map((nama) => ({ nama })), 4); if (p) h.pekerjaan = p.nama; }
+    if (h.pekerjaan) { const p = cocokkan(h.pekerjaan, PEKERJAAN_BAKU.map((nama) => ({ nama })), 4); if (p) h.pekerjaan = p.nama; }
     return h;
   }
 
@@ -55,10 +55,6 @@ const KTP = (() => {
     return d[a.length][b.length];
   }
   // Pekerjaan baku di KTP (untuk membetulkan salah baca, mis. "Petanvpekebun")
-  const PEKERJAAN = ['Petani/Pekebun', 'Buruh Tani/Perkebunan', 'Wiraswasta', 'Pedagang', 'Mengurus Rumah Tangga', 'Pelajar/Mahasiswa',
-    'Karyawan Swasta', 'Karyawan Honorer', 'Pegawai Negeri Sipil', 'Buruh Harian Lepas', 'Guru', 'Dosen', 'Belum/Tidak Bekerja', 'Pensiunan',
-    'Nelayan/Perikanan', 'Peternak', 'Sopir', 'Tukang Batu', 'Tukang Kayu', 'Perangkat Desa', 'Kepala Desa', 'Kepolisian RI',
-    'Tentara Nasional Indonesia', 'Bidan', 'Perawat', 'Dokter', 'Ustadz/Mubaligh', 'Karyawan BUMN', 'Karyawan BUMD', 'Penjahit', 'Montir'];
   function cocokkan(nama, daftar, bagi = 5) {
     const n = norm(nama);
     if (n.length < 3) return null;

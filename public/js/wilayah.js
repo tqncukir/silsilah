@@ -65,6 +65,7 @@ const Wilayah = (() => {
   const nanti = (f) => { clearTimeout(tunda); tunda = setTimeout(() => f().catch(() => {}), 250); };
 
   async function pasang() {
+    if ($w('saran-kerja')) opsi('saran-kerja', PEKERJAAN_BAKU.map((n) => [n]));
     await daftarKab();
     opsi('saran-kab', kab.map((k) => [k.nama, k.prov]));
     if ($w('saran-lahir')) opsi('saran-lahir', [...new Set(kab.map((k) => k.nama.replace(/^Kota /, '')))].sort().map((n) => [n]));
