@@ -34,12 +34,13 @@ footer{text-align:center;padding:20px 16px 32px;color:var(--abu);font-size:var(-
 .form .isian{margin:0 0 12px}
 .form label{display:block;font-weight:600;font-size:var(--fs-kecil);margin:0 0 4px}
 .form input{width:100%;min-height:44px;padding:8px 12px;border:1.5px solid #9DB89D;border-radius:12px;font:inherit;font-size:var(--fs-isian);font-weight:500;
-  background:#FFFFFF;color:var(--hitam);letter-spacing:.02em}
+  background:#FFFFFF;color:var(--hitam);letter-spacing:.02em;font-variant-numeric:tabular-nums}
 .form input::placeholder{color:#6B6B6B;letter-spacing:0}
 .form input:focus{outline:none;border-color:var(--hijau-jamiyyah);box-shadow:0 0 0 4px rgba(11,107,46,.18)}
 .form input[aria-invalid="true"]{border-color:#B3261E}
 .ket{margin:4px 0 0;font-size:var(--fs-kecil);color:var(--abu);line-height:1.4}
-.ts{margin:2px 0 10px;min-height:65px}
+.ts{margin:0 0 8px}
+.ts:empty{margin:0}
 .pesan{margin:0;font-weight:500;color:#8C1D18}
 .pesan:not(:empty){margin:0 0 12px;padding:12px 14px;border-radius:12px;background:#FCECEA;border-left:5px solid #B3261E}
 .pesan.ok:not(:empty){color:var(--hijau-jamiyyah);background:var(--hijau-pupus);border-left-color:var(--hijau-daun)}
@@ -84,9 +85,10 @@ footer{text-align:center;padding:20px 16px 32px;color:var(--abu);font-size:var(-
 /* ===== Masuk di layar lebar (laptop/komputer): dua kolom ===== */
 @media (min-width:960px){
   .hal-masuk{display:grid;grid-template-columns:minmax(380px,44%) 1fr;grid-template-rows:1fr auto;min-height:100vh}
-  .masuk-atas{grid-row:1 / span 2;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;text-align:left;
+  .masuk-atas{grid-row:1 / span 2;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:left;
     padding:48px 56px;border-bottom:0;border-right:4px solid var(--kuning-rosyid)}
   .masuk-kembali{left:24px;top:24px}
+  .masuk-merek{width:100%;max-width:400px}
   .masuk-logo{width:88px;height:88px;margin:0 0 20px}
   .masuk-nama{font-size:1.75rem}
   .masuk-lembaga{font-size:var(--fs-isi);margin-top:4px}

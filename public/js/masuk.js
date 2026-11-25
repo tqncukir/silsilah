@@ -4,7 +4,7 @@ const pesan = (t, ok) => tulis($('pesan'), t, ok);
 let tsAnggota = null;
 
 window.tsSiap = () => {
-  tsAnggota = turnstile.render('#ts-anggota', { sitekey: TS_SITE, language: 'id', size: 'flexible' });
+  tsAnggota = turnstile.render('#ts-anggota', { sitekey: TS_SITE, language: 'id', size: 'flexible', appearance: 'interaction-only' });
 };
 
 if (sesi.ambil()) location.replace('/beranda.html');
@@ -33,7 +33,7 @@ $('form-anggota').addEventListener('submit', async (e) => {
   if (!desa) return salah('desa', 'Nama desa belum diisi.');
   if (!/^(\d{6}|\d{8})$/.test(pin)) return salah('pin', 'PIN harus 6 angka (KTA) atau 8 angka (PIN Pengurus).');
   const token = tsAnggota !== null ? turnstile.getResponse(tsAnggota) : '';
-  if (!token) return pesan('Tunggu tanda centang pemeriksaan keamanan selesai, lalu tekan Masuk lagi.');
+  if (!token) return pesan('Pemeriksaan keamanan belum selesai. Tunggu sebentar lalu tekan Masuk lagi.');
   const btn = e.submitter || $('form-anggota').querySelector('button[type=submit]');
   btn.disabled = true; btn.classList.add('sibuk'); btn.querySelector('.teks').textContent = 'Memeriksa...'; pesan('');
   try {
