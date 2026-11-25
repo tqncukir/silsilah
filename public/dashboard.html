@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=49">
-<link rel="stylesheet" href="/css/app.css?v=49">
+<link rel="stylesheet" href="/css/tokens.css?v=50">
+<link rel="stylesheet" href="/css/app.css?v=50">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -63,14 +63,14 @@
 
   <div id="isi" class="dsb-isi" aria-busy="true">
     <section class="dsb-kartu-baris" aria-label="Ringkasan">
-      <div class="dsb-kartu"><p class="dsb-kartu-label">Jamaah Terdaftar</p><p class="dsb-kartu-angka" id="k-total">–</p></div>
-      <div class="dsb-kartu"><p class="dsb-kartu-label">Kabupaten/Kota Tercatat</p><p class="dsb-kartu-angka" id="k-kab">–</p></div>
-      <div class="dsb-kartu dsb-kartu-catatan"><p class="dsb-kartu-label">Entri dengan Catatan</p><p class="dsb-kartu-angka" id="k-catatan">–</p></div>
+      <div class="dsb-kartu"><span class="dsb-ikon dsb-ikon-kartu" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.3-6 6.5-6s5.9 2.4 6.5 6M16 5.2a3.3 3.3 0 010 6.3M18 14.4c1.9.8 3.2 2.8 3.5 5.6"/></svg></span><div><p class="dsb-kartu-label">Jamaah Terdaftar</p><p class="dsb-kartu-angka" id="k-total">–</p><p class="dsb-kartu-sub" id="k-total-sub"></p></div></div>
+      <div class="dsb-kartu"><span class="dsb-ikon dsb-ikon-kartu" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4L3 6.5v13.5l6-2.5 6 2.5 6-2.5V4l-6 2.5L9 4zM9 4v13.5M15 6.5V20"/></svg></span><div><p class="dsb-kartu-label">Kabupaten/Kota Tercatat</p><p class="dsb-kartu-angka" id="k-kab">–</p><p class="dsb-kartu-sub" id="k-kab-sub"></p></div></div>
+      <div class="dsb-kartu dsb-kartu-catatan"><span class="dsb-ikon dsb-ikon-kartu" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2.5"/><path d="M9 4h6v3H9zM9 13.5l2 2 4-4"/></svg></span><div><p class="dsb-kartu-label">Entri dengan Catatan</p><p class="dsb-kartu-angka" id="k-catatan">–</p><p class="dsb-kartu-sub" id="k-catatan-sub"></p></div></div>
     </section>
 
     <div class="dsb-grid">
       <section class="panel dsb-panel dsb-sebaran" aria-labelledby="g-sebaran">
-        <h2 id="g-sebaran" class="dsb-judul">Sebaran Jamaah per Wilayah</h2>
+        <div class="dsb-kepala"><span class="dsb-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0114 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span><h2 id="g-sebaran" class="dsb-judul">Sebaran Jamaah per Wilayah</h2></div>
         <nav class="dsb-jejak" id="jejak" aria-label="Tingkat wilayah"></nav>
         <p class="dsb-ket">Ketuk nama wilayah untuk melihat lebih rinci.</p>
         <ol class="dsb-batang" id="sebaran"></ol>
@@ -81,21 +81,21 @@
       </section>
 
       <section class="panel dsb-panel dsb-usia" aria-labelledby="g-usia">
-        <h2 id="g-usia" class="dsb-judul">Usia saat Mendaftar</h2>
+        <div class="dsb-kepala"><span class="dsb-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><h2 id="g-usia" class="dsb-judul">Usia saat Mendaftar</h2></div>
         <div class="dsb-kolom dsb-kolom-usia" id="usia" role="list"></div>
         <p class="dsb-ringkas" id="usia-ringkas"></p>
         <p class="dsb-ket" id="usia-kosong"></p>
       </section>
 
       <section class="panel dsb-panel dsb-jk" aria-labelledby="g-jk">
-        <h2 id="g-jk" class="dsb-judul">Jenis Kelamin</h2>
+        <div class="dsb-kepala"><span class="dsb-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.3-6 6.5-6s5.9 2.4 6.5 6M16 5.2a3.3 3.3 0 010 6.3M18 14.4c1.9.8 3.2 2.8 3.5 5.6"/></svg></span><h2 id="g-jk" class="dsb-judul">Jenis Kelamin</h2></div>
         <ul class="jk-legenda" id="jk-legenda"></ul>
         <div class="jk-batang" id="jk-batang" aria-hidden="true"></div>
         <p class="dsb-ket" id="jk-ket"></p>
       </section>
 
       <section class="panel dsb-panel dsb-bulan" aria-labelledby="g-bulan">
-        <h2 id="g-bulan" class="dsb-judul">Pendaftaran Jamaah per Bulan</h2>
+        <div class="dsb-kepala"><span class="dsb-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><h2 id="g-bulan" class="dsb-judul">Pendaftaran Jamaah per Bulan</h2></div>
         <p class="dsb-ket">Berdasarkan tanggal daftar yang tercatat</p>
         <div class="dsb-bulan-wadah">
           <div class="dsb-kolom dsb-kolom-bulan" id="bulan" role="list"></div>
@@ -104,13 +104,13 @@
       </section>
 
       <section class="panel dsb-panel dsb-catatan" aria-labelledby="g-catatan">
-        <h2 id="g-catatan" class="dsb-judul">Catatan Pengecekan Data</h2>
+        <div class="dsb-kepala"><span class="dsb-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2.5"/><path d="M9 4h6v3H9zM9 13.5l2 2 4-4"/></svg></span><h2 id="g-catatan" class="dsb-judul">Catatan Pengecekan Data</h2></div>
         <p class="dsb-ket">Ketuk batang untuk melihat daftar anggota dan catatan aslinya.</p>
         <ol class="dsb-batang dsb-batang-catatan" id="catatan"></ol>
       </section>
 
       <section class="panel dsb-panel dsb-pekerjaan" aria-labelledby="g-pekerjaan">
-        <h2 id="g-pekerjaan" class="dsb-judul">Komposisi Pekerjaan Jamaah</h2>
+        <div class="dsb-kepala"><span class="dsb-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5h6v2M3 12.5h18"/></svg></span><h2 id="g-pekerjaan" class="dsb-judul">Komposisi Pekerjaan Jamaah</h2></div>
         <ol class="dsb-batang" id="pekerjaan"></ol>
       </section>
     </div>
@@ -126,8 +126,8 @@
   <ul class="dsb-daftar" id="daftar-isi"></ul>
 </dialog>
 
-<script src="/js/supa.js?v=49" defer></script>
-<script src="/js/aturan-dashboard.js?v=49" defer></script>
-<script src="/js/dashboard.js?v=49" defer></script>
+<script src="/js/supa.js?v=50" defer></script>
+<script src="/js/aturan-dashboard.js?v=50" defer></script>
+<script src="/js/dashboard.js?v=50" defer></script>
 </body>
 </html>

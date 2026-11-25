@@ -79,9 +79,9 @@ $('filter-buka').onclick = () => {
 
 // ---------- Grafik ----------
 // Batang horizontal: baris = { label, n, teks, aksi? }. Lebar diatur lewat JS (CSP tidak mengizinkan style di HTML).
-function batang(ol, baris, maks, { warna = '', tombol = false } = {}) {
+function batang(ol, baris, maks, { warna = '', tombol = false, nomor = false } = {}) {
   ol.innerHTML = baris.map((b, i) => {
-    const isi = `<span class="bt-nama">${hurufAman(b.label)}</span>
+    const isi = `<span class="bt-nama">${nomor ? `<span class="bt-no" aria-hidden="true">${i + 1}</span>` : ''}${hurufAman(b.label)}</span>
       <span class="bt-jalur" aria-hidden="true"><span class="bt-isi${warna}" data-i="${i}"></span></span>
       <span class="bt-nilai">${b.teks.replace(/ \((.+)\)$/, ' <span class="bt-persen">($1)</span>')}</span>`;
     return `<li>${tombol && b.aksi !== false ? `<button type="button" class="bt-baris bt-tombol" data-i="${i}" aria-label="${hurufAman(b.label)}: ${b.teks}${b.petunjuk || ''}">${isi}</button>` : `<div class="bt-baris">${isi}</div>`}</li>`;
@@ -97,7 +97,7 @@ function gambarSebaran() {
     label: w.nama, n: w.n, teks: `${angka(w.n)} (${persen(w.n, total)})`,
     petunjuk: turun ? `. Ketuk untuk melihat ${turun}` : (String(w.id) === f.desa ? '' : '. Ketuk untuk memilih desa ini'),
     aksi: !(data.tingkat === 'desa' && String(w.id) === f.desa),
-  })), s[0]?.n || 0, { tombol: true });
+  })), s[0]?.n || 0, { tombol: true, nomor: true });
   for (const b of $('sebaran').querySelectorAll('button')) b.onclick = () => {
     const w = tampil[b.dataset.i];
     if (data.tingkat === 'kabupaten') ubah({ kab: String(w.id), kec: '', desa: '' });
@@ -122,7 +122,7 @@ function kolom(wadah, baris, { labelAngka = true, labelSetiap = 1 } = {}) {
   const maks = Math.max(...baris.map((b) => b.n), 0);
   wadah.innerHTML = baris.map((b, i) => `<div class="kl" role="listitem">
       <button type="button" class="kl-tombol" data-i="${i}" aria-label="${hurufAman(b.judul)}">
-        <span class="kl-batang" data-i="${i}"><span class="kl-nilai${labelAngka || (b.n === maks && maks) ? '' : ' sr-only'}">${angka(b.n)}</span></span>
+        <span class="kl-batang${b.sorot ? ' kl-sorot' : ''}" data-i="${i}"><span class="kl-nilai${labelAngka || (b.n === maks && maks) ? '' : ' sr-only'}">${angka(b.n)}</span></span>
       </button>
       <span class="kl-label${i % labelSetiap ? ' kl-label-sembunyi' : ''}" aria-hidden="true">${hurufAman(b.label)}${b.label2 ? `<small>${hurufAman(b.label2)}</small>` : ''}</span>
     </div>`).join('');
@@ -132,7 +132,7 @@ function kolom(wadah, baris, { labelAngka = true, labelSetiap = 1 } = {}) {
 function gambarUsia() {
   const u = data.usia;
   const kel = [['<30', u.u30], ['30–44', u.u44], ['45–59', u.u59], ['60–69', u.u69], ['≥70', u.u70]];
-  kolom($('usia'), kel.map(([l, n]) => ({ label: l, n, judul: `Usia ${l} tahun: ${angka(n)} jamaah` })));
+  kolom($('usia'), kel.map(([l, n], i) => ({ label: l, n, sorot: i >= 3, judul: `Usia ${l} tahun: ${angka(n)} jamaah` })));
   const valid = kel.reduce((a, [, n]) => a + n, 0);
   $('usia-ringkas').textContent = valid ? `${persen(u.u69 + u.u70, valid)} jamaah berusia 60 tahun ke atas saat mendaftar` : 'Belum ada umur yang tercatat.';
   $('usia-kosong').textContent = `Dihitung dari ${angka(valid)} jamaah dengan umur valid. Umur kosong atau tidak valid: ${angka(u.tidak_valid)}.`;
@@ -154,6 +154,8 @@ function gambarBulan() {
     const n = ada.get(b) || 0;
     baris.push({ b, n, label: BULAN[m - 1].slice(0, 3), label2: m === 1 || !baris.length ? String(y) : '', judul: `${BULAN[m - 1]} ${y}: ${angka(n)} pendaftaran` });
   }
+  const puncak = Math.max(...baris.map((b) => b.n));
+  for (const b of baris) b.sorot = b.n === puncak && puncak > 0;
   const lebar = $('bulan').clientWidth || 300;
   const perKolom = lebar / baris.length;
   const labelSetiap = perKolom >= 30 ? 1 : perKolom >= 14 ? 3 : 6;
@@ -255,6 +257,9 @@ async function muat() {
     $('k-total').textContent = angka(data.total);
     $('k-kab').textContent = angka(data.kabupaten);
     $('k-catatan').textContent = angka(data.catatan_total);
+    $('k-total-sub').textContent = `${teksWilayah()} · ${teksPeriode()}`;
+    $('k-kab-sub').textContent = data.tingkat === 'kabupaten' ? 'Dari alamat jamaah' : `${angka(data.sebaran.length)} ${TINGKAT[data.tingkat]} di pilihan ini`;
+    $('k-catatan-sub').textContent = `${persen(data.catatan_total, data.total)} dari jamaah terdaftar`;
     gambarSebaran(); gambarUsia(); gambarJk(); gambarBulan(); gambarCatatan(); gambarPekerjaan();
   } catch (e) {
     if (ini !== nomorMuat) return;
