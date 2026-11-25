@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=33">
-<link rel="stylesheet" href="/css/app.css?v=33">
+<link rel="stylesheet" href="/css/tokens.css?v=35">
+<link rel="stylesheet" href="/css/app.css?v=35">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -97,29 +97,31 @@
       <div class="isian">
         <label for="tgl-lahir">Tanggal lahir</label>
         <input id="tgl-lahir" type="date" min="1900-01-01" aria-describedby="umur-ket">
-        <p class="ket" id="umur-ket">Umur dihitung otomatis dari tanggal lahir.</p>
       </div>
+      <p class="ket bagian-ket umur-info" id="umur-ket" aria-live="polite">Umur dihitung otomatis dari tanggal lahir.</p>
       <fieldset class="isian pilihan">
         <legend>Jenis kelamin</legend>
         <label class="pil"><input type="radio" name="jk" value="L"> Laki-laki</label>
         <label class="pil"><input type="radio" name="jk" value="P"> Perempuan</label>
       </fieldset>
       <div class="isian" id="isian-goldar" hidden>
-        <label for="gol-darah">Gol. darah <span class="wajib">rahasia, hanya admin dan ketua</span></label>
-        <select id="gol-darah"><option value="">Tidak diketahui</option><option>A</option><option>B</option><option>AB</option><option>O</option></select>
+        <label for="gol-darah">Gol. darah <span class="wajib">rahasia</span></label>
+        <select id="gol-darah" aria-describedby="k-goldar"><option value="">Tidak diketahui</option><option>A</option><option>B</option><option>AB</option><option>O</option></select>
+        <p class="ket" id="k-goldar">Hanya admin dan ketua yang bisa melihat.</p>
       </div>
-      <div class="isian k3">
+      <div class="isian k3 d2">
         <label for="status-kawin">Status perkawinan</label>
         <select id="status-kawin"><option value="">Belum diisi</option><option>Belum Kawin</option><option>Kawin</option><option>Cerai Hidup</option><option>Cerai Mati</option></select>
       </div>
-      <div class="isian k3">
+      <div class="isian k3 d2">
         <label for="wn">Kewarganegaraan</label>
         <select id="wn"><option>WNI</option><option>WNA</option></select>
       </div>
-      <div class="isian lebar">
+      <div class="isian d2">
         <label for="pekerjaan">Pekerjaan</label>
         <input id="pekerjaan" maxlength="60" autocapitalize="words" autocomplete="off">
       </div>
+
       <h3 class="bagian-judul" id="b-alamat">Alamat sesuai KTP</h3>
       <p class="ket bagian-ket">Isi dari wilayah terbesar. Saran kecamatan dan desa akan menyesuaikan.</p>
       <div class="isian d2">
@@ -178,10 +180,10 @@
     </div>
   </section>
 </main>
-<script src="/js/supa.js?v=33" defer></script>
-<script src="/js/wilayah.js?v=33" defer></script>
+<script src="/js/supa.js?v=35" defer></script>
+<script src="/js/wilayah.js?v=35" defer></script>
 <script src="/ocr/tesseract.min.js" defer></script>
-<script src="/js/ktp.js?v=33" defer></script>
-<script src="/js/pendaftaran.js?v=33" defer></script>
+<script src="/js/ktp.js?v=35" defer></script>
+<script src="/js/pendaftaran.js?v=35" defer></script>
 </body>
 </html>
