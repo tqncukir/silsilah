@@ -1,6 +1,6 @@
 // KTA Digital: kartu seperti asli, QR keaslian (ditandatangani di server dengan kunci admin pusat), PIN, cetak.
 const $ = (id) => document.getElementById(id);
-const id = new URLSearchParams(location.search).get('id');
+let id = new URLSearchParams(location.search).get('id');
 let j = null, peran = '';
 
 const pesan = (t) => { $('pesan').textContent = t; };
@@ -80,13 +80,36 @@ $('ganti').onclick = async () => {
 
 $('keluar').onclick = keluar;
 
+let fokusSebelum = null;
+function tutupQr() { $('qr-besar').hidden = true; document.body.classList.remove('terkunci'); fokusSebelum?.focus(); }
+$('perbesar').onclick = () => {
+  const svg = $('kta-qr').querySelector('svg');
+  if (!svg) { pesanAksi('QR belum tersedia. Periksa sinyal lalu buka ulang halaman ini.'); return; }
+  fokusSebelum = document.activeElement;
+  $('qr-besar-gambar').innerHTML = svg.outerHTML;
+  $('qr-besar-nama').textContent = j.nama;
+  $('qr-besar-nomor').textContent = j.nomor_anggota;
+  $('qr-besar').hidden = false; document.body.classList.add('terkunci');
+  $('tutup-qr').focus();
+};
+$('tutup-qr').onclick = tutupQr;
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('qr-besar').hidden) tutupQr(); });
+
 (async () => {
   try {
     const p = await profilSaya();
-    if (!p || !PERAN_LIHAT_JAMAAH.includes(p.peran)) { location.replace('/beranda.html'); return; }
+    const anggota = p?.peran === 'anggota';
+    if (!p || !(PERAN_LIHAT_JAMAAH.includes(p.peran) || (anggota && p.jamaah_id))) { location.replace('/beranda.html'); return; }
     peran = p.peran;
+    if (anggota) {
+      id = String(p.jamaah_id);
+      $('kembali').href = '/beranda.html'; $('kembali').lastChild.textContent = ' Beranda';
+      $('aksi-judul').textContent = 'Kartu saya';
+      $('aksi-ket').textContent = 'Tunjukkan QR ini saat kegiatan, atau cetak kartunya. PIN tidak ikut tercetak dari sini.';
+      $('perbesar').className = 'btn btn-utama'; $('cetak').textContent = 'Cetak kartu';
+    }
     if (!id) { pesan('Jamaah belum dipilih.'); return; }
-    $('kembali').href = `/jamaah-isi.html?id=${encodeURIComponent(id)}`;
+    if (!anggota) $('kembali').href = `/jamaah-isi.html?id=${encodeURIComponent(id)}`;
     j = (await dbGet(`jamaah?select=${PILIH}&id=eq.${encodeURIComponent(id)}`))[0];
     if (!j) { pesan('Data jamaah tidak ditemukan atau akun ini tidak punya izin melihatnya.'); return; }
     gambarKartu();

@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=42">
-<link rel="stylesheet" href="/css/app.css?v=42">
+<link rel="stylesheet" href="/css/tokens.css?v=43">
+<link rel="stylesheet" href="/css/app.css?v=43">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -19,7 +19,7 @@
     <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
     <nav class="app-nav" aria-label="Menu utama">
       <a href="/beranda.html">Beranda</a>
-      <a href="/jamaah.html" aria-current="page">Data Jamaah</a>
+      <a href="/jamaah.html" id="nav-jamaah" hidden>Data Jamaah</a>
       <a href="/pendaftaran.html" id="nav-daftar" hidden>Pendaftaran</a>
     </nav>
     <button class="app-keluar" id="keluar" type="button">Keluar</button>
@@ -78,6 +78,7 @@
       </div>
       <div class="tombol-baris kolom">
         <button type="button" class="btn btn-utama" id="buat-pin" hidden><span class="putar" aria-hidden="true"></span><span class="teks">Buat PIN baru lalu cetak</span></button>
+        <button type="button" class="btn btn-kedua" id="perbesar">Perbesar QR untuk dipindai</button>
         <button type="button" class="btn btn-kedua" id="cetak">Cetak tanpa PIN</button>
         <button type="button" class="btn btn-bahaya" id="ganti" hidden>KTA hilang: batalkan QR lama</button>
       </div>
@@ -85,8 +86,15 @@
     </section>
   </div>
 </main>
-<script src="/js/supa.js?v=42" defer></script>
-<script src="/js/qrcode.js?v=42" defer></script>
-<script src="/js/kta.js?v=42" defer></script>
+<div id="qr-besar" class="qr-besar" hidden role="dialog" aria-modal="true" aria-labelledby="qr-besar-nama">
+  <p class="qr-besar-nama" id="qr-besar-nama"></p>
+  <p class="qr-besar-nomor" id="qr-besar-nomor"></p>
+  <div class="qr-besar-gambar" id="qr-besar-gambar"></div>
+  <p class="qr-besar-ket">Tunjukkan ke petugas untuk dipindai</p>
+  <button type="button" class="btn btn-kedua" id="tutup-qr">Tutup</button>
+</div>
+<script src="/js/supa.js?v=43" defer></script>
+<script src="/js/qrcode.js?v=43" defer></script>
+<script src="/js/kta.js?v=43" defer></script>
 </body>
 </html>
