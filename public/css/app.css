@@ -183,7 +183,7 @@ footer{text-align:center;padding:20px 16px 32px;color:var(--abu);font-size:var(-
 .stat{display:inline-block;font-size:var(--fs-kecil);font-weight:600;white-space:nowrap}
 .stat-aktif{color:#16702F}
 .stat-tidak{color:#5A5A5A}
-.stat-wafat{color:#3D3D3D;background:#ECEDEA;padding:2px 10px;border-radius:999px}
+.stat-wafat{color:#A1241B;background:#FCECEA;border:1px solid #E9A39C;padding:1px 10px;border-radius:999px}
 
 /* Halaman berikut */
 .halaman{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:16px 0 0}
