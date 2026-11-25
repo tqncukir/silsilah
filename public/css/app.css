@@ -453,14 +453,16 @@ body.terkunci{overflow:hidden}
 @media (min-width:768px){
   .dsb-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .dsb-panel{padding:20px}
-  .dsb-sebaran,.dsb-usia,.dsb-bulan{grid-column:1 / -1}
+  .dsb-sebaran,.dsb-usia,.dsb-jk,.dsb-bulan{grid-column:1 / -1}
 }
 @media (min-width:1024px){
   .dsb-grid{grid-template-columns:repeat(10,minmax(0,1fr))}
   .dsb-sebaran{grid-column:span 6}
   .dsb-usia{grid-column:span 4}
   .dsb-bulan{grid-column:1 / -1}
-  .dsb-grid>.dsb-panel:nth-child(n+4){grid-column:span 5}
+  .dsb-sebaran{grid-row:span 2}
+  .dsb-jk{grid-column:span 4}
+  .dsb-catatan,.dsb-pekerjaan{grid-column:span 5}
 }
 
 /* jejak wilayah */
@@ -538,3 +540,15 @@ body.terkunci{overflow:hidden}
   .dsb-kartu-angka{font-size:1.5rem}
 }
 .bt-persen{color:var(--hijau-jamiyyah);font-weight:700}
+
+/* jenis kelamin: satu batang dibagi */
+.jk-legenda{list-style:none;margin:8px 0 12px;padding:0;display:grid;gap:6px}
+.jk-legenda li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;min-height:32px}
+.jk-teks{font-weight:600}
+.jk-kotak{width:14px;height:14px;border-radius:4px}
+.jk-batang{display:flex;gap:2px;height:20px;border-radius:999px;overflow:hidden;background:#EEF2E8}
+.jk-batang span{flex:1 1 0;min-width:4px}
+.jk-l{background:var(--hijau-jamiyyah)}
+.jk-p{background:#1E6FB8}
+.jk-k{background:#B9C4B4}
+.dsb-jk .dsb-ket{margin:10px 0 0}

@@ -195,6 +195,19 @@ function gambarPekerjaan() {
   batang($('pekerjaan'), baris, Math.max(...baris.map((b) => b.n)));
 }
 
+function gambarJk() {
+  const j = data.jk || { l: 0, p: 0, kosong: data.total };
+  const bagian = [['Laki-laki', j.l, 'jk-l'], ['Perempuan', j.p, 'jk-p'], ['Belum diisi', j.kosong, 'jk-k']].filter((b) => b[1] || b[2] !== 'jk-k');
+  $('jk-legenda').innerHTML = bagian.map(([t, n, k]) => `<li><span class="jk-kotak ${k}" aria-hidden="true"></span><span class="jk-teks">${t}</span>
+    <span class="bt-nilai">${angka(n)} <span class="bt-persen">(${persen(n, data.total)})</span></span></li>`).join('');
+  $('jk-batang').innerHTML = bagian.filter((b) => b[1]).map(([, n, k]) => `<span class="${k}" data-n="${n}"></span>`).join('');
+  for (const el of $('jk-batang').children) el.style.flexGrow = el.dataset.n;
+  const ket = [];
+  if (data.jk_tebakan) ket.push(`${angka(data.jk_tebakan)} di antaranya ditebak dari nama (data lama).`);
+  if (j.kosong) ket.push(`${angka(j.kosong)} belum diisi, perlu dicek di Data Jamaah.`);
+  $('jk-ket').textContent = ket.join(' ');
+}
+
 // ---------- Daftar anggota untuk satu catatan ----------
 async function bukaDaftar(c) {
   const d = $('daftar');
@@ -242,7 +255,7 @@ async function muat() {
     $('k-total').textContent = angka(data.total);
     $('k-kab').textContent = angka(data.kabupaten);
     $('k-catatan').textContent = angka(data.catatan_total);
-    gambarSebaran(); gambarUsia(); gambarBulan(); gambarCatatan(); gambarPekerjaan();
+    gambarSebaran(); gambarUsia(); gambarJk(); gambarBulan(); gambarCatatan(); gambarPekerjaan();
   } catch (e) {
     if (ini !== nomorMuat) return;
     if (e.message === 'belum-masuk' || e.message === 'gagal-401') { location.replace('/masuk.html'); return; }

@@ -33,6 +33,8 @@ Mulai: 2026-11-25 (Kang Salman: "Bismillah").
 
 - **Dashboard Pengurus** (modul 12 awal, permintaan Kang 2026-11-25): `dashboard.html` + `js/dashboard.js` + `js/aturan-dashboard.js` (aturan kelompok pekerjaan dan label catatan, satu tempat). Menu "Dashboard Pengurus" di semua halaman pengurus + ubin "Amanah & Tata Kelola" di Beranda (peran yang boleh lihat Data Jamaah). Hanya membaca; angka dihitung di server `dashboard_pengurus()` (SECURITY INVOKER, ikut RLS jamaah) dan daftar anggota per catatan `dashboard_catatan_daftar()`. Catatan pengecekan impor (kolom "cek", 462 anggota) disimpan di tabel terpisah `jamaah_cek` (isian anggota tidak diubah). Migrasi `20261125100000` dijalankan Kang. Filter Kab/Kota → Kecamatan → Desa + Periode (12 bulan, per tahun, rentang bulan), Reset filter; klik batang sebaran turun tingkat. Uji tiruan 360/768/1280 lulus. Menunggu uji Kang.
 
+- **Jenis kelamin data lama** (izin Kang 2026-11-25): ditebak dari nama + pekerjaan "mengurus rumah tangga": 1.393 L, 3.660 P diisi; 475 ragu dikosongkan dan ditandai perlu dicek (tabel `jamaah_jk_tebakan`, tanda hilang otomatis saat pengurus mengubah jenis kelamin; migrasi `20261125110000` dijalankan Kang). Daftar perlu dicek: `/mnt/project-files/silsilah/jenis-kelamin/` (di luar repo). Dashboard: grafik Jenis Kelamin (satu batang dibagi) + format angka "4.047 (73,2%)" dengan persen hijau.
+
 ## Berikutnya (satu per satu, tunggu persetujuan Kang)
 
 Setelah 7 langkah beres dan Kang setuju: impor 5.528 data asli.
