@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Masuk · SILSILAH TQN Cukir</title>
+<meta name="theme-color" content="#0B6B2E">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="/css/tokens.css">
+<link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<header class="header">
+  <a href="/" class="header-link"><img src="/icons/logo-96.png" alt="Logo Jam'iyyah TQN Cukir" width="44" height="44"></a>
+  <div><p class="judul">SILSILAH</p><span class="sub">Masuk</span></div>
+</header>
+<main>
+  <div class="tab" role="tablist">
+    <button role="tab" id="tab-anggota" aria-selected="true" aria-controls="form-anggota">Anggota</button>
+    <button role="tab" id="tab-pengurus" aria-selected="false" aria-controls="form-pengurus">Pengurus</button>
+  </div>
+
+  <form id="form-anggota" class="form" autocomplete="off" novalidate>
+    <label for="nomor">Nomor Anggota <span class="kecil">(10 angka di KTA)</span></label>
+    <input id="nomor" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required>
+    <label for="desa">Nama Desa</label>
+    <input id="desa" maxlength="60" required autocapitalize="words">
+    <label for="pin">PIN <span class="kecil">(6 angka di KTA)</span></label>
+    <input id="pin" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required>
+    <div id="ts-anggota" class="ts"></div>
+    <button class="btn btn-utama" type="submit">Masuk</button>
+  </form>
+
+  <form id="form-pengurus" class="form" hidden novalidate>
+    <label for="email">Email pengurus</label>
+    <input id="email" type="email" inputmode="email" autocomplete="email" required>
+    <p class="kecil">Kami kirim tautan masuk ke email ini. Buka emailnya di HP ini, lalu ketuk tautannya.</p>
+    <button class="btn btn-utama" type="submit">Kirim tautan masuk</button>
+  </form>
+
+  <p id="pesan" class="pesan" role="alert" aria-live="assertive"></p>
+</main>
+<script src="/js/supa.js" defer></script>
+<script src="/js/masuk.js" defer></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=tsSiap&render=explicit" defer></script>
+</body>
+</html>

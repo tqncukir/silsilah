@@ -29,3 +29,15 @@ footer{text-align:center;padding:20px 16px 32px;color:var(--abu);font-size:1rem}
   text-align:center;display:none}
 .status.tampil{display:block}
 @media (prefers-reduced-motion:no-preference){.btn{transition:transform .1s}.btn:active{transform:scale(.98)}}
+.header-link{display:flex}
+.tab{display:flex;gap:8px;margin:0 0 16px}
+.tab button{flex:1;min-height:48px;border:2px solid var(--hijau-daun);border-radius:12px;background:var(--putih);
+  color:var(--hijau-jamiyyah);font:inherit;font-weight:700;cursor:pointer}
+.tab button[aria-selected="true"]{background:var(--hijau-jamiyyah);border-color:var(--hijau-jamiyyah);color:#FFFFFF}
+.form label{display:block;font-weight:700;margin:12px 0 6px}
+.form input{width:100%;min-height:52px;padding:10px 14px;border:2px solid #8FB58F;border-radius:12px;font:inherit;font-size:1.15rem;background:#FFFFFF;color:var(--hitam)}
+.form input:focus{outline:3px solid var(--kuning-rosyid);border-color:var(--hijau-jamiyyah)}
+.form .btn{margin-top:16px}
+.ts{margin-top:14px;min-height:65px}
+.pesan{min-height:1.5em;font-weight:700;color:#B3261E}
+.pesan.ok{color:var(--hijau-jamiyyah)}
