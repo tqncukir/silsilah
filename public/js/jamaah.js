@@ -1,7 +1,8 @@
-// Daftar Data Jamaah: cari, saring, 20 per halaman. Hak lihat/ubah tetap dijaga RLS di database.
+// Daftar Data Jamaah: cari, saring, 10/20/50 per halaman. Hak lihat/ubah tetap dijaga RLS di database.
 const $ = (id) => document.getElementById(id);
-const PER_HALAMAN = 20;
 const q = new URLSearchParams(location.search);
+const UKURAN = [10, 20, 50];
+let PER_HALAMAN = (() => { let n = Number(q.get('n')); try { n ||= Number(localStorage.getItem('silsilah.perHalaman')); } catch {} return UKURAN.includes(n) ? n : 20; })();
 let halaman = Math.max(1, Number(q.get('h')) || 1);
 let semuaDesa = [];
 let tunda;
@@ -12,6 +13,7 @@ const STATUS = (j) => j.wafat ? ['Wafat', 'wafat'] : j.aktif ? ['Aktif', 'aktif'
 function simpanUrl() {
   const p = new URLSearchParams();
   for (const k of ['cari', 'kecamatan', 'desa', 'status']) if ($(k).value.trim()) p.set(k, $(k).value.trim());
+  if (PER_HALAMAN !== 20) p.set('n', PER_HALAMAN);
   if (halaman > 1) p.set('h', halaman);
   history.replaceState(null, '', p.toString() ? `?${p}` : location.pathname);
 }
@@ -71,8 +73,8 @@ async function muat() {
       </tr>`;
     }).join('') : `<tr><td colspan="13" class="tabel-kosong">Tidak ada jamaah yang cocok.${disaring ? ' <button type="button" class="tautan" id="hapus-saring">Hapus saringan</button>' : ''}</td></tr>`;
     $('hapus-saring')?.addEventListener('click', () => { for (const k of ['cari', 'kecamatan', 'status']) $(k).value = ''; isiDesa(); $('desa').value = ''; halaman = 1; muat(); });
-    $('halaman').hidden = jmlHal <= 1;
-    $('posisi').textContent = `Halaman ${halaman} dari ${jmlHal}`;
+    $('halaman').hidden = !total;
+    $('posisi').innerHTML = `<strong>${halaman}</strong> / ${jmlHal}<span class="sr-only"> halaman</span>`;
     $('sebelum').disabled = halaman <= 1;
     $('sesudah').disabled = halaman >= jmlHal;
   } catch (e) {
@@ -96,6 +98,13 @@ $('kecamatan').addEventListener('change', () => { isiDesa(); halaman = 1; muat()
 for (const k of ['desa', 'status']) $(k).addEventListener('change', () => { halaman = 1; muat(); });
 $('sebelum').onclick = () => { halaman--; muat(); scrollTo({ top: 0 }); };
 $('sesudah').onclick = () => { halaman++; muat(); scrollTo({ top: 0 }); };
+$('per-halaman').value = String(PER_HALAMAN);
+$('per-halaman').addEventListener('change', (e) => {
+  const awal = (halaman - 1) * PER_HALAMAN;
+  PER_HALAMAN = Number(e.target.value);
+  try { localStorage.setItem('silsilah.perHalaman', PER_HALAMAN); } catch {}
+  halaman = Math.floor(awal / PER_HALAMAN) + 1; muat();
+});
 $('keluar').onclick = keluar;
 
 (async () => {

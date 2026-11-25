@@ -195,9 +195,15 @@ footer{text-align:center;padding:20px 16px 32px;color:var(--abu);font-size:var(-
 .stat-wafat{color:#A1241B;background:#FCECEA;border:1px solid #E9A39C;padding:1px 10px;border-radius:999px}
 
 /* Halaman berikut */
-.halaman{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:16px 0 0}
-.halaman span{font-size:var(--fs-kecil);color:var(--abu);text-align:center}
-.halaman .btn:disabled{opacity:.45;cursor:not-allowed}
+.halaman{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:4px 8px;margin:16px 0 0}
+.hal-panah{width:44px;height:44px;display:grid;place-items:center;border:0;border-radius:12px;background:transparent;color:var(--hijau-jamiyyah);cursor:pointer}
+.hal-panah:hover:not(:disabled){background:var(--hijau-pupus)}
+.hal-panah:focus-visible{outline:3px solid var(--hijau-daun);outline-offset:2px}
+.hal-panah:disabled{color:#A9B5A2;cursor:not-allowed}
+.hal-posisi{min-width:64px;text-align:center;font-size:var(--fs-isi);color:var(--abu);font-variant-numeric:tabular-nums}
+.hal-posisi strong{color:#1A1A1A;font-weight:600}
+.hal-jumlah{margin-left:8px}
+.hal-jumlah select{min-height:44px;padding:8px 12px;border:1.5px solid #9DB89D;border-radius:10px;font:inherit;font-size:var(--fs-isian);background:#FFFFFF;color:var(--hitam);cursor:pointer}
 
 /* Panel rincian & formulir */
 .panel{background:#FFFFFF;border-radius:16px;padding:20px;box-shadow:0 1px 3px rgba(26,26,26,.08)}

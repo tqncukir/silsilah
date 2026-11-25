@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=43">
-<link rel="stylesheet" href="/css/app.css?v=43">
+<link rel="stylesheet" href="/css/tokens.css?v=44">
+<link rel="stylesheet" href="/css/app.css?v=44">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -69,12 +69,15 @@
   </div>
 
   <nav class="halaman" id="halaman" aria-label="Pindah halaman" hidden>
-    <button type="button" class="btn btn-kedua btn-pas" id="sebelum">Sebelumnya</button>
-    <span id="posisi"></span>
-    <button type="button" class="btn btn-kedua btn-pas" id="sesudah">Berikutnya</button>
+    <button type="button" class="hal-panah" id="sebelum" aria-label="Halaman sebelumnya"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <span id="posisi" class="hal-posisi" aria-live="polite"></span>
+    <button type="button" class="hal-panah" id="sesudah" aria-label="Halaman berikutnya"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <label class="hal-jumlah"><span class="sr-only">Jumlah per halaman</span>
+      <select id="per-halaman"><option value="10">10 / halaman</option><option value="20">20 / halaman</option><option value="50">50 / halaman</option></select>
+    </label>
   </nav>
 </main>
-<script src="/js/supa.js?v=43" defer></script>
-<script src="/js/jamaah.js?v=43" defer></script>
+<script src="/js/supa.js?v=44" defer></script>
+<script src="/js/jamaah.js?v=44" defer></script>
 </body>
 </html>
