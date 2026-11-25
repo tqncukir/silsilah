@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=20">
-<link rel="stylesheet" href="/css/app.css?v=20">
+<link rel="stylesheet" href="/css/tokens.css?v=21">
+<link rel="stylesheet" href="/css/app.css?v=21">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -62,6 +62,15 @@
         <input id="tgl-lahir" type="date" min="1900-01-01" aria-describedby="umur-ket">
         <p class="ket" id="umur-ket">Umur dihitung otomatis dari tanggal lahir.</p>
       </div>
+      <fieldset class="isian pilihan">
+        <legend>Jenis kelamin</legend>
+        <label class="pil"><input type="radio" name="jk" value="L"> Laki-laki</label>
+        <label class="pil"><input type="radio" name="jk" value="P"> Perempuan</label>
+      </fieldset>
+      <div class="isian" id="isian-goldar" hidden>
+        <label for="gol-darah">Gol. darah <span class="wajib">rahasia, hanya admin dan ketua</span></label>
+        <select id="gol-darah"><option value="">Tidak diketahui</option><option>A</option><option>B</option><option>AB</option><option>O</option></select>
+      </div>
       <div class="isian">
         <label for="kecamatan">Kecamatan <span class="wajib">wajib</span></label>
         <select id="kecamatan" required><option value="">Pilih kecamatan</option></select>
@@ -70,10 +79,14 @@
         <label for="desa">Desa <span class="wajib">wajib</span></label>
         <select id="desa" required disabled><option value="">Pilih kecamatan dulu</option></select>
       </div>
-      <div class="isian lebar">
+      <div class="isian">
         <label for="alamat">Alamat</label>
         <input id="alamat" maxlength="160" aria-describedby="k-alamat">
-        <p class="ket" id="k-alamat">Dusun, RT/RW. Tanpa nomor HP.</p>
+        <p class="ket" id="k-alamat">Dusun atau jalan. Tanpa nomor HP.</p>
+      </div>
+      <div class="isian">
+        <label for="rt-rw">RT/RW</label>
+        <input id="rt-rw" inputmode="numeric" maxlength="7" placeholder="002/003">
       </div>
       <div class="isian" id="isian-umur">
         <label for="umur">Umur saat mendaftar</label>
@@ -83,6 +96,14 @@
       <div class="isian">
         <label for="pekerjaan">Pekerjaan</label>
         <input id="pekerjaan" maxlength="60" autocapitalize="words">
+      </div>
+      <div class="isian">
+        <label for="status-kawin">Status perkawinan</label>
+        <select id="status-kawin"><option value="">Belum diisi</option><option>Belum Kawin</option><option>Kawin</option><option>Cerai Hidup</option><option>Cerai Mati</option></select>
+      </div>
+      <div class="isian">
+        <label for="wn">Kewarganegaraan</label>
+        <select id="wn"><option>WNI</option><option>WNA</option></select>
       </div>
       <div class="isian">
         <label for="mursyid">Mursyid</label>
@@ -111,7 +132,7 @@
     </div>
   </form>
 </main>
-<script src="/js/supa.js?v=20" defer></script>
-<script src="/js/jamaah-isi.js?v=20" defer></script>
+<script src="/js/supa.js?v=21" defer></script>
+<script src="/js/jamaah-isi.js?v=21" defer></script>
 </body>
 </html>

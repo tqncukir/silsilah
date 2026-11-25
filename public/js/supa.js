@@ -56,16 +56,16 @@ async function keluar() {
 }
 
 // Kirim perubahan (POST/PATCH) lewat REST. RLS tetap berlaku.
-async function dbKirim(metode, jalur, isi) {
+async function dbKirim(metode, jalur, isi, prefer = 'return=representation') {
   const t = await tokenAktif();
   if (!t) throw new Error('belum-masuk');
   const r = await fetch(`${SB_URL}/rest/v1/${jalur}`, {
     method: metode,
-    headers: { apikey: SB_KEY, Authorization: `Bearer ${t}`, 'Content-Type': 'application/json', Prefer: 'return=representation' },
-    body: JSON.stringify(isi),
+    headers: { apikey: SB_KEY, Authorization: `Bearer ${t}`, 'Content-Type': 'application/json', Prefer: prefer },
+    body: isi === undefined ? undefined : JSON.stringify(isi),
   });
   if (!r.ok) { const b = await r.json().catch(() => ({})); const e = new Error('gagal-' + r.status); e.detail = b; throw e; }
-  return r.json();
+  return r.status === 204 ? [] : r.json();
 }
 
 // Baca satu halaman data + jumlah total. Hasil: { baris, total }
@@ -126,4 +126,29 @@ function pasangUmurOtomatis() {
   g('tgl-lahir').addEventListener('input', atur);
   g('tanggal').addEventListener('input', atur);
   return atur;
+}
+
+// ===== Isian data KTP bersama (Pendaftaran & Ubah data) =====
+const PERAN_GOLDAR = ['admin_pusat', 'ketua']; // gol. darah = data kesehatan, rahasia
+function bacaIsianKtp() {
+  const g = (id) => document.getElementById(id);
+  const rt = g('rt-rw').value.replace(/[^0-9\/]/g, '');
+  const m = rt.match(/^(\d{1,3})\/(\d{1,3})$/);
+  return {
+    jenis_kelamin: document.querySelector('[name=jk]:checked')?.value || null,
+    rt_rw: m ? `${m[1].padStart(3, '0')}/${m[2].padStart(3, '0')}` : null,
+    status_kawin: g('status-kawin').value || null,
+    kewarganegaraan: g('wn').value || 'WNI',
+  };
+}
+function isiIsianKtp(j) {
+  const g = (id) => document.getElementById(id);
+  document.querySelectorAll('[name=jk]').forEach((r) => { r.checked = r.value === j?.jenis_kelamin; });
+  g('rt-rw').value = j?.rt_rw || '';
+  g('status-kawin').value = j?.status_kawin || '';
+  g('wn').value = j?.kewarganegaraan || 'WNI';
+}
+async function simpanGoldar(jamaahId, nilai, adaSebelumnya) {
+  if (nilai) await dbKirim('POST', 'jamaah_goldar?on_conflict=jamaah_id', { jamaah_id: jamaahId, gol_darah: nilai }, 'resolution=merge-duplicates,return=minimal');
+  else if (adaSebelumnya) await dbKirim('DELETE', `jamaah_goldar?jamaah_id=eq.${jamaahId}`, undefined, 'return=minimal');
 }

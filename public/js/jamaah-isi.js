@@ -1,14 +1,14 @@
 // Rincian, tambah, dan ubah satu jamaah. Hak ubah dijaga RLS (koordinator hanya kecamatannya).
 const $ = (id) => document.getElementById(id);
 const id = new URLSearchParams(location.search).get('id');
-let data = null, semuaDesa = [], kecBoleh = null, peran = '';
+let data = null, semuaDesa = [], kecBoleh = null, peran = '', goldar = '';
 
 const pesan = (t) => { $('pesan').textContent = t; };
 const pesanForm = (t, ok) => { $('pesan-form').textContent = t; $('pesan-form').className = 'pesan' + (ok ? ' ok' : ''); };
 const tgl = (d) => d ? new Date(d + 'T00:00:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '–';
 const statusDari = (j) => j.wafat ? 'wafat' : j.aktif ? 'aktif' : 'tidak';
 const TEKS_STATUS = { aktif: 'Aktif', tidak: 'Tidak aktif', wafat: 'Wafat' };
-const PILIH = 'id,nomor_anggota,nama,tempat_lahir,tanggal_lahir,umur_daftar,pekerjaan,alamat,desa_id,mursyid_id,tanggal_daftar,aktif,wafat,tanggal_wafat,desa(nama,kecamatan_id,kecamatan(nama,kabupaten(nama))),mursyid(nama)';
+const PILIH = 'id,nomor_anggota,nama,tempat_lahir,tanggal_lahir,jenis_kelamin,rt_rw,status_kawin,kewarganegaraan,umur_daftar,pekerjaan,alamat,desa_id,mursyid_id,tanggal_daftar,aktif,wafat,tanggal_wafat,desa(nama,kecamatan_id,kecamatan(nama,kabupaten(nama))),mursyid(nama)';
 
 function tampilLihat() {
   const j = data, s = statusDari(j);
@@ -21,7 +21,11 @@ function tampilLihat() {
     ['Desa', j.desa.nama], ['Kecamatan', j.desa.kecamatan.nama], ['Kabupaten/Kota', j.desa.kecamatan.kabupaten?.nama],
     ['Tempat, tanggal lahir', [j.tempat_lahir, j.tanggal_lahir && tgl(j.tanggal_lahir)].filter(Boolean).join(', ')],
     ['Umur sekarang', j.tanggal_lahir && !j.wafat ? `${hitungUmur(j.tanggal_lahir)} tahun` : null],
-    ['Alamat', j.alamat], ['Umur saat mendaftar', j.umur_daftar ? `${j.umur_daftar} tahun` : null], ['Pekerjaan', j.pekerjaan],
+    ['Jenis kelamin', { L: 'Laki-laki', P: 'Perempuan' }[j.jenis_kelamin]],
+    ...(PERAN_GOLDAR.includes(peran) ? [['Gol. darah', goldar]] : []),
+    ['Alamat', [j.alamat, j.rt_rw && `RT/RW ${j.rt_rw}`].filter(Boolean).join(', ')],
+    ['Status perkawinan', j.status_kawin], ['Kewarganegaraan', j.kewarganegaraan],
+    ['Umur saat mendaftar', j.umur_daftar ? `${j.umur_daftar} tahun` : null], ['Pekerjaan', j.pekerjaan],
     ['Mursyid', j.mursyid?.nama], ['Tanggal daftar', tgl(j.tanggal_daftar)],
   ];
   if (j.wafat) baris.push(['Tanggal wafat', tgl(j.tanggal_wafat)]);
@@ -50,6 +54,8 @@ function tampilForm() {
   $('alamat').value = j?.alamat || '';
   $('umur').value = j?.umur_daftar || '';
   $('tempat-lahir').value = j?.tempat_lahir || '';
+  isiIsianKtp(j);
+  $('gol-darah').value = goldar || '';
   $('tgl-lahir').value = j?.tanggal_lahir || '';
   $('pekerjaan').value = j?.pekerjaan || '';
   $('mursyid').value = j?.mursyid_id ? String(j.mursyid_id) : '';
@@ -87,7 +93,7 @@ $('form').addEventListener('submit', async (e) => {
   if (umur !== null && (umur < 5 || umur > 120)) return salah('umur', 'Umur harus antara 5 dan 120 tahun.');
   const isi = {
     nama, desa_id: Number($('desa').value), alamat: $('alamat').value.trim() || null, umur_daftar: umur,
-    tempat_lahir: $('tempat-lahir').value.trim() || null, tanggal_lahir: $('tgl-lahir').value || null,
+    tempat_lahir: $('tempat-lahir').value.trim() || null, tanggal_lahir: $('tgl-lahir').value || null, ...bacaIsianKtp(),
     pekerjaan: $('pekerjaan').value.trim() || null, mursyid_id: $('mursyid').value ? Number($('mursyid').value) : null,
     tanggal_daftar: $('tanggal').value || undefined,
     aktif: status === 'aktif', wafat: status === 'wafat', tanggal_wafat: status === 'wafat' ? ($('tgl-wafat').value || null) : null,
@@ -98,6 +104,10 @@ $('form').addEventListener('submit', async (e) => {
       ? await dbKirim('PATCH', `jamaah?id=eq.${data.id}&select=${PILIH}`, isi)
       : await dbKirim('POST', `jamaah?select=${PILIH}`, isi);
     if (!hasil) throw new Error('ditolak');
+    if (PERAN_GOLDAR.includes(peran) && $('gol-darah').value !== goldar) {
+      await simpanGoldar(hasil.id, $('gol-darah').value, !!goldar);
+      goldar = $('gol-darah').value;
+    }
     data = hasil;
     history.replaceState(null, '', `?id=${hasil.id}`);
     tampilLihat();
@@ -126,6 +136,8 @@ $('form').addEventListener('submit', async (e) => {
     semuaDesa = desa;
     $('kecamatan').innerHTML += kec.filter((k) => !kecBoleh || kecBoleh.has(k.id)).map((k) => `<option value="${k.id}">${hurufAman(k.nama)}</option>`).join('');
     $('mursyid').innerHTML += murs.map((m) => `<option value="${m.id}">${hurufAman(m.nama)}</option>`).join('');
+    $('isian-goldar').hidden = !PERAN_GOLDAR.includes(peran);
+    if (id && PERAN_GOLDAR.includes(peran)) goldar = (await dbGet(`jamaah_goldar?select=gol_darah&jamaah_id=eq.${encodeURIComponent(id)}`))[0]?.gol_darah || '';
     if (id) {
       data = lain[0]?.[0];
       if (!data) { pesan('Data jamaah tidak ditemukan atau akun ini tidak punya izin melihatnya.'); return; }

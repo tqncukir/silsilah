@@ -254,6 +254,7 @@ body:has(.kol-luas) .app-atas-isi{max-width:1280px}
 .form-judul{margin:0;font-size:var(--fs-sub);color:var(--hijau-jamiyyah)}
 .hasil-baca{margin:12px 0 0;padding:8px 12px;border-radius:10px;background:#E6F4E1;font-size:var(--fs-kecil)}
 .form .otomatis{border-color:var(--hijau-daun);background:#F3FAEF}
+.form .pil.otomatis{border-color:var(--hijau-daun);background:#E6F4E1}
 .dobel{margin:4px 0 12px;padding:12px 14px;border-radius:12px;background:#FFF6CC;border:1px solid #E3C443;font-size:var(--fs-kecil)}
 .dobel p{margin:0 0 6px}
 .dobel ul{margin:0 0 6px;padding-left:20px}

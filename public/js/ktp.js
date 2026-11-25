@@ -25,7 +25,17 @@ const KTP = (() => {
     }
     const alamat = ambil(baris, /^ALAMAT\s*[:;]?\s*(.+)$/);
     const rtrw = baris.join('\n').match(/RT\s*\/?\s*RW\s*[:;]?\s*(\d{1,3})\s*[\/l|I1]\s*(\d{1,3})/);
-    h.alamat = [alamat && judul(alamat), rtrw && `RT ${rtrw[1].padStart(3, '0')}/RW ${rtrw[2].padStart(3, '0')}`].filter(Boolean).join(', ');
+    h.alamat = alamat ? judul(alamat) : '';
+    if (rtrw) h.rt_rw = `${rtrw[1].padStart(3, '0')}/${rtrw[2].padStart(3, '0')}`;
+    const semua = baris.join('\n');
+    const jk = semua.match(/KELAMIN\s*[:;]?\s*(LAKI|PEREMPUAN|PR)/);
+    if (jk) h.jenis_kelamin = jk[1] === 'LAKI' ? 'L' : 'P';
+    const gd = semua.match(/DARAH\s*[:;]?\s*(AB|A|B|O|0)\b/);
+    if (gd) h.gol_darah = gd[1] === '0' ? 'O' : gd[1];
+    const sk = semua.match(/PERKAWINAN\s*[:;]?\s*(BELUM\s*KAWIN|CERAI\s*HIDUP|CERAI\s*MATI|KAWIN)/);
+    if (sk) h.status_kawin = judul(sk[1].replace(/\s+/g, ' '));
+    const wn = semua.match(/KEWARGANEGARAAN\s*[:;]?\s*(WNI|WNA)/);
+    if (wn) h.kewarganegaraan = wn[1];
     h.desa = ambil(baris, /^(?:KEL|DESA)\s*[\/I1l|]?\s*(?:DESA|KEL)?\s*[:;]?\s*([A-Z .]+)$/);
     h.kecamatan = ambil(baris, /^KECAMATAN\s*[:;]?\s*([A-Z .]+)$/);
     h.pekerjaan = ambil(baris, /^PEKERJAAN\s*[:;]?\s*([A-Z .\/]+)$/);
