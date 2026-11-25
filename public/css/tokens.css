@@ -1,0 +1,14 @@
+/* Sistem warna resmi SILSILAH (dari KTA). Satu sumber untuk semua halaman. */
+:root{
+  --hijau-jamiyyah:#0B6B2E; /* header, menu, tombol utama */
+  --hijau-daun:#1E9E3A;     /* tombol kedua, ikon, berhasil */
+  --kuning-rosyid:#F2D300;  /* aksen di atas hijau saja */
+  --hijau-pupus:#EEF6DC;    /* latar kartu info */
+  --putih:#FFFFFF;
+  --hitam:#1A1A1A;
+  --abu:#4A4A4A;
+  /* warna kelompok modul: hanya ikon & label kecil */
+  --grup-pondasi:#1E9E3A; --grup-ruhani:#1E6FB8; --grup-kepedulian:#C99A00; --grup-amanah:#B3261E;
+  --radius:14px; --gap:16px;
+  --font:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif;
+}

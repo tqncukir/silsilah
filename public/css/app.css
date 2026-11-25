@@ -1,0 +1,31 @@
+*{box-sizing:border-box}
+html{font-size:100%;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--font);font-size:1.0625rem;line-height:1.55;color:var(--hitam);background:var(--putih)}
+.header{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:12px;padding:10px 16px;
+  padding-top:max(10px,env(safe-area-inset-top));background:var(--hijau-jamiyyah);color:var(--kuning-rosyid);
+  border-bottom:4px solid var(--kuning-rosyid)}
+.header img{width:44px;height:44px;flex:none}
+.header .judul{font-weight:800;font-size:1.25rem;letter-spacing:.04em;margin:0;line-height:1.2}
+.header .sub{display:block;font-size:.9rem;font-weight:500;color:#FFFFFF}
+main{max-width:640px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.5rem;line-height:1.3;margin:.2em 0 .4em;color:var(--hijau-jamiyyah)}
+h2{font-size:1.2rem;margin:0 0 .4em}
+p{margin:0 0 1em}
+.kartu{background:var(--hijau-pupus);border-radius:var(--radius);padding:16px;margin:0 0 var(--gap);border-left:6px solid var(--hijau-daun)}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:52px;padding:12px 18px;margin:0 0 12px;
+  border:0;border-radius:12px;font:inherit;font-size:1.1rem;font-weight:700;cursor:pointer;text-decoration:none}
+.btn-utama{background:var(--hijau-jamiyyah);color:#FFFFFF}
+.btn-kedua{background:var(--putih);color:var(--hijau-jamiyyah);border:2px solid var(--hijau-daun)}
+.btn:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:2px;box-shadow:0 0 0 6px var(--hijau-jamiyyah)}
+.btn[hidden]{display:none}
+.lencana{display:inline-block;background:var(--hijau-jamiyyah);color:var(--kuning-rosyid);font-size:.85rem;font-weight:700;
+  padding:3px 10px;border-radius:999px}
+.daftar{list-style:none;margin:0;padding:0}
+.daftar li{padding:10px 0;border-bottom:1px solid #D7E6C0}
+.daftar li:last-child{border-bottom:0}
+.kecil{font-size:1rem;color:var(--abu)}
+footer{text-align:center;padding:20px 16px 32px;color:var(--abu);font-size:1rem}
+.status{position:fixed;left:16px;right:16px;bottom:16px;padding:12px 16px;border-radius:12px;background:var(--hitam);color:#FFFFFF;
+  text-align:center;display:none}
+.status.tampil{display:block}
+@media (prefers-reduced-motion:no-preference){.btn{transition:transform .1s}.btn:active{transform:scale(.98)}}
