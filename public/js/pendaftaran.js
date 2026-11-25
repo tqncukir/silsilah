@@ -21,7 +21,7 @@ function kosongkan() {
   $('hasil-baca').hidden = true; $('dobel').hidden = true; dobelDiperiksa = ''; pesanForm('');
 }
 
-function terapkan(h) {
+async function terapkan(h) {
   const tandai = (k, v) => { if (v === undefined || v === null || v === '') return; $(k).value = v; $(k).classList.add('otomatis'); };
   tandai('nama', h.nama); tandai('alamat', h.alamat); tandai('pekerjaan', h.pekerjaan);
   tandai('tempat-lahir', h.tempat_lahir); tandai('tgl-lahir', h.tanggal_lahir);
@@ -29,13 +29,9 @@ function terapkan(h) {
   if (PERAN_GOLDAR.includes(peranSaya)) tandai('gol-darah', h.gol_darah);
   if (h.jenis_kelamin) { const r = document.querySelector(`[name=jk][value=${h.jenis_kelamin}]`); r.checked = true; r.closest('.pil').classList.add('otomatis'); }
   aturUmur();
-  // wilayah: pakai ejaan yang sudah ada di daftar kalau mirip (salah baca sedikit dibetulkan)
-  const kab = h.kabupaten ? (KTP.cocokkan(h.kabupaten, [...new Set(semuaWilayah.map((w) => w.kab))].map((nama) => ({ nama })))?.nama || h.kabupaten) : null;
-  const diKab = semuaWilayah.filter((w) => !kab || w.kab === kab);
-  const kec = h.kecamatan ? (KTP.cocokkan(h.kecamatan, [...new Set(diKab.map((w) => w.kec))].map((nama) => ({ nama })))?.nama || h.kecamatan) : null;
-  const diKec = diKab.filter((w) => !kec || w.kec === kec);
-  const desa = h.desa ? (KTP.cocokkan(h.desa, diKec.map((w) => ({ nama: w.desa })))?.nama || h.desa) : null;
-  tandai('kabupaten', kab); tandai('kecamatan', kec); tandai('desa', desa);
+  // wilayah: ejaan dibetulkan ke nama resmi Kemendagri kalau mirip (salah baca sedikit)
+  const w = await Wilayah.betulkan(h, KTP.cocokkan).catch(() => h);
+  tandai('kabupaten', w.kabupaten); tandai('kecamatan', w.kecamatan); tandai('desa', w.desa);
   perbaruiSaran();
   const terisi = ISIAN.filter((k) => $(k).classList.contains('otomatis')).length;
   $('hasil-baca').hidden = terisi === 0;
@@ -104,7 +100,7 @@ async function bacaGambar(berkas) {
       $('bilah-isi').style.width = `${Math.max(5, p * 100)}%`;
     });
     const hasil = KTP.urai(teks);
-    kosongkan(); terapkan(hasil);
+    kosongkan(); await terapkan(hasil);
     tampil('form');
   } catch (err) {
     pesan('KTP belum bisa dibaca di perangkat ini. Silakan isi manual.');

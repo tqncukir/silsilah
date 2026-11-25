@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=27">
-<link rel="stylesheet" href="/css/app.css?v=27">
+<link rel="stylesheet" href="/css/tokens.css?v=28">
+<link rel="stylesheet" href="/css/app.css?v=28">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -92,7 +92,8 @@
       </div>
       <div class="isian">
         <label for="tempat-lahir">Tempat lahir</label>
-        <input id="tempat-lahir" maxlength="60" autocapitalize="words">
+        <input id="tempat-lahir" list="saran-lahir" maxlength="60" autocapitalize="words" autocomplete="off">
+        <datalist id="saran-lahir"></datalist>
       </div>
       <div class="isian">
         <label for="tgl-lahir">Tanggal lahir</label>
@@ -180,9 +181,10 @@
     </div>
   </section>
 </main>
-<script src="/js/supa.js?v=27" defer></script>
+<script src="/js/supa.js?v=28" defer></script>
+<script src="/js/wilayah.js?v=28" defer></script>
 <script src="/ocr/tesseract.min.js" defer></script>
-<script src="/js/ktp.js?v=27" defer></script>
-<script src="/js/pendaftaran.js?v=27" defer></script>
+<script src="/js/ktp.js?v=28" defer></script>
+<script src="/js/pendaftaran.js?v=28" defer></script>
 </body>
 </html>
