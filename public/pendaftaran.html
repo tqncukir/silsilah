@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=17">
-<link rel="stylesheet" href="/css/app.css?v=17">
+<link rel="stylesheet" href="/css/tokens.css?v=18">
+<link rel="stylesheet" href="/css/app.css?v=18">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -41,11 +41,11 @@
       <p><strong>Foto KTP dibaca di perangkat ini saja.</strong> Foto tidak dikirim, tidak disimpan, dan NIK tidak dicatat.</p>
     </div>
     <div class="foto-pilih">
-      <label class="btn btn-utama btn-pas" for="kamera">
+      <button type="button" class="btn btn-utama btn-pas" id="buka-kamera">
         <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
         Foto KTP
-      </label>
-      <input id="kamera" type="file" accept="image/*" capture="environment" class="sr-only">
+      </button>
+      <input id="kamera" type="file" accept="image/*" capture="environment" class="sr-only" tabindex="-1">
       <label class="btn btn-kedua btn-pas" for="galeri">Pilih dari galeri</label>
       <input id="galeri" type="file" accept="image/*" class="sr-only">
       <button type="button" class="tautan" id="manual">Isi manual tanpa KTP</button>
@@ -59,6 +59,17 @@
       <div class="bilah" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-labelledby="membaca-teks"><span id="bilah-isi"></span></div>
     </div>
   </section>
+
+  <div id="kamera-layar" class="kamera" hidden role="dialog" aria-modal="true" aria-labelledby="kamera-judul">
+    <video id="video" playsinline muted autoplay></video>
+    <div class="kamera-bingkai" id="bingkai" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <p class="kamera-petunjuk" id="kamera-judul">Masukkan KTP ke dalam kotak.<br><span>Pastikan terang dan tulisan terbaca jelas.</span></p>
+    <div class="kamera-bawah">
+      <button type="button" class="kamera-batal" id="kamera-batal">Batal</button>
+      <button type="button" class="kamera-jepret" id="jepret" aria-label="Ambil foto KTP"><span></span></button>
+      <span class="kamera-isi"></span>
+    </div>
+  </div>
 
   <form id="form" class="panel form" hidden novalidate aria-labelledby="f-judul">
     <h2 id="f-judul" class="form-judul">Data jamaah baru</h2>
@@ -121,9 +132,9 @@
     </div>
   </section>
 </main>
-<script src="/js/supa.js?v=17" defer></script>
+<script src="/js/supa.js?v=18" defer></script>
 <script src="/ocr/tesseract.min.js" defer></script>
-<script src="/js/ktp.js?v=17" defer></script>
-<script src="/js/pendaftaran.js?v=17" defer></script>
+<script src="/js/ktp.js?v=18" defer></script>
+<script src="/js/pendaftaran.js?v=18" defer></script>
 </body>
 </html>

@@ -50,7 +50,51 @@ function terapkan(h) {
 async function prosesFoto(e) {
   const berkas = e.target.files?.[0];
   e.target.value = '';
-  if (!berkas) return;
+  if (berkas) bacaGambar(berkas);
+}
+
+// ===== Kamera dengan bingkai KTP =====
+let aliran = null;
+async function bukaKamera() {
+  if (!navigator.mediaDevices?.getUserMedia) return $('kamera').click(); // HP lama: pakai kamera bawaan
+  try {
+    aliran = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } }, audio: false });
+  } catch {
+    pesan('Izin kamera ditolak. Foto KTP lewat kamera bawaan HP.');
+    return $('kamera').click();
+  }
+  $('video').srcObject = aliran;
+  $('kamera-layar').hidden = false;
+  document.body.style.overflow = 'hidden';
+  $('jepret').focus();
+}
+function tutupKamera() {
+  aliran?.getTracks().forEach((t) => t.stop()); aliran = null;
+  $('video').srcObject = null;
+  $('kamera-layar').hidden = true;
+  document.body.style.overflow = '';
+  $('buka-kamera').focus();
+}
+function jepret() {
+  const v = $('video'), b = $('bingkai').getBoundingClientRect(), l = v.getBoundingClientRect();
+  if (!v.videoWidth) return;
+  // video tampil "cover": hitung bagian video yang ada di dalam bingkai
+  const skala = Math.max(l.width / v.videoWidth, l.height / v.videoHeight);
+  const geserX = (v.videoWidth * skala - l.width) / 2, geserY = (v.videoHeight * skala - l.height) / 2;
+  const sx = (b.left - l.left + geserX) / skala, sy = (b.top - l.top + geserY) / skala;
+  const sw = b.width / skala, sh = b.height / skala;
+  const k = document.createElement('canvas');
+  k.width = Math.round(sw); k.height = Math.round(sh);
+  k.getContext('2d').drawImage(v, sx, sy, sw, sh, 0, 0, k.width, k.height);
+  tutupKamera();
+  k.toBlob((blob) => { k.width = k.height = 0; if (blob) bacaGambar(blob); }, 'image/jpeg', 0.92);
+}
+$('buka-kamera').onclick = bukaKamera;
+$('kamera-batal').onclick = tutupKamera;
+$('jepret').onclick = jepret;
+$('kamera-layar').addEventListener('keydown', (e) => { if (e.key === 'Escape') tutupKamera(); });
+
+async function bacaGambar(berkas) {
   pesan('');
   $('membaca').hidden = false;
   $('membaca-teks').textContent = 'Menyiapkan pembaca KTP...'; $('membaca-persen').textContent = ''; $('bilah-isi').style.width = '5%';
