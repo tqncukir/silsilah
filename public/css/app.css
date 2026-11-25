@@ -302,4 +302,5 @@ body:has(.kol-luas) .app-atas-isi{max-width:1280px}
 .saran-daftar li span{font-size:var(--fs-isi);color:var(--hitam,#1A1A1A)}
 .saran-daftar li small{font-size:var(--fs-kecil);color:var(--abu)}
 .saran-daftar li:hover,.saran-daftar li[aria-selected=true]{background:var(--hijau-pupus)}
+.saran-daftar li.terpilih span{font-weight:600;color:var(--hijau-jamiyyah)}
 @media (min-width:640px){.saran-daftar{min-width:280px}}

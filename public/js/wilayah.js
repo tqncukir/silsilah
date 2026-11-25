@@ -32,13 +32,16 @@ const Wilayah = (() => {
     for (const x of daftar) { const n = kecil(ambil(x)); if (n.startsWith(k)) awal.push(x); else if (n.includes(k)) isi.push(x); }
     return awal.concat(isi);
   };
+  let fokusBaru = false; // baru masuk isian (belum mengetik)
+  // Isian kosong atau (saat baru masuk) sudah sama persis dengan salah satu pilihan: tampilkan semua (bisa digulir) agar mudah diganti.
+  const saringAtauSemua = (daftar, q, ambil = (x) => x) => (!kecil(q) || (fokusBaru && daftar.some((x) => kecil(ambil(x)) === kecil(q))) ? daftar : saring(daftar, q, ambil));
   const unik = (daftar) => { const ada = new Set(); return daftar.filter((x) => { const k = x.teks + '|' + x.sub; if (ada.has(k)) return false; ada.add(k); return true; }); };
 
   // ===== Sumber saran: (teks yang diketik) -> [{teks, sub, isi}] =====
   const sumber = {
     async kabupaten(q) {
       await daftarKab();
-      return saring(kab, q, (k) => k.nama).slice(0, 8).map((k) => ({ teks: k.nama, sub: k.prov, isi: { kabupaten: k.nama } }));
+      return (kecil(q) ? saringAtauSemua(kab, q, (k) => k.nama) : kab).slice(0, 40).map((k) => ({ teks: k.nama, sub: k.prov, isi: { kabupaten: k.nama } }));
     },
     async 'tempat-lahir'(q) {
       if (kecil(q).length < 2) return [];
@@ -47,24 +50,24 @@ const Wilayah = (() => {
       return saring(nama, q).slice(0, 8).map((n) => ({ teks: n, isi: { 'tempat-lahir': n } }));
     },
     async pekerjaan(q) {
-      return saring(PEKERJAAN_BAKU, q).slice(0, 8).map((n) => ({ teks: n, isi: { pekerjaan: n } }));
+      return saringAtauSemua(PEKERJAAN_BAKU, q).map((n) => ({ teks: n, isi: { pekerjaan: n } }));
     },
     async kecamatan(q) {
       await daftarKab();
       const k = cariKab($w('kabupaten').value);
-      const dekat = k ? saring(await anakDari(k.kode), q, (x) => x.nama).map((x) => ({ teks: x.nama, sub: k.nama, isi: { kecamatan: x.nama, kabupaten: k.nama } })) : [];
+      const dekat = k ? saringAtauSemua(await anakDari(k.kode), q, (x) => x.nama).map((x) => ({ teks: x.nama, sub: k.nama, isi: { kecamatan: x.nama, kabupaten: k.nama } })) : [];
       let jauh = [];
       if (kecil(q).length >= 3) {
         const r = await dbGet(`wilayah_resmi?select=kode,nama&tingkat=eq.3&nama=ilike.${aman(q)}*&order=nama&limit=12`);
         jauh = r.map((x) => { const kb = kabKode(x.kode); return { teks: x.nama, sub: `${kb.nama}, ${kb.prov}`, isi: { kecamatan: x.nama, kabupaten: kb.nama } }; });
       }
-      return unik(dekat.slice(0, 8).concat(jauh)).slice(0, 10);
+      return unik(dekat.concat(jauh)).slice(0, 60);
     },
     async desa(q) {
       await daftarKab();
       const k = cariKab($w('kabupaten').value);
       const kc = k && (await anakDari(k.kode)).find((x) => kecil(x.nama) === kecil($w('kecamatan').value));
-      const dekat = kc ? saring(await anakDari(kc.kode), q, (x) => x.nama)
+      const dekat = kc ? saringAtauSemua(await anakDari(kc.kode), q, (x) => x.nama)
         .map((x) => ({ teks: x.nama, sub: `Kec. ${kc.nama}, ${k.nama}`, isi: { desa: x.nama, kecamatan: kc.nama, kabupaten: k.nama } })) : [];
       let jauh = [];
       if (kecil(q).length >= 3) {
@@ -74,7 +77,7 @@ const Wilayah = (() => {
         jauh = r.map((x) => { const kb = kabKode(x.kode), kcn = nk[x.kode.slice(0, 8)]; return { teks: x.nama, sub: `Kec. ${kcn}, ${kb.nama}`, isi: { desa: x.nama, kecamatan: kcn, kabupaten: kb.nama }, dekat: k && kb.kode === k.kode }; });
         jauh.sort((a, b) => (b.dekat ? 1 : 0) - (a.dekat ? 1 : 0)); // kab/kota yang terisi lebih dulu
       }
-      return unik(dekat.slice(0, 8).concat(jauh)).slice(0, 10);
+      return unik(dekat.concat(jauh)).slice(0, 60);
     },
   };
 
@@ -103,15 +106,18 @@ const Wilayah = (() => {
       for (const [k, v] of Object.entries(x.isi)) { const el = $w(k); if (el) { el.value = v; el.classList.remove('otomatis'); el.removeAttribute('aria-invalid'); el.dispatchEvent(new Event('change', { bubbles: true })); } }
       tutup();
     };
-    const tampilkan = async () => {
+    const tampilkan = async (fokus = false) => {
       const n = ++nomor;
+      fokusBaru = fokus;
       let hasil = [];
       try { hasil = await sumber[id](inp.value); } catch { hasil = []; }
       if (n !== nomor || document.activeElement !== inp) return; // sudah ada ketikan baru / pindah isian
       item = hasil;
       if (!item.length || (item.length === 1 && kecil(item[0].teks) === kecil(inp.value) && !item[0].sub)) return tutup();
+      const pas = item.findIndex((x) => kecil(x.teks) === kecil(inp.value));
       ul.innerHTML = item.map((x, i) => `<li role="option" id="${ul.id}-${i}" aria-selected="false"><span>${hurufAman(x.teks)}</span>${x.sub ? `<small>${hurufAman(x.sub)}</small>` : ''}</li>`).join('');
       ul.hidden = false; inp.setAttribute('aria-expanded', 'true'); aktif = -1;
+      if (pas >= 0) { ul.children[pas].classList.add('terpilih'); ul.scrollTop = ul.children[pas].offsetTop - 4; }
       // isian setengah lebar (di HP): lebarkan kotak saran tanpa keluar dari kartu
       const kartu = inp.closest('.form-kisi') || inp.closest('.panel');
       const a1 = inp.getBoundingClientRect(), a2 = kartu.getBoundingClientRect();
@@ -119,10 +125,10 @@ const Wilayah = (() => {
       ul.style.minWidth = `${Math.min(260, a2.width)}px`;
       ul.style.left = kanan ? 'auto' : '0'; ul.style.right = kanan ? '0' : 'auto';
     };
-    const nanti = () => { clearTimeout(tunda); tunda = setTimeout(tampilkan, 200); };
+    const nanti = (fokus) => { clearTimeout(tunda); tunda = setTimeout(() => tampilkan(fokus === true), 200); };
 
-    inp.addEventListener('input', nanti);
-    inp.addEventListener('focus', nanti);
+    inp.addEventListener('input', () => nanti(false));
+    inp.addEventListener('focus', () => nanti(true));
     inp.addEventListener('blur', () => setTimeout(tutup, 150));
     inp.addEventListener('keydown', (e) => {
       if (ul.hidden) return;
