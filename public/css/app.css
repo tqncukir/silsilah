@@ -149,8 +149,7 @@ footer{text-align:center;padding:20px 16px 32px;color:var(--abu);font-size:var(-
 
 /* Tabel: jadi kartu di HP */
 .tabel-bungkus{background:#FFFFFF;border-radius:14px;box-shadow:0 1px 3px rgba(26,26,26,.08);overflow:hidden}
-.app-isi:has(.kol-luas){max-width:1280px}
-body:has(.kol-luas) .app-atas-isi{max-width:1280px}
+
 .tabel{width:100%;border-collapse:collapse}
 .tabel th{text-align:left;font-size:var(--fs-kecil);font-weight:600;color:var(--abu);padding:12px 16px;background:#F6F9F1;border-bottom:1px solid #E2ECD6}
 .tabel td{padding:12px 16px;border-bottom:1px solid #EEF2E8}
@@ -307,3 +306,16 @@ body:has(.kol-luas) .app-atas-isi{max-width:1280px}
 .saran-daftar li:hover,.saran-daftar li[aria-selected=true]{background:var(--hijau-pupus)}
 .saran-daftar li.terpilih span{font-weight:600;color:var(--hijau-jamiyyah)}
 @media (min-width:640px){.saran-daftar{min-width:280px}}
+
+/* Komputer/laptop: penuh layar agar semua informasi terlihat (permintaan Kang 2026-11-25) */
+@media (min-width:1024px){
+  .app-atas-isi,.app-isi,.app-sempit{max-width:none;padding-left:32px;padding-right:32px}
+}
+@media (min-width:1100px){
+  .form-kisi{grid-template-columns:repeat(12,minmax(0,1fr));gap:0 20px}
+  .form-kisi>*{grid-column:span 3}
+  .form-kisi>.lebar{grid-column:span 6}
+  .form-kisi>.d4{grid-column:span 4}
+  .form-kisi>.d2{grid-column:span 2}
+  .form-kisi>.bagian-judul,.form-kisi>.bagian-ket{grid-column:span 12}
+}
