@@ -39,6 +39,7 @@ Nomor Anggota: 1165100001 dst. KTA lama (QR teks biasa) tetap berlaku; KTA baru 
 12. Sistem warna resmi dari KTA (lihat di bawah). Huruf minimal 16px, kontras memenuhi standar, tombol besar untuk para sepuh.
 13. Ringan, aman, awet: tabel ternormalisasi + indeks; pagination; PWA cache; arsip data lama per tahun; file dikompres; backup bulanan ke luar Supabase; semua perubahan database lewat migrasi di repo; cek Supabase advisors rutin.
 14. Kalau perintah kurang jelas atau berisi banyak tugas sekaligus, ingatkan: "Beri perintah yang jelas per tugas, Kang" + contoh.
+15. Responsif: SILSILAH dan website harus nyaman di HP, tablet, laptop, dan komputer (uji 360px, 768px, 1280px ke atas).
 
 ## Warna resmi (`public/css/tokens.css`, satu sumber untuk semua halaman)
 | Nama | Kode | Untuk |
