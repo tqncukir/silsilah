@@ -22,6 +22,7 @@ Mulai: 2026-11-25 (Kang Salman: "Bismillah").
 
 - Langkah 3/3b disetujui Kang 2026-11-25 ("lanjut langkah 4").
 - Langkah 6 disetujui Kang 2026-11-25 ("bagus", "lanjut langkah 7").
+- Langkah 7 disetujui Kang 2026-11-25 ("sudah bagus"). Tahap 1 (7 langkah) selesai dibangun. Berikutnya: impor 5.528 data asli, tunggu perintah Kang.
 
 ## Sedang dikerjakan
 - **Langkah 4, Data Jamaah** (mulai 2026-11-25): `jamaah.html` (cari nama/10 angka nomor, saring kecamatan/desa/status, 20 per halaman, tabel jadi kartu di HP), `jamaah-isi.html` (rincian, tambah, ubah, status Aktif/Tidak aktif/Wafat + tanggal wafat), beranda bermenu sesuai peran. Nomor Anggota otomatis (`nomor_anggota_seq`, mulai 1165105645; migrasi `20261125040000`). Fungsi `cek_login_anggota` lama sudah dihapus. Kang lanjut ke Langkah 5 (2026-11-25). Tambahan atas permintaan Kang: kolom No urut, info 20 per halaman, status berwarna (Aktif hijau, Tidak aktif kuning, Wafat merah), semua kolom di laptop.
