@@ -134,9 +134,18 @@ const Wilayah = (() => {
     ul.addEventListener('pointerdown', (e) => { e.preventDefault(); const li = e.target.closest('li'); if (li) pilih([...ul.children].indexOf(li)); });
   }
 
+  // Nama provinsi tampil di bawah Kab/Kota sebagai keterangan (tidak disimpan).
+  function provinsi() {
+    const el = $w('k-prov'); if (!el) return;
+    const k = cariKab($w('kabupaten').value);
+    el.textContent = k ? `Provinsi ${k.prov}` : '';
+  }
+
   async function pasang() {
     for (const id of ['tempat-lahir', 'pekerjaan', 'desa', 'kecamatan', 'kabupaten']) pasangKotak(id);
+    for (const ev of ['input', 'change']) $w('kabupaten').addEventListener(ev, provinsi);
     await daftarKab();
+    provinsi();
   }
 
   // Ejaan hasil baca KTP dibetulkan ke nama resmi bila mirip. cocokkan(teks, daftar) -> item | null
@@ -149,7 +158,7 @@ const Wilayah = (() => {
     return { ...h, kabupaten: h.kabupaten ? k.nama : h.kabupaten, kecamatan: kec?.nama || h.kecamatan, desa: desa?.nama || h.desa };
   }
 
-  return { pasang, betulkan };
+  return { pasang, betulkan, provinsi };
 })();
 
 async function muatWilayah(kecBoleh) {
@@ -157,7 +166,7 @@ async function muatWilayah(kecBoleh) {
   semuaWilayah = d.filter((x) => !kecBoleh || kecBoleh.has(x.kecamatan.id))
     .map((x) => ({ id: x.id, desa: x.nama, kec: x.kecamatan.nama, kec_id: x.kecamatan.id, kab: x.kecamatan.kabupaten.nama }));
   await Wilayah.pasang().catch(() => {}); // tanpa daftar resmi pun isian tetap bisa diketik
-  return () => {};
+  return Wilayah.provinsi;
 }
 // Kab/kota awal: satu-satunya yang dipakai (misal koordinator), selain itu Jombang.
 function wilayahAwal() {

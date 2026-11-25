@@ -176,9 +176,9 @@ $('form').addEventListener('submit', async (e) => {
       ['Jenis kelamin', { L: 'Laki-laki', P: 'Perempuan' }[ktp.jenis_kelamin] || ''],
       ...(PERAN_GOLDAR.includes(peranSaya) ? [['Gol. darah', $('gol-darah').value]] : []),
       ['Status perkawinan', ktp.status_kawin], ['Kewarganegaraan', ktp.kewarganegaraan], ['Pekerjaan', siapKirim.pekerjaan],
-      ['Alamat', [siapKirim.alamat, ktp.rt_rw && `RT/RW ${ktp.rt_rw}`].filter(Boolean).join(', ')],
-      ['Desa/Kelurahan', KTP.judul($('desa').value.replace(/\s+/g, ' '))], ['Kecamatan', KTP.judul($('kecamatan').value.replace(/\s+/g, ' '))],
-      ['Kabupaten/Kota', KTP.judul($('kabupaten').value.replace(/\s+/g, ' '))],
+      ['Kab/Kota', KTP.judul($('kabupaten').value.replace(/\s+/g, ' ')) + ($('k-prov').textContent ? `, ${$('k-prov').textContent.replace('Provinsi ', '')}` : '')],
+      ['Kecamatan', KTP.judul($('kecamatan').value.replace(/\s+/g, ' '))], ['Kel/Desa', KTP.judul($('desa').value.replace(/\s+/g, ' '))],
+      ['Dusun/Jalan', [siapKirim.alamat, ktp.rt_rw && `RT/RW ${ktp.rt_rw}`].filter(Boolean).join(', ')],
     ];
     $('k-rincian').innerHTML = baris.map(([k, v]) => `<div><dt>${k}</dt><dd>${v ? hurufAman(v) : '<span class="kosong">Belum diisi</span>'}</dd></div>`).join('');
     $('pesan-konfirmasi').textContent = '';

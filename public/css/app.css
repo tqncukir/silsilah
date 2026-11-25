@@ -213,12 +213,14 @@ body:has(.kol-luas) .app-atas-isi{max-width:1280px}
 .form-kisi{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0 12px;margin-top:16px}
 .form-kisi>*{grid-column:span 6;min-width:0}
 .form-kisi>.k3{grid-column:span 3}
+.form-kisi>.k4{grid-column:span 4}.form-kisi>.k2{grid-column:span 2}
 .form .bagian-judul{margin:12px 0 10px;padding-top:14px;border-top:1px solid #E3EBDD;font-size:var(--fs-isi);font-weight:600;color:var(--hijau-jamiyyah)}
 .form .bagian-judul:first-child{margin-top:0;padding-top:0;border-top:0}
 .pilihan .pil{flex:1 1 0;justify-content:center;white-space:nowrap;padding:0 10px}
 .bagian-ket{grid-column:span 6;margin:-6px 0 12px}
+.bagian-ket:last-child{margin:0 0 8px}
 @media (max-width:639px){.form-kisi{align-items:end}}
-@media (min-width:640px){.form-kisi{gap:0 16px}.form-kisi>*{grid-column:span 3}.form-kisi>.lebar,.form-kisi>.bagian-judul,.form-kisi>.bagian-ket{grid-column:span 6}}
+@media (min-width:640px){.form-kisi{gap:0 16px}.form-kisi>*{grid-column:span 3}.form-kisi>.lebar,.form-kisi>.bagian-judul,.form-kisi>.bagian-ket{grid-column:span 6}.form-kisi>.d2{grid-column:span 2}.form-kisi>.d4{grid-column:span 4}}
 .wajib{font-weight:400;color:var(--abu);font-size:.8125rem}
 .form select:disabled{background:#F3F3F1;color:var(--abu)}
 .pilihan{border:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
