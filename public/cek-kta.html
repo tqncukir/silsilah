@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Cek Keaslian KTA · SILSILAH TQN Cukir</title>
+<meta name="description" content="Periksa keaslian Kartu Tanda Anggota Jamaah TQN Pusat Cukir Jombang">
+<meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=40">
+<link rel="stylesheet" href="/css/app.css?v=40">
+</head>
+<body class="hal-masuk">
+<header class="masuk-atas">
+  <a href="/" class="masuk-kembali" aria-label="Kembali ke beranda">
+    <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+  <div class="masuk-merek">
+    <img src="/icons/icon-192.png" alt="Logo Jam'iyyah TQN Cukir" width="60" height="60" class="masuk-logo">
+    <p class="masuk-nama">SILSILAH</p>
+    <p class="masuk-lembaga">Jamaah TQN Pusat Cukir Jombang</p>
+  </div>
+</header>
+
+<main class="masuk-isi">
+  <section class="masuk-kartu" aria-labelledby="judul-cek">
+    <h1 id="judul-cek">Cek Keaslian KTA</h1>
+    <p class="masuk-ajak" id="ajak">Pindai QR di KTA baru dengan kamera HP, atau isi data KTA lama di bawah.</p>
+
+    <div id="hasil" class="cek-hasil" hidden aria-live="polite">
+      <p class="cek-tanda" id="hasil-tanda"></p>
+      <p class="cek-ket" id="hasil-ket"></p>
+      <dl class="rincian" id="hasil-rincian"></dl>
+    </div>
+
+    <form id="form-lama" class="form" autocomplete="off" novalidate aria-labelledby="judul-lama">
+      <h2 class="bagian-judul" id="judul-lama">KTA lama (tanpa QR baru)</h2>
+      <div class="isian">
+        <label for="nomor">Nomor Anggota</label>
+        <input id="nomor" inputmode="numeric" maxlength="10" required aria-describedby="ket-nomor" placeholder="Contoh: 1165100001">
+        <p id="ket-nomor" class="ket">10 angka di KTA</p>
+      </div>
+      <div class="isian">
+        <label for="nama">Nama sesuai KTA</label>
+        <input id="nama" maxlength="120" required autocapitalize="words">
+      </div>
+      <p id="pesan" class="pesan" role="alert"></p>
+      <button class="btn btn-utama btn-masuk" type="submit" id="periksa"><span class="putar" aria-hidden="true"></span><span class="teks">Periksa</span></button>
+    </form>
+  </section>
+  <aside class="masuk-bantuan">
+    <p>Hasil hanya menampilkan nama, alamat desa, dan status. Data lain jamaah tetap rahasia.</p>
+  </aside>
+</main>
+<script src="/js/supa.js?v=40" defer></script>
+<script src="/js/cek-kta.js?v=40" defer></script>
+</body>
+</html>

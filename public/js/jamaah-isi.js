@@ -133,6 +133,7 @@ $('form').addEventListener('submit', async (e) => {
       data = lain[0]?.[0];
       if (!data) { pesan('Data jamaah tidak ditemukan atau akun ini tidak punya izin melihatnya.'); return; }
       $('ubah').hidden = !bisaUbah || (kecBoleh && !kecBoleh.has(data.desa.kecamatan_id));
+      $('lihat-kta').href = `/kta.html?id=${encodeURIComponent(id)}`; $('lihat-kta').hidden = false;
       tampilLihat();
     } else if (bisaUbah) {
       tampilForm();

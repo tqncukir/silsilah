@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>KTA Digital · SILSILAH TQN Cukir</title>
+<meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=40">
+<link rel="stylesheet" href="/css/app.css?v=40">
+</head>
+<body class="hal-app">
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <a href="/beranda.html">Beranda</a>
+      <a href="/jamaah.html" aria-current="page">Data Jamaah</a>
+      <a href="/pendaftaran.html" id="nav-daftar" hidden>Pendaftaran</a>
+    </nav>
+    <button class="app-keluar" id="keluar" type="button">Keluar</button>
+  </div>
+</header>
+
+<main class="app-isi app-sempit">
+  <a href="/jamaah.html" class="kembali" id="kembali">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Rincian jamaah
+  </a>
+  <div class="judul-baris">
+    <div>
+      <h1>KTA Digital</h1>
+      <p class="judul-sub">QR di kartu bisa dipindai siapa saja untuk memastikan kartu ini asli.</p>
+    </div>
+  </div>
+  <p id="pesan" class="pesan" role="alert"></p>
+
+  <div class="kta-tata">
+    <div class="kta-wadah">
+      <article class="kta" id="kartu" aria-label="Kartu Tanda Anggota" hidden>
+        <header class="kta-kepala">
+          <img src="/icons/logo-96.png" alt="" width="40" height="40">
+          <div>
+            <p class="kta-judul">KARTU ANGGOTA JAM'IYYAH</p>
+            <p class="kta-sub">Thoriqoh Qodiriyah wa Naqsyabandiyah · Pusat Cukir Jombang</p>
+          </div>
+        </header>
+        <div class="kta-badan">
+          <dl class="kta-data" id="kta-data"></dl>
+          <div class="kta-qr">
+            <div id="kta-qr" class="kta-qr-gambar" role="img" aria-label="QR keaslian KTA"></div>
+            <p class="kta-pin" id="kta-pin" hidden>PIN <strong id="kta-pin-angka"></strong></p>
+          </div>
+        </div>
+        <footer class="kta-kaki">
+          <span>Al-Mursyid <strong>KH. Syamsuddin Ali</strong></span>
+          <span id="kta-versi"></span>
+        </footer>
+      </article>
+    </div>
+
+    <section class="panel kta-aksi" id="aksi" hidden aria-labelledby="aksi-judul">
+      <h2 id="aksi-judul" class="form-judul">Cetak kartu</h2>
+      <p class="judul-sub" id="aksi-ket">PIN 6 angka dicetak di kartu untuk login anggota. PIN hanya tampil sekali, saat dibuat.</p>
+      <div id="pin-baru" class="pin-baru" hidden role="status">
+        <p>PIN baru: <strong class="angka" id="pin-tampil"></strong></p>
+        <p class="ket">Sudah tercetak di kartu. Setelah halaman ini ditutup, PIN tidak bisa dilihat lagi.</p>
+      </div>
+      <div class="tombol-baris kolom">
+        <button type="button" class="btn btn-utama" id="buat-pin" hidden><span class="putar" aria-hidden="true"></span><span class="teks">Buat PIN baru lalu cetak</span></button>
+        <button type="button" class="btn btn-kedua" id="cetak">Cetak tanpa PIN</button>
+        <button type="button" class="btn btn-bahaya" id="ganti" hidden>KTA hilang: batalkan QR lama</button>
+      </div>
+      <p id="pesan-aksi" class="pesan" role="alert"></p>
+    </section>
+  </div>
+</main>
+<script src="/js/supa.js?v=40" defer></script>
+<script src="/js/qrcode.js?v=40" defer></script>
+<script src="/js/kta.js?v=40" defer></script>
+</body>
+</html>
