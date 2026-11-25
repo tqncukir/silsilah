@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=23">
-<link rel="stylesheet" href="/css/app.css?v=23">
+<link rel="stylesheet" href="/css/tokens.css?v=24">
+<link rel="stylesheet" href="/css/app.css?v=24">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -147,14 +147,25 @@
     <div id="dobel" class="dobel" hidden role="alert">
       <p><strong>Mungkin sudah terdaftar.</strong> Jamaah dengan nama mirip di desa yang sama:</p>
       <ul id="dobel-daftar"></ul>
-      <p class="ket">Kalau memang orang yang berbeda, tekan Simpan lagi.</p>
+      <p class="ket">Kalau memang orang yang berbeda, tekan Periksa data lagi.</p>
     </div>
     <p id="pesan-form" class="pesan" role="alert"></p>
     <div class="tombol-baris">
       <button type="button" class="btn btn-kedua btn-pas" id="ulang">Foto ulang</button>
-      <button type="submit" class="btn btn-utama btn-pas btn-masuk" id="simpan"><span class="putar" aria-hidden="true"></span><span class="teks">Simpan</span></button>
+      <button type="submit" class="btn btn-utama btn-pas btn-masuk" id="simpan"><span class="putar" aria-hidden="true"></span><span class="teks">Periksa data</span></button>
     </div>
   </form>
+
+  <section id="konfirmasi" class="panel" hidden aria-labelledby="k-judul">
+    <h2 id="k-judul" class="form-judul" tabindex="-1">Periksa sekali lagi</h2>
+    <p class="judul-sub">Pastikan semua data sudah benar. Setelah disimpan, Nomor Anggota langsung dibuat.</p>
+    <dl class="rincian rincian-periksa" id="k-rincian"></dl>
+    <p id="pesan-konfirmasi" class="pesan" role="alert"></p>
+    <div class="tombol-baris">
+      <button type="button" class="btn btn-kedua btn-pas" id="perbaiki">Ubah</button>
+      <button type="button" class="btn btn-utama btn-pas btn-masuk" id="simpan-yakin"><span class="putar" aria-hidden="true"></span><span class="teks">Ya, simpan</span></button>
+    </div>
+  </section>
 
   <section id="selesai" class="panel selesai" hidden aria-live="polite">
     <div class="selesai-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="32" height="32"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
@@ -166,9 +177,9 @@
     </div>
   </section>
 </main>
-<script src="/js/supa.js?v=23" defer></script>
+<script src="/js/supa.js?v=24" defer></script>
 <script src="/ocr/tesseract.min.js" defer></script>
-<script src="/js/ktp.js?v=23" defer></script>
-<script src="/js/pendaftaran.js?v=23" defer></script>
+<script src="/js/ktp.js?v=24" defer></script>
+<script src="/js/pendaftaran.js?v=24" defer></script>
 </body>
 </html>

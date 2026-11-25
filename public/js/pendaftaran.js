@@ -7,7 +7,7 @@ let peranSaya = '';
 
 const pesan = (t) => { $('pesan').textContent = t; };
 const pesanForm = (t) => { $('pesan-form').textContent = t; };
-const tampil = (bag) => { for (const b of ['tahap-foto', 'form', 'selesai']) $(b).hidden = b !== bag; scrollTo({ top: 0 }); };
+const tampil = (bag) => { for (const b of ['tahap-foto', 'form', 'konfirmasi', 'selesai']) $(b).hidden = b !== bag; scrollTo({ top: 0 }); };
 
 function kosongkan() {
   for (const k of ISIAN) { $(k).value = ''; $(k).classList.remove('otomatis'); $(k).removeAttribute('aria-invalid'); }
@@ -141,6 +141,17 @@ $('keluar').onclick = keluar;
 
 function salah(idEl, t) { $(idEl).setAttribute('aria-invalid', 'true'); $(idEl).focus(); pesanForm(t); }
 
+let siapKirim = null; // data yang sudah diperiksa, menunggu "Ya, simpan"
+
+// Desa yang sudah ada di daftar (untuk cek dobel tanpa membuat wilayah baru dulu)
+function desaIdLokal() {
+  const s = (i) => $(i).value.trim().toLowerCase().replace(/\s+/g, ' ');
+  return semuaWilayah.find((w) => w.desa.toLowerCase() === s('desa') && w.kec.toLowerCase() === s('kecamatan') && w.kab.toLowerCase() === s('kabupaten'))?.id;
+}
+
+const tglPanjang = (d) => d ? new Date(d + 'T00:00:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+const teksPilihan = (id) => { const o = $(id).selectedOptions[0]; return o && o.value ? o.textContent : ''; };
+
 $('form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const nama = KTP.judul($('nama').value.replace(/\s+/g, ' '));
@@ -153,26 +164,57 @@ $('form').addEventListener('submit', async (e) => {
   const btn = $('simpan'); btn.disabled = true; btn.classList.add('sibuk'); btn.querySelector('.teks').textContent = 'Memeriksa...';
   pesanForm('');
   try {
-    const desaId = await desaIdWilayah();
-    if (await cekDobel(nama, desaId)) return;
-    btn.querySelector('.teks').textContent = 'Menyimpan...';
-    const [j] = await dbKirim('POST', 'jamaah?select=id,nomor_anggota,nama,desa(nama)', {
-      nama, desa_id: desaId, alamat: $('alamat').value.trim() || null,
-      tempat_lahir: $('tempat-lahir').value.trim() ? KTP.judul($('tempat-lahir').value) : null, tanggal_lahir: $('tgl-lahir').value || null, ...bacaIsianKtp(),
+    const idLama = desaIdLokal();
+    if (idLama && await cekDobel(nama, idLama)) return;
+    const ktp = bacaIsianKtp();
+    siapKirim = {
+      nama, alamat: $('alamat').value.trim() || null,
+      tempat_lahir: $('tempat-lahir').value.trim() ? KTP.judul($('tempat-lahir').value) : null, tanggal_lahir: $('tgl-lahir').value || null, ...ktp,
       pekerjaan: $('pekerjaan').value.trim() ? KTP.judul($('pekerjaan').value) : null,
       mursyid_id: $('mursyid').value ? Number($('mursyid').value) : null, tanggal_daftar: $('tanggal').value || undefined,
-    });
+    };
+    const lahir = [siapKirim.tempat_lahir, tglPanjang(siapKirim.tanggal_lahir)].filter(Boolean).join(', ');
+    const baris = [
+      ['Nama lengkap', nama], ['Tempat, tanggal lahir', lahir], ['Umur saat daftar', umur !== null ? `${umur} tahun` : ''],
+      ['Jenis kelamin', { L: 'Laki-laki', P: 'Perempuan' }[ktp.jenis_kelamin] || ''],
+      ...(PERAN_GOLDAR.includes(peranSaya) ? [['Gol. darah', $('gol-darah').value]] : []),
+      ['Desa/Kelurahan', KTP.judul($('desa').value.replace(/\s+/g, ' '))], ['Kecamatan', KTP.judul($('kecamatan').value.replace(/\s+/g, ' '))],
+      ['Kabupaten/Kota', KTP.judul($('kabupaten').value.replace(/\s+/g, ' '))],
+      ['Alamat', [siapKirim.alamat, ktp.rt_rw && `RT/RW ${ktp.rt_rw}`].filter(Boolean).join(', ')], ['Pekerjaan', siapKirim.pekerjaan],
+      ['Status perkawinan', ktp.status_kawin], ['Kewarganegaraan', ktp.kewarganegaraan], ['Mursyid', teksPilihan('mursyid')],
+      ['Tanggal daftar', tglPanjang($('tanggal').value)],
+    ];
+    $('k-rincian').innerHTML = baris.map(([k, v]) => `<div><dt>${k}</dt><dd>${v ? hurufAman(v) : '<span class="kosong">Belum diisi</span>'}</dd></div>`).join('');
+    $('pesan-konfirmasi').textContent = '';
+    tampil('konfirmasi');
+    $('k-judul').focus();
+  } catch (err) {
+    if (err.message === 'belum-masuk' || err.message === 'gagal-401') return location.replace('/masuk.html');
+    pesanForm(err.message === 'Failed to fetch' ? 'Sinyal terputus. Coba lagi.' : 'Data belum bisa diperiksa. Coba lagi.');
+  } finally { btn.disabled = false; btn.classList.remove('sibuk'); btn.querySelector('.teks').textContent = 'Periksa data'; }
+});
+
+$('perbaiki').onclick = () => { tampil('form'); $('nama').focus(); };
+
+$('simpan-yakin').onclick = async () => {
+  if (!siapKirim) return;
+  const btn = $('simpan-yakin'); btn.disabled = true; btn.classList.add('sibuk'); btn.querySelector('.teks').textContent = 'Menyimpan...';
+  $('pesan-konfirmasi').textContent = '';
+  try {
+    const desaId = await desaIdWilayah();
+    const [j] = await dbKirim('POST', 'jamaah?select=id,nomor_anggota,nama,desa(nama)', { ...siapKirim, desa_id: desaId });
     if (PERAN_GOLDAR.includes(peranSaya) && $('gol-darah').value) await simpanGoldar(j.id, $('gol-darah').value, false).catch(() => {});
+    siapKirim = null;
     $('selesai-teks').innerHTML = `<strong>${hurufAman(j.nama)}</strong> dari Desa ${hurufAman(j.desa.nama)}<br>Nomor Anggota <strong class="angka">${j.nomor_anggota}</strong>`;
     $('lihat-data').href = `/jamaah-isi.html?id=${j.id}`;
     tampil('selesai');
   } catch (err) {
     if (err.message === 'belum-masuk' || err.message === 'gagal-401') return location.replace('/masuk.html');
-    pesanForm(err.detail?.message === 'di luar wilayah tugas' ? 'Wilayah ini di luar wilayah tugas akun ini. Periksa ejaan desa dan kecamatan.'
+    $('pesan-konfirmasi').textContent = err.detail?.message === 'di luar wilayah tugas' ? 'Wilayah ini di luar wilayah tugas akun ini. Tekan Ubah lalu periksa ejaan desa dan kecamatan.'
       : err.message === 'gagal-403' || err.detail?.code === '42501' ? 'Akun ini tidak punya izin mendaftarkan jamaah di desa ini.'
-      : err.message === 'Failed to fetch' ? 'Sinyal terputus. Data belum tersimpan, coba lagi.' : 'Data belum tersimpan. Periksa isian lalu coba lagi.');
-  } finally { btn.disabled = false; btn.classList.remove('sibuk'); btn.querySelector('.teks').textContent = 'Simpan'; }
-});
+      : err.message === 'Failed to fetch' ? 'Sinyal terputus. Data belum tersimpan, coba lagi.' : 'Data belum tersimpan. Tekan Ubah, periksa isian, lalu coba lagi.';
+  } finally { btn.disabled = false; btn.classList.remove('sibuk'); btn.querySelector('.teks').textContent = 'Ya, simpan'; }
+};
 
 (async () => {
   try {

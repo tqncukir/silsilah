@@ -208,6 +208,8 @@ body:has(.kol-luas) .app-atas-isi{max-width:1280px}
 .rincian{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px 24px;margin:16px 0 4px}
 .rincian dt{font-size:var(--fs-kecil);color:var(--abu)}
 .rincian dd{margin:2px 0 0;font-weight:500}
+.rincian-periksa{padding:16px;border-radius:12px;background:var(--hijau-pupus,#EEF6DC)}
+.rincian-periksa .kosong{color:var(--abu);font-weight:400}
 .form-kisi{display:grid;grid-template-columns:1fr;gap:0 16px;margin-top:16px}
 .form-kisi .lebar{grid-column:1 / -1}
 @media (min-width:640px){.form-kisi{grid-template-columns:1fr 1fr}}
