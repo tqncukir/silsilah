@@ -18,6 +18,7 @@ function tampilLihat() {
   $('l-status').textContent = TEKS_STATUS[s];
   $('l-status').className = `stat stat-${s}`;
   const baris = [
+    ['Mursyid', j.mursyid?.nama],
     ['Desa', j.desa.nama], ['Kecamatan', j.desa.kecamatan.nama], ['Kabupaten/Kota', j.desa.kecamatan.kabupaten?.nama],
     ['Tempat, tanggal lahir', [j.tempat_lahir, j.tanggal_lahir && tgl(j.tanggal_lahir)].filter(Boolean).join(', ')],
     ['Umur sekarang', j.tanggal_lahir && !j.wafat ? `${hitungUmur(j.tanggal_lahir)} tahun` : null],
@@ -26,7 +27,7 @@ function tampilLihat() {
     ['Alamat', [j.alamat, j.rt_rw && `RT/RW ${j.rt_rw}`].filter(Boolean).join(', ')],
     ['Status perkawinan', j.status_kawin], ['Kewarganegaraan', j.kewarganegaraan],
     ['Umur saat mendaftar', j.umur_daftar ? `${j.umur_daftar} tahun` : null], ['Pekerjaan', j.pekerjaan],
-    ['Mursyid', j.mursyid?.nama], ['Tanggal daftar', tgl(j.tanggal_daftar)],
+    ['Tanggal daftar', tgl(j.tanggal_daftar)],
   ];
   if (j.wafat) baris.push(['Tanggal wafat', tgl(j.tanggal_wafat)]);
   $('l-rincian').innerHTML = baris.map(([k, v]) => `<div><dt>${k}</dt><dd>${v ? hurufAman(v) : '–'}</dd></div>`).join('');

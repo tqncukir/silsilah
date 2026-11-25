@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=24">
-<link rel="stylesheet" href="/css/app.css?v=24">
+<link rel="stylesheet" href="/css/tokens.css?v=25">
+<link rel="stylesheet" href="/css/app.css?v=25">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -77,6 +77,10 @@
     <p class="hasil-baca" id="hasil-baca" hidden>Isian bertanda hijau dibaca dari KTP. Periksa lagi, hasil baca bisa keliru.</p>
     <div class="form-kisi">
       <div class="isian lebar">
+        <label for="mursyid">Mursyid</label>
+        <select id="mursyid"><option value="">Belum diisi</option></select>
+      </div>
+      <div class="isian lebar">
         <label for="nama">Nama lengkap <span class="wajib">wajib</span></label>
         <input id="nama" maxlength="120" required autocapitalize="words">
       </div>
@@ -136,10 +140,6 @@
         <select id="wn"><option>WNI</option><option>WNA</option></select>
       </div>
       <div class="isian">
-        <label for="mursyid">Mursyid</label>
-        <select id="mursyid"><option value="">Belum diisi</option></select>
-      </div>
-      <div class="isian">
         <label for="tanggal">Tanggal daftar</label>
         <input id="tanggal" type="date">
       </div>
@@ -177,9 +177,9 @@
     </div>
   </section>
 </main>
-<script src="/js/supa.js?v=24" defer></script>
+<script src="/js/supa.js?v=25" defer></script>
 <script src="/ocr/tesseract.min.js" defer></script>
-<script src="/js/ktp.js?v=24" defer></script>
-<script src="/js/pendaftaran.js?v=24" defer></script>
+<script src="/js/ktp.js?v=25" defer></script>
+<script src="/js/pendaftaran.js?v=25" defer></script>
 </body>
 </html>
