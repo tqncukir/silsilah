@@ -1,5 +1,5 @@
 // Service worker: simpan kerangka aplikasi agar tetap terbuka saat sinyal putus.
-const VERSI = 'silsilah-v3';
+const VERSI = 'silsilah-v4';
 const INTI = ['/', '/index.html', '/css/tokens.css', '/css/app.css', '/js/app.js', '/js/supa.js', '/masuk.html', '/js/masuk.js', '/manifest.webmanifest',
   '/icons/logo-96.png', '/icons/icon-192.png'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(VERSI).then((c) => c.addAll(INTI))); self.skipWaiting(); });

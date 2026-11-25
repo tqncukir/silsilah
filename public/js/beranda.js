@@ -8,7 +8,7 @@ const isi = (label, nilai) => { const li = document.createElement('li'); li.text
 (async () => {
   sesiDariTautan();
   try {
-    const [p] = await dbGet('pengguna?select=nama,peran,jamaah_id');
+    const [p] = await dbGet(`pengguna?select=nama,peran,jamaah_id&user_id=eq.${await idSaya()}`);
     if (!p) {
       document.getElementById('salam').textContent = 'Akun belum punya peran';
       document.getElementById('catatan').textContent = 'Hubungi admin pusat agar akun ini diberi peran.';

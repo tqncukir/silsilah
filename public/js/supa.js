@@ -32,6 +32,13 @@ async function tokenAktif() {
   return b.access_token;
 }
 
+// ID akun yang sedang masuk (dari token)
+async function idSaya() {
+  const t = await tokenAktif();
+  if (!t) throw new Error('belum-masuk');
+  return JSON.parse(atob(t.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))).sub;
+}
+
 // Baca tabel lewat REST (RLS tetap berlaku). contoh: dbGet('pengguna?select=nama,peran')
 async function dbGet(jalur) {
   const t = await tokenAktif();

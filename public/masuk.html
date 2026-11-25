@@ -11,37 +11,64 @@
 <link rel="stylesheet" href="/css/tokens.css">
 <link rel="stylesheet" href="/css/app.css">
 </head>
-<body>
-<header class="header">
-  <a href="/" class="header-link"><img src="/icons/logo-96.png" alt="Logo Jam'iyyah TQN Cukir" width="44" height="44"></a>
-  <div><p class="judul">SILSILAH</p><span class="sub">Masuk</span></div>
+<body class="hal-masuk">
+<header class="masuk-atas">
+  <a href="/" class="masuk-kembali" aria-label="Kembali ke beranda">
+    <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+  <img src="/icons/icon-192.png" alt="Logo Jam'iyyah TQN Cukir" width="88" height="88" class="masuk-logo">
+  <p class="masuk-nama">SILSILAH</p>
+  <p class="masuk-lembaga">Jamaah TQN Pusat Cukir Jombang</p>
 </header>
-<main>
-  <div class="tab" role="tablist">
-    <button role="tab" id="tab-anggota" aria-selected="true" aria-controls="form-anggota">Anggota</button>
-    <button role="tab" id="tab-pengurus" aria-selected="false" aria-controls="form-pengurus">Pengurus</button>
-  </div>
 
-  <form id="form-anggota" class="form" autocomplete="off" novalidate>
-    <label for="nomor">Nomor Anggota <span class="kecil">(10 angka di KTA)</span></label>
-    <input id="nomor" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required>
-    <label for="desa">Nama Desa</label>
-    <input id="desa" maxlength="60" required autocapitalize="words">
-    <label for="pin">PIN <span class="kecil">(6 angka di KTA)</span></label>
-    <input id="pin" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required>
-    <div id="ts-anggota" class="ts"></div>
-    <button class="btn btn-utama" type="submit">Masuk</button>
-  </form>
+<main class="masuk-isi">
+  <section class="masuk-kartu" aria-labelledby="judul-masuk">
+    <h1 id="judul-masuk">Masuk</h1>
+    <p class="masuk-ajak">Isi sesuai yang tertulis di Kartu Anggota (KTA).</p>
 
-  <form id="form-pengurus" class="form" hidden novalidate>
-    <label for="email">Email pengurus</label>
-    <input id="email" type="email" inputmode="email" autocomplete="email" required>
-    <p class="kecil">Kami kirim tautan masuk ke email ini. Buka emailnya di HP ini, lalu ketuk tautannya.</p>
-    <button class="btn btn-utama" type="submit">Kirim tautan masuk</button>
-  </form>
+    <form id="form-anggota" class="form" autocomplete="off" novalidate>
+      <div class="isian">
+        <label for="nomor">Nomor Anggota</label>
+        <input id="nomor" inputmode="numeric" maxlength="10" required aria-describedby="ket-nomor" placeholder="11651xxxxx">
+        <p id="ket-nomor" class="ket">10 angka di KTA</p>
+      </div>
+      <div class="isian">
+        <label for="desa">Nama Desa</label>
+        <input id="desa" maxlength="60" required autocapitalize="words" aria-describedby="ket-desa">
+        <p id="ket-desa" class="ket">Desa tempat tinggal, seperti di KTA</p>
+      </div>
+      <div class="isian">
+        <label for="pin">PIN</label>
+        <div class="pin-baris">
+          <input id="pin" type="password" inputmode="numeric" maxlength="8" required aria-describedby="ket-pin">
+          <button type="button" id="lihat-pin" class="pin-lihat" aria-pressed="false" aria-controls="pin">Lihat</button>
+        </div>
+        <p id="ket-pin" class="ket">6 angka di KTA. Pengurus memakai PIN Pengurus 8 angka.</p>
+      </div>
+      <div id="ts-anggota" class="ts" aria-label="Pemeriksaan keamanan"></div>
+      <p id="pesan" class="pesan" role="alert" aria-live="assertive"></p>
+      <button class="btn btn-utama btn-masuk" type="submit"><span class="putar" aria-hidden="true"></span><span class="teks">Masuk</span></button>
+    </form>
+  </section>
 
-  <p id="pesan" class="pesan" role="alert" aria-live="assertive"></p>
+  <aside class="masuk-bantuan">
+    <p><strong>Lupa PIN atau KTA hilang?</strong><br>Hubungi pengurus desa atau koordinator wilayah.</p>
+  </aside>
+
+  <details class="masuk-admin">
+    <summary>Masuk admin lewat email</summary>
+    <form id="form-pengurus" class="form" novalidate>
+      <div class="isian">
+        <label for="email">Email admin</label>
+        <input id="email" type="email" inputmode="email" autocomplete="email" required aria-describedby="ket-email">
+        <p id="ket-email" class="ket">Kami kirim tautan masuk ke email ini. Buka di HP ini lalu ketuk tautannya.</p>
+      </div>
+      <p id="pesan-email" class="pesan" role="alert" aria-live="assertive"></p>
+      <button class="btn btn-kedua" type="submit">Kirim tautan masuk</button>
+    </form>
+  </details>
 </main>
+<footer class="masuk-kaki">Jam'iyyah Ahlith Thoriqoh Al Mu'tabaroh An Nahdliyyah</footer>
 <script src="/js/supa.js" defer></script>
 <script src="/js/masuk.js" defer></script>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=tsSiap&render=explicit" defer></script>

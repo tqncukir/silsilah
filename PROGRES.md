@@ -17,8 +17,11 @@ Mulai: 2026-11-25 (Kang Salman: "Bismillah").
   - Supabase Auth: Site URL https://silsilah-tqn.pages.dev, redirect https://silsilah-tqn.pages.dev/**.
   - Pendaftaran akun baru di Supabase Auth DIMATIKAN; pengurus baru dibuat admin (Langkah 4/13).
 
+- **Langkah 3b, PIN Pengurus** (2026-11-25, pilihan Kang): satu formulir untuk semua. PIN KTA 6 angka = akun anggota; PIN Pengurus 8 angka (rahasia, tidak dicetak) = akun pengurus terpisah `<nomor>@pengurus.silsilah.invalid` dengan peran dari `private.pengurus_pin`. Fungsi `public.cek_login` (ganti `cek_login_anggota`, yang lama tidak dipakai lagi, hapus nanti). Pasang PIN: `select private.set_pin_pengurus(jamaah_id, 'ketua', '12345678')`. Data contoh: 9990000026 / Cukir = ketua. Email admin tetap sebagai cadangan (lipatan "Masuk admin lewat email").
+  - Tampilan Masuk dirapikan (skill UI UX Pro Max): kepala hijau + logo, kartu putih, tombol Lihat PIN, pesan galat jelas, bantuan lupa PIN.
+
 ## Sedang dikerjakan
-- Langkah 3 menunggu persetujuan Kang. Langkah 4 dimulai setelah Kang setuju.
+- Langkah 3/3b menunggu persetujuan Kang. Langkah 4 dimulai setelah Kang setuju.
 
 ## Berikutnya (satu per satu, tunggu persetujuan Kang)
 4. **Data Jamaah**: halaman pengurus untuk cari, lihat, tambah, ubah, ubah status Aktif/Wafat; filter desa dan kecamatan; pagination.

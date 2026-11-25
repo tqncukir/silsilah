@@ -1,4 +1,5 @@
-// Login anggota: Nomor Anggota + nama desa + PIN 6 angka, dilindungi Turnstile dan batas salah PIN.
+// Login satu formulir: Nomor Anggota + nama desa + PIN. PIN KTA 6 angka = akun anggota;
+// PIN Pengurus 8 angka (rahasia, tidak dicetak) = akun pengurus. Dilindungi Turnstile dan batas salah PIN.
 // Rahasia (TURNSTILE_SECRET, service role) hanya ada di server Supabase, tidak di repo.
 import { createClient } from "npm:@supabase/supabase-js@2.49.4";
 
@@ -32,7 +33,7 @@ Deno.serve(async (req) => {
   const nomor = String(b.nomor ?? "").replace(/\D/g, "");
   const desa = String(b.desa ?? "").trim().slice(0, 60);
   const pin = String(b.pin ?? "");
-  if (!/^\d{10}$/.test(nomor) || !desa || !/^\d{6}$/.test(pin)) return balas(h, 400, { pesan: SALAH });
+  if (!/^\d{10}$/.test(nomor) || !desa || !/^(\d{6}|\d{8})$/.test(pin)) return balas(h, 400, { pesan: SALAH });
 
   const ip = req.headers.get("cf-connecting-ip") ?? req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "";
 
@@ -48,21 +49,24 @@ Deno.serve(async (req) => {
 
   // 2. Cek PIN (dengan batas salah) di database
   const admin = createClient(URL_SB, KUNCI_SERVIS, { auth: { persistSession: false, autoRefreshToken: false } });
-  const { data: cek, error } = await admin.rpc("cek_login_anggota", { p_nomor: Number(nomor), p_desa: desa, p_pin: pin, p_ip: ip });
+  const { data: cek, error } = await admin.rpc("cek_login", { p_nomor: Number(nomor), p_desa: desa, p_pin: pin, p_ip: ip });
   if (error) return balas(h, 500, { pesan: "Terjadi gangguan. Coba lagi sebentar." });
   const hasil = cek?.[0];
   if (hasil?.status === "terkunci") return balas(h, 429, { pesan: "Terlalu banyak percobaan salah. Tunggu 15 menit lalu coba lagi." });
   if (hasil?.status !== "ok") return balas(h, 401, { pesan: SALAH });
 
-  // 3. Siapkan akun login anggota (dibuat sekali, tanpa email asli)
-  const email = `${nomor}@anggota.silsilah.invalid`;
-  const { data: p } = await admin.from("pengguna").select("user_id").eq("jamaah_id", hasil.jamaah_id).maybeSingle();
-  if (!p) {
+  // 3. Siapkan akun login (dibuat sekali, tanpa email asli). Pengurus punya akun terpisah dari akun anggotanya.
+  const pengurus = hasil.mode === "pengurus";
+  const email = `${nomor}@${pengurus ? "pengurus" : "anggota"}.silsilah.invalid`;
+  if (!hasil.user_id) {
     const { data: u, error: eu } = await admin.auth.admin.createUser({
-      email, email_confirm: true, app_metadata: { peran: "anggota", jamaah_id: hasil.jamaah_id },
+      email, email_confirm: true, app_metadata: { peran: hasil.peran, jamaah_id: hasil.jamaah_id },
     });
     if (eu || !u.user) return balas(h, 500, { pesan: "Akun belum bisa dibuat. Hubungi pengurus." });
-    const { error: ep } = await admin.from("pengguna").insert({ user_id: u.user.id, nama: hasil.nama, peran: "anggota", jamaah_id: hasil.jamaah_id });
+    const baris = pengurus
+      ? { user_id: u.user.id, nama: hasil.nama, peran: hasil.peran }
+      : { user_id: u.user.id, nama: hasil.nama, peran: "anggota", jamaah_id: hasil.jamaah_id };
+    const { error: ep } = await admin.from("pengguna").insert(baris);
     if (ep) return balas(h, 500, { pesan: "Akun belum bisa dibuat. Hubungi pengurus." });
   }
 
