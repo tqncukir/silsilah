@@ -4,10 +4,10 @@
 Mulai: 2026-11-25 (Kang Salman: "Bismillah").
 
 ## Selesai
-- **Langkah 1, Fondasi** (2026-11-25): repo `tqncukir/silsilah`, CLAUDE.md, PROGRES.md, kerangka PWA (logo resmi, warna KTA, bisa dipasang di HP, tetap terbuka saat sinyal putus), header keamanan.
+- **Langkah 1, Fondasi** (2026-11-25): repo `tqncukir/silsilah`, CLAUDE.md, PROGRES.md, kerangka PWA (logo resmi, warna KTA, bisa dipasang di HP, tetap terbuka saat sinyal putus), header keamanan. Tayang di Cloudflare Pages (project `silsilah-tqn`, akun jtccukir2022), otomatis tayang setiap push ke `main`.
 
 ## Sedang dikerjakan
-- Langkah 1: memasang di Cloudflare Pages, lalu menunggu Kang mengecek di HP.
+- Langkah 1 menunggu Kang cek di HP. Langkah 2 dimulai setelah Kang setuju.
 
 ## Berikutnya (satu per satu, tunggu persetujuan Kang)
 2. **Database Jamaah dan Hak Akses**: tabel jamaah, wilayah (desa, kecamatan, kab/kota), peran pengguna; RLS; ±50 data contoh.
@@ -20,4 +20,5 @@ Mulai: 2026-11-25 (Kang Salman: "Bismillah").
 Setelah 7 langkah beres dan Kang setuju: impor 5.528 data asli.
 
 ## Catatan
-- Alamat uji coba: (diisi setelah Cloudflare Pages terpasang)
+- Alamat uji coba: https://silsilah-tqn.pages.dev
+- GitHub App Claude dan Cloudflare Pages hanya diberi akses ke repo `silsilah`.
