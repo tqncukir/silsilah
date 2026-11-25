@@ -11,7 +11,8 @@ const KTP = (() => {
       .split(/\n+/).map((b) => b.trim()).filter(Boolean)
       .filter((b) => !/^\s*NIK\b/.test(b));     // baris NIK diabaikan
     const h = {};
-    h.kabupaten = ambil(baris, /^(?:KABUPATEN|KAB\.?|KOTA)\s+([A-Z .]+)$/);
+    h.kabupaten = ambil(baris, /^(?:KABUPATEN|KAB\.?)\s+([A-Z .]+)$/);
+    if (!h.kabupaten) { const k = ambil(baris, /^KOTA\s+([A-Z .]+)$/); if (k) h.kabupaten = 'KOTA ' + k; }
     h.nama = ambil(baris, /^NAMA\s*[:;]?\s*([A-Z .,'`]+)$/);
     const lahir = baris.join('\n').match(/LAHIR\s*[:;]?\s*([A-Z .]*?)[,.\s]+(\d{1,2})\s*[-\/. ]\s*(\d{1,2})\s*[-\/. ]\s*(\d{4})/);
     if (lahir) {

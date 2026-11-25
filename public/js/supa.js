@@ -152,3 +152,33 @@ async function simpanGoldar(jamaahId, nilai, adaSebelumnya) {
   if (nilai) await dbKirim('POST', 'jamaah_goldar?on_conflict=jamaah_id', { jamaah_id: jamaahId, gol_darah: nilai }, 'resolution=merge-duplicates,return=minimal');
   else if (adaSebelumnya) await dbKirim('DELETE', `jamaah_goldar?jamaah_id=eq.${jamaahId}`, undefined, 'return=minimal');
 }
+
+// ===== Wilayah diketik: Desa, Kecamatan, Kabupaten/Kota (dengan saran dari data yang sudah ada) =====
+let semuaWilayah = []; // [{id, desa, kec, kab, kec_id}]
+async function muatWilayah(kecBoleh) {
+  const d = await dbGet('desa?select=id,nama,kecamatan(id,nama,kabupaten(nama))&order=nama');
+  semuaWilayah = d.filter((x) => !kecBoleh || kecBoleh.has(x.kecamatan.id))
+    .map((x) => ({ id: x.id, desa: x.nama, kec: x.kecamatan.nama, kec_id: x.kecamatan.id, kab: x.kecamatan.kabupaten.nama }));
+  const $w = (i) => document.getElementById(i);
+  const sama = (a, b) => a.trim().toLowerCase() === b.toLowerCase();
+  const isiSaran = (id, daftar) => { $w(id).innerHTML = [...new Set(daftar)].sort().map((n) => `<option value="${hurufAman(n)}">`).join(''); };
+  const perbarui = () => {
+    const kab = $w('kabupaten').value, kec = $w('kecamatan').value;
+    isiSaran('saran-kab', semuaWilayah.map((w) => w.kab));
+    isiSaran('saran-kec', semuaWilayah.filter((w) => !kab.trim() || sama(kab, w.kab)).map((w) => w.kec));
+    isiSaran('saran-desa', semuaWilayah.filter((w) => (!kab.trim() || sama(kab, w.kab)) && (!kec.trim() || sama(kec, w.kec))).map((w) => w.desa));
+  };
+  for (const i of ['kabupaten', 'kecamatan', 'desa']) $w(i).addEventListener('input', perbarui);
+  perbarui();
+  return perbarui;
+}
+// Satu-satunya kabupaten yang tersedia (misal koordinator) dipakai sebagai isian awal.
+function wilayahAwal() {
+  const kab = [...new Set(semuaWilayah.map((w) => w.kab))];
+  return kab.length === 1 ? kab[0] : 'Jombang';
+}
+// Kirim ke database: cari wilayah yang cocok, atau buat baru (hanya admin pusat & ketua).
+async function desaIdWilayah() {
+  const v = (i) => document.getElementById(i).value;
+  return dbKirim('POST', 'rpc/desa_id_wilayah', { p_kabupaten: v('kabupaten'), p_kecamatan: v('kecamatan'), p_desa: v('desa') });
+}

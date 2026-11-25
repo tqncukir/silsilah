@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=21">
-<link rel="stylesheet" href="/css/app.css?v=21">
+<link rel="stylesheet" href="/css/tokens.css?v=22">
+<link rel="stylesheet" href="/css/app.css?v=22">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -99,12 +99,20 @@
         <select id="gol-darah"><option value="">Tidak diketahui</option><option>A</option><option>B</option><option>AB</option><option>O</option></select>
       </div>
       <div class="isian">
-        <label for="kecamatan">Kecamatan <span class="wajib">wajib</span></label>
-        <select id="kecamatan" required><option value="">Pilih kecamatan</option></select>
+        <label for="desa">Desa/Kelurahan <span class="wajib">wajib</span></label>
+        <input id="desa" list="saran-desa" maxlength="60" autocomplete="off" required>
+        <datalist id="saran-desa"></datalist>
       </div>
       <div class="isian">
-        <label for="desa">Desa <span class="wajib">wajib</span></label>
-        <select id="desa" required disabled><option value="">Pilih kecamatan dulu</option></select>
+        <label for="kecamatan">Kecamatan <span class="wajib">wajib</span></label>
+        <input id="kecamatan" list="saran-kec" maxlength="60" autocomplete="off" required>
+        <datalist id="saran-kec"></datalist>
+      </div>
+      <div class="isian">
+        <label for="kabupaten">Kabupaten/Kota <span class="wajib">wajib</span></label>
+        <input id="kabupaten" list="saran-kab" maxlength="60" autocomplete="off" required aria-describedby="k-kab">
+        <datalist id="saran-kab"></datalist>
+        <p class="ket" id="k-kab">Ketik bebas, misal Surabaya. Untuk kota tulis "Kota Malang".</p>
       </div>
       <div class="isian">
         <label for="alamat">Alamat</label>
@@ -163,9 +171,9 @@
     </div>
   </section>
 </main>
-<script src="/js/supa.js?v=21" defer></script>
+<script src="/js/supa.js?v=22" defer></script>
 <script src="/ocr/tesseract.min.js" defer></script>
-<script src="/js/ktp.js?v=21" defer></script>
-<script src="/js/pendaftaran.js?v=21" defer></script>
+<script src="/js/ktp.js?v=22" defer></script>
+<script src="/js/pendaftaran.js?v=22" defer></script>
 </body>
 </html>

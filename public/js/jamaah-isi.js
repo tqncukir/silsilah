@@ -1,7 +1,7 @@
 // Rincian, tambah, dan ubah satu jamaah. Hak ubah dijaga RLS (koordinator hanya kecamatannya).
 const $ = (id) => document.getElementById(id);
 const id = new URLSearchParams(location.search).get('id');
-let data = null, semuaDesa = [], kecBoleh = null, peran = '', goldar = '';
+let data = null, kecBoleh = null, peran = '', goldar = '', perbaruiSaran = () => {};
 
 const pesan = (t) => { $('pesan').textContent = t; };
 const pesanForm = (t, ok) => { $('pesan-form').textContent = t; $('pesan-form').className = 'pesan' + (ok ? ' ok' : ''); };
@@ -33,15 +33,6 @@ function tampilLihat() {
   $('form').hidden = true; $('lihat').hidden = false;
 }
 
-function isiDesa(pilih) {
-  const kec = $('kecamatan').value;
-  $('desa').disabled = !kec;
-  $('desa').innerHTML = `<option value="">${kec ? 'Pilih desa' : 'Pilih kecamatan dulu'}</option>` + semuaDesa
-    .filter((d) => String(d.kecamatan_id) === kec)
-    .map((d) => `<option value="${d.id}">${hurufAman(d.nama)}</option>`).join('');
-  if (pilih) $('desa').value = String(pilih);
-}
-
 function aturWafat() { $('isian-wafat').hidden = document.querySelector('[name=status]:checked').value !== 'wafat'; }
 
 function tampilForm() {
@@ -49,8 +40,10 @@ function tampilForm() {
   $('f-judul').textContent = j ? 'Ubah data jamaah' : 'Tambah jamaah';
   $('f-sub').textContent = j ? `Nomor Anggota ${j.nomor_anggota}` : 'Nomor Anggota dibuat otomatis setelah disimpan.';
   $('nama').value = j?.nama || '';
-  $('kecamatan').value = j ? String(j.desa.kecamatan_id) : ($('kecamatan').options.length === 2 ? $('kecamatan').options[1].value : '');
-  isiDesa(j?.desa_id);
+  $('desa').value = j?.desa.nama || '';
+  $('kecamatan').value = j?.desa.kecamatan.nama || '';
+  $('kabupaten').value = j?.desa.kecamatan.kabupaten?.nama || wilayahAwal();
+  perbaruiSaran();
   $('alamat').value = j?.alamat || '';
   $('umur').value = j?.umur_daftar || '';
   $('tempat-lahir').value = j?.tempat_lahir || '';
@@ -74,7 +67,6 @@ function salah(idEl, t) { $(idEl).setAttribute('aria-invalid', 'true'); $(idEl).
 $('form').addEventListener('input', (e) => e.target.removeAttribute?.('aria-invalid'));
 const aturUmur = pasangUmurOtomatis();
 $('umur').addEventListener('input', (e) => { e.target.value = e.target.value.replace(/\D/g, ''); });
-$('kecamatan').addEventListener('change', () => isiDesa());
 document.querySelectorAll('[name=status]').forEach((r) => r.addEventListener('change', aturWafat));
 $('ubah').onclick = tampilForm;
 $('batal').onclick = () => (data ? tampilLihat() : location.assign('/jamaah.html'));
@@ -87,12 +79,13 @@ $('form').addEventListener('submit', async (e) => {
   const umur = $('umur').value ? Number($('umur').value) : null;
   const status = document.querySelector('[name=status]:checked').value;
   if (nama.length < 2) return salah('nama', 'Nama lengkap belum diisi.');
-  if (!$('kecamatan').value) return salah('kecamatan', 'Pilih kecamatan.');
-  if (!$('desa').value) return salah('desa', 'Pilih desa.');
+  if (!$('desa').value.trim()) return salah('desa', 'Desa/Kelurahan belum diisi.');
+  if (!$('kecamatan').value.trim()) return salah('kecamatan', 'Kecamatan belum diisi.');
+  if (!$('kabupaten').value.trim()) return salah('kabupaten', 'Kabupaten/Kota belum diisi.');
   if ($('tgl-lahir').value && (umur === null || umur < 5 || umur > 120)) return salah('tgl-lahir', 'Tanggal lahir belum benar: umur saat daftar harus 5 sampai 120 tahun.');
   if (umur !== null && (umur < 5 || umur > 120)) return salah('umur', 'Umur harus antara 5 dan 120 tahun.');
   const isi = {
-    nama, desa_id: Number($('desa').value), alamat: $('alamat').value.trim() || null, umur_daftar: umur,
+    nama, desa_id: null, alamat: $('alamat').value.trim() || null, umur_daftar: umur,
     tempat_lahir: $('tempat-lahir').value.trim() || null, tanggal_lahir: $('tgl-lahir').value || null, ...bacaIsianKtp(),
     pekerjaan: $('pekerjaan').value.trim() || null, mursyid_id: $('mursyid').value ? Number($('mursyid').value) : null,
     tanggal_daftar: $('tanggal').value || undefined,
@@ -100,6 +93,7 @@ $('form').addEventListener('submit', async (e) => {
   };
   const btn = $('simpan'); btn.disabled = true; btn.classList.add('sibuk'); btn.querySelector('.teks').textContent = 'Menyimpan...';
   try {
+    isi.desa_id = await desaIdWilayah();
     const [hasil] = data
       ? await dbKirim('PATCH', `jamaah?id=eq.${data.id}&select=${PILIH}`, isi)
       : await dbKirim('POST', `jamaah?select=${PILIH}`, isi);
@@ -116,7 +110,8 @@ $('form').addEventListener('submit', async (e) => {
     setTimeout(() => $('lihat').querySelector('.pesan.ok')?.remove(), 5000);
   } catch (err) {
     if (err.message === 'belum-masuk' || err.message === 'gagal-401') return location.replace('/masuk.html');
-    pesanForm(err.message === 'ditolak' || err.message === 'gagal-403' || err.detail?.code === '42501'
+    pesanForm(err.detail?.message === 'di luar wilayah tugas' ? 'Wilayah ini di luar wilayah tugas akun ini. Periksa ejaan desa dan kecamatan.'
+      : err.message === 'ditolak' || err.message === 'gagal-403' || err.detail?.code === '42501'
       ? 'Akun ini tidak punya izin mengubah jamaah di desa ini.'
       : err.message === 'Failed to fetch' ? 'Sinyal terputus. Data belum tersimpan, coba lagi.' : 'Data belum tersimpan. Periksa isian lalu coba lagi.');
   } finally { btn.disabled = false; btn.classList.remove('sibuk'); btn.querySelector('.teks').textContent = 'Simpan'; }
@@ -128,13 +123,12 @@ $('form').addEventListener('submit', async (e) => {
     if (!p || !PERAN_LIHAT_JAMAAH.includes(p.peran)) { location.replace('/beranda.html'); return; }
     peran = p.peran;
     const bisaUbah = PERAN_UBAH_JAMAAH.includes(peran);
-    const tugas = [dbGet('kecamatan?select=id,nama&order=nama'), dbGet('desa?select=id,nama,kecamatan_id&order=nama'), dbGet('mursyid?select=id,nama&order=nama')];
+    const tugas = [dbGet('mursyid?select=id,nama&order=nama')];
     if (peran === 'koordinator_wilayah') tugas.push(dbGet(`pengguna_wilayah?select=kecamatan_id&user_id=eq.${await idSaya()}`));
     if (id) tugas.push(dbGet(`jamaah?select=${PILIH}&id=eq.${encodeURIComponent(id)}`));
-    const [kec, desa, murs, ...lain] = await Promise.all(tugas);
+    const [murs, ...lain] = await Promise.all(tugas);
     if (peran === 'koordinator_wilayah') kecBoleh = new Set(lain.shift().map((w) => w.kecamatan_id));
-    semuaDesa = desa;
-    $('kecamatan').innerHTML += kec.filter((k) => !kecBoleh || kecBoleh.has(k.id)).map((k) => `<option value="${k.id}">${hurufAman(k.nama)}</option>`).join('');
+    if (bisaUbah) perbaruiSaran = await muatWilayah(kecBoleh);
     $('mursyid').innerHTML += murs.map((m) => `<option value="${m.id}">${hurufAman(m.nama)}</option>`).join('');
     $('isian-goldar').hidden = !PERAN_GOLDAR.includes(peran);
     if (id && PERAN_GOLDAR.includes(peran)) goldar = (await dbGet(`jamaah_goldar?select=gol_darah&jamaah_id=eq.${encodeURIComponent(id)}`))[0]?.gol_darah || '';

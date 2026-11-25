@@ -1,21 +1,13 @@
 // Pendaftaran jamaah baru: foto KTP -> isi otomatis -> periksa -> simpan.
 // Foto KTP hanya diproses di perangkat ini; tidak dikirim, tidak disimpan. NIK tidak diambil.
 const $ = (id) => document.getElementById(id);
-let semuaKec = [], semuaDesa = [], kecBoleh = null, dobelDiperiksa = '', siapBaca = false;
-const ISIAN = ['nama', 'tempat-lahir', 'tgl-lahir', 'gol-darah', 'kecamatan', 'desa', 'alamat', 'rt-rw', 'umur', 'pekerjaan', 'status-kawin', 'wn'];
+let kecBoleh = null, perbaruiSaran = () => {}, dobelDiperiksa = '', siapBaca = false;
+const ISIAN = ['nama', 'tempat-lahir', 'tgl-lahir', 'gol-darah', 'desa', 'kecamatan', 'kabupaten', 'alamat', 'rt-rw', 'umur', 'pekerjaan', 'status-kawin', 'wn'];
 let peranSaya = '';
 
 const pesan = (t) => { $('pesan').textContent = t; };
 const pesanForm = (t) => { $('pesan-form').textContent = t; };
 const tampil = (bag) => { for (const b of ['tahap-foto', 'form', 'selesai']) $(b).hidden = b !== bag; scrollTo({ top: 0 }); };
-
-function isiDesa(pilih) {
-  const kec = $('kecamatan').value;
-  $('desa').disabled = !kec;
-  $('desa').innerHTML = `<option value="">${kec ? 'Pilih desa' : 'Pilih kecamatan dulu'}</option>` + semuaDesa
-    .filter((d) => String(d.kecamatan_id) === kec).map((d) => `<option value="${d.id}">${hurufAman(d.nama)}</option>`).join('');
-  if (pilih) $('desa').value = String(pilih);
-}
 
 function kosongkan() {
   for (const k of ISIAN) { $(k).value = ''; $(k).classList.remove('otomatis'); $(k).removeAttribute('aria-invalid'); }
@@ -23,8 +15,8 @@ function kosongkan() {
   isiIsianKtp(null); $('gol-darah').value = '';
   document.querySelectorAll('.pil').forEach((l) => l.classList.remove('otomatis'));
   $('tanggal').value = new Date().toLocaleDateString('sv-SE');
-  if ($('kecamatan').options.length === 2) $('kecamatan').value = $('kecamatan').options[1].value;
-  isiDesa();
+  $('kabupaten').value = wilayahAwal();
+  perbaruiSaran();
   aturUmur();
   $('hasil-baca').hidden = true; $('dobel').hidden = true; dobelDiperiksa = ''; pesanForm('');
 }
@@ -38,21 +30,18 @@ function terapkan(h) {
   if (h.jenis_kelamin) { const r = document.querySelector(`[name=jk][value=${h.jenis_kelamin}]`); r.checked = true; r.closest('.pil').classList.add('otomatis'); }
   if (!h.tanggal_lahir) tandai('umur', h.umur);
   aturUmur();
-  const kecDaftar = semuaKec.filter((k) => !kecBoleh || kecBoleh.has(k.id));
-  let kec = KTP.cocokkan(h.kecamatan, kecDaftar);
-  let desa = kec ? KTP.cocokkan(h.desa, semuaDesa.filter((d) => d.kecamatan_id === kec.id)) : null;
-  if (!kec && h.desa) { // kecamatan tidak terbaca: cari desanya langsung
-    desa = KTP.cocokkan(h.desa, semuaDesa.filter((d) => !kecBoleh || kecBoleh.has(d.kecamatan_id)));
-    if (desa) kec = kecDaftar.find((k) => k.id === desa.kecamatan_id);
-  }
-  if (kec) { $('kecamatan').value = String(kec.id); $('kecamatan').classList.add('otomatis'); }
-  isiDesa(desa?.id);
-  if (desa) $('desa').classList.add('otomatis');
+  // wilayah: pakai ejaan yang sudah ada di daftar kalau mirip (salah baca sedikit dibetulkan)
+  const kab = h.kabupaten ? (KTP.cocokkan(h.kabupaten, [...new Set(semuaWilayah.map((w) => w.kab))].map((nama) => ({ nama })))?.nama || h.kabupaten) : null;
+  const diKab = semuaWilayah.filter((w) => !kab || w.kab === kab);
+  const kec = h.kecamatan ? (KTP.cocokkan(h.kecamatan, [...new Set(diKab.map((w) => w.kec))].map((nama) => ({ nama })))?.nama || h.kecamatan) : null;
+  const diKec = diKab.filter((w) => !kec || w.kec === kec);
+  const desa = h.desa ? (KTP.cocokkan(h.desa, diKec.map((w) => ({ nama: w.desa })))?.nama || h.desa) : null;
+  tandai('kabupaten', kab); tandai('kecamatan', kec); tandai('desa', desa);
+  perbaruiSaran();
   const terisi = ISIAN.filter((k) => $(k).classList.contains('otomatis')).length;
   $('hasil-baca').hidden = terisi === 0;
   const kurang = [];
   if (!h.nama) kurang.push('nama');
-  if (h.desa && !desa) kurang.push(`desa "${h.desa}" belum ada di daftar`);
   pesanForm(terisi === 0 ? 'Tulisan KTP belum terbaca. Isi manual atau foto ulang dengan cahaya lebih terang.'
     : kurang.length ? `Periksa: ${kurang.join(', ')}.` : '');
 }
@@ -146,8 +135,7 @@ $('galeri').addEventListener('change', prosesFoto);
 $('manual').onclick = () => { kosongkan(); tampil('form'); $('nama').focus(); };
 $('ulang').onclick = () => { kosongkan(); tampil('tahap-foto'); };
 $('lagi').onclick = () => { kosongkan(); tampil('tahap-foto'); };
-$('kecamatan').addEventListener('change', () => { isiDesa(); $('dobel').hidden = true; });
-$('desa').addEventListener('change', () => { $('dobel').hidden = true; });
+for (const i of ['desa', 'kecamatan', 'kabupaten']) $(i).addEventListener('input', () => { $('dobel').hidden = true; });
 const aturUmur = pasangUmurOtomatis();
 $('umur').addEventListener('input', (e) => { e.target.value = e.target.value.replace(/\D/g, ''); });
 $('form').addEventListener('input', (e) => { e.target.classList?.remove('otomatis'); e.target.closest?.('.pil')?.classList.remove('otomatis'); e.target.removeAttribute?.('aria-invalid'); });
@@ -160,17 +148,19 @@ $('form').addEventListener('submit', async (e) => {
   const nama = KTP.judul($('nama').value.replace(/\s+/g, ' '));
   const umur = $('umur').value ? Number($('umur').value) : null;
   if (nama.length < 2) return salah('nama', 'Nama lengkap belum diisi.');
-  if (!$('kecamatan').value) return salah('kecamatan', 'Pilih kecamatan.');
-  if (!$('desa').value) return salah('desa', 'Pilih desa.');
+  if (!$('desa').value.trim()) return salah('desa', 'Desa/Kelurahan belum diisi.');
+  if (!$('kecamatan').value.trim()) return salah('kecamatan', 'Kecamatan belum diisi.');
+  if (!$('kabupaten').value.trim()) return salah('kabupaten', 'Kabupaten/Kota belum diisi.');
   if ($('tgl-lahir').value && (umur === null || umur < 5 || umur > 120)) return salah('tgl-lahir', 'Tanggal lahir belum benar: umur saat daftar harus 5 sampai 120 tahun.');
   if (umur !== null && (umur < 5 || umur > 120)) return salah('umur', 'Umur harus antara 5 dan 120 tahun.');
   const btn = $('simpan'); btn.disabled = true; btn.classList.add('sibuk'); btn.querySelector('.teks').textContent = 'Memeriksa...';
   pesanForm('');
   try {
-    if (await cekDobel(nama, $('desa').value)) return;
+    const desaId = await desaIdWilayah();
+    if (await cekDobel(nama, desaId)) return;
     btn.querySelector('.teks').textContent = 'Menyimpan...';
     const [j] = await dbKirim('POST', 'jamaah?select=id,nomor_anggota,nama,desa(nama)', {
-      nama, desa_id: Number($('desa').value), alamat: $('alamat').value.trim() || null, umur_daftar: umur,
+      nama, desa_id: desaId, alamat: $('alamat').value.trim() || null, umur_daftar: umur,
       tempat_lahir: $('tempat-lahir').value.trim() ? KTP.judul($('tempat-lahir').value) : null, tanggal_lahir: $('tgl-lahir').value || null, ...bacaIsianKtp(),
       pekerjaan: $('pekerjaan').value.trim() ? KTP.judul($('pekerjaan').value) : null,
       mursyid_id: $('mursyid').value ? Number($('mursyid').value) : null, tanggal_daftar: $('tanggal').value || undefined,
@@ -181,7 +171,8 @@ $('form').addEventListener('submit', async (e) => {
     tampil('selesai');
   } catch (err) {
     if (err.message === 'belum-masuk' || err.message === 'gagal-401') return location.replace('/masuk.html');
-    pesanForm(err.message === 'gagal-403' || err.detail?.code === '42501' ? 'Akun ini tidak punya izin mendaftarkan jamaah di desa ini.'
+    pesanForm(err.detail?.message === 'di luar wilayah tugas' ? 'Wilayah ini di luar wilayah tugas akun ini. Periksa ejaan desa dan kecamatan.'
+      : err.message === 'gagal-403' || err.detail?.code === '42501' ? 'Akun ini tidak punya izin mendaftarkan jamaah di desa ini.'
       : err.message === 'Failed to fetch' ? 'Sinyal terputus. Data belum tersimpan, coba lagi.' : 'Data belum tersimpan. Periksa isian lalu coba lagi.');
   } finally { btn.disabled = false; btn.classList.remove('sibuk'); btn.querySelector('.teks').textContent = 'Simpan'; }
 });
@@ -192,12 +183,11 @@ $('form').addEventListener('submit', async (e) => {
     if (!p || !PERAN_UBAH_JAMAAH.includes(p.peran)) { location.replace('/beranda.html'); return; }
     peranSaya = p.peran;
     $('isian-goldar').hidden = !PERAN_GOLDAR.includes(p.peran);
-    const tugas = [dbGet('kecamatan?select=id,nama&order=nama'), dbGet('desa?select=id,nama,kecamatan_id&order=nama'), dbGet('mursyid?select=id,nama&order=nama')];
+    const tugas = [dbGet('mursyid?select=id,nama&order=nama')];
     if (p.peran === 'koordinator_wilayah') tugas.push(dbGet(`pengguna_wilayah?select=kecamatan_id&user_id=eq.${await idSaya()}`));
-    const [kec, desa, murs, wil] = await Promise.all(tugas);
+    const [murs, wil] = await Promise.all(tugas);
     if (wil) kecBoleh = new Set(wil.map((w) => w.kecamatan_id));
-    semuaKec = kec; semuaDesa = desa;
-    $('kecamatan').innerHTML += kec.filter((k) => !kecBoleh || kecBoleh.has(k.id)).map((k) => `<option value="${k.id}">${hurufAman(k.nama)}</option>`).join('');
+    perbaruiSaran = await muatWilayah(kecBoleh);
     $('mursyid').innerHTML += murs.map((m) => `<option value="${m.id}">${hurufAman(m.nama)}</option>`).join('');
     kosongkan();
     // siapkan pembaca KTP di latar belakang selagi petugas bersiap memotret
