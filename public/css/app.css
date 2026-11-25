@@ -149,6 +149,8 @@ footer{text-align:center;padding:20px 16px 32px;color:var(--abu);font-size:var(-
 
 /* Tabel: jadi kartu di HP */
 .tabel-bungkus{background:#FFFFFF;border-radius:14px;box-shadow:0 1px 3px rgba(26,26,26,.08);overflow:hidden}
+.app-isi:has(.kol-luas){max-width:1280px}
+body:has(.kol-luas) .app-atas-isi{max-width:1280px}
 .tabel{width:100%;border-collapse:collapse}
 .tabel th{text-align:left;font-size:var(--fs-kecil);font-weight:600;color:var(--abu);padding:12px 16px;background:#F6F9F1;border-bottom:1px solid #E2ECD6}
 .tabel td{padding:12px 16px;border-bottom:1px solid #EEF2E8}
@@ -159,6 +161,14 @@ footer{text-align:center;padding:20px 16px 32px;color:var(--abu);font-size:var(-
 .tabel .angka a{color:var(--hijau-jamiyyah);font-weight:600;text-decoration:none}
 .tabel-nama{font-weight:600}
 .tabel .kol-no{width:64px;color:var(--abu);text-align:right;padding-right:8px}
+.kol-luas{display:none}
+@media (min-width:1024px){
+  .tabel .kol-luas{display:table-cell}
+  .tabel-bungkus{overflow-x:auto}
+  .tabel th,.tabel td{padding:10px 10px;font-size:var(--fs-kecil)}
+  .tabel .tabel-nama{font-size:var(--fs-isi)}
+  .tabel .angka,.tabel th{white-space:nowrap}
+}
 .info-tampil{margin:0 0 8px;font-size:var(--fs-kecil);color:var(--abu)}
 .hp-saja{display:none}
 .tabel-kosong{text-align:center;color:var(--abu);padding:32px 16px!important}
