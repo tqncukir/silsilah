@@ -36,7 +36,7 @@ Nomor Anggota: 1165100001 dst. KTA lama (QR teks biasa) tetap berlaku; KTA baru 
 9. Perubahan besar (konsep modul, hapus data) ditanyakan dulu.
 10. Hemat token: jawaban singkat; kerja per bagian kecil; ubah file yang ada, jangan tulis ulang; jangan baca ulang yang sudah diketahui.
 11. Serah terima lewat repo ini (CLAUDE.md + PROGRES.md).
-12. Sistem warna resmi dari KTA (lihat di bawah). Huruf minimal 16px, kontras memenuhi standar, tombol besar untuk para sepuh.
+12. Sistem warna resmi dari KTA (lihat di bawah). Pemakai semua usia (muda dan sepuh): tampilan ringkas, halus, modern; huruf isi 16px (HP tidak memperbesar), label dan keterangan 13-14px, judul sedang; target sentuh minimal 44px, kontras memenuhi standar (diubah Kang 2026-11-25).
 13. Ringan, aman, awet: tabel ternormalisasi + indeks; pagination; PWA cache; arsip data lama per tahun; file dikompres; backup bulanan ke luar Supabase; semua perubahan database lewat migrasi di repo; cek Supabase advisors rutin.
 14. Kalau perintah kurang jelas atau berisi banyak tugas sekaligus, ingatkan: "Beri perintah yang jelas per tugas, Kang" + contoh.
 15. Responsif: SILSILAH dan website harus nyaman di HP, tablet, laptop, dan komputer (uji 360px, 768px, 1280px ke atas).
@@ -69,7 +69,7 @@ supabase/migrations/  file migrasi database
 ```
 
 ## Cara kerja
-- Huruf: Plus Jakarta Sans (OFL, `public/fonts/`), skala huruf di `tokens.css` (`--fs-*`), tidak ada di bawah 16px.
+- Huruf: Plus Jakarta Sans (OFL, `public/fonts/`), skala huruf di `tokens.css` (`--fs-*`), minimal 14px.
 - Logo resmi: `public/icons/` (dibuat dari logo Jam'iyyah, 9 bintang emas).
 - Setiap ganti file yang di-cache, naikkan `VERSI` di `public/sw.js` DAN angka `?v=` pada link CSS/JS di semua HTML (kalau tidak, HP memakai CSS lama).
 - Sebelum lapor selesai: coba di lebar layar HP 360px, tablet 768px, dan laptop 1280px, cek Supabase advisors, pastikan tidak ada rahasia di repo.
