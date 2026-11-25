@@ -1,5 +1,7 @@
--- DATA CONTOH (bukan jamaah asli). Nomor 9990000001-9990000050. Hapus sebelum impor data asli:
--- delete from public.jamaah where nomor_anggota between 9990000001 and 9990000050;
+-- DATA CONTOH (bukan jamaah asli): 50 jamaah, nomor 9990000001-9990000050, 3 kabupaten, 14 desa.
+-- Sudah dijalankan di Supabase 2026-11-25. Hapus sebelum impor data asli:
+--   delete from public.log_perubahan where tabel='jamaah' and baris_id in (select id from public.jamaah where nomor_anggota between 9990000001 and 9990000050);
+--   delete from public.jamaah where nomor_anggota between 9990000001 and 9990000050;  (hapus ini hanya untuk data contoh)
 insert into public.mursyid (nama) values ('KH. Syamsuddin Ali Al-Mursyid'),('KH. Ahmad Sholihuddin Rifa''i') on conflict do nothing;
 insert into public.kabupaten (nama) values ('Jombang') on conflict do nothing;
 insert into public.kecamatan (kabupaten_id,nama) select id,'Diwek' from public.kabupaten where nama='Jombang' on conflict do nothing;

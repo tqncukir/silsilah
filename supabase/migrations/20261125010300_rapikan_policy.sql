@@ -1,9 +1,10 @@
 -- Saran Supabase advisors: satu policy per aksi (lebih cepat), dan tutup fungsi bawaan dari API.
+-- Catatan: bagian DROP dijalankan Kang lewat SQL Editor; policy baru dibuat lebih dulu.
 revoke execute on function public.rls_auto_enable() from public, anon, authenticated;
 
 do $$ declare t text; a text; begin
   foreach t in array array['kabupaten','kecamatan','desa','mursyid','pengguna','pengguna_wilayah'] loop
-    execute format('drop policy kelola on public.%I', t);
+    execute format('drop policy if exists kelola on public.%I', t);
     foreach a in array array['insert','update','delete'] loop
       execute format('create policy %s on public.%I for %s to authenticated %s',
         'admin_' || a, t, a,
