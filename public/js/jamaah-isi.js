@@ -26,7 +26,7 @@ function tampilLihat() {
     ...(PERAN_GOLDAR.includes(peran) ? [['Gol. darah', goldar]] : []),
     ['Status perkawinan', j.status_kawin], ['Kewarganegaraan', j.kewarganegaraan], ['Pekerjaan', j.pekerjaan],
     ['Kab/Kota', j.desa.kecamatan.kabupaten?.nama], ['Kecamatan', j.desa.kecamatan.nama], ['Kel/Desa', j.desa.nama],
-    ['Dusun/Jalan', [j.alamat, j.rt_rw && `RT/RW ${j.rt_rw}`].filter(Boolean).join(', ')],
+    ['Dusun/Jalan', j.alamat], ['RT/RW', j.rt_rw],
   ];
   if (j.wafat) baris.push(['Tanggal wafat', tgl(j.tanggal_wafat)]);
   $('l-rincian').innerHTML = baris.map(([k, v]) => `<div><dt>${k}</dt><dd>${v ? hurufAman(v) : '–'}</dd></div>`).join('');

@@ -25,7 +25,7 @@ function isiDesa() {
 }
 
 function jalurData() {
-  const p = ['select=id,nomor_anggota,nama,aktif,wafat,alamat,rt_rw,umur_daftar,tanggal_lahir,pekerjaan,tanggal_daftar,mursyid(nama),desa!inner(nama,kecamatan_id,kecamatan(nama))', 'order=nama.asc,id.asc'];
+  const p = ['select=id,nomor_anggota,nama,aktif,wafat,alamat,rt_rw,umur_daftar,tanggal_lahir,pekerjaan,tanggal_daftar,mursyid(nama),desa!inner(nama,kecamatan_id,kecamatan(nama,kabupaten(nama)))', 'order=nama.asc,id.asc'];
   const cari = $('cari').value.trim();
   if (/^\d{10}$/.test(cari)) p.push(`nomor_anggota=eq.${cari}`);
   else if (cari) p.push(`nama=ilike.${encodeURIComponent('*' + cari.replace(/[*,()]/g, ' ') + '*')}`);
@@ -58,16 +58,18 @@ async function muat() {
         <td data-l="No" class="angka kol-no">${(dari + i + 1).toLocaleString('id-ID')}</td>
         <td data-l="Nomor" class="angka"><a href="/jamaah-isi.html?id=${j.id}">${j.nomor_anggota}</a></td>
         <td data-l="Nama" class="tabel-nama">${hurufAman(j.nama)}</td>
-        <td data-l="Desa">${hurufAman(j.desa.nama)}<span class="hp-saja"> · Kec. ${hurufAman(j.desa.kecamatan.nama)}</span></td>
+        <td data-l="Desa"><span class="hp-saja">${hurufAman([j.alamat, j.rt_rw && 'RT/RW ' + j.rt_rw].filter(Boolean).join(' ') + (j.alamat || j.rt_rw ? ', ' : ''))}</span>${hurufAman(j.desa.nama)}<span class="hp-saja"> · Kec. ${hurufAman(j.desa.kecamatan.nama)} · ${hurufAman(j.desa.kecamatan.kabupaten?.nama || '')}</span></td>
         <td data-l="Kecamatan">${hurufAman(j.desa.kecamatan.nama)}</td>
-        <td class="kol-luas">${hurufAman([j.alamat, j.rt_rw && 'RT/RW ' + j.rt_rw].filter(Boolean).join(', ') || '–')}</td>
+        <td class="kol-luas">${hurufAman(j.desa.kecamatan.kabupaten?.nama || '–')}</td>
+        <td class="kol-luas">${hurufAman(j.alamat || '–')}</td>
+        <td class="kol-luas angka">${hurufAman(j.rt_rw || '–')}</td>
         <td class="kol-luas angka">${j.tanggal_lahir ? hitungUmur(j.tanggal_lahir) : (j.umur_daftar ?? '–')}</td>
         <td class="kol-luas">${hurufAman(j.pekerjaan || '–')}</td>
         <td class="kol-luas">${hurufAman(j.mursyid?.nama || '–')}</td>
         <td class="kol-luas angka">${j.tanggal_daftar ? new Date(j.tanggal_daftar + 'T00:00:00').toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '–'}</td>
         <td data-l="Status"><span class="stat stat-${kelas}">${teks}</span></td>
       </tr>`;
-    }).join('') : `<tr><td colspan="11" class="tabel-kosong">Tidak ada jamaah yang cocok.${disaring ? ' <button type="button" class="tautan" id="hapus-saring">Hapus saringan</button>' : ''}</td></tr>`;
+    }).join('') : `<tr><td colspan="13" class="tabel-kosong">Tidak ada jamaah yang cocok.${disaring ? ' <button type="button" class="tautan" id="hapus-saring">Hapus saringan</button>' : ''}</td></tr>`;
     $('hapus-saring')?.addEventListener('click', () => { for (const k of ['cari', 'kecamatan', 'status']) $(k).value = ''; isiDesa(); $('desa').value = ''; halaman = 1; muat(); });
     $('halaman').hidden = jmlHal <= 1;
     $('posisi').textContent = `Halaman ${halaman} dari ${jmlHal}`;

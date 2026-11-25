@@ -184,7 +184,7 @@ footer{text-align:center;padding:20px 16px 32px;color:var(--abu);font-size:var(-
   .tabel td[data-l="Nomor"]{grid-column:2 / -1;font-size:var(--fs-kecil)}
   .tabel td[data-l="Desa"],.tabel td[data-l="Kecamatan"]{display:inline;font-size:var(--fs-kecil);color:var(--abu)}
   .tabel td[data-l="Desa"]{grid-column:2 / -1}
-  .tabel td[data-l="Kecamatan"]{display:none}
+  .tabel td[data-l="Kecamatan"],.tabel td.kol-luas{display:none}
   .hp-saja{display:inline}
 }
 
