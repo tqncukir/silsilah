@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=45">
-<link rel="stylesheet" href="/css/app.css?v=45">
+<link rel="stylesheet" href="/css/tokens.css?v=46">
+<link rel="stylesheet" href="/css/app.css?v=46">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -45,8 +45,10 @@
       <input id="cari" type="search" placeholder="Cari nama atau Nomor Anggota" autocomplete="off" enterkeyhint="search">
     </div>
     <div class="saring-pilih">
+      <label><span>Kab/Kota</span><select id="kabupaten"><option value="">Semua</option></select></label>
       <label><span>Kecamatan</span><select id="kecamatan"><option value="">Semua</option></select></label>
-      <label><span>Desa</span><select id="desa"><option value="">Semua</option></select></label>
+      <label><span>Kel/Desa</span><select id="desa"><option value="">Semua</option></select></label>
+      <label><span>Mursyid</span><select id="mursyid"><option value="">Semua</option><option value="kosong">Belum diisi</option></select></label>
       <label><span>Status</span>
         <select id="status">
           <option value="">Semua</option>
@@ -56,6 +58,7 @@
         </select>
       </label>
     </div>
+    <button type="button" class="tautan saring-ulang" id="saring-ulang" hidden>Hapus semua saringan</button>
   </form>
 
   <p id="pesan" class="pesan" role="alert"></p>
@@ -64,7 +67,7 @@
   <div class="tabel-bungkus">
     <table class="tabel" id="tabel">
       <thead><tr><th scope="col" class="kol-no">No</th><th scope="col">Nomor Anggota</th><th scope="col">Nama</th><th scope="col">Kel/Desa</th><th scope="col">Kecamatan</th><th scope="col" class="kol-luas">Kab/Kota</th><th scope="col" class="kol-luas">Dusun/Jalan</th><th scope="col" class="kol-luas">RT/RW</th><th scope="col" class="kol-luas">Umur</th><th scope="col" class="kol-luas">Pekerjaan</th><th scope="col" class="kol-luas">Mursyid</th><th scope="col" class="kol-luas">Tgl daftar</th><th scope="col">Status</th></tr></thead>
-      <tbody id="isi-tabel"><tr><td colspan="11" class="tabel-kosong">Memuat...</td></tr></tbody>
+      <tbody id="isi-tabel"><tr><td colspan="13" class="tabel-kosong">Memuat...</td></tr></tbody>
     </table>
   </div>
 
@@ -77,7 +80,7 @@
     </label>
   </nav>
 </main>
-<script src="/js/supa.js?v=45" defer></script>
-<script src="/js/jamaah.js?v=45" defer></script>
+<script src="/js/supa.js?v=46" defer></script>
+<script src="/js/jamaah.js?v=46" defer></script>
 </body>
 </html>
