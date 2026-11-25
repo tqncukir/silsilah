@@ -59,9 +59,28 @@ async function bukaKamera() {
   }
   $('video').srcObject = aliran;
   $('kamera-layar').hidden = false;
+  nyalakanLampu();
   document.body.style.overflow = 'hidden';
   $('jepret').focus();
 }
+// Lampu flash menyala otomatis agar tulisan KTP terang (HP Android/Chrome; iPhone belum mengizinkan dari website).
+async function aturLampu(nyala) {
+  const t = aliran?.getVideoTracks()[0];
+  if (!t) return false;
+  try { await t.applyConstraints({ advanced: [{ torch: nyala }] }); } catch { return false; }
+  $('lampu').setAttribute('aria-pressed', String(nyala));
+  return true;
+}
+async function nyalakanLampu() {
+  const t = aliran?.getVideoTracks()[0];
+  const bisa = !!t?.getCapabilities?.().torch;
+  $('lampu').hidden = !bisa;
+  if (!bisa) return;
+  try { if (t.getCapabilities().focusMode?.includes('continuous')) await t.applyConstraints({ advanced: [{ focusMode: 'continuous' }] }); } catch {}
+  await new Promise((r) => setTimeout(r, 300)); // beberapa HP perlu jeda setelah kamera menyala
+  if (!(await aturLampu(true))) $('lampu').hidden = true;
+}
+$('lampu').onclick = () => aturLampu($('lampu').getAttribute('aria-pressed') !== 'true');
 function tutupKamera() {
   aliran?.getTracks().forEach((t) => t.stop()); aliran = null;
   $('video').srcObject = null;
