@@ -1,7 +1,7 @@
-// Daftar Data Jamaah: cari, saring, 10/20/50 per halaman. Hak lihat/ubah tetap dijaga RLS di database.
+// Daftar Data Jamaah: cari, saring, 10/20/50/100 per halaman. Hak lihat/ubah tetap dijaga RLS di database.
 const $ = (id) => document.getElementById(id);
 const q = new URLSearchParams(location.search);
-const UKURAN = [10, 20, 50];
+const UKURAN = [10, 20, 50, 100];
 let PER_HALAMAN = (() => { let n = Number(q.get('n')); try { n ||= Number(localStorage.getItem('silsilah.perHalaman')); } catch {} return UKURAN.includes(n) ? n : 20; })();
 let halaman = Math.max(1, Number(q.get('h')) || 1);
 let semuaDesa = [];
