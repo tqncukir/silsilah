@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Data Jamaah · SILSILAH TQN Cukir</title>
+<meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=12">
+<link rel="stylesheet" href="/css/app.css?v=12">
+</head>
+<body class="hal-app">
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <a href="/beranda.html">Beranda</a>
+      <a href="/jamaah.html" aria-current="page">Data Jamaah</a>
+    </nav>
+    <button class="app-keluar" id="keluar" type="button">Keluar</button>
+  </div>
+</header>
+
+<main class="app-isi">
+  <div class="judul-baris">
+    <div>
+      <h1>Data Jamaah</h1>
+      <p class="judul-sub" id="ringkas" aria-live="polite">Memuat...</p>
+    </div>
+    <a href="/jamaah-isi.html" class="btn btn-utama btn-pas" id="tambah" hidden>
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+      Tambah jamaah
+    </a>
+  </div>
+
+  <form class="saring" id="saring" role="search" onsubmit="return false">
+    <div class="saring-cari">
+      <label for="cari" class="sr-only">Cari nama atau Nomor Anggota</label>
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="cari" type="search" placeholder="Cari nama atau Nomor Anggota" autocomplete="off" enterkeyhint="search">
+    </div>
+    <div class="saring-pilih">
+      <label><span>Kecamatan</span><select id="kecamatan"><option value="">Semua</option></select></label>
+      <label><span>Desa</span><select id="desa"><option value="">Semua</option></select></label>
+      <label><span>Status</span>
+        <select id="status">
+          <option value="">Semua</option>
+          <option value="aktif">Aktif</option>
+          <option value="tidak">Tidak aktif</option>
+          <option value="wafat">Wafat</option>
+        </select>
+      </label>
+    </div>
+  </form>
+
+  <p id="pesan" class="pesan" role="alert"></p>
+
+  <div class="tabel-bungkus">
+    <table class="tabel" id="tabel">
+      <thead><tr><th scope="col">Nomor Anggota</th><th scope="col">Nama</th><th scope="col">Desa</th><th scope="col">Kecamatan</th><th scope="col">Status</th></tr></thead>
+      <tbody id="isi-tabel"><tr><td colspan="5" class="tabel-kosong">Memuat...</td></tr></tbody>
+    </table>
+  </div>
+
+  <nav class="halaman" id="halaman" aria-label="Pindah halaman" hidden>
+    <button type="button" class="btn btn-kedua btn-pas" id="sebelum">Sebelumnya</button>
+    <span id="posisi"></span>
+    <button type="button" class="btn btn-kedua btn-pas" id="sesudah">Berikutnya</button>
+  </nav>
+</main>
+<script src="/js/supa.js?v=12" defer></script>
+<script src="/js/jamaah.js?v=12" defer></script>
+</body>
+</html>

@@ -5,27 +5,54 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Beranda · SILSILAH TQN Cukir</title>
 <meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=11">
-<link rel="stylesheet" href="/css/app.css?v=11">
+<link rel="stylesheet" href="/css/tokens.css?v=12">
+<link rel="stylesheet" href="/css/app.css?v=12">
 </head>
-<body>
-<header class="header">
-  <img src="/icons/logo-96.png" alt="Logo Jam'iyyah TQN Cukir" width="44" height="44">
-  <div><p class="judul">SILSILAH</p><span class="sub">Beranda</span></div>
+<body class="hal-app">
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <a href="/beranda.html" aria-current="page">Beranda</a>
+      <a href="/jamaah.html" id="nav-jamaah" hidden>Data Jamaah</a>
+    </nav>
+    <button class="app-keluar" id="keluar" type="button">Keluar</button>
+  </div>
 </header>
-<main>
-  <h1 id="salam">Memuat...</h1>
-  <section class="kartu" id="info" hidden>
-    <ul class="daftar" id="rincian"></ul>
+
+<main class="app-isi">
+  <section class="sambut">
+    <p class="sambut-salam">Assalamu'alaikum</p>
+    <h1 id="salam">Memuat...</h1>
+    <p class="judul-sub" id="peran"></p>
   </section>
-  <p class="kecil" id="catatan"></p>
-  <button id="keluar" class="btn btn-kedua" type="button">Keluar</button>
+  <p id="pesan" class="pesan" role="alert"></p>
+
+  <section id="menu" hidden aria-label="Menu">
+    <h2 class="bagian-judul">Pondasi Jamaah</h2>
+    <div class="menu-kisi">
+      <a class="menu-ubin" href="/jamaah.html" id="m-jamaah" hidden>
+        <span class="menu-ikon grup-pondasi" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><circle cx="9" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2.5 20c.6-3.6 3.3-6 6.5-6s5.9 2.4 6.5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16 5.2a3.3 3.3 0 010 6.3M18 14.4c1.9.8 3.2 2.8 3.5 5.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        <span><strong>Data Jamaah</strong><span class="menu-ket" id="m-jamaah-ket">Cari, lihat, dan ubah data jamaah</span></span>
+      </a>
+      <a class="menu-ubin" href="/jamaah-isi.html" id="m-tambah" hidden>
+        <span class="menu-ikon grup-pondasi" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><circle cx="10" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 20c.6-3.6 3.3-6 6.5-6 1.4 0 2.6.4 3.6 1.2M19 14v6M16 17h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        <span><strong>Tambah Jamaah</strong><span class="menu-ket">Catat jamaah baru</span></span>
+      </a>
+    </div>
+  </section>
+
+  <section id="anggota" class="panel" hidden aria-label="Data saya">
+    <dl class="rincian" id="rincian"></dl>
+    <p class="judul-sub">KTA digital dan data lengkap menyusul di langkah berikutnya.</p>
+  </section>
 </main>
-<script src="/js/supa.js?v=11" defer></script>
-<script src="/js/beranda.js?v=11" defer></script>
+<script src="/js/supa.js?v=12" defer></script>
+<script src="/js/beranda.js?v=12" defer></script>
 </body>
 </html>

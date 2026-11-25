@@ -1,33 +1,32 @@
-const NAMA_PERAN = {
-  admin_pusat: 'Admin Pusat', ketua: 'Ketua', bendahara: 'Bendahara', nadzir: 'Nadzir',
-  koordinator_wilayah: 'Koordinator Wilayah', petugas_scan: 'Petugas Scan', khodim: 'Khodim/Keluarga',
-  dokter: 'Dokter Pendamping', anggota: 'Anggota',
-};
-const isi = (label, nilai) => { const li = document.createElement('li'); li.textContent = `${label}: ${nilai}`; document.getElementById('rincian').append(li); };
+// Beranda setelah masuk: menu sesuai peran.
+const $ = (id) => document.getElementById(id);
+$('keluar').onclick = keluar;
 
 (async () => {
   sesiDariTautan();
   try {
-    const [p] = await dbGet(`pengguna?select=nama,peran,jamaah_id&user_id=eq.${await idSaya()}`);
+    const p = await profilSaya();
     if (!p) {
-      document.getElementById('salam').textContent = 'Akun belum punya peran';
-      document.getElementById('catatan').textContent = 'Hubungi admin pusat agar akun ini diberi peran.';
+      $('salam').textContent = 'Akun belum punya peran';
+      $('peran').textContent = 'Hubungi admin pusat agar akun ini diberi peran.';
       return;
     }
-    document.getElementById('salam').textContent = `Assalamu'alaikum, ${p.nama}`;
-    isi('Peran', NAMA_PERAN[p.peran] || p.peran);
-    if (p.jamaah_id) {
-      const [j] = await dbGet(`jamaah?select=nomor_anggota,desa(nama,kecamatan(nama))&id=eq.${p.jamaah_id}`);
-      if (j) { isi('Nomor Anggota', j.nomor_anggota); isi('Desa', `${j.desa.nama}, Kec. ${j.desa.kecamatan.nama}`); }
-    } else {
-      const r = await dbGet('jamaah?select=id&limit=1000');
-      isi('Data jamaah yang bisa dilihat', `${r.length} orang`);
+    $('salam').textContent = p.nama;
+    $('peran').textContent = NAMA_PERAN[p.peran] || p.peran;
+    if (PERAN_LIHAT_JAMAAH.includes(p.peran)) {
+      $('menu').hidden = false; $('m-jamaah').hidden = false; $('nav-jamaah').hidden = false;
+      $('m-tambah').hidden = !PERAN_UBAH_JAMAAH.includes(p.peran);
+      dbHalaman('jamaah?select=id', 0, 0).then(({ total }) => {
+        $('m-jamaah-ket').textContent = `${total.toLocaleString('id-ID')} jamaah tercatat`;
+      }).catch(() => {});
     }
-    document.getElementById('info').hidden = false;
-    document.getElementById('catatan').textContent = 'Menu lengkap (Data Jamaah, KTA Digital) menyusul di langkah berikutnya.';
-  } catch (e) {
-    if (e.message === 'belum-masuk' || e.message === 'gagal-401') location.replace('/masuk.html');
-    else document.getElementById('salam').textContent = 'Gagal memuat. Periksa sinyal lalu muat ulang.';
-  }
+    if (p.peran === 'anggota' && p.jamaah_id) {
+      const [j] = await dbGet(`jamaah?select=nomor_anggota,desa(nama,kecamatan(nama))&id=eq.${p.jamaah_id}`);
+      if (j) {
+        $('rincian').innerHTML = [['Nomor Anggota', j.nomor_anggota], ['Desa', j.desa.nama], ['Kecamatan', j.desa.kecamatan.nama]]
+          .map(([k, v]) => `<div><dt>${k}</dt><dd>${hurufAman(v)}</dd></div>`).join('');
+        $('anggota').hidden = false;
+      }
+    }
+  } catch (e) { tanganiGalat(e, (t) => { $('pesan').textContent = t; }); }
 })();
-document.getElementById('keluar').onclick = keluar;

@@ -20,11 +20,12 @@ Mulai: 2026-11-25 (Kang Salman: "Bismillah").
 - **Langkah 3b, PIN Pengurus** (2026-11-25, pilihan Kang, diuji Kang: login pengurus berhasil): satu formulir untuk semua. PIN KTA 6 angka = akun anggota; PIN Pengurus 8 angka (rahasia, tidak dicetak) = akun pengurus terpisah `<nomor>@pengurus.silsilah.invalid` dengan peran dari `private.pengurus_pin`. Fungsi `public.cek_login` (ganti `cek_login_anggota`, yang lama tidak dipakai lagi, hapus nanti). Pasang PIN: `select private.set_pin_pengurus(jamaah_id, 'ketua', '12345678')`. Data contoh: 9990000026 / Cukir = ketua. Email admin tetap sebagai cadangan di alamat khusus `/admin.html` (tidak ditautkan dari halaman umum).
   - Tampilan Masuk dirapikan (skill UI UX Pro Max): kepala hijau + logo, kartu putih, tombol Lihat PIN, pesan galat jelas, bantuan lupa PIN.
 
+- Langkah 3/3b disetujui Kang 2026-11-25 ("lanjut langkah 4").
+
 ## Sedang dikerjakan
-- Langkah 3/3b menunggu persetujuan Kang. Langkah 4 dimulai setelah Kang setuju.
+- **Langkah 4, Data Jamaah** (mulai 2026-11-25): `jamaah.html` (cari nama/10 angka nomor, saring kecamatan/desa/status, 20 per halaman, tabel jadi kartu di HP), `jamaah-isi.html` (rincian, tambah, ubah, status Aktif/Tidak aktif/Wafat + tanggal wafat), beranda bermenu sesuai peran. Nomor Anggota otomatis (`nomor_anggota_seq`, mulai 1165105645; migrasi `20261125040000`). Fungsi `cek_login_anggota` lama sudah dihapus. Menunggu uji Kang.
 
 ## Berikutnya (satu per satu, tunggu persetujuan Kang)
-4. **Data Jamaah**: halaman pengurus untuk cari, lihat, tambah, ubah, ubah status Aktif/Wafat; filter desa dan kecamatan; pagination.
 5. **Pendaftaran**: formulir jamaah baru dengan scan KTP untuk isi otomatis; foto KTP dan NIK langsung dibuang.
 6. **KTA Digital**: tampilan seperti kartu asli, QR baru aman (kunci di admin pusat), PIN 6 angka, bisa dicetak, halaman publik "Cek Keaslian KTA"; KTA lama tetap berlaku.
 7. **Portal Anggota**: jamaah login lalu melihat KTA dan datanya sendiri.

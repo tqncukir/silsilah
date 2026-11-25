@@ -54,3 +54,49 @@ async function keluar() {
   sesi.hapus();
   location.href = '/masuk.html';
 }
+
+// Kirim perubahan (POST/PATCH) lewat REST. RLS tetap berlaku.
+async function dbKirim(metode, jalur, isi) {
+  const t = await tokenAktif();
+  if (!t) throw new Error('belum-masuk');
+  const r = await fetch(`${SB_URL}/rest/v1/${jalur}`, {
+    method: metode,
+    headers: { apikey: SB_KEY, Authorization: `Bearer ${t}`, 'Content-Type': 'application/json', Prefer: 'return=representation' },
+    body: JSON.stringify(isi),
+  });
+  if (!r.ok) { const b = await r.json().catch(() => ({})); const e = new Error('gagal-' + r.status); e.detail = b; throw e; }
+  return r.json();
+}
+
+// Baca satu halaman data + jumlah total. Hasil: { baris, total }
+async function dbHalaman(jalur, dari, sampai) {
+  const t = await tokenAktif();
+  if (!t) throw new Error('belum-masuk');
+  const r = await fetch(`${SB_URL}/rest/v1/${jalur}`, {
+    headers: { apikey: SB_KEY, Authorization: `Bearer ${t}`, Range: `${dari}-${sampai}`, Prefer: 'count=exact' },
+  });
+  if (!r.ok && r.status !== 416) throw new Error('gagal-' + r.status);
+  const total = Number((r.headers.get('content-range') || '/0').split('/')[1]) || 0;
+  return { baris: r.status === 416 ? [] : await r.json(), total };
+}
+
+// Profil akun yang sedang masuk: { nama, peran, jamaah_id }
+async function profilSaya() {
+  const [p] = await dbGet(`pengguna?select=nama,peran,jamaah_id&user_id=eq.${await idSaya()}`);
+  return p || null;
+}
+
+const NAMA_PERAN = {
+  admin_pusat: 'Admin Pusat', ketua: 'Ketua', bendahara: 'Bendahara', nadzir: 'Nadzir',
+  koordinator_wilayah: 'Koordinator Wilayah', petugas_scan: 'Petugas Scan', khodim: 'Khodim/Keluarga',
+  dokter: 'Dokter Pendamping', anggota: 'Anggota',
+};
+const PERAN_LIHAT_JAMAAH = ['admin_pusat', 'ketua', 'bendahara', 'petugas_scan', 'koordinator_wilayah'];
+const PERAN_UBAH_JAMAAH = ['admin_pusat', 'ketua', 'koordinator_wilayah'];
+
+// Kalau sesi habis, kembali ke halaman Masuk
+function tanganiGalat(e, tampil) {
+  if (e.message === 'belum-masuk' || e.message === 'gagal-401') { location.replace('/masuk.html'); return; }
+  tampil(e.message === 'Failed to fetch' ? 'Sinyal terputus. Periksa sinyal lalu coba lagi.' : 'Gagal memuat data. Coba muat ulang halaman.');
+}
+const hurufAman = (t) => String(t ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
