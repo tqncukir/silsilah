@@ -83,7 +83,7 @@ function batang(ol, baris, maks, { warna = '', tombol = false } = {}) {
   ol.innerHTML = baris.map((b, i) => {
     const isi = `<span class="bt-nama">${hurufAman(b.label)}</span>
       <span class="bt-jalur" aria-hidden="true"><span class="bt-isi${warna}" data-i="${i}"></span></span>
-      <span class="bt-nilai">${b.teks}</span>`;
+      <span class="bt-nilai">${b.teks.replace(/ \((.+)\)$/, ' <span class="bt-persen">($1)</span>')}</span>`;
     return `<li>${tombol && b.aksi !== false ? `<button type="button" class="bt-baris bt-tombol" data-i="${i}" aria-label="${hurufAman(b.label)}: ${b.teks}${b.petunjuk || ''}">${isi}</button>` : `<div class="bt-baris">${isi}</div>`}</li>`;
   }).join('');
   for (const el of ol.querySelectorAll('.bt-isi')) el.style.width = `${maks ? Math.max(baris[el.dataset.i].n / maks * 100, baris[el.dataset.i].n ? 1.5 : 0) : 0}%`;
@@ -94,7 +94,7 @@ function gambarSebaran() {
   const turun = data.tingkat === 'kabupaten' ? 'kecamatan' : data.tingkat === 'kecamatan' ? 'desa' : null;
   const tampil = semuaSebaran ? s : s.slice(0, 10);
   batang($('sebaran'), tampil.map((w) => ({
-    label: w.nama, n: w.n, teks: `${angka(w.n)} · ${persen(w.n, total)}`,
+    label: w.nama, n: w.n, teks: `${angka(w.n)} (${persen(w.n, total)})`,
     petunjuk: turun ? `. Ketuk untuk melihat ${turun}` : (String(w.id) === f.desa ? '' : '. Ketuk untuk memilih desa ini'),
     aksi: !(data.tingkat === 'desa' && String(w.id) === f.desa),
   })), s[0]?.n || 0, { tombol: true });
@@ -178,7 +178,7 @@ function gambarBulan() {
 function gambarCatatan() {
   const c = data.catatan;
   if (!c.length) { $('catatan').innerHTML = '<li class="dsb-kosong-kecil">Tidak ada catatan pengecekan untuk pilihan ini.</li>'; return; }
-  batang($('catatan'), c.map((x) => ({ label: labelCatatan(x.catatan), n: x.n, teks: `${angka(x.n)} · ${persen(x.n, data.catatan_total)}`, petunjuk: '. Ketuk untuk melihat daftar anggota' })),
+  batang($('catatan'), c.map((x) => ({ label: labelCatatan(x.catatan), n: x.n, teks: `${angka(x.n)} (${persen(x.n, data.catatan_total)})`, petunjuk: '. Ketuk untuk melihat daftar anggota' })),
     c[0].n, { warna: ' bt-isi-catatan', tombol: true });
   for (const b of $('catatan').querySelectorAll('button')) b.onclick = () => bukaDaftar(c[b.dataset.i]);
 }
@@ -191,7 +191,7 @@ function gambarPekerjaan() {
   const baris = lima.map(([label, n]) => ({ label, n }));
   if (lainnya) baris.push({ label: `Lainnya (${angka(urut.length - 5)} kelompok)`, n: lainnya });
   if (kosong) baris.push({ label: 'Belum diisi', n: kosong });
-  for (const b of baris) b.teks = `${angka(b.n)} · ${persen(b.n, data.total)}`;
+  for (const b of baris) b.teks = `${angka(b.n)} (${persen(b.n, data.total)})`;
   batang($('pekerjaan'), baris, Math.max(...baris.map((b) => b.n)));
 }
 
