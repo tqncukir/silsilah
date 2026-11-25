@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=41">
-<link rel="stylesheet" href="/css/app.css?v=41">
+<link rel="stylesheet" href="/css/tokens.css?v=42">
+<link rel="stylesheet" href="/css/app.css?v=42">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -45,14 +45,20 @@
         <header class="kta-kepala">
           <img src="/icons/logo-96.png" alt="" width="40" height="40">
           <div>
-            <p class="kta-judul">KARTU ANGGOTA JAM'IYYAH</p>
+            <p class="kta-judul">Kartu Anggota Jam'iyyah</p>
             <p class="kta-sub">Thoriqoh Qodiriyah wa Naqsyabandiyah · Pusat Cukir Jombang</p>
           </div>
         </header>
         <div class="kta-badan">
-          <dl class="kta-data" id="kta-data"></dl>
+          <img class="kta-tanda-air" src="/icons/logo-96.png" alt="" width="96" height="96">
+          <div class="kta-kiri">
+            <p class="kta-nama" id="kta-nama"></p>
+            <p class="kta-nomor"><span>No. Anggota</span> <strong id="kta-nomor"></strong></p>
+            <dl class="kta-data" id="kta-data"></dl>
+          </div>
           <div class="kta-qr">
             <div id="kta-qr" class="kta-qr-gambar" role="img" aria-label="QR keaslian KTA"></div>
+            <p class="kta-qr-ket">Pindai untuk cek keaslian</p>
             <p class="kta-pin" id="kta-pin" hidden>PIN <strong id="kta-pin-angka"></strong></p>
           </div>
         </div>
@@ -79,8 +85,8 @@
     </section>
   </div>
 </main>
-<script src="/js/supa.js?v=41" defer></script>
-<script src="/js/qrcode.js?v=41" defer></script>
-<script src="/js/kta.js?v=41" defer></script>
+<script src="/js/supa.js?v=42" defer></script>
+<script src="/js/qrcode.js?v=42" defer></script>
+<script src="/js/kta.js?v=42" defer></script>
 </body>
 </html>

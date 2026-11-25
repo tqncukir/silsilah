@@ -9,13 +9,15 @@ const tgl = (d) => d ? new Date(d + 'T00:00:00').toLocaleDateString('id-ID', { d
 const PILIH = 'id,nomor_anggota,nama,umur_daftar,pekerjaan,tanggal_daftar,aktif,wafat,desa(nama,kecamatan(nama,kabupaten(nama))),mursyid(nama)';
 
 function gambarKartu() {
+  const kab = j.desa.kecamatan.kabupaten?.nama || '';
   const baris = [
-    ['Nomor', j.nomor_anggota, 'kta-nomor'], ['Nama', j.nama, 'kta-nama'],
-    ['Umur', j.umur_daftar ? `${j.umur_daftar} tahun` : '–'], ['Pekerjaan', j.pekerjaan || '–'],
-    ['Desa', j.desa.nama], ['Kecamatan', j.desa.kecamatan.nama], ['Kab/Kota', j.desa.kecamatan.kabupaten?.nama || '–'],
-    ['Mursyid', j.mursyid?.nama || '–'], ['Terdaftar', tgl(j.tanggal_daftar)],
+    ['Desa', j.desa.nama], ['Kecamatan', j.desa.kecamatan.nama], ['Kab/Kota', kab || '–'],
+    ['Umur', j.umur_daftar ? `${j.umur_daftar} tahun` : '–'], ['Pekerjaan', j.pekerjaan || '–'], ['Terdaftar', tgl(j.tanggal_daftar)],
+    ['Mursyid', j.mursyid?.nama || '–', 'lebar'],
   ];
-  $('kta-data').innerHTML = baris.map(([k, v, c]) => `<dt>${k}</dt><dd${c ? ` class="${c}"` : ''}>${hurufAman(String(v))}</dd>`).join('');
+  $('kta-nama').textContent = j.nama;
+  $('kta-nomor').textContent = j.nomor_anggota;
+  $('kta-data').innerHTML = baris.map(([k, v, c]) => `<div${c ? ` class="${c}"` : ''}><dt>${k}</dt><dd>${hurufAman(String(v))}</dd></div>`).join('');
   $('kartu').hidden = false;
   document.title = `KTA ${j.nama} · SILSILAH TQN Cukir`;
 }

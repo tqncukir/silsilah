@@ -325,23 +325,28 @@ footer{text-align:center;padding:20px 16px 32px;color:var(--abu);font-size:var(-
 @media (min-width:900px){.kta-tata{grid-template-columns:minmax(0,560px) minmax(280px,380px);align-items:start}}
 .kta-wadah{container-type:inline-size;max-width:560px}
 .kta{aspect-ratio:85.6/54;display:flex;flex-direction:column;overflow:hidden;border-radius:3.6cqw;background:#FFFFFF;color:#1A1A1A;
-  box-shadow:0 1px 2px rgba(26,26,26,.08),0 8px 24px rgba(11,107,46,.14);border:1px solid #D8E4D2}
-.kta-kepala{display:flex;align-items:center;gap:2.4cqw;padding:2.4cqw 3.6cqw;background:var(--hijau-jamiyyah);border-bottom:.9cqw solid var(--kuning-rosyid)}
-.kta-kepala img{width:9cqw;height:9cqw;border-radius:50%;background:#FFFFFF}
-.kta-judul{margin:0;font-size:4.2cqw;font-weight:700;letter-spacing:.02em;color:var(--kuning-rosyid);line-height:1.15}
-.kta-sub{margin:.4cqw 0 0;font-size:2.4cqw;color:#FFFFFF;line-height:1.2}
-.kta-badan{flex:1;display:flex;gap:2.4cqw;padding:2.2cqw 3.6cqw 1.4cqw;min-height:0}
-.kta-data{flex:1;margin:0;display:grid;grid-template-columns:auto 1fr;gap:.35cqw 2cqw;align-content:start;font-size:2.75cqw;line-height:1.25;min-width:0}
-.kta-data dt{color:#4A4A4A}
-.kta-data dd{margin:0;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.kta-data .kta-nama{font-size:3.4cqw;color:var(--hijau-jamiyyah);white-space:normal;line-height:1.15}
-.kta-data .kta-nomor{font-variant-numeric:tabular-nums;letter-spacing:.03em}
-.kta-qr{display:flex;flex-direction:column;align-items:center;gap:.8cqw;width:24cqw;flex:none}
-.kta-qr-gambar{width:24cqw;height:24cqw;display:grid;place-items:center;background:#FFFFFF;text-align:center;font-size:2.2cqw;color:#4A4A4A}
+  box-shadow:0 1px 2px rgba(0,0,0,.08),0 8px 24px rgba(11,107,46,.14);border:1px solid #DDE7D3}
+.kta-kepala{display:flex;align-items:center;gap:2.6cqw;padding:2.4cqw 4cqw;background:var(--hijau-jamiyyah);border-bottom:.8cqw solid var(--kuning-rosyid)}
+.kta-kepala img{width:9.4cqw;height:9.4cqw;border-radius:50%;background:#FFFFFF;padding:.4cqw;box-shadow:0 0 0 .5cqw var(--kuning-rosyid)}
+.kta-judul{margin:0;font-size:4cqw;font-weight:700;color:var(--kuning-rosyid);line-height:1.15}
+.kta-sub{margin:.5cqw 0 0;font-size:2.3cqw;color:#FFFFFF;line-height:1.25}
+.kta-badan{position:relative;flex:1;display:flex;gap:3cqw;padding:2.8cqw 4cqw 2cqw;min-height:0;background:#FFFFFF}
+.kta-tanda-air{position:absolute;right:30cqw;bottom:-6cqw;width:36cqw;height:36cqw;opacity:.06;pointer-events:none}
+.kta-kiri{position:relative;flex:1;min-width:0;display:flex;flex-direction:column}
+.kta-nama{margin:0;font-size:4.4cqw;font-weight:700;color:var(--hijau-jamiyyah);line-height:1.12;overflow-wrap:anywhere}
+.kta-nomor{margin:.9cqw 0 0;display:flex;align-items:baseline;gap:1.4cqw;font-size:2.3cqw;color:#4A4A4A}
+.kta-nomor strong{padding:.3cqw 1.6cqw;border-radius:99cqw;background:var(--hijau-pupus);font-size:3cqw;color:#1A1A1A;font-variant-numeric:tabular-nums;letter-spacing:.06em}
+.kta-data{margin:1.8cqw 0 0;padding-top:1.6cqw;border-top:.25cqw solid #E3EBDA;display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.3fr) minmax(0,1fr);gap:1.2cqw 2.4cqw;line-height:1.2}
+.kta-data dt{font-size:2cqw;color:#5A5A5A}
+.kta-data dd{margin:.15cqw 0 0;font-size:2.7cqw;font-weight:600;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere}
+.kta-data .lebar{grid-column:1 / -1}
+.kta-qr{position:relative;display:flex;flex-direction:column;align-items:center;gap:.8cqw;width:25cqw;flex:none}
+.kta-qr-gambar{width:25cqw;height:25cqw;padding:1.4cqw;display:grid;place-items:center;background:#FFFFFF;border:.3cqw solid #E3EBDA;border-radius:2cqw;text-align:center;font-size:2.2cqw;color:#4A4A4A}
 .kta-qr-gambar svg{width:100%;height:100%;display:block}
-.kta-pin{margin:0;font-size:2.6cqw;color:#4A4A4A}
+.kta-qr-ket{margin:0;font-size:1.9cqw;color:#5A5A5A;text-align:center;line-height:1.2}
+.kta-pin{margin:0;font-size:2.4cqw;color:#4A4A4A}
 .kta-pin strong{font-size:3.2cqw;color:#1A1A1A;letter-spacing:.12em;font-variant-numeric:tabular-nums}
-.kta-kaki{display:flex;justify-content:space-between;align-items:center;gap:2cqw;padding:1.3cqw 3.6cqw;background:var(--kuning-rosyid);font-size:2.4cqw;color:#1A1A1A}
+.kta-kaki{display:flex;justify-content:space-between;align-items:center;gap:2cqw;padding:1.4cqw 4cqw;background:var(--kuning-rosyid);font-size:2.3cqw;color:#1A1A1A}
 .kta-aksi .tombol-baris.kolom{flex-direction:column;align-items:stretch;border-top:0;padding-top:4px}
 .kta-aksi .tombol-baris.kolom .btn{margin:0}
 .pin-baru{margin:12px 0 4px;padding:12px 14px;border-radius:12px;background:var(--hijau-pupus)}
