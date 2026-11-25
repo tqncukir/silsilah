@@ -204,6 +204,7 @@ function gambarJk() {
     <span class="bt-nilai">${angka(n)} <span class="bt-persen">(${persen(n, data.total)})</span></span></li>`).join('');
   $('jk-batang').innerHTML = bagian.filter((b) => b[1]).map(([, n, k]) => `<span class="${k}" data-n="${n}"></span>`).join('');
   for (const el of $('jk-batang').children) el.style.flexGrow = el.dataset.n;
+  $('g-jk').textContent = data.jk_tebakan ? 'Jenis Kelamin · Perkiraan' : 'Jenis Kelamin';
   const ket = [];
   if (data.jk_tebakan) ket.push(`${angka(data.jk_tebakan)} di antaranya ditebak dari nama (data lama).`);
   if (j.kosong) ket.push(`${angka(j.kosong)} belum diisi, perlu dicek di Data Jamaah.`);

@@ -632,3 +632,12 @@ li:nth-child(-n+3)>.bt-baris .bt-no{background:var(--hijau-jamiyyah);color:#FFFF
 /* tombol bawah sebaran */
 .dsb-bawah{padding-top:8px;border-top:1px solid #F1F4EC}
 @media (prefers-reduced-motion:no-preference){.kl-batang{transition:height .3s ease-out}.bt-tombol,.kl-tombol{transition:background-color .15s}}
+/* jenis kelamin: warna permintaan Kang */
+.jk-batang{gap:0;height:16px;border-radius:999px;overflow:hidden;background:#FFFFFF}
+.jk-batang span{border-radius:0}
+.jk-batang span+span{border-left:2px solid #FFFFFF}
+.jk-l{background:#087443}
+.jk-p{background:#B88722}
+.jk-k{background:repeating-linear-gradient(135deg,#9CA3AF 0 2px,#E5E7EB 2px 6px)}
+.jk-kotak.jk-k{background:repeating-linear-gradient(135deg,#9CA3AF 0 1.5px,#E5E7EB 1.5px 4px);box-shadow:inset 0 0 0 1px #9CA3AF}
+.dsb-jk .bt-nilai,.dsb-jk .bt-persen{color:var(--hitam)}
