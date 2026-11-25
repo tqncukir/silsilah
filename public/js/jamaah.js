@@ -49,16 +49,20 @@ async function muat() {
     if (halaman > jmlHal) { halaman = jmlHal; return muat(); }
     const disaring = $('cari').value.trim() || $('kecamatan').value || $('desa').value || $('status').value;
     $('ringkas').textContent = `${total.toLocaleString('id-ID')} jamaah${disaring ? ' cocok dengan saringan' : ''}`;
-    $('isi-tabel').innerHTML = baris.length ? baris.map((j) => {
+    $('info-tampil').textContent = total
+      ? `Menampilkan nomor ${(dari + 1).toLocaleString('id-ID')}–${(dari + baris.length).toLocaleString('id-ID')} dari ${total.toLocaleString('id-ID')} jamaah · ${PER_HALAMAN} orang per halaman`
+      : '';
+    $('isi-tabel').innerHTML = baris.length ? baris.map((j, i) => {
       const [teks, kelas] = STATUS(j);
       return `<tr data-id="${j.id}" tabindex="0">
+        <td data-l="No" class="angka kol-no">${(dari + i + 1).toLocaleString('id-ID')}</td>
         <td data-l="Nomor" class="angka"><a href="/jamaah-isi.html?id=${j.id}">${j.nomor_anggota}</a></td>
         <td data-l="Nama" class="tabel-nama">${hurufAman(j.nama)}</td>
         <td data-l="Desa">${hurufAman(j.desa.nama)}<span class="hp-saja"> · Kec. ${hurufAman(j.desa.kecamatan.nama)}</span></td>
         <td data-l="Kecamatan">${hurufAman(j.desa.kecamatan.nama)}</td>
         <td data-l="Status"><span class="stat stat-${kelas}">${teks}</span></td>
       </tr>`;
-    }).join('') : `<tr><td colspan="5" class="tabel-kosong">Tidak ada jamaah yang cocok.${disaring ? ' <button type="button" class="tautan" id="hapus-saring">Hapus saringan</button>' : ''}</td></tr>`;
+    }).join('') : `<tr><td colspan="6" class="tabel-kosong">Tidak ada jamaah yang cocok.${disaring ? ' <button type="button" class="tautan" id="hapus-saring">Hapus saringan</button>' : ''}</td></tr>`;
     $('hapus-saring')?.addEventListener('click', () => { for (const k of ['cari', 'kecamatan', 'status']) $(k).value = ''; isiDesa(); $('desa').value = ''; halaman = 1; muat(); });
     $('halaman').hidden = jmlHal <= 1;
     $('posisi').textContent = `Halaman ${halaman} dari ${jmlHal}`;

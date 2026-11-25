@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=12">
-<link rel="stylesheet" href="/css/app.css?v=12">
+<link rel="stylesheet" href="/css/tokens.css?v=13">
+<link rel="stylesheet" href="/css/app.css?v=13">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -59,10 +59,11 @@
 
   <p id="pesan" class="pesan" role="alert"></p>
 
+  <p class="info-tampil" id="info-tampil" aria-live="polite"></p>
   <div class="tabel-bungkus">
     <table class="tabel" id="tabel">
-      <thead><tr><th scope="col">Nomor Anggota</th><th scope="col">Nama</th><th scope="col">Desa</th><th scope="col">Kecamatan</th><th scope="col">Status</th></tr></thead>
-      <tbody id="isi-tabel"><tr><td colspan="5" class="tabel-kosong">Memuat...</td></tr></tbody>
+      <thead><tr><th scope="col" class="kol-no">No</th><th scope="col">Nomor Anggota</th><th scope="col">Nama</th><th scope="col">Desa</th><th scope="col">Kecamatan</th><th scope="col">Status</th></tr></thead>
+      <tbody id="isi-tabel"><tr><td colspan="6" class="tabel-kosong">Memuat...</td></tr></tbody>
     </table>
   </div>
 
@@ -72,7 +73,7 @@
     <button type="button" class="btn btn-kedua btn-pas" id="sesudah">Berikutnya</button>
   </nav>
 </main>
-<script src="/js/supa.js?v=12" defer></script>
-<script src="/js/jamaah.js?v=12" defer></script>
+<script src="/js/supa.js?v=13" defer></script>
+<script src="/js/jamaah.js?v=13" defer></script>
 </body>
 </html>
