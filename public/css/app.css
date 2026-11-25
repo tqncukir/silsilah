@@ -181,8 +181,8 @@ footer{text-align:center;padding:20px 16px 32px;color:var(--abu);font-size:var(-
 
 /* Status: wajar = teks berwarna; perlu perhatian = berlatar */
 .stat{display:inline-block;font-size:var(--fs-kecil);font-weight:600;white-space:nowrap}
-.stat-aktif{color:#16702F}
-.stat-tidak{color:#5A5A5A}
+.stat-aktif{color:#11652B;background:#E6F4E1;border:1px solid #8CC79A;padding:1px 10px;border-radius:999px}
+.stat-tidak{color:#6E5200;background:#FFF6CC;border:1px solid #E3C443;padding:1px 10px;border-radius:999px}
 .stat-wafat{color:#A1241B;background:#FCECEA;border:1px solid #E9A39C;padding:1px 10px;border-radius:999px}
 
 /* Halaman berikut */
