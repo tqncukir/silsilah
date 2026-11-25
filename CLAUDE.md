@@ -8,7 +8,7 @@ Pemilik dan pengambil keputusan: **Kang Salman** (admin pusat). Balas dalam Baha
 Setelah satu bagian selesai: perbarui `PROGRES.md`, commit, laporkan ringkas plus link untuk dicoba di HP.
 
 ## Konsep ringkas
-Website mobile-first yang bisa dipasang di layar HP seperti aplikasi (PWA, tanpa Play Store), dengan notifikasi.
+Website mobile-first yang juga nyaman dibuka di komputer, laptop, tablet, dan HP (responsif), bisa dipasang di layar HP seperti aplikasi (PWA, tanpa Play Store), dengan notifikasi.
 Bagian publik (profil, agenda, laporan infaq, berita, cek keaslian KTA) + area login (pengurus dan anggota).
 
 14 modul, dikelompokkan warna (warna kelompok hanya untuk ikon dan label kecil):
@@ -70,4 +70,4 @@ supabase/migrations/  file migrasi database
 ## Cara kerja
 - Logo resmi: `public/icons/` (dibuat dari logo Jam'iyyah, 9 bintang emas).
 - Setiap ganti file yang di-cache, naikkan `VERSI` di `public/sw.js` DAN angka `?v=` pada link CSS/JS di semua HTML (kalau tidak, HP memakai CSS lama).
-- Sebelum lapor selesai: coba di lebar layar HP 360px, cek Supabase advisors, pastikan tidak ada rahasia di repo.
+- Sebelum lapor selesai: coba di lebar layar HP 360px, tablet 768px, dan laptop 1280px, cek Supabase advisors, pastikan tidak ada rahasia di repo.
