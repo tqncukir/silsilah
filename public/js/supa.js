@@ -1,7 +1,7 @@
 // Penghubung ringan ke Supabase (tanpa library besar). Sesi disimpan di HP ini saja.
 const SB_URL = 'https://tuthgclhrzvvlcnpjxiv.supabase.co';
 const SB_KEY = 'sb_publishable_IWIH_9fvK7E3WvimMrz_vQ_3so84UC6'; // kunci publik (aman di website)
-const TS_SITE = 'ISI_SITE_KEY_TURNSTILE';                          // kunci publik Turnstile
+const TS_SITE = '0x4AAAAAAGRsXDXsYWPJ3-z-';                          // kunci publik Turnstile
 const SIMPAN = 'silsilah.sesi';
 
 const sesi = {
