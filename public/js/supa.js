@@ -87,6 +87,7 @@ async function profilSaya() {
   const nav = (id, boleh) => { const el = document.getElementById(id); if (el) el.hidden = !boleh; };
   nav('nav-jamaah', p && PERAN_LIHAT_JAMAAH.includes(p.peran));
   nav('nav-daftar', p && PERAN_UBAH_JAMAAH.includes(p.peran));
+  nav('nav-dasbor', p && PERAN_LIHAT_JAMAAH.includes(p.peran));
   return p || null;
 }
 

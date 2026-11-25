@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Dashboard Pengurus · SILSILAH TQN Cukir</title>
+<meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=47">
+<link rel="stylesheet" href="/css/app.css?v=47">
+</head>
+<body class="hal-app">
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <a href="/beranda.html">Beranda</a>
+      <a href="/dashboard.html" id="nav-dasbor" aria-current="page">Dashboard Pengurus</a>
+      <a href="/jamaah.html" id="nav-jamaah" hidden>Data Jamaah</a>
+      <a href="/pendaftaran.html" id="nav-daftar" hidden>Pendaftaran</a>
+    </nav>
+    <button class="app-keluar" id="keluar" type="button">Keluar</button>
+  </div>
+</header>
+
+<main class="app-isi">
+  <div class="judul-baris">
+    <div>
+      <h1>Dashboard Pengurus</h1>
+      <p class="judul-sub">Persebaran jamaah untuk merencanakan kegiatan dan memilih wilayah yang perlu diperiksa.</p>
+    </div>
+  </div>
+
+  <section class="dsb-filter" aria-label="Filter dashboard">
+    <div class="dsb-filter-hp">
+      <button type="button" class="btn btn-kedua dsb-filter-tombol" id="filter-buka" aria-expanded="false" aria-controls="filter-panel">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Filter
+      </button>
+      <p class="dsb-pilihan" id="filter-ringkas" aria-live="polite"></p>
+    </div>
+    <div class="dsb-filter-panel" id="filter-panel">
+      <label><span>Kabupaten/Kota</span><select id="f-kab"><option value="">Semua wilayah</option></select></label>
+      <label><span>Kecamatan</span><select id="f-kec"><option value="">Semua kecamatan</option></select></label>
+      <label><span>Desa</span><select id="f-desa"><option value="">Semua desa</option></select></label>
+      <label><span>Periode daftar</span><select id="f-periode"><option value="">Semua periode</option></select></label>
+      <label class="f-rentang" hidden><span>Dari bulan</span><input type="month" id="f-dari"></label>
+      <label class="f-rentang" hidden><span>Sampai bulan</span><input type="month" id="f-sampai"></label>
+      <button type="button" class="btn btn-kedua dsb-reset" id="reset">Reset filter</button>
+    </div>
+  </section>
+
+  <p id="pesan" class="pesan" role="alert"></p>
+
+  <div id="keadaan" class="panel dsb-keadaan" hidden>
+    <p id="keadaan-teks"></p>
+    <button type="button" class="btn btn-utama btn-pas" id="keadaan-tombol"></button>
+  </div>
+
+  <div id="isi" class="dsb-isi" aria-busy="true">
+    <section class="dsb-kartu-baris" aria-label="Ringkasan">
+      <div class="dsb-kartu"><p class="dsb-kartu-label">Jamaah Terdaftar</p><p class="dsb-kartu-angka" id="k-total">–</p></div>
+      <div class="dsb-kartu"><p class="dsb-kartu-label">Kabupaten/Kota Tercatat</p><p class="dsb-kartu-angka" id="k-kab">–</p></div>
+      <div class="dsb-kartu dsb-kartu-catatan"><p class="dsb-kartu-label">Entri dengan Catatan</p><p class="dsb-kartu-angka" id="k-catatan">–</p></div>
+    </section>
+
+    <div class="dsb-grid">
+      <section class="panel dsb-panel dsb-sebaran" aria-labelledby="g-sebaran">
+        <h2 id="g-sebaran" class="dsb-judul">Sebaran Jamaah per Wilayah</h2>
+        <nav class="dsb-jejak" id="jejak" aria-label="Tingkat wilayah"></nav>
+        <p class="dsb-ket">Ketuk nama wilayah untuk melihat lebih rinci.</p>
+        <ol class="dsb-batang" id="sebaran"></ol>
+        <div class="dsb-bawah">
+          <button type="button" class="tautan" id="lihat-semua" hidden>Lihat semua</button>
+          <a class="tautan" id="ke-data" href="/jamaah.html">Buka di Data Jamaah</a>
+        </div>
+      </section>
+
+      <section class="panel dsb-panel dsb-usia" aria-labelledby="g-usia">
+        <h2 id="g-usia" class="dsb-judul">Usia saat Mendaftar</h2>
+        <div class="dsb-kolom dsb-kolom-usia" id="usia" role="list"></div>
+        <p class="dsb-ringkas" id="usia-ringkas"></p>
+        <p class="dsb-ket" id="usia-kosong"></p>
+      </section>
+
+      <section class="panel dsb-panel dsb-bulan" aria-labelledby="g-bulan">
+        <h2 id="g-bulan" class="dsb-judul">Pendaftaran Jamaah per Bulan</h2>
+        <p class="dsb-ket">Berdasarkan tanggal daftar yang tercatat</p>
+        <div class="dsb-bulan-wadah">
+          <div class="dsb-kolom dsb-kolom-bulan" id="bulan" role="list"></div>
+          <div class="dsb-tip" id="tip" role="status" hidden></div>
+        </div>
+      </section>
+
+      <section class="panel dsb-panel" aria-labelledby="g-catatan">
+        <h2 id="g-catatan" class="dsb-judul">Catatan Pengecekan Data</h2>
+        <p class="dsb-ket">Ketuk batang untuk melihat daftar anggota dan catatan aslinya.</p>
+        <ol class="dsb-batang dsb-batang-catatan" id="catatan"></ol>
+      </section>
+
+      <section class="panel dsb-panel" aria-labelledby="g-pekerjaan">
+        <h2 id="g-pekerjaan" class="dsb-judul">Komposisi Pekerjaan Jamaah</h2>
+        <ol class="dsb-batang" id="pekerjaan"></ol>
+      </section>
+    </div>
+  </div>
+</main>
+
+<dialog class="dsb-dialog" id="daftar" aria-labelledby="daftar-judul">
+  <div class="dsb-dialog-kepala">
+    <h2 id="daftar-judul" class="dsb-judul"></h2>
+    <button type="button" class="btn btn-kedua btn-pas" id="daftar-tutup">Tutup</button>
+  </div>
+  <p class="dsb-ket" id="daftar-ket"></p>
+  <ul class="dsb-daftar" id="daftar-isi"></ul>
+</dialog>
+
+<script src="/js/supa.js?v=47" defer></script>
+<script src="/js/aturan-dashboard.js?v=47" defer></script>
+<script src="/js/dashboard.js?v=47" defer></script>
+</body>
+</html>

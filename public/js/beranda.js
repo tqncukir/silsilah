@@ -14,7 +14,7 @@ $('keluar').onclick = keluar;
     $('salam').textContent = p.nama;
     $('peran').textContent = NAMA_PERAN[p.peran] || p.peran;
     if (PERAN_LIHAT_JAMAAH.includes(p.peran)) {
-      $('menu').hidden = false; $('m-jamaah').hidden = false; $('nav-jamaah').hidden = false;
+      $('menu').hidden = false; $('m-jamaah').hidden = false; $('nav-jamaah').hidden = false; $('m-amanah').hidden = false; $('m-amanah-judul').hidden = false;
       $('m-tambah').hidden = !PERAN_UBAH_JAMAAH.includes(p.peran);
       dbHalaman('jamaah?select=id', 0, 0).then(({ total }) => {
         $('m-jamaah-ket').textContent = `${total.toLocaleString('id-ID')} jamaah tercatat`;
