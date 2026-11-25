@@ -22,7 +22,8 @@ Mulai: 2026-11-25 (Kang Salman: "Bismillah").
 
 - Langkah 3/3b disetujui Kang 2026-11-25 ("lanjut langkah 4").
 - Langkah 6 disetujui Kang 2026-11-25 ("bagus", "lanjut langkah 7").
-- Langkah 7 disetujui Kang 2026-11-25 ("sudah bagus"). Tahap 1 (7 langkah) selesai dibangun. Berikutnya: impor 5.528 data asli, tunggu perintah Kang.
+- Langkah 7 disetujui Kang 2026-11-25 ("sudah bagus"). Tahap 1 (7 langkah) selesai dibangun.
+- **Impor data asli** (2026-11-25, perintah Kang "mulai impor data asli"): 5.528 jamaah (1165100001-1165105644) dari file bersih `Database Jamaah TQN Cukir (Bersih).xlsx`. Alamat dicocokkan ke daftar wilayah resmi: 5.066 cocok penuh, 418 desa ditulis seperti data lama (kebanyakan nama dusun), 44 kecamatan/kab dibetulkan; RT/RW dan dusun dipisah. File impor + kolom `cek` (462 baris perlu dicek pengurus) ada di project files `silsilah/impor/impor_jamaah.csv` (tidak di repo, privasi). Lewat tabel sementara `impor_jamaah` (CSV diunggah Kang lewat Table Editor, sudah dihapus). Hasil: 529 desa, 97 kecamatan, 24 kab/kota, 9 mursyid. 50 data contoh + akun uji 9990000021/9990000026 sudah dihapus. Belum ada PIN untuk jamaah asli: PIN dibuat pengurus lewat halaman KTA. Admin masuk lewat `/admin.html`.
 
 ## Sedang dikerjakan
 - **Langkah 4, Data Jamaah** (mulai 2026-11-25): `jamaah.html` (cari nama/10 angka nomor, saring kecamatan/desa/status, 20 per halaman, tabel jadi kartu di HP), `jamaah-isi.html` (rincian, tambah, ubah, status Aktif/Tidak aktif/Wafat + tanggal wafat), beranda bermenu sesuai peran. Nomor Anggota otomatis (`nomor_anggota_seq`, mulai 1165105645; migrasi `20261125040000`). Fungsi `cek_login_anggota` lama sudah dihapus. Kang lanjut ke Langkah 5 (2026-11-25). Tambahan atas permintaan Kang: kolom No urut, info 20 per halaman, status berwarna (Aktif hijau, Tidak aktif kuning, Wafat merah), semua kolom di laptop.
@@ -37,7 +38,7 @@ Setelah 7 langkah beres dan Kang setuju: impor 5.528 data asli.
 ## Catatan
 - Alamat uji coba: https://silsilah-tqn.pages.dev
 - GitHub App Claude dan Cloudflare Pages hanya diberi akses ke repo `silsilah`.
-- Data contoh: nomor anggota 9990000001-9990000050 (hapus sebelum impor data asli).
+- Data contoh 9990000001-9990000050 sudah dihapus 2026-11-25 (setelah impor data asli).
 - Migrasi 20261125010300 dijalankan Kang lewat SQL Editor (perintah DROP butuh persetujuan), lalu dicatat manual di schema_migrations.
 - Belum ada PIN di database: PIN anggota (disimpan sebagai hash, bukan angka asli) dibuat di Langkah 3/6.
 - Alat Supabase yang meminta izin (apply_migration, DELETE/DROP, secret) tidak muncul di aplikasi Kang. Pakai SQL Editor di Chrome Kang (Kang klik Run) dan dashboard.
