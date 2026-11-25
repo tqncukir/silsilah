@@ -15,6 +15,9 @@ const KTP = (() => {
     h.nama = ambil(baris, /^NAMA\s*[:;]?\s*([A-Z .,'`]+)$/);
     const lahir = baris.join('\n').match(/LAHIR\s*[:;]?\s*([A-Z .]*?)[,.\s]+(\d{1,2})\s*[-\/. ]\s*(\d{1,2})\s*[-\/. ]\s*(\d{4})/);
     if (lahir) {
+      if (lahir[1].trim()) h.tempat_lahir = lahir[1].trim();
+      const tl = new Date(Date.UTC(+lahir[4], +lahir[3] - 1, +lahir[2]));
+      if (tl.getUTCDate() === +lahir[2] && tl.getUTCMonth() === +lahir[3] - 1) h.tanggal_lahir = tl.toISOString().slice(0, 10);
       const t = new Date(+lahir[4], +lahir[3] - 1, +lahir[2]), kini = new Date();
       let u = kini.getFullYear() - t.getFullYear();
       if (kini < new Date(kini.getFullYear(), t.getMonth(), t.getDate())) u--;
@@ -26,7 +29,7 @@ const KTP = (() => {
     h.desa = ambil(baris, /^(?:KEL|DESA)\s*[\/I1l|]?\s*(?:DESA|KEL)?\s*[:;]?\s*([A-Z .]+)$/);
     h.kecamatan = ambil(baris, /^KECAMATAN\s*[:;]?\s*([A-Z .]+)$/);
     h.pekerjaan = ambil(baris, /^PEKERJAAN\s*[:;]?\s*([A-Z .\/]+)$/);
-    for (const k of ['kabupaten', 'nama', 'desa', 'kecamatan', 'pekerjaan']) if (h[k]) h[k] = judul(h[k]);
+    for (const k of ['kabupaten', 'nama', 'tempat_lahir', 'desa', 'kecamatan', 'pekerjaan']) if (h[k]) h[k] = judul(h[k]);
     if (h.pekerjaan) { const p = cocokkan(h.pekerjaan, PEKERJAAN.map((nama) => ({ nama })), 4); if (p) h.pekerjaan = p.nama; }
     return h;
   }

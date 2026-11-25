@@ -2,7 +2,7 @@
 // Foto KTP hanya diproses di perangkat ini; tidak dikirim, tidak disimpan. NIK tidak diambil.
 const $ = (id) => document.getElementById(id);
 let semuaKec = [], semuaDesa = [], kecBoleh = null, dobelDiperiksa = '', siapBaca = false;
-const ISIAN = ['nama', 'kecamatan', 'desa', 'alamat', 'umur', 'pekerjaan'];
+const ISIAN = ['nama', 'tempat-lahir', 'tgl-lahir', 'kecamatan', 'desa', 'alamat', 'umur', 'pekerjaan'];
 
 const pesan = (t) => { $('pesan').textContent = t; };
 const pesanForm = (t) => { $('pesan-form').textContent = t; };
@@ -22,12 +22,16 @@ function kosongkan() {
   $('tanggal').value = new Date().toLocaleDateString('sv-SE');
   if ($('kecamatan').options.length === 2) $('kecamatan').value = $('kecamatan').options[1].value;
   isiDesa();
+  aturUmur();
   $('hasil-baca').hidden = true; $('dobel').hidden = true; dobelDiperiksa = ''; pesanForm('');
 }
 
 function terapkan(h) {
   const tandai = (k, v) => { if (v === undefined || v === null || v === '') return; $(k).value = v; $(k).classList.add('otomatis'); };
-  tandai('nama', h.nama); tandai('alamat', h.alamat); tandai('umur', h.umur); tandai('pekerjaan', h.pekerjaan);
+  tandai('nama', h.nama); tandai('alamat', h.alamat); tandai('pekerjaan', h.pekerjaan);
+  tandai('tempat-lahir', h.tempat_lahir); tandai('tgl-lahir', h.tanggal_lahir);
+  if (!h.tanggal_lahir) tandai('umur', h.umur);
+  aturUmur();
   const kecDaftar = semuaKec.filter((k) => !kecBoleh || kecBoleh.has(k.id));
   let kec = KTP.cocokkan(h.kecamatan, kecDaftar);
   let desa = kec ? KTP.cocokkan(h.desa, semuaDesa.filter((d) => d.kecamatan_id === kec.id)) : null;
@@ -138,6 +142,7 @@ $('ulang').onclick = () => { kosongkan(); tampil('tahap-foto'); };
 $('lagi').onclick = () => { kosongkan(); tampil('tahap-foto'); };
 $('kecamatan').addEventListener('change', () => { isiDesa(); $('dobel').hidden = true; });
 $('desa').addEventListener('change', () => { $('dobel').hidden = true; });
+const aturUmur = pasangUmurOtomatis();
 $('umur').addEventListener('input', (e) => { e.target.value = e.target.value.replace(/\D/g, ''); });
 $('form').addEventListener('input', (e) => { e.target.classList?.remove('otomatis'); e.target.removeAttribute?.('aria-invalid'); });
 $('keluar').onclick = keluar;
@@ -151,6 +156,7 @@ $('form').addEventListener('submit', async (e) => {
   if (nama.length < 2) return salah('nama', 'Nama lengkap belum diisi.');
   if (!$('kecamatan').value) return salah('kecamatan', 'Pilih kecamatan.');
   if (!$('desa').value) return salah('desa', 'Pilih desa.');
+  if ($('tgl-lahir').value && (umur === null || umur < 5 || umur > 120)) return salah('tgl-lahir', 'Tanggal lahir belum benar: umur saat daftar harus 5 sampai 120 tahun.');
   if (umur !== null && (umur < 5 || umur > 120)) return salah('umur', 'Umur harus antara 5 dan 120 tahun.');
   const btn = $('simpan'); btn.disabled = true; btn.classList.add('sibuk'); btn.querySelector('.teks').textContent = 'Memeriksa...';
   pesanForm('');
@@ -159,6 +165,7 @@ $('form').addEventListener('submit', async (e) => {
     btn.querySelector('.teks').textContent = 'Menyimpan...';
     const [j] = await dbKirim('POST', 'jamaah?select=id,nomor_anggota,nama,desa(nama)', {
       nama, desa_id: Number($('desa').value), alamat: $('alamat').value.trim() || null, umur_daftar: umur,
+      tempat_lahir: $('tempat-lahir').value.trim() ? KTP.judul($('tempat-lahir').value) : null, tanggal_lahir: $('tgl-lahir').value || null,
       pekerjaan: $('pekerjaan').value.trim() ? KTP.judul($('pekerjaan').value) : null,
       mursyid_id: $('mursyid').value ? Number($('mursyid').value) : null, tanggal_daftar: $('tanggal').value || undefined,
     });

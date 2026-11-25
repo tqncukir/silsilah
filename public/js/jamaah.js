@@ -25,7 +25,7 @@ function isiDesa() {
 }
 
 function jalurData() {
-  const p = ['select=id,nomor_anggota,nama,aktif,wafat,alamat,umur_daftar,pekerjaan,tanggal_daftar,mursyid(nama),desa!inner(nama,kecamatan_id,kecamatan(nama))', 'order=nama.asc,id.asc'];
+  const p = ['select=id,nomor_anggota,nama,aktif,wafat,alamat,umur_daftar,tanggal_lahir,pekerjaan,tanggal_daftar,mursyid(nama),desa!inner(nama,kecamatan_id,kecamatan(nama))', 'order=nama.asc,id.asc'];
   const cari = $('cari').value.trim();
   if (/^\d{10}$/.test(cari)) p.push(`nomor_anggota=eq.${cari}`);
   else if (cari) p.push(`nama=ilike.${encodeURIComponent('*' + cari.replace(/[*,()]/g, ' ') + '*')}`);
@@ -61,7 +61,7 @@ async function muat() {
         <td data-l="Desa">${hurufAman(j.desa.nama)}<span class="hp-saja"> · Kec. ${hurufAman(j.desa.kecamatan.nama)}</span></td>
         <td data-l="Kecamatan">${hurufAman(j.desa.kecamatan.nama)}</td>
         <td class="kol-luas">${hurufAman(j.alamat || '–')}</td>
-        <td class="kol-luas angka">${j.umur_daftar ?? '–'}</td>
+        <td class="kol-luas angka">${j.tanggal_lahir ? hitungUmur(j.tanggal_lahir) : (j.umur_daftar ?? '–')}</td>
         <td class="kol-luas">${hurufAman(j.pekerjaan || '–')}</td>
         <td class="kol-luas">${hurufAman(j.mursyid?.nama || '–')}</td>
         <td class="kol-luas angka">${j.tanggal_daftar ? new Date(j.tanggal_daftar + 'T00:00:00').toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '–'}</td>

@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=19">
-<link rel="stylesheet" href="/css/app.css?v=19">
+<link rel="stylesheet" href="/css/tokens.css?v=20">
+<link rel="stylesheet" href="/css/app.css?v=20">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -81,6 +81,15 @@
         <input id="nama" maxlength="120" required autocapitalize="words">
       </div>
       <div class="isian">
+        <label for="tempat-lahir">Tempat lahir</label>
+        <input id="tempat-lahir" maxlength="60" autocapitalize="words">
+      </div>
+      <div class="isian">
+        <label for="tgl-lahir">Tanggal lahir</label>
+        <input id="tgl-lahir" type="date" min="1900-01-01" aria-describedby="umur-ket">
+        <p class="ket" id="umur-ket">Umur dihitung otomatis dari tanggal lahir.</p>
+      </div>
+      <div class="isian">
         <label for="kecamatan">Kecamatan <span class="wajib">wajib</span></label>
         <select id="kecamatan" required><option value="">Pilih kecamatan</option></select>
       </div>
@@ -93,9 +102,10 @@
         <input id="alamat" maxlength="160" aria-describedby="k-alamat">
         <p class="ket" id="k-alamat">Dusun, RT/RW. Tanpa nomor HP.</p>
       </div>
-      <div class="isian">
+      <div class="isian" id="isian-umur">
         <label for="umur">Umur saat mendaftar</label>
-        <input id="umur" inputmode="numeric" maxlength="3">
+        <input id="umur" inputmode="numeric" maxlength="3" aria-describedby="k-umur">
+        <p class="ket" id="k-umur">Isi hanya kalau tanggal lahir tidak diketahui.</p>
       </div>
       <div class="isian">
         <label for="pekerjaan">Pekerjaan</label>
@@ -132,9 +142,9 @@
     </div>
   </section>
 </main>
-<script src="/js/supa.js?v=19" defer></script>
+<script src="/js/supa.js?v=20" defer></script>
 <script src="/ocr/tesseract.min.js" defer></script>
-<script src="/js/ktp.js?v=19" defer></script>
-<script src="/js/pendaftaran.js?v=19" defer></script>
+<script src="/js/ktp.js?v=20" defer></script>
+<script src="/js/pendaftaran.js?v=20" defer></script>
 </body>
 </html>

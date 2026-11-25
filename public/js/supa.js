@@ -104,3 +104,26 @@ function tanganiGalat(e, tampil) {
   tampil(e.message === 'Failed to fetch' ? 'Sinyal terputus. Periksa sinyal lalu coba lagi.' : 'Gagal memuat data. Coba muat ulang halaman.');
 }
 const hurufAman = (t) => String(t ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+// Umur (tahun penuh) pada tanggal tertentu. tgl dalam format YYYY-MM-DD.
+function hitungUmur(lahir, pada) {
+  if (!lahir) return null;
+  const a = new Date(lahir + 'T00:00:00'), b = pada ? new Date(pada + 'T00:00:00') : new Date();
+  let u = b.getFullYear() - a.getFullYear();
+  if (b.getMonth() < a.getMonth() || (b.getMonth() === a.getMonth() && b.getDate() < a.getDate())) u--;
+  return u;
+}
+// Formulir: tanggal lahir -> umur saat daftar otomatis; isian umur manual hanya bila tanggal lahir kosong.
+function pasangUmurOtomatis() {
+  const g = (id) => document.getElementById(id);
+  const atur = () => {
+    const lahir = g('tgl-lahir').value, u = hitungUmur(lahir, g('tanggal').value || undefined);
+    g('isian-umur').hidden = !!lahir;
+    if (lahir) g('umur').value = u ?? '';
+    g('umur-ket').textContent = lahir ? (u >= 0 ? `Umur saat daftar: ${u} tahun` : 'Tanggal lahir sesudah tanggal daftar.') : 'Umur dihitung otomatis dari tanggal lahir.';
+  };
+  g('tgl-lahir').max = new Date().toLocaleDateString('sv-SE');
+  g('tgl-lahir').addEventListener('input', atur);
+  g('tanggal').addEventListener('input', atur);
+  return atur;
+}
