@@ -45,7 +45,6 @@ function tampilForm() {
   $('kabupaten').value = j?.desa.kecamatan.kabupaten?.nama || wilayahAwal();
   perbaruiSaran();
   $('alamat').value = j?.alamat || '';
-  $('umur').value = j?.umur_daftar || '';
   $('tempat-lahir').value = j?.tempat_lahir || '';
   isiIsianKtp(j);
   $('gol-darah').value = goldar || '';
@@ -66,7 +65,6 @@ function salah(idEl, t) { $(idEl).setAttribute('aria-invalid', 'true'); $(idEl).
 
 $('form').addEventListener('input', (e) => e.target.removeAttribute?.('aria-invalid'));
 const aturUmur = pasangUmurOtomatis();
-$('umur').addEventListener('input', (e) => { e.target.value = e.target.value.replace(/\D/g, ''); });
 document.querySelectorAll('[name=status]').forEach((r) => r.addEventListener('change', aturWafat));
 $('ubah').onclick = tampilForm;
 $('batal').onclick = () => (data ? tampilLihat() : location.assign('/jamaah.html'));
@@ -76,16 +74,15 @@ $('kembali').onclick = (e) => { if (document.referrer.includes('/jamaah.html')) 
 $('form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const nama = $('nama').value.trim().replace(/\s+/g, ' ');
-  const umur = $('umur').value ? Number($('umur').value) : null;
+  const umur = $('tgl-lahir').value ? hitungUmur($('tgl-lahir').value, $('tanggal').value || undefined) : null; // umur_daftar dihitung database
   const status = document.querySelector('[name=status]:checked').value;
   if (nama.length < 2) return salah('nama', 'Nama lengkap belum diisi.');
   if (!$('desa').value.trim()) return salah('desa', 'Desa/Kelurahan belum diisi.');
   if (!$('kecamatan').value.trim()) return salah('kecamatan', 'Kecamatan belum diisi.');
   if (!$('kabupaten').value.trim()) return salah('kabupaten', 'Kabupaten/Kota belum diisi.');
-  if ($('tgl-lahir').value && (umur === null || umur < 5 || umur > 120)) return salah('tgl-lahir', 'Tanggal lahir belum benar: umur saat daftar harus 5 sampai 120 tahun.');
-  if (umur !== null && (umur < 5 || umur > 120)) return salah('umur', 'Umur harus antara 5 dan 120 tahun.');
+  if (umur !== null && (umur < 5 || umur > 120)) return salah('tgl-lahir', 'Tanggal lahir belum benar: umur saat daftar harus 5 sampai 120 tahun.');
   const isi = {
-    nama, desa_id: null, alamat: $('alamat').value.trim() || null, umur_daftar: umur,
+    nama, desa_id: null, alamat: $('alamat').value.trim() || null,
     tempat_lahir: $('tempat-lahir').value.trim() || null, tanggal_lahir: $('tgl-lahir').value || null, ...bacaIsianKtp(),
     pekerjaan: $('pekerjaan').value.trim() || null, mursyid_id: $('mursyid').value ? Number($('mursyid').value) : null,
     tanggal_daftar: $('tanggal').value || undefined,

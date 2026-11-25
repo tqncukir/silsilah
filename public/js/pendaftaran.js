@@ -2,7 +2,7 @@
 // Foto KTP hanya diproses di perangkat ini; tidak dikirim, tidak disimpan. NIK tidak diambil.
 const $ = (id) => document.getElementById(id);
 let kecBoleh = null, perbaruiSaran = () => {}, dobelDiperiksa = '', siapBaca = false;
-const ISIAN = ['nama', 'tempat-lahir', 'tgl-lahir', 'gol-darah', 'desa', 'kecamatan', 'kabupaten', 'alamat', 'rt-rw', 'umur', 'pekerjaan', 'status-kawin', 'wn'];
+const ISIAN = ['nama', 'tempat-lahir', 'tgl-lahir', 'gol-darah', 'desa', 'kecamatan', 'kabupaten', 'alamat', 'rt-rw', 'pekerjaan', 'status-kawin', 'wn'];
 let peranSaya = '';
 
 const pesan = (t) => { $('pesan').textContent = t; };
@@ -28,7 +28,6 @@ function terapkan(h) {
   tandai('rt-rw', h.rt_rw); tandai('status-kawin', h.status_kawin); tandai('wn', h.kewarganegaraan);
   if (PERAN_GOLDAR.includes(peranSaya)) tandai('gol-darah', h.gol_darah);
   if (h.jenis_kelamin) { const r = document.querySelector(`[name=jk][value=${h.jenis_kelamin}]`); r.checked = true; r.closest('.pil').classList.add('otomatis'); }
-  if (!h.tanggal_lahir) tandai('umur', h.umur);
   aturUmur();
   // wilayah: pakai ejaan yang sudah ada di daftar kalau mirip (salah baca sedikit dibetulkan)
   const kab = h.kabupaten ? (KTP.cocokkan(h.kabupaten, [...new Set(semuaWilayah.map((w) => w.kab))].map((nama) => ({ nama })))?.nama || h.kabupaten) : null;
@@ -137,7 +136,6 @@ $('ulang').onclick = () => { kosongkan(); tampil('tahap-foto'); };
 $('lagi').onclick = () => { kosongkan(); tampil('tahap-foto'); };
 for (const i of ['desa', 'kecamatan', 'kabupaten']) $(i).addEventListener('input', () => { $('dobel').hidden = true; });
 const aturUmur = pasangUmurOtomatis();
-$('umur').addEventListener('input', (e) => { e.target.value = e.target.value.replace(/\D/g, ''); });
 $('form').addEventListener('input', (e) => { e.target.classList?.remove('otomatis'); e.target.closest?.('.pil')?.classList.remove('otomatis'); e.target.removeAttribute?.('aria-invalid'); });
 $('keluar').onclick = keluar;
 
@@ -146,13 +144,12 @@ function salah(idEl, t) { $(idEl).setAttribute('aria-invalid', 'true'); $(idEl).
 $('form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const nama = KTP.judul($('nama').value.replace(/\s+/g, ' '));
-  const umur = $('umur').value ? Number($('umur').value) : null;
+  const umur = $('tgl-lahir').value ? hitungUmur($('tgl-lahir').value, $('tanggal').value || undefined) : null; // umur_daftar dihitung database
   if (nama.length < 2) return salah('nama', 'Nama lengkap belum diisi.');
   if (!$('desa').value.trim()) return salah('desa', 'Desa/Kelurahan belum diisi.');
   if (!$('kecamatan').value.trim()) return salah('kecamatan', 'Kecamatan belum diisi.');
   if (!$('kabupaten').value.trim()) return salah('kabupaten', 'Kabupaten/Kota belum diisi.');
-  if ($('tgl-lahir').value && (umur === null || umur < 5 || umur > 120)) return salah('tgl-lahir', 'Tanggal lahir belum benar: umur saat daftar harus 5 sampai 120 tahun.');
-  if (umur !== null && (umur < 5 || umur > 120)) return salah('umur', 'Umur harus antara 5 dan 120 tahun.');
+  if (umur !== null && (umur < 5 || umur > 120)) return salah('tgl-lahir', 'Tanggal lahir belum benar: umur saat daftar harus 5 sampai 120 tahun.');
   const btn = $('simpan'); btn.disabled = true; btn.classList.add('sibuk'); btn.querySelector('.teks').textContent = 'Memeriksa...';
   pesanForm('');
   try {
@@ -160,7 +157,7 @@ $('form').addEventListener('submit', async (e) => {
     if (await cekDobel(nama, desaId)) return;
     btn.querySelector('.teks').textContent = 'Menyimpan...';
     const [j] = await dbKirim('POST', 'jamaah?select=id,nomor_anggota,nama,desa(nama)', {
-      nama, desa_id: desaId, alamat: $('alamat').value.trim() || null, umur_daftar: umur,
+      nama, desa_id: desaId, alamat: $('alamat').value.trim() || null,
       tempat_lahir: $('tempat-lahir').value.trim() ? KTP.judul($('tempat-lahir').value) : null, tanggal_lahir: $('tgl-lahir').value || null, ...bacaIsianKtp(),
       pekerjaan: $('pekerjaan').value.trim() ? KTP.judul($('pekerjaan').value) : null,
       mursyid_id: $('mursyid').value ? Number($('mursyid').value) : null, tanggal_daftar: $('tanggal').value || undefined,

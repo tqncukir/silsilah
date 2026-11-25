@@ -118,8 +118,6 @@ function pasangUmurOtomatis() {
   const g = (id) => document.getElementById(id);
   const atur = () => {
     const lahir = g('tgl-lahir').value, u = hitungUmur(lahir, g('tanggal').value || undefined);
-    g('isian-umur').hidden = !!lahir;
-    if (lahir) g('umur').value = u ?? '';
     g('umur-ket').textContent = lahir ? (u >= 0 ? `Umur saat daftar: ${u} tahun` : 'Tanggal lahir sesudah tanggal daftar.') : 'Umur dihitung otomatis dari tanggal lahir.';
   };
   g('tgl-lahir').max = new Date().toLocaleDateString('sv-SE');
