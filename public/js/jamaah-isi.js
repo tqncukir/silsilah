@@ -18,16 +18,15 @@ function tampilLihat() {
   $('l-status').textContent = TEKS_STATUS[s];
   $('l-status').className = `stat stat-${s}`;
   const baris = [
-    ['Mursyid', j.mursyid?.nama],
-    ['Desa', j.desa.nama], ['Kecamatan', j.desa.kecamatan.nama], ['Kabupaten/Kota', j.desa.kecamatan.kabupaten?.nama],
+    ['Mursyid', j.mursyid?.nama], ['Tanggal daftar', tgl(j.tanggal_daftar)],
     ['Tempat, tanggal lahir', [j.tempat_lahir, j.tanggal_lahir && tgl(j.tanggal_lahir)].filter(Boolean).join(', ')],
+    ['Umur saat mendaftar', j.umur_daftar ? `${j.umur_daftar} tahun` : null],
     ['Umur sekarang', j.tanggal_lahir && !j.wafat ? `${hitungUmur(j.tanggal_lahir)} tahun` : null],
     ['Jenis kelamin', { L: 'Laki-laki', P: 'Perempuan' }[j.jenis_kelamin]],
     ...(PERAN_GOLDAR.includes(peran) ? [['Gol. darah', goldar]] : []),
-    ['Alamat', [j.alamat, j.rt_rw && `RT/RW ${j.rt_rw}`].filter(Boolean).join(', ')],
-    ['Status perkawinan', j.status_kawin], ['Kewarganegaraan', j.kewarganegaraan],
-    ['Umur saat mendaftar', j.umur_daftar ? `${j.umur_daftar} tahun` : null], ['Pekerjaan', j.pekerjaan],
-    ['Tanggal daftar', tgl(j.tanggal_daftar)],
+    ['Status perkawinan', j.status_kawin], ['Kewarganegaraan', j.kewarganegaraan], ['Pekerjaan', j.pekerjaan],
+    ['Kab/Kota', j.desa.kecamatan.kabupaten?.nama], ['Kecamatan', j.desa.kecamatan.nama], ['Kel/Desa', j.desa.nama],
+    ['Dusun/Jalan', [j.alamat, j.rt_rw && `RT/RW ${j.rt_rw}`].filter(Boolean).join(', ')],
   ];
   if (j.wafat) baris.push(['Tanggal wafat', tgl(j.tanggal_wafat)]);
   $('l-rincian').innerHTML = baris.map(([k, v]) => `<div><dt>${k}</dt><dd>${v ? hurufAman(v) : '–'}</dd></div>`).join('');
