@@ -210,9 +210,15 @@ body:has(.kol-luas) .app-atas-isi{max-width:1280px}
 .rincian dd{margin:2px 0 0;font-weight:500}
 .rincian-periksa{padding:16px;border-radius:12px;background:var(--hijau-pupus,#EEF6DC)}
 .rincian-periksa .kosong{color:var(--abu);font-weight:400}
-.form-kisi{display:grid;grid-template-columns:1fr;gap:0 16px;margin-top:16px}
-.form-kisi .lebar{grid-column:1 / -1}
-@media (min-width:640px){.form-kisi{grid-template-columns:1fr 1fr}}
+.form-kisi{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0 12px;margin-top:16px}
+.form-kisi>*{grid-column:span 6;min-width:0}
+.form-kisi>.k3{grid-column:span 3}
+.form .bagian-judul{margin:12px 0 10px;padding-top:14px;border-top:1px solid #E3EBDD;font-size:var(--fs-isi);font-weight:600;color:var(--hijau-jamiyyah)}
+.form .bagian-judul:first-child{margin-top:0;padding-top:0;border-top:0}
+.pilihan .pil{flex:1 1 0;justify-content:center;white-space:nowrap;padding:0 10px}
+.bagian-ket{grid-column:span 6;margin:-6px 0 12px}
+@media (max-width:639px){.form-kisi{align-items:end}}
+@media (min-width:640px){.form-kisi{gap:0 16px}.form-kisi>*{grid-column:span 3}.form-kisi>.lebar,.form-kisi>.bagian-judul,.form-kisi>.bagian-ket{grid-column:span 6}}
 .wajib{font-weight:400;color:var(--abu);font-size:.8125rem}
 .form select:disabled{background:#F3F3F1;color:var(--abu)}
 .pilihan{border:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}

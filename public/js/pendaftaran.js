@@ -175,14 +175,14 @@ $('form').addEventListener('submit', async (e) => {
     };
     const lahir = [siapKirim.tempat_lahir, tglPanjang(siapKirim.tanggal_lahir)].filter(Boolean).join(', ');
     const baris = [
-      ['Mursyid', teksPilihan('mursyid')], ['Nama lengkap', nama], ['Tempat, tanggal lahir', lahir], ['Umur saat daftar', umur !== null ? `${umur} tahun` : ''],
+      ['Mursyid', teksPilihan('mursyid')], ['Tanggal daftar', tglPanjang($('tanggal').value)],
+      ['Nama lengkap', nama], ['Tempat, tanggal lahir', lahir], ['Umur saat daftar', umur !== null ? `${umur} tahun` : ''],
       ['Jenis kelamin', { L: 'Laki-laki', P: 'Perempuan' }[ktp.jenis_kelamin] || ''],
       ...(PERAN_GOLDAR.includes(peranSaya) ? [['Gol. darah', $('gol-darah').value]] : []),
+      ['Status perkawinan', ktp.status_kawin], ['Kewarganegaraan', ktp.kewarganegaraan], ['Pekerjaan', siapKirim.pekerjaan],
+      ['Alamat', [siapKirim.alamat, ktp.rt_rw && `RT/RW ${ktp.rt_rw}`].filter(Boolean).join(', ')],
       ['Desa/Kelurahan', KTP.judul($('desa').value.replace(/\s+/g, ' '))], ['Kecamatan', KTP.judul($('kecamatan').value.replace(/\s+/g, ' '))],
       ['Kabupaten/Kota', KTP.judul($('kabupaten').value.replace(/\s+/g, ' '))],
-      ['Alamat', [siapKirim.alamat, ktp.rt_rw && `RT/RW ${ktp.rt_rw}`].filter(Boolean).join(', ')], ['Pekerjaan', siapKirim.pekerjaan],
-      ['Status perkawinan', ktp.status_kawin], ['Kewarganegaraan', ktp.kewarganegaraan],
-      ['Tanggal daftar', tglPanjang($('tanggal').value)],
     ];
     $('k-rincian').innerHTML = baris.map(([k, v]) => `<div><dt>${k}</dt><dd>${v ? hurufAman(v) : '<span class="kosong">Belum diisi</span>'}</dd></div>`).join('');
     $('pesan-konfirmasi').textContent = '';

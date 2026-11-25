@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=25">
-<link rel="stylesheet" href="/css/app.css?v=25">
+<link rel="stylesheet" href="/css/tokens.css?v=27">
+<link rel="stylesheet" href="/css/app.css?v=27">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -76,10 +76,16 @@
     <p class="judul-sub" id="f-sub">Nomor Anggota dibuat otomatis setelah disimpan.</p>
     <p class="hasil-baca" id="hasil-baca" hidden>Isian bertanda hijau dibaca dari KTP. Periksa lagi, hasil baca bisa keliru.</p>
     <div class="form-kisi">
-      <div class="isian lebar">
+      <h3 class="bagian-judul" id="b-daftar">Pendaftaran</h3>
+      <div class="isian">
         <label for="mursyid">Mursyid</label>
         <select id="mursyid"><option value="">Belum diisi</option></select>
       </div>
+      <div class="isian">
+        <label for="tanggal">Tanggal daftar</label>
+        <input id="tanggal" type="date">
+      </div>
+      <h3 class="bagian-judul" id="b-diri">Data diri</h3>
       <div class="isian lebar">
         <label for="nama">Nama lengkap <span class="wajib">wajib</span></label>
         <input id="nama" maxlength="120" required autocapitalize="words">
@@ -102,46 +108,43 @@
         <label for="gol-darah">Gol. darah <span class="wajib">rahasia, hanya admin dan ketua</span></label>
         <select id="gol-darah"><option value="">Tidak diketahui</option><option>A</option><option>B</option><option>AB</option><option>O</option></select>
       </div>
-      <div class="isian">
-        <label for="desa">Desa/Kelurahan <span class="wajib">wajib</span></label>
-        <input id="desa" list="saran-desa" maxlength="60" autocomplete="off" required>
-        <datalist id="saran-desa"></datalist>
+      <div class="isian k3">
+        <label for="status-kawin">Status perkawinan</label>
+        <select id="status-kawin"><option value="">Belum diisi</option><option>Belum Kawin</option><option>Kawin</option><option>Cerai Hidup</option><option>Cerai Mati</option></select>
       </div>
-      <div class="isian">
-        <label for="kecamatan">Kecamatan <span class="wajib">wajib</span></label>
-        <input id="kecamatan" list="saran-kec" maxlength="60" autocomplete="off" required>
-        <datalist id="saran-kec"></datalist>
+      <div class="isian k3">
+        <label for="wn">Kewarganegaraan</label>
+        <select id="wn"><option>WNI</option><option>WNA</option></select>
       </div>
-      <div class="isian">
-        <label for="kabupaten">Kabupaten/Kota <span class="wajib">wajib</span></label>
-        <input id="kabupaten" list="saran-kab" maxlength="60" autocomplete="off" required aria-describedby="k-kab">
-        <datalist id="saran-kab"></datalist>
-        <p class="ket" id="k-kab">Ketik bebas, misal Surabaya. Untuk kota tulis "Kota Malang".</p>
+      <div class="isian lebar">
+        <label for="pekerjaan">Pekerjaan</label>
+        <input id="pekerjaan" maxlength="60" autocapitalize="words">
       </div>
-      <div class="isian">
+      <h3 class="bagian-judul" id="b-alamat">Alamat sesuai KTP</h3>
+      <p class="ket bagian-ket">Tulis seperti di KTP. Untuk kota, tulis "Kota Malang".</p>
+      <div class="isian lebar">
         <label for="alamat">Alamat</label>
         <input id="alamat" maxlength="160" aria-describedby="k-alamat">
         <p class="ket" id="k-alamat">Dusun atau jalan. Tanpa nomor HP.</p>
       </div>
-      <div class="isian">
+      <div class="isian k3">
         <label for="rt-rw">RT/RW</label>
         <input id="rt-rw" inputmode="numeric" maxlength="7" placeholder="002/003">
       </div>
-      <div class="isian">
-        <label for="pekerjaan">Pekerjaan</label>
-        <input id="pekerjaan" maxlength="60" autocapitalize="words">
+      <div class="isian k3">
+        <label for="desa">Kel/Desa <span class="wajib">wajib</span></label>
+        <input id="desa" list="saran-desa" maxlength="60" autocomplete="off" required>
+        <datalist id="saran-desa"></datalist>
       </div>
-      <div class="isian">
-        <label for="status-kawin">Status perkawinan</label>
-        <select id="status-kawin"><option value="">Belum diisi</option><option>Belum Kawin</option><option>Kawin</option><option>Cerai Hidup</option><option>Cerai Mati</option></select>
+      <div class="isian k3">
+        <label for="kecamatan">Kecamatan <span class="wajib">wajib</span></label>
+        <input id="kecamatan" list="saran-kec" maxlength="60" autocomplete="off" required>
+        <datalist id="saran-kec"></datalist>
       </div>
-      <div class="isian">
-        <label for="wn">Kewarganegaraan</label>
-        <select id="wn"><option>WNI</option><option>WNA</option></select>
-      </div>
-      <div class="isian">
-        <label for="tanggal">Tanggal daftar</label>
-        <input id="tanggal" type="date">
+      <div class="isian k3">
+        <label for="kabupaten">Kab/Kota <span class="wajib">wajib</span></label>
+        <input id="kabupaten" list="saran-kab" maxlength="60" autocomplete="off" required>
+        <datalist id="saran-kab"></datalist>
       </div>
     </div>
     <div id="dobel" class="dobel" hidden role="alert">
@@ -177,9 +180,9 @@
     </div>
   </section>
 </main>
-<script src="/js/supa.js?v=25" defer></script>
+<script src="/js/supa.js?v=27" defer></script>
 <script src="/ocr/tesseract.min.js" defer></script>
-<script src="/js/ktp.js?v=25" defer></script>
-<script src="/js/pendaftaran.js?v=25" defer></script>
+<script src="/js/ktp.js?v=27" defer></script>
+<script src="/js/pendaftaran.js?v=27" defer></script>
 </body>
 </html>
