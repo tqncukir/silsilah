@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=29">
-<link rel="stylesheet" href="/css/app.css?v=29">
+<link rel="stylesheet" href="/css/tokens.css?v=31">
+<link rel="stylesheet" href="/css/app.css?v=31">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -59,8 +59,7 @@
       </div>
       <div class="isian">
         <label for="tempat-lahir">Tempat lahir</label>
-        <input id="tempat-lahir" list="saran-lahir" maxlength="60" autocapitalize="words" autocomplete="off">
-        <datalist id="saran-lahir"></datalist>
+        <input id="tempat-lahir" maxlength="60" autocapitalize="words" autocomplete="off">
       </div>
       <div class="isian">
         <label for="tgl-lahir">Tanggal lahir</label>
@@ -78,18 +77,15 @@
       </div>
       <div class="isian">
         <label for="desa">Desa/Kelurahan <span class="wajib">wajib</span></label>
-        <input id="desa" list="saran-desa" maxlength="60" autocomplete="off" required>
-        <datalist id="saran-desa"></datalist>
+        <input id="desa" maxlength="60" autocomplete="off" required>
       </div>
       <div class="isian">
         <label for="kecamatan">Kecamatan <span class="wajib">wajib</span></label>
-        <input id="kecamatan" list="saran-kec" maxlength="60" autocomplete="off" required>
-        <datalist id="saran-kec"></datalist>
+        <input id="kecamatan" maxlength="60" autocomplete="off" required>
       </div>
       <div class="isian">
         <label for="kabupaten">Kabupaten/Kota <span class="wajib">wajib</span></label>
-        <input id="kabupaten" list="saran-kab" maxlength="60" autocomplete="off" required aria-describedby="k-kab">
-        <datalist id="saran-kab"></datalist>
+        <input id="kabupaten" maxlength="60" autocomplete="off" required aria-describedby="k-kab">
         <p class="ket" id="k-kab">Ketik bebas, misal Surabaya. Untuk kota tulis "Kota Malang".</p>
       </div>
       <div class="isian">
@@ -103,8 +99,7 @@
       </div>
       <div class="isian">
         <label for="pekerjaan">Pekerjaan</label>
-        <input id="pekerjaan" list="saran-kerja" maxlength="60" autocapitalize="words" autocomplete="off">
-        <datalist id="saran-kerja"></datalist>
+        <input id="pekerjaan" maxlength="60" autocapitalize="words" autocomplete="off">
       </div>
       <div class="isian">
         <label for="status-kawin">Status perkawinan</label>
@@ -137,8 +132,8 @@
     </div>
   </form>
 </main>
-<script src="/js/supa.js?v=29" defer></script>
-<script src="/js/wilayah.js?v=29" defer></script>
-<script src="/js/jamaah-isi.js?v=29" defer></script>
+<script src="/js/supa.js?v=31" defer></script>
+<script src="/js/wilayah.js?v=31" defer></script>
+<script src="/js/jamaah-isi.js?v=31" defer></script>
 </body>
 </html>
