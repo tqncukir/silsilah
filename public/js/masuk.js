@@ -53,21 +53,3 @@ $('form-anggota').addEventListener('submit', async (e) => {
   }
   btn.disabled = false; btn.classList.remove('sibuk'); btn.querySelector('.teks').textContent = 'Masuk';
 });
-
-$('form-pengurus').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const out = $('pesan-email');
-  const email = $('email').value.trim().toLowerCase();
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return tulis(out, 'Email belum benar.');
-  const btn = e.submitter; btn.disabled = true; tulis(out, 'Mengirim...', true);
-  try {
-    const r = await fetch(`${SB_URL}/auth/v1/otp?redirect_to=${encodeURIComponent(location.origin + '/beranda.html')}`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json', apikey: SB_KEY },
-      body: JSON.stringify({ email, create_user: false }),
-    });
-    if (!r.ok) throw new Error(r.status === 429 ? 'Terlalu sering. Tunggu beberapa menit lalu coba lagi.' : 'Email belum bisa dikirim. Coba lagi nanti.');
-    tulis(out, 'Tautan masuk sudah dikirim. Silakan buka email.', true);
-  } catch (err) {
-    tulis(out, err.message === 'Failed to fetch' ? 'Sinyal terputus. Coba lagi.' : err.message);
-  } finally { btn.disabled = false; }
-});

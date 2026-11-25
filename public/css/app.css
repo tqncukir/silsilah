@@ -74,11 +74,10 @@ footer{text-align:center;padding:20px 16px 32px;color:var(--abu);font-size:var(-
 .masuk-bantuan{margin:12px 0 0;padding:10px 14px;border-radius:14px;background:#FFFFFF;border-left:6px solid var(--hijau-daun)}
 .masuk-bantuan p{margin:0;font-size:var(--fs-kecil)}
 .masuk-bantuan strong{font-weight:600}
-.masuk-admin{margin:8px 0 0}
-.masuk-admin summary{min-height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;
+.masuk-admin{margin:12px 0 0;text-align:center}
+.masuk-admin a{min-height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;
   color:var(--hijau-jamiyyah);font-weight:600;text-decoration:underline;text-underline-offset:4px;border-radius:12px}
-.masuk-admin summary:focus-visible{outline:3px solid var(--kuning-rosyid)}
-.masuk-admin[open] .form{background:#FFFFFF;border-radius:20px;padding:20px;margin-top:8px}
+.masuk-admin a:focus-visible{outline:3px solid var(--kuning-rosyid)}
 .masuk-kaki{text-align:center;padding:4px 16px max(16px,env(safe-area-inset-bottom));color:var(--abu);font-size:var(--fs-kecil)}
 .masuk-sambut{display:none}
 
