@@ -685,3 +685,20 @@ li:nth-child(-n+3)>.bt-baris .bt-no{background:var(--hijau-jamiyyah);color:#FFFF
 .kta-master .kta-pin{margin:0;font-size:2.2cqw;line-height:1.1;font-weight:700;color:#111111}
 .kta-versi{margin:0;font-size:2cqw;line-height:1.1;font-weight:700;color:#111111}
 .kta-versi:empty{display:none}
+
+/* Atur PIN Pengurus (admin pusat) */
+.pin-tata{display:grid;gap:16px;align-items:start}
+@media (min-width:900px){.pin-tata{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)}}
+.pin-tata[hidden]{display:none}
+.pin-hasil{margin:16px 0 0;padding:16px;border-radius:12px;background:var(--hijau-pupus);border-left:5px solid var(--hijau-daun)}
+.pin-hasil[hidden]{display:none}
+.pin-hasil p{margin:0 0 6px}
+.pin-hasil-angka{font-size:2rem;font-weight:700;letter-spacing:.12em;color:var(--hijau-jamiyyah);font-variant-numeric:tabular-nums}
+.pin-hasil .btn{margin:10px 0 0}
+.pin-daftar{list-style:none;margin:0;padding:0}
+.pin-daftar li{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px 16px;padding:12px 0;border-bottom:1px solid #EEF2E8}
+.pin-daftar li:last-child{border-bottom:0}
+.pin-daftar li .ket{display:block;margin:2px 0 0}
+.pin-daftar li.mati strong{color:var(--abu)}
+.pin-aksi{display:flex;gap:16px}
+.tautan-bahaya{color:#B3261E}

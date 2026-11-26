@@ -17,6 +17,7 @@ $('keluar').onclick = keluar;
     if (PERAN_LIHAT_JAMAAH.includes(p.peran)) {
       $('menu').hidden = false; $('m-jamaah').hidden = false; $('nav-jamaah').hidden = false; $('m-amanah').hidden = false; $('m-amanah-judul').hidden = false;
       $('m-tambah').hidden = !PERAN_UBAH_JAMAAH.includes(p.peran);
+      $('m-pin').hidden = p.peran !== 'admin_pusat';
       dbHalaman('jamaah?select=id', 0, 0).then(({ total }) => {
         $('m-jamaah-ket').textContent = `${total.toLocaleString('id-ID')} jamaah tercatat`;
       }).catch(() => {});

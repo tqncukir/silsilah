@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Atur PIN Pengurus · SILSILAH TQN Cukir</title>
+<meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=58">
+<link rel="stylesheet" href="/css/app.css?v=58">
+</head>
+<body class="hal-app">
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <a href="/beranda.html">Beranda</a>
+      <a href="/dashboard.html" id="nav-dasbor" hidden>Dashboard Pengurus</a>
+      <a href="/jamaah.html" id="nav-jamaah" hidden>Data Jamaah</a>
+      <a href="/pendaftaran.html" id="nav-daftar" hidden>Pendaftaran</a>
+    </nav>
+    <button class="app-keluar" id="keluar" type="button">Keluar</button>
+  </div>
+</header>
+
+<main class="app-isi">
+  <div class="judul-baris">
+    <div>
+      <h1>Atur PIN Pengurus</h1>
+      <p class="judul-sub">PIN Pengurus 8 angka membuka akun pengurus. PIN tidak bisa dilihat lagi setelah disimpan.</p>
+    </div>
+  </div>
+  <p id="pesan" class="pesan" role="alert"></p>
+
+  <div class="pin-tata" id="isi" hidden>
+    <form id="form" class="panel form" novalidate aria-labelledby="f-judul">
+      <h2 class="form-judul" id="f-judul">Pasang atau ganti PIN</h2>
+
+      <button type="button" class="btn btn-kedua btn-pindai" id="pindai">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8V5a1 1 0 011-1h3M16 4h3a1 1 0 011 1v3M20 16v3a1 1 0 01-1 1h-3M8 20H5a1 1 0 01-1-1v-3M7 12h10"/></svg>
+        <span class="teks">Pindai KTA pengurus</span>
+      </button>
+
+      <div class="isian">
+        <label for="nomor">Nomor Anggota</label>
+        <input id="nomor" inputmode="numeric" maxlength="10" required aria-describedby="ket-nomor" placeholder="10 angka di KTA">
+        <p id="ket-nomor" class="ket" aria-live="polite"></p>
+      </div>
+
+      <div class="isian">
+        <label for="peran">Peran</label>
+        <select id="peran" required>
+          <option value="">Pilih peran</option>
+          <option value="ketua">Ketua</option>
+          <option value="bendahara">Bendahara</option>
+          <option value="nadzir">Nadzir</option>
+          <option value="koordinator_wilayah">Koordinator Wilayah</option>
+          <option value="petugas_scan">Petugas Scan</option>
+          <option value="khodim">Khodim/Keluarga</option>
+          <option value="dokter">Dokter Pendamping</option>
+          <option value="admin_pusat">Admin Pusat</option>
+        </select>
+      </div>
+
+      <div class="isian">
+        <label for="pin">PIN Pengurus</label>
+        <div class="pin-baris">
+          <input id="pin" inputmode="numeric" maxlength="8" required autocomplete="off" aria-describedby="ket-pin">
+          <button type="button" id="acak" class="pin-lihat">Buat acak</button>
+        </div>
+        <p id="ket-pin" class="ket">8 angka. Hindari tanggal lahir atau angka berurutan.</p>
+      </div>
+
+      <p id="pesan-form" class="pesan" role="alert"></p>
+      <button type="submit" class="btn btn-utama btn-masuk" id="simpan"><span class="putar" aria-hidden="true"></span><span class="teks">Simpan PIN</span></button>
+
+      <div class="pin-hasil" id="hasil" hidden role="status" tabindex="-1">
+        <p>PIN untuk <strong id="hasil-nama"></strong>:</p>
+        <p class="pin-hasil-angka" id="hasil-pin"></p>
+        <p class="ket">Catat sekarang dan serahkan langsung ke orangnya, jangan lewat grup. PIN ini tidak bisa dilihat lagi.</p>
+        <button type="button" class="btn btn-kedua" id="selesai">Sudah dicatat</button>
+      </div>
+    </form>
+
+    <section class="panel" aria-labelledby="d-judul">
+      <h2 class="form-judul" id="d-judul">Pengurus ber-PIN</h2>
+      <ul class="pin-daftar" id="daftar"></ul>
+    </section>
+  </div>
+</main>
+<script src="/js/supa.js?v=58" defer></script>
+<script src="/js/pindai.js?v=58" defer></script>
+<script src="/js/pengurus-pin.js?v=58" defer></script>
+</body>
+</html>
