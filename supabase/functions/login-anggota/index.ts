@@ -7,7 +7,7 @@
 // Rahasia (TURNSTILE_SECRET, service role) hanya ada di server Supabase, tidak di repo.
 import { createClient } from "npm:@supabase/supabase-js@2.49.4";
 
-const ASAL_BOLEH = ["https://silsilah-tqn.pages.dev", "http://localhost:8765"];
+const ASAL_BOLEH = ["https://silsilah.tqncukir.id", "https://silsilah-tqn.pages.dev", "http://localhost:8765"];
 const URL_SB = Deno.env.get("SUPABASE_URL")!;
 const KUNCI_SERVIS = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const KUNCI_ANON = Deno.env.get("SUPABASE_ANON_KEY")!;

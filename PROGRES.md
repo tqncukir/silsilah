@@ -14,7 +14,7 @@ Mulai: 2026-11-25 (Kang Salman: "Bismillah").
   - PIN disimpan hash bcrypt di `private.jamaah_pin`. Data contoh: 9990000021 / Cukir / PIN 271145 (yang lain acak).
   - Pengurus: tautan email (magic link). Email jtccukir2022@gmail.com otomatis jadi admin_pusat (trigger `private.pengguna_baru`).
   - Turnstile widget "SILSILAH login" (akun Cloudflare jtccukir2022), rahasia di Supabase secret `TURNSTILE_SECRET`.
-  - Supabase Auth: Site URL https://silsilah-tqn.pages.dev, redirect https://silsilah-tqn.pages.dev/**.
+  - Supabase Auth: Site URL https://silsilah-tqn.pages.dev, redirect https://silsilah-tqn.pages.dev/** dan https://silsilah.tqncukir.id/**.
   - Pendaftaran akun baru di Supabase Auth DIMATIKAN; pengurus baru dibuat admin (Langkah 4/13).
 
 - **Langkah 3b, PIN Pengurus** (2026-11-25, pilihan Kang, diuji Kang: login pengurus berhasil): satu formulir untuk semua. PIN KTA 6 angka = akun anggota; PIN Pengurus 8 angka (rahasia, tidak dicetak) = akun pengurus terpisah `<nomor>@pengurus.silsilah.invalid` dengan peran dari `private.pengurus_pin`. Fungsi `public.cek_login` (ganti `cek_login_anggota`, yang lama tidak dipakai lagi, hapus nanti). Pasang PIN: `select private.set_pin_pengurus(jamaah_id, 'ketua', '12345678')`. Data contoh: 9990000026 / Cukir = ketua. Email admin tetap sebagai cadangan di alamat khusus `/admin.html` (tidak ditautkan dari halaman umum).
@@ -54,7 +54,7 @@ Mulai: 2026-11-25 (Kang Salman: "Bismillah").
 Login scan QR KTA di HP sudah dicoba Kang dan lancar (2026-11-26); KTA master disetujui. **Tahap 1 selesai.** Tunggu Kang bilang "mulai" untuk tahap berikutnya (Tahap 2 belum ditentukan Kang).
 
 ## Catatan
-- Alamat uji coba: https://silsilah-tqn.pages.dev
+- Alamat resmi: https://silsilah.tqncukir.id (domain tqncukir.id dibeli Kang di Domosquare 2026-11-26, nameserver dipindah ke Cloudflare akun jtccukir2022: damon/kira.ns.cloudflare.com; CNAME `silsilah` → silsilah-tqn.pages.dev, custom domain Pages; hostname Turnstile ditambah; ASAL_BOLEH fungsi `kta` v4 & `login-anggota` v7 ditambah). Alamat lama tetap jalan: https://silsilah-tqn.pages.dev
 - GitHub App Claude dan Cloudflare Pages hanya diberi akses ke repo `silsilah`.
 - Data contoh 9990000001-9990000050 sudah dihapus 2026-11-25 (setelah impor data asli).
 - Migrasi 20261125010300 dijalankan Kang lewat SQL Editor (perintah DROP butuh persetujuan), lalu dicatat manual di schema_migrations.
