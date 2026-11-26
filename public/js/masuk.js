@@ -1,11 +1,27 @@
 const $ = (id) => document.getElementById(id);
 const tulis = (el, t, ok) => { el.textContent = t; el.className = 'pesan' + (ok ? ' ok' : ''); };
 const pesan = (t, ok) => tulis($('pesan'), t, ok);
-let tsAnggota = null;
+let tsAnggota = null, tsToken = '', tsTunggu = [];
+const tsKabari = (t) => { tsToken = t; tsTunggu.splice(0).forEach((f) => f(t)); };
 
 window.tsSiap = () => {
-  tsAnggota = turnstile.render('#ts-anggota', { sitekey: TS_SITE, language: 'id', size: 'flexible', appearance: 'interaction-only' });
+  tsAnggota = turnstile.render('#ts-anggota', {
+    sitekey: TS_SITE, language: 'id', size: 'flexible', appearance: 'interaction-only',
+    callback: tsKabari,
+    'expired-callback': () => { tsToken = ''; },
+    'before-interactive-callback': () => pesan('Ketuk kotak pemeriksaan keamanan di bawah tombol, lalu tunggu sebentar.'),
+  });
 };
+
+// Tunggu pemeriksaan keamanan (Turnstile) selesai, paling lama 20 detik. Token hanya sekali pakai.
+function tokenKeamanan(batas = 20000) {
+  if (tsToken) { const t = tsToken; tsToken = ''; return Promise.resolve(t); }
+  return new Promise((selesai) => {
+    const habis = setTimeout(() => { tsTunggu = tsTunggu.filter((f) => f !== ambil); selesai(''); }, batas);
+    const ambil = (t) => { clearTimeout(habis); tsToken = ''; selesai(t); };
+    tsTunggu.push(ambil);
+  });
+}
 
 if (sesi.ambil()) location.replace('/beranda.html');
 
@@ -25,10 +41,10 @@ $('lihat-pin').onclick = () => {
 };
 
 async function masuk(isi, tombol, teksAwal) {
-  const token = tsAnggota !== null ? turnstile.getResponse(tsAnggota) : '';
-  if (!token) { pesan('Pemeriksaan keamanan belum selesai. Tunggu sebentar lalu coba lagi.'); return; }
   tombol.disabled = true; tombol.classList.add('sibuk'); tombol.querySelector('.teks').textContent = 'Memeriksa...'; pesan('');
   try {
+    const token = await tokenKeamanan();
+    if (!token) throw new Error('Pemeriksaan keamanan belum berhasil. Periksa sinyal internet, lalu coba lagi.');
     const r = await fetch(`${SB_URL}/functions/v1/login-anggota`, {
       method: 'POST', headers: { 'Content-Type': 'application/json', apikey: SB_KEY },
       body: JSON.stringify({ ...isi, turnstile: token }),

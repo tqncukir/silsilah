@@ -39,6 +39,8 @@ Mulai: 2026-11-25 (Kang Salman: "Bismillah").
 
 - **Dibangun 2026-11-26:** pemindai QR bersama (`js/pindai.js`, BarcodeDetector atau jsQR); Cek Keaslian bisa scan QR lama/baru (fungsi `kta` aksi `qrlama`); Masuk: tombol utama "Pindai QR KTA", PIN di bagian lipat; QR lama = sesi terbatas (tabel `private.sesi_terbatas`, RPC `kartu_saya`, migrasi `20261125120000` dijalankan Kang); KTA digital ikut pola kartu fisik. Fungsi `kta` v3 dan `login-anggota` v4 dipasang lewat MCP (deploy_edge_function bisa langsung). Menunggu uji Kang di HP dengan KTA fisik.
 
+- **Perbaikan 2026-11-26 (laporan Kang):** scan QR saat Masuk sempat ditolak "Pemeriksaan keamanan belum selesai" (Turnstile belum siap/kedaluwarsa saat tombol ditekan). Sekarang `masuk.js` menunggu token Turnstile (callback, maks 20 detik, token sekali pakai) dengan tombol "Memeriksa...", dan memberi tahu bila kotak keamanan perlu diketuk. Diuji dengan Turnstile tiruan lambat (4 detik): berhasil masuk. Versi cache v53.
+
 ## Berikutnya (satu per satu, tunggu persetujuan Kang)
 
 Uji Kang: scan KTA fisik di Cek Keaslian dan Masuk (HP). Setelah disetujui: tunggu perintah Kang untuk tahap berikutnya.
