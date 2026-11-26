@@ -559,7 +559,6 @@ body.terkunci{overflow:hidden}
 .jk-batang{display:flex;gap:2px;height:20px;border-radius:999px;overflow:hidden;background:var(--garis-lembut)}
 .jk-batang span{flex:1 1 0;min-width:4px}
 .jk-l{background:var(--hijau-jamiyyah)}
-.jk-p{background:#1E6FB8}
 .jk-k{background:#B9C4B4}
 .dsb-jk .dsb-ket{margin:10px 0 0}
 
@@ -646,18 +645,17 @@ li:nth-child(-n+3)>.bt-baris .bt-no{background:var(--hijau-jamiyyah);color:#FFFF
 .jk-kotak{width:12px;height:12px;border-radius:999px}
 .jk-teks{font-weight:500}
 .jk-l{background:var(--hijau-jamiyyah)}
-.jk-p{background:#2E7DC4}
 .jk-k{background:repeating-linear-gradient(135deg,#C9D4C4 0 4px,#DDE5D8 4px 8px)}
 
 /* tombol bawah sebaran */
 .dsb-bawah{padding-top:8px;border-top:1px solid var(--garis-lembut)}
 @media (prefers-reduced-motion:no-preference){.kl-batang{transition:height .3s ease-out}.bt-tombol,.kl-tombol{transition:background-color .15s}}
-/* jenis kelamin: warna permintaan Kang */
+/* jenis kelamin: hijau tua + hijau daun (Kang 2026-11-27, ganti coklat keemasan) */
 .jk-batang{gap:0;height:16px;border-radius:999px;overflow:hidden;background:#FFFFFF}
 .jk-batang span{border-radius:0}
 .jk-batang span+span{border-left:2px solid #FFFFFF}
-.jk-l{background:#087443}
-.jk-p{background:#B88722}
+.jk-l{background:var(--hijau-jamiyyah)}
+.jk-p{background:var(--hijau-daun)}
 .jk-k{background:repeating-linear-gradient(135deg,#9CA3AF 0 2px,#E5E7EB 2px 6px)}
 .jk-kotak.jk-k{background:repeating-linear-gradient(135deg,#9CA3AF 0 1.5px,#E5E7EB 1.5px 4px);box-shadow:inset 0 0 0 1px #9CA3AF}
 .dsb-jk .bt-nilai,.dsb-jk .bt-persen{color:var(--hitam)}
