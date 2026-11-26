@@ -43,11 +43,11 @@ Mulai: 2026-11-25 (Kang Salman: "Bismillah").
 
 - **Percepatan 2026-11-26 (laporan Kang "pembacaan database lama"):** database sendiri cepat (10-40 ms per permintaan di log server); yang lama adalah langkah yang berurutan lewat sinyal HP. `login-anggota` v5: cek Turnstile, batas IP, dan data kartu berjalan bersamaan (tidak ada data dikembalikan sebelum cek robot dan batas IP lolos; jalur PIN tetap cek robot dulu). Beranda dan KTA anggota: `kartu_saya` diambil bersamaan dengan profil (`kartuSayaAwal()` di `supa.js`, token disegarkan sekali dulu). Uji tiruan sinyal lambat 800 ms: Beranda anggota 1 kali tunggu (0,9 dtk) bukan 2. Versi cache v54.
 
-- **KTA memakai Master dari Kang 2026-11-26** (`Master-KTA-Cukir.png` 1579x996, tajam untuk cetak; menggantikan tiruan CSS dari gambar kecil sebelumnya): disimpan `public/img/kta-master.webp` (122 KB, kualitas 86) sebagai latar kartu (`.kta-master` di `app.css`). Di atasnya hanya isian data, QR (kiri, 18cqw), PIN, "Kartu ke-N", dan tanggal setelah "Jombang," yang sudah tercetak. Posisi diukur dari gambar (1cqw = 15,79 px master); garis dasar isian sejajar label (selisih 0-1 px). Teks yang sudah ada di gambar tetap di HTML untuk pembaca layar. Isian panjang dikecilkan otomatis sampai 70% (`kta.js`), tidak dipotong; data asli terpanjang 31-32 huruf muat. Diuji 360/768/1280 dan cetak 85,6x54 mm. Versi cache v56 (daftar INTI di sw.js ikut dibetulkan). Menunggu persetujuan Kang.
+- **KTA memakai Master dari Kang 2026-11-26** (`Master-KTA-Cukir.png` 1579x996, tajam untuk cetak; menggantikan tiruan CSS dari gambar kecil sebelumnya): disimpan `public/img/kta-master.webp` (122 KB, kualitas 86) sebagai latar kartu (`.kta-master` di `app.css`). Di atasnya hanya isian data, QR (kiri, 18cqw), PIN, "Kartu ke-N", dan tanggal setelah "Jombang," yang sudah tercetak. Posisi diukur dari gambar (1cqw = 15,79 px master); garis dasar isian sejajar label (selisih 0-1 px). Teks yang sudah ada di gambar tetap di HTML untuk pembaca layar. Isian panjang dikecilkan otomatis sampai 70% (`kta.js`), tidak dipotong; data asli terpanjang 31-32 huruf muat. Diuji 360/768/1280 dan cetak 85,6x54 mm. Versi cache v56 (daftar INTI di sw.js ikut dibetulkan). **Disetujui Kang 2026-11-26.**
 
 ## Berikutnya (satu per satu, tunggu persetujuan Kang)
 
-Uji Kang: scan KTA fisik di Cek Keaslian dan Masuk (HP). Setelah disetujui: tunggu perintah Kang untuk tahap berikutnya.
+Login scan QR KTA di HP sudah dicoba Kang dan lancar (2026-11-26); KTA master disetujui. **Tahap 1 selesai.** Tunggu Kang bilang "mulai" untuk tahap berikutnya (Tahap 2 belum ditentukan Kang).
 
 ## Catatan
 - Alamat uji coba: https://silsilah-tqn.pages.dev
