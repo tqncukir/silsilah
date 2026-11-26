@@ -70,7 +70,7 @@ function pindaiQr({ judul = 'Pindai QR di KTA', ket = 'Arahkan kamera ke kotak Q
           status.textContent = h.teks;
           if (h.kelas) status.classList.add(h.kelas);
           jedaSampai = Date.now() + 4000;
-          setTimeout(putar, 900); // beri waktu petugas membaca hasil
+          setTimeout(putar, 3000); // hasil ditahan 3 detik agar terbaca petugas (permintaan Kang 2026-11-27)
           return;
         }
       } catch { /* bingkai berikutnya */ }
