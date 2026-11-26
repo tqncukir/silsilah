@@ -30,6 +30,8 @@ function tampilLihat() {
   $('ubah').hidden = !boleh || k.dibatalkan;
   $('batalkan').hidden = !boleh;
   $('batalkan').textContent = k.dibatalkan ? 'Aktifkan lagi' : 'Batalkan kegiatan';
+  $('ke-absen').href = `/absensi.html?kegiatan=${k.id}`;
+  $('ke-absen').hidden = k.dibatalkan || !PERAN_ABSEN.includes(peran) || (kecBoleh && !(k.kecamatan_id && kecBoleh.has(k.kecamatan_id)));
   $('form').hidden = true; $('lihat').hidden = false;
 }
 

@@ -20,7 +20,9 @@ function bacaKta(teks) {
 }
 
 // Buka kamera dan tunggu satu QR. Hasil: teks QR, atau null bila ditutup.
-function pindaiQr({ judul = 'Pindai QR di KTA', ket = 'Arahkan kamera ke kotak QR di kartu.' } = {}) {
+// Mode beruntun (Absensi): beruntun(teks) dipanggil tiap QR terbaca dan mengembalikan { teks, kelas } untuk ditampilkan;
+// kamera tetap menyala sampai Tutup. QR yang sama diabaikan 4 detik agar kartu yang tertahan tidak dicatat dua kali.
+function pindaiQr({ judul = 'Pindai QR di KTA', ket = 'Arahkan kamera ke kotak QR di kartu.', beruntun = null } = {}) {
   return new Promise((selesai) => {
     const d = document.createElement('dialog');
     d.className = 'pindai';
@@ -31,7 +33,7 @@ function pindaiQr({ judul = 'Pindai QR di KTA', ket = 'Arahkan kamera ke kotak Q
       <p class="pindai-ket" role="status">${ket}</p>`;
     document.body.append(d);
     const video = d.querySelector('video'), status = d.querySelector('.pindai-ket');
-    let aliran = null, jalan = true, detektor = null;
+    let aliran = null, jalan = true, detektor = null, terakhir = '', jedaSampai = 0;
     const kanvas = document.createElement('canvas'), ctx = kanvas.getContext('2d', { willReadFrequently: true });
 
     const akhiri = (hasil) => {
@@ -58,7 +60,19 @@ function pindaiQr({ judul = 'Pindai QR di KTA', ket = 'Arahkan kamera ke kotak Q
           const g = ctx.getImageData(0, 0, kanvas.width, kanvas.height);
           teks = window.jsQR(g.data, g.width, g.height, { inversionAttempts: 'attemptBoth' })?.data || null;
         }
-        if (teks) { navigator.vibrate?.(60); akhiri(teks); return; }
+        if (teks && !beruntun) { navigator.vibrate?.(60); akhiri(teks); return; }
+        if (teks && !(teks === terakhir && Date.now() < jedaSampai)) {
+          terakhir = teks; navigator.vibrate?.(60);
+          status.className = 'pindai-ket pindai-hasil'; status.textContent = 'Memeriksa...';
+          let h;
+          try { h = await beruntun(teks); } catch { h = { teks: 'Gagal memeriksa. Coba pindai lagi.', kelas: 'pindai-galat' }; }
+          if (!jalan) return;
+          status.textContent = h.teks;
+          if (h.kelas) status.classList.add(h.kelas);
+          jedaSampai = Date.now() + 4000;
+          setTimeout(putar, 900); // beri waktu petugas membaca hasil
+          return;
+        }
       } catch { /* bingkai berikutnya */ }
       if (jalan) setTimeout(putar, 120);
     }

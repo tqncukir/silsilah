@@ -106,6 +106,7 @@ async function profilSaya() {
 // ===== Kegiatan (modul 4) =====
 const PERAN_LIHAT_KEGIATAN = ['admin_pusat', 'ketua', 'bendahara', 'petugas_scan', 'koordinator_wilayah'];
 const PERAN_KELOLA_KEGIATAN = ['admin_pusat', 'ketua', 'koordinator_wilayah']; // koordinator: kecamatannya (RLS)
+const PERAN_ABSEN = ['admin_pusat', 'ketua', 'petugas_scan', 'koordinator_wilayah']; // koordinator: kegiatan kecamatannya (catat_hadir)
 const JENIS_KEGIATAN = { khususiyah: 'Khususiyah/Tawajjuhan', manaqiban: 'Manaqiban', haul: 'Haul/Acara akbar', pengajian: 'Pengajian/lainnya' };
 // Waktu kegiatan selalu WIB (Jombang), apa pun zona waktu HP.
 const ZONA = 'Asia/Jakarta';

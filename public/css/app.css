@@ -719,3 +719,26 @@ li:nth-child(-n+3)>.bt-baris .bt-no{background:var(--hijau-jamiyyah);color:#FFFF
 .kec-batal{display:block;margin:12px auto 0;min-height:44px}
 .kec-batal[hidden]{display:none}
 .tautan-bahaya{color:#B3261E}
+
+/* ===== Absensi kegiatan (Tahap 2 Langkah 3) ===== */
+.pesan.ingat:not(:empty){color:#6E5200;background:#FFF6CC;border-left-color:#E3C443}
+.absen-jumlah{margin:0;display:flex;align-items:baseline;gap:6px;font-size:var(--fs-isi);color:var(--abu)}
+.absen-jumlah strong{font-size:2rem;line-height:1.1;color:var(--hijau-jamiyyah);font-variant-numeric:tabular-nums}
+.absen-aksi{margin:16px 0 0}
+.absen-aksi[hidden]{display:none}
+.absen-aksi .btn-pindai{margin:0}
+.absen-aksi>.ket{margin:6px 0 0}
+.absen-ketik{margin:20px 0 12px}
+.absen-ketik-baris{display:flex;gap:8px}
+.absen-ketik-baris input{flex:1;min-width:0;font-variant-numeric:tabular-nums}
+.absen-ketik-baris .btn{flex:none;white-space:nowrap}
+.absen-daftar,.absen-pilih{list-style:none;margin:0;padding:0}
+.absen-daftar li{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid #EEF2E8}
+.absen-urut{min-width:36px;text-align:right;font-size:var(--fs-kecil);color:var(--abu);font-variant-numeric:tabular-nums}
+.absen-isi{flex:1;min-width:0}
+.absen-isi .ket{display:block;margin:0}
+.absen-pilih{display:grid;gap:10px;margin:16px 0 0}
+#absen .bagian-judul{margin:20px 0 4px;padding-top:16px;border-top:1px solid #EEF2E8}
+.pindai-hasil{min-height:4.4em;display:flex;align-items:center;justify-content:center;font-size:var(--fs-isi);font-weight:600}
+.pindai-ok{color:#BFF2C9}
+.pindai-ingat{color:#FFE680}
