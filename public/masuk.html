@@ -9,8 +9,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=56">
-<link rel="stylesheet" href="/css/app.css?v=56">
+<link rel="stylesheet" href="/css/tokens.css?v=57">
+<link rel="stylesheet" href="/css/app.css?v=57">
 </head>
 <body class="hal-masuk">
 <header class="masuk-atas">
@@ -47,6 +47,16 @@
     <details class="masuk-pin" id="masuk-pin">
       <summary>Masuk dengan PIN (pengurus atau KTA ber-PIN)</summary>
     <form id="form-anggota" class="form" autocomplete="off" novalidate>
+      <button type="button" class="btn btn-kedua btn-pindai" id="pindai-pengurus">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8V5a1 1 0 011-1h3M16 4h3a1 1 0 011 1v3M20 16v3a1 1 0 01-1 1h-3M8 20H5a1 1 0 01-1-1v-3M7 12h10"/></svg>
+        <span class="teks">Pindai KTA Pengurus</span>
+      </button>
+      <div class="kta-terbaca" id="kta-terbaca" hidden>
+        <p>KTA terbaca: <strong id="kta-terbaca-nomor"></strong></p>
+        <button type="button" class="tautan" id="ketik-manual">Ketik nomor sendiri</button>
+      </div>
+      <div id="isian-manual">
+      <p class="ket atau">atau ketik Nomor Anggota dan desa:</p>
       <div class="isian">
         <label for="nomor">Nomor Anggota</label>
         <input id="nomor" inputmode="numeric" maxlength="10" required aria-describedby="ket-nomor" placeholder="Contoh: 1165100001">
@@ -55,6 +65,7 @@
       <div class="isian">
         <label for="desa">Nama Desa</label>
         <input id="desa" maxlength="60" required autocapitalize="words">
+      </div>
       </div>
       <div class="isian">
         <label for="pin">PIN</label>
@@ -74,9 +85,9 @@
   </aside>
 
 </main>
-<script src="/js/supa.js?v=56" defer></script>
-<script src="/js/pindai.js?v=56" defer></script>
-<script src="/js/masuk.js?v=56" defer></script>
+<script src="/js/supa.js?v=57" defer></script>
+<script src="/js/pindai.js?v=57" defer></script>
+<script src="/js/masuk.js?v=57" defer></script>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=tsSiap&render=explicit" defer></script>
 </body>
 </html>

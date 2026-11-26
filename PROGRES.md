@@ -45,6 +45,8 @@ Mulai: 2026-11-25 (Kang Salman: "Bismillah").
 
 - **KTA memakai Master dari Kang 2026-11-26** (`Master-KTA-Cukir.png` 1579x996, tajam untuk cetak; menggantikan tiruan CSS dari gambar kecil sebelumnya): disimpan `public/img/kta-master.webp` (122 KB, kualitas 86) sebagai latar kartu (`.kta-master` di `app.css`). Di atasnya hanya isian data, QR (kiri, 18cqw), PIN, "Kartu ke-N", dan tanggal setelah "Jombang," yang sudah tercetak. Posisi diukur dari gambar (1cqw = 15,79 px master); garis dasar isian sejajar label (selisih 0-1 px). Teks yang sudah ada di gambar tetap di HTML untuk pembaca layar. Isian panjang dikecilkan otomatis sampai 70% (`kta.js`), tidak dipotong; data asli terpanjang 31-32 huruf muat. Diuji 360/768/1280 dan cetak 85,6x54 mm. Versi cache v56 (daftar INTI di sw.js ikut dibetulkan). **Disetujui Kang 2026-11-26.**
 
+- **Login pengurus QR + PIN 2026-11-26 (keputusan Kang: pengurus tidak boleh QR saja):** di bagian "Masuk dengan PIN" ada tombol "Pindai KTA Pengurus"; Nomor dan desa diambil dari kartu, pengurus tinggal ketik PIN Pengurus 8 angka ("Ketik nomor sendiri" untuk kembali ke cara lama). Server `login-anggota` v6 jalur (c): QR diperiksa sah (tanda tangan / nama, versi, aktif) lalu `cek_login(nomor, desa dari kartu, PIN)` dengan batas salah yang sama; sesi pengurus tidak pernah terbatas. Anggota tetap scan QR saja. Diuji tiruan 360/1280 (PIN salah panjang ditolak di HP, isi kiriman benar). Versi cache v57. Menunggu uji Kang dengan KTA + PIN pengurus asli.
+
 ## Berikutnya (satu per satu, tunggu persetujuan Kang)
 
 Login scan QR KTA di HP sudah dicoba Kang dan lancar (2026-11-26); KTA master disetujui. **Tahap 1 selesai.** Tunggu Kang bilang "mulai" untuk tahap berikutnya (Tahap 2 belum ditentukan Kang).

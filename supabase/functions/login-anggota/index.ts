@@ -1,6 +1,8 @@
 // Login: (a) scan QR KTA (anggota, keputusan Kang 2026-11-26): QR baru bertanda tangan = sesi biasa,
 //        QR lama teks biasa = sesi terbatas (hanya data yang tercetak di kartu);
-//    (b) Nomor Anggota + nama desa + PIN: PIN KTA 6 angka = anggota, PIN Pengurus 8 angka = pengurus.
+//    (b) Nomor Anggota + nama desa + PIN: PIN KTA 6 angka = anggota, PIN Pengurus 8 angka = pengurus;
+//    (c) scan QR KTA + PIN Pengurus 8 angka = pengurus (keputusan Kang 2026-11-26: pengurus tidak boleh QR saja).
+//        Nomor dan desa diambil dari kartu yang QR-nya sah, lalu PIN dicek seperti (b) (termasuk batas salah).
 // Dilindungi Turnstile, batas salah PIN, dan batas scan per IP.
 // Rahasia (TURNSTILE_SECRET, service role) hanya ada di server Supabase, tidak di repo.
 import { createClient } from "npm:@supabase/supabase-js@2.49.4";
@@ -55,6 +57,7 @@ const balas = (h: Record<string, string>, status: number, data: unknown) =>
   new Response(JSON.stringify(data), { status, headers: { ...h, "Content-Type": "application/json" } });
 
 const SALAH = "Nomor Anggota, nama desa, atau PIN tidak cocok.";
+const SALAH_PIN = "PIN Pengurus tidak cocok dengan kartu ini. PIN Pengurus 8 angka.";
 
 Deno.serve(async (req) => {
   const h = cors(req.headers.get("origin"));
@@ -72,6 +75,8 @@ Deno.serve(async (req) => {
   const desa = String(b.desa ?? "").trim().slice(0, 60);
   const pin = String(b.pin ?? "");
   if (!lewatQr && (!/^\d{10}$/.test(nomor) || !desa || !/^(\d{6}|\d{8})$/.test(pin))) return balas(h, 400, { pesan: SALAH });
+  const qrPengurus = lewatQr && pin !== "";
+  if (qrPengurus && !/^\d{8}$/.test(pin)) return balas(h, 400, { pesan: SALAH_PIN });
 
   const ip = req.headers.get("cf-connecting-ip") ?? req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "";
 
@@ -109,9 +114,18 @@ Deno.serve(async (req) => {
       if (r.versi > 1) return balas(h, 401, { pesan: "Kartu ini sudah diganti. Pakai KTA terbaru." });
     }
     if (r.wafat || !r.aktif) return balas(h, 403, { pesan: "Kartu ini tidak aktif. Hubungi pengurus." });
+    if (qrPengurus) {
+      // 2c. Kartu sah + PIN Pengurus: cek PIN dengan batas salah yang sama seperti (b)
+      const { data: cek, error } = await admin.rpc("cek_login", { p_nomor: Number(nomor), p_desa: r.desa, p_pin: pin, p_ip: ip });
+      if (error) return balas(h, 500, { pesan: "Terjadi gangguan. Coba lagi sebentar." });
+      hasil = cek?.[0];
+      if (hasil?.status === "terkunci") return balas(h, 429, { pesan: "Terlalu banyak percobaan salah. Tunggu 15 menit lalu coba lagi." });
+      if (hasil?.status !== "ok" || hasil?.mode !== "pengurus") return balas(h, 401, { pesan: SALAH_PIN });
+    } else {
     const { data: pg } = await admin.from("pengguna").select("user_id, aktif").eq("jamaah_id", r.jamaah_id).eq("peran", "anggota").maybeSingle();
     if (pg && !pg.aktif) return balas(h, 403, { pesan: "Akun ini dinonaktifkan. Hubungi pengurus." });
     hasil = { status: "ok", mode: "anggota", peran: "anggota", jamaah_id: r.jamaah_id, nama: r.nama, user_id: pg?.user_id ?? null };
+    }
   } else {
     // 2b. Cek PIN (dengan batas salah) di database, hanya setelah cek robot lolos
     if (!(await tsJanji).success) return balas(h, 403, ROBOT);
@@ -146,7 +160,7 @@ Deno.serve(async (req) => {
 
   const { access_token, refresh_token, expires_at } = s.session;
   // 5. Sesi dari QR lama ditandai terbatas sebelum diserahkan
-  const terbatas = !!qrLama;
+  const terbatas = !!qrLama && !qrPengurus;
   if (terbatas) {
     let sid = "";
     try { sid = JSON.parse(atob(access_token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))).session_id ?? ""; } catch { /* kosong */ }

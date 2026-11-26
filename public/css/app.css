@@ -658,6 +658,11 @@ li:nth-child(-n+3)>.bt-baris .bt-no{background:var(--hijau-jamiyyah);color:#FFFF
 .masuk-pin summary{min-height:44px;display:flex;align-items:center;cursor:pointer;color:var(--hijau-jamiyyah);font-weight:600;font-size:var(--fs-kecil)}
 .masuk-pin summary:focus-visible{outline:3px solid var(--hijau-jamiyyah);outline-offset:2px;border-radius:8px}
 .masuk-pin[open] summary{margin-bottom:8px}
+.kta-terbaca{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 12px;margin:0 0 16px;padding:8px 14px;
+  background:var(--hijau-pupus);border-radius:12px;font-size:var(--fs-isian)}
+.kta-terbaca[hidden],#isian-manual[hidden]{display:none}
+.kta-terbaca p{margin:0}
+.ket.atau{margin:0 0 8px}
 .btn-pindai .putar{display:none}
 .btn-pindai.sibuk{opacity:.8}
 

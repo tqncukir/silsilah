@@ -72,11 +72,35 @@ $('pindai').onclick = async () => {
 
 const salah = (id, t) => { $(id).setAttribute('aria-invalid', 'true'); $(id).focus(); pesan(t); };
 
+// Pengurus: scan KTA mengganti ketik Nomor + desa; tetap wajib PIN Pengurus 8 angka (keputusan Kang 2026-11-26).
+let qrPengurus = '';
+function pakaiQrPengurus(teks) {
+  qrPengurus = teks;
+  const k = teks ? bacaKta(teks) : null;
+  $('kta-terbaca-nomor').textContent = k ? (k.jenis === 'baru' ? k.kode.split('-')[1] : k.nomor) : '';
+  $('kta-terbaca').hidden = !teks; $('isian-manual').hidden = !!teks; $('pindai-pengurus').hidden = !!teks;
+  $('ket-pin').textContent = teks ? 'PIN Pengurus 8 angka.' : '6 angka di KTA. Pengurus: 8 angka.';
+  if (teks) $('pin').focus(); else $('nomor').focus();
+}
+$('pindai-pengurus').onclick = async () => {
+  pesan('');
+  const teks = await pindaiQr({ judul: 'Pindai QR di KTA Pengurus' });
+  if (!teks) return;
+  if (!bacaKta(teks)) { pesan('QR ini bukan QR KTA TQN Cukir. Pindai QR di Kartu Anggota.'); return; }
+  pakaiQrPengurus(teks);
+};
+$('ketik-manual').onclick = () => pakaiQrPengurus('');
+
 $('form-anggota').addEventListener('submit', async (e) => {
   e.preventDefault();
   const nomor = $('nomor').value, desa = $('desa').value.trim(), pin = $('pin').value;
+  const tombol = e.submitter || $('form-anggota').querySelector('button[type=submit]');
+  if (qrPengurus) {
+    if (!/^\d{8}$/.test(pin)) return salah('pin', 'PIN Pengurus harus 8 angka.');
+    return masuk({ qr: qrPengurus, pin }, tombol, 'Masuk');
+  }
   if (nomor.length !== 10) return salah('nomor', 'Nomor Anggota harus 10 angka.');
   if (!desa) return salah('desa', 'Nama desa belum diisi.');
   if (!/^(\d{6}|\d{8})$/.test(pin)) return salah('pin', 'PIN harus 6 angka (KTA) atau 8 angka (PIN Pengurus).');
-  masuk({ nomor, desa, pin }, e.submitter || $('form-anggota').querySelector('button[type=submit]'), 'Masuk');
+  masuk({ nomor, desa, pin }, tombol, 'Masuk');
 });
