@@ -54,7 +54,7 @@ Mulai: 2026-11-25 (Kang Salman: "Bismillah").
 Login scan QR KTA di HP sudah dicoba Kang dan lancar (2026-11-26); KTA master disetujui. **Tahap 1 selesai.** Tunggu Kang bilang "mulai" untuk tahap berikutnya (Tahap 2 belum ditentukan Kang).
 
 ## Catatan
-- Alamat resmi: https://silsilah.tqncukir.id (domain tqncukir.id dibeli Kang di Domosquare 2026-11-26, nameserver dipindah ke Cloudflare akun jtccukir2022: damon/kira.ns.cloudflare.com; CNAME `silsilah` → silsilah-tqn.pages.dev, custom domain Pages; hostname Turnstile ditambah; ASAL_BOLEH fungsi `kta` v4 & `login-anggota` v7 ditambah). Alamat lama tetap jalan: https://silsilah-tqn.pages.dev
+- Alamat resmi: https://silsilah.tqncukir.id (domain tqncukir.id dibeli Kang di Domosquare 2026-11-26, nameserver dipindah ke Cloudflare akun jtccukir2022: damon/kira.ns.cloudflare.com; CNAME `silsilah` → silsilah-tqn.pages.dev, custom domain Pages; hostname Turnstile ditambah; ASAL_BOLEH fungsi `kta` v4 & `login-anggota` v7 ditambah). Alamat lama tetap jalan: https://silsilah-tqn.pages.dev. `tqncukir.id` dan `www.tqncukir.id` sengaja dibiarkan kosong (keputusan Kang 2026-11-26), nanti untuk website profil jamaah (agenda, berita, dll).
 - GitHub App Claude dan Cloudflare Pages hanya diberi akses ke repo `silsilah`.
 - Data contoh 9990000001-9990000050 sudah dihapus 2026-11-25 (setelah impor data asli).
 - Migrasi 20261125010300 dijalankan Kang lewat SQL Editor (perintah DROP butuh persetujuan), lalu dicatat manual di schema_migrations.
