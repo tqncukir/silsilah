@@ -844,3 +844,46 @@ li:nth-child(-n+3)>.bt-baris .bt-no{background:var(--hijau-jamiyyah);color:#FFFF
 
 .tabel.baca tbody tr[data-id]{cursor:default}
 .tabel.baca tbody tr[data-id]:hover{background:transparent}
+
+/* ===== Cara pasang (pasang.html) ===== */
+.pasang-cepat{margin:0 0 16px}
+.pasang-cepat .ket{margin:6px 0 0}
+.pasang-pilih{margin:8px 0 12px}
+.pasang-pilih legend{font-weight:600;font-size:var(--fs-kecil);margin:0 0 6px}
+.pasang-langkah[hidden]{display:none}
+.langkah-daftar{list-style:none;margin:0 0 var(--gap);padding:0;display:grid;gap:12px}
+.langkah-daftar li{display:flex;gap:12px;align-items:flex-start;padding:14px;background:#FFFFFF;border:1px solid #E2ECD6;border-radius:16px}
+.langkah-no{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--hijau-jamiyyah);color:#FFFFFF;font-weight:700;font-size:1.125rem}
+.langkah-isi{flex:1;min-width:0;display:grid;gap:10px;justify-items:center}
+.langkah-isi p{margin:4px 0 0;justify-self:stretch;font-size:var(--fs-isi);line-height:1.5}
+.langkah-gbr{max-width:100%;height:auto}
+@media (min-width:768px){.langkah-daftar{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* ===== Poster A4 pemasangan (poster.html) ===== */
+.hal-poster{background:#E9EDE6;margin:0}
+.poster-alat{display:flex;justify-content:space-between;align-items:center;gap:12px;max-width:210mm;margin:0 auto;padding:12px 16px}
+.poster{box-sizing:border-box;width:210mm;min-height:297mm;margin:0 auto 24px;padding:0 0 10mm;background:#FFFFFF;color:var(--hitam);
+  display:flex;flex-direction:column;align-items:center;text-align:center;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.poster-kepala{box-sizing:border-box;width:100%;display:flex;align-items:center;gap:7mm;padding:8mm 16mm;background:var(--hijau-jamiyyah);
+  border-bottom:3mm solid var(--kuning-rosyid);text-align:left;color:#FFFFFF}
+.poster-kepala img{width:28mm;height:28mm;background:#FFFFFF;border-radius:50%}
+.poster-merek{margin:0;font-size:17mm;line-height:1;font-weight:800;letter-spacing:.04em;color:var(--kuning-rosyid)}
+.poster-sub{margin:2mm 0 0;font-size:4.3mm;line-height:1.35;font-weight:500}
+.poster-judul{margin:9mm 12mm 6mm;font-size:10mm;line-height:1.2;color:var(--hijau-jamiyyah)}
+.poster-qr{padding:5mm;border:1.2mm solid var(--hijau-jamiyyah);border-radius:8mm}
+.poster-qr-gbr{width:82mm;height:82mm}
+.poster-qr-gbr svg{width:100%;height:100%;display:block}
+.poster-qr p{margin:3mm 0 0;font-size:5.2mm}
+.poster-langkah{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6mm;width:calc(100% - 28mm);margin:8mm 0 0;padding:0}
+.poster-langkah li{display:grid;justify-items:center;align-content:start;gap:2.5mm;padding:4mm 3mm;border-radius:6mm;background:var(--hijau-pupus)}
+.poster-langkah span{display:grid;place-items:center;width:13mm;height:13mm;border-radius:50%;background:var(--hijau-jamiyyah);color:#FFFFFF;font-size:7mm;font-weight:800}
+.poster-langkah p{margin:0;font-size:4.6mm;line-height:1.35}
+.poster-alamat{margin:7mm 0 0;font-size:5.2mm}
+.poster-kaki{margin-top:auto;padding-top:5mm;font-size:4.2mm;line-height:1.5;color:var(--abu)}
+@media screen and (max-width:820px){.poster{zoom:.45}}
+@media print{
+  @page{size:A4;margin:0}
+  .hal-poster{background:#FFFFFF}
+  .poster-alat{display:none}
+  .poster{margin:0;height:297mm;min-height:0;overflow:hidden}
+}
