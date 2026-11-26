@@ -159,8 +159,16 @@ function gambarBulan() {
   const lebar = $('bulan').clientWidth || 300;
   const perKolom = lebar / baris.length;
   const labelSetiap = perKolom >= 30 ? 1 : perKolom >= 14 ? 3 : 6;
-  if (labelSetiap > 1) for (const b of baris) b.label2 = b.b.slice(0, 4); // label jarang: tiap label memuat tahunnya
-  kolom($('bulan'), baris, { labelAngka: perKolom >= 30, labelSetiap });
+  if (labelSetiap > 1) { // label jarang: tahun hanya pada label pertama yang tampil dan saat tahun berganti
+    let thnTerakhir = '';
+    baris.forEach((b, i) => {
+      const thn = b.b.slice(0, 4);
+      b.label2 = i % labelSetiap === 0 && thn !== thnTerakhir ? thn : '';
+      if (i % labelSetiap === 0) thnTerakhir = thn;
+    });
+  }
+  // angka di atas setiap batang bila muat (angka 13px, ±8 px per huruf)
+  kolom($('bulan'), baris, { labelAngka: perKolom >= angka(puncak).length * 8 + 2, labelSetiap });
   // Tooltip saat diarahkan atau disentuh
   for (const t of $('bulan').querySelectorAll('.kl-tombol')) {
     const tampil = () => {
@@ -204,7 +212,7 @@ function gambarJk() {
     <span class="bt-nilai">${angka(n)} <span class="bt-persen">(${persen(n, data.total)})</span></span></li>`).join('');
   $('jk-batang').innerHTML = bagian.filter((b) => b[1]).map(([, n, k]) => `<span class="${k}" data-n="${n}"></span>`).join('');
   for (const el of $('jk-batang').children) el.style.flexGrow = el.dataset.n;
-  $('g-jk').textContent = data.jk_tebakan ? 'Jenis Kelamin · Perkiraan' : 'Jenis Kelamin';
+  $('g-jk').textContent = data.jk_tebakan ? 'Jenis kelamin · perkiraan' : 'Jenis kelamin';
   const ket = [];
   if (data.jk_tebakan) ket.push(`${angka(data.jk_tebakan)} di antaranya ditebak dari nama (data lama).`);
   if (j.kosong) ket.push(`${angka(j.kosong)} belum diisi, perlu dicek di Data Jamaah.`);
@@ -248,7 +256,7 @@ async function muatHadir(ini, dari, sampai) {
   try {
     const h = await dbKirim('POST', 'rpc/dashboard_kehadiran', { p_kab: f.kab || null, p_kec: f.kec || null, p_desa: f.desa || null, p_dari: dari, p_sampai: sampai });
     if (ini !== nomorMuat) return;
-    $('hadir-ket').textContent = `Jamaah dari ${teksWilayah()} · kegiatan ${teksPeriode().toLowerCase()} · tanpa kegiatan dibatalkan`;
+    $('hadir-ket').textContent = `${teksWilayah()} · ${teksPeriode()}. Jamaah dihitung sekali walau hadir berkali-kali; kegiatan dibatalkan tidak dihitung.`;
     $('hadir-keg').textContent = angka(h.kegiatan); $('hadir-total').textContent = angka(h.hadir); $('hadir-orang').textContent = angka(h.orang);
     const maks = Math.max(...h.jenis.map((j) => j.hadir), 0);
     batang($('hadir-jenis'), h.jenis.map((j) => ({ label: JENIS_KEGIATAN[j.jenis] || j.jenis, n: j.hadir, teks: `${angka(j.hadir)} hadir · ${angka(j.kegiatan)} keg.` })), maks);

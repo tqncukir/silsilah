@@ -451,7 +451,7 @@ body.terkunci{overflow:hidden}
   .dsb-kartu-angka{font-size:2rem}
 }
 
-.dsb-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+.dsb-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start}
 .dsb-panel{min-width:0;padding:16px}
 .dsb-judul{margin:0 0 4px;font-size:var(--fs-sub);font-weight:700;color:var(--hitam)}
 .dsb-ket{margin:0 0 12px;font-size:var(--fs-kecil);color:var(--abu)}
@@ -470,7 +470,8 @@ body.terkunci{overflow:hidden}
   .dsb-bulan{grid-column:1 / -1}
   .dsb-sebaran{grid-row:span 2}
   .dsb-jk{grid-column:span 4}
-  .dsb-catatan,.dsb-pekerjaan{grid-column:span 5}
+  .dsb-catatan{grid-column:span 4}
+  .dsb-pekerjaan{grid-column:span 6}
 }
 
 /* jejak wilayah */
@@ -500,6 +501,7 @@ body.terkunci{overflow:hidden}
 /* kolom tegak */
 .dsb-kolom{display:flex;align-items:stretch;gap:6px;height:200px;margin:8px 0 0;border-bottom:1px solid #C9D4C4}
 .dsb-kolom-bulan{gap:2px;height:180px}
+.dsb-kolom-bulan .kl-nilai{font-size:.8125rem}
 .kl{flex:1 1 0;min-width:0;display:flex;flex-direction:column;position:relative}
 .kl-tombol{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;min-height:44px;padding:22px 0 0;margin:0;
   border:0;background:none;cursor:default;font:inherit;border-radius:8px 8px 0 0}
@@ -578,11 +580,22 @@ body.terkunci{overflow:hidden}
 .dsb-kartu-angka{margin:2px 0 0;font-size:1.75rem;letter-spacing:-.01em}
 .dsb-kartu-sub{margin:2px 0 0;font-size:var(--fs-kecil);color:var(--abu);overflow-wrap:anywhere}
 .dsb-kartu-sub:empty{display:none}
-.dsb-kartu-catatan{background:linear-gradient(#FFFAEB,#FFFAEB);border-color:#F2E2B3}
+.dsb-kartu-catatan{background:#FFFAEB;border-color:#F2E2B3}
 .dsb-kartu-catatan .dsb-ikon{background:#FFEFC2;color:#7A5200}
 @media (min-width:768px){.dsb-kartu{padding:18px 20px}.dsb-kartu-angka{font-size:2rem}}
 @media (min-width:480px) and (max-width:1023px){
   .dsb-kartu{flex-direction:column;align-items:flex-start;gap:10px}
+}
+
+/* HP: tiga angka ringkasan jadi satu kartu 3 baris (poles 2026-11-27) */
+@media (max-width:479px){
+  .dsb-kartu-baris{gap:0;background:#FFFFFF;border:1px solid var(--garis);border-radius:18px;box-shadow:var(--bayang);overflow:hidden}
+  .dsb-kartu-baris .dsb-kartu{border:0;border-radius:0;box-shadow:none;padding:12px 16px;gap:12px}
+  .dsb-kartu-baris .dsb-kartu+.dsb-kartu{border-top:1px solid var(--garis-lembut)}
+  .dsb-kartu-baris .dsb-ikon-kartu{width:36px;height:36px;border-radius:11px}
+  .dsb-kartu-baris .dsb-kartu>div{flex:1;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:0 12px}
+  .dsb-kartu-baris .dsb-kartu-angka{grid-column:2;grid-row:1;margin:0;font-size:1.375rem}
+  .dsb-kartu-baris .dsb-kartu-sub{grid-column:1 / -1}
 }
 
 /* jejak wilayah sebagai pil */
@@ -601,9 +614,9 @@ body.terkunci{overflow:hidden}
   font-weight:700;font-variant-numeric:tabular-nums}
 li:nth-child(-n+3)>.bt-baris .bt-no{background:var(--hijau-jamiyyah);color:#FFFFFF}
 .bt-nilai{color:var(--hitam);font-weight:600}
-.bt-jalur{height:8px;background:#EFF3EA}
-.bt-isi{background:linear-gradient(90deg,#1E9E3A,var(--hijau-jamiyyah))}
-.bt-isi-catatan{background:linear-gradient(90deg,#C99A00,#A87400)}
+.bt-jalur{height:8px;background:var(--garis-lembut)}
+.bt-isi{background:var(--hijau-daun)}
+.bt-isi-catatan{background:var(--grup-kepedulian)}
 .bt-tombol:hover .bt-isi{filter:brightness(1.08)}
 .bt-tombol::after{content:"›";grid-column:3;grid-row:1 / span 2;align-self:center;color:#9AA894;font-size:1.25rem;line-height:1}
 .bt-tombol{grid-template-columns:minmax(0,1fr) auto 12px}
@@ -614,9 +627,8 @@ li:nth-child(-n+3)>.bt-baris .bt-no{background:var(--hijau-jamiyyah);color:#FFFF
 /* kolom tegak: garis bantu, sorot */
 .dsb-kolom{border-bottom:1.5px solid #C9D4C4;
   background-image:linear-gradient(var(--garis-lembut) 1px,transparent 1px);background-size:100% 25%;background-position:0 22px;background-repeat:repeat-y}
-.kl-batang{border-radius:8px 8px 2px 2px;background:#8FC3A0}
-.kl-sorot{background:linear-gradient(180deg,#1E9E3A,var(--hijau-jamiyyah))}
-.dsb-kolom-usia .kl-batang:not(.kl-sorot){background:#86BD98}
+.kl-batang{border-radius:8px 8px 2px 2px;background:var(--garis-isian)}
+.kl-sorot{background:var(--hijau-jamiyyah)}
 .kl-tombol:hover .kl-batang{filter:brightness(.92)}
 .kl-tombol:hover{background:rgba(238,246,220,.6)}
 .kl-nilai{font-weight:700}
