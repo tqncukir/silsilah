@@ -7,7 +7,7 @@ const BULAN = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', '
 const TINGKAT = { kabupaten: 'kabupaten/kota', kecamatan: 'kecamatan', desa: 'desa' };
 
 let semuaKab = [], semuaKec = [], semuaDesa = [];
-let data = null, semuaSebaran = false, nomorMuat = 0;
+let data = null, semuaSebaran = false, nomorMuat = 0, lihatHadir = false;
 const f = { kab: q.get('kab') || '', kec: q.get('kec') || '', desa: q.get('desa') || '', periode: q.get('periode') || '', dari: q.get('dari') || '', sampai: q.get('sampai') || '' };
 
 const namaKab = (id) => semuaKab.find((k) => String(k.id) === String(id))?.nama || '';
@@ -242,12 +242,30 @@ function keadaan(teks, tombol, aksi) {
   $('keadaan-teks').textContent = teks; $('keadaan-tombol').textContent = tombol; $('keadaan-tombol').onclick = aksi;
 }
 
+// Kehadiran kegiatan (rpc dashboard_kehadiran, ikut RLS): wilayah = asal jamaah, periode = tanggal kegiatan.
+async function muatHadir(ini, dari, sampai) {
+  if (!lihatHadir) return;
+  try {
+    const h = await dbKirim('POST', 'rpc/dashboard_kehadiran', { p_kab: f.kab || null, p_kec: f.kec || null, p_desa: f.desa || null, p_dari: dari, p_sampai: sampai });
+    if (ini !== nomorMuat) return;
+    $('hadir-ket').textContent = `Jamaah dari ${teksWilayah()} · kegiatan ${teksPeriode().toLowerCase()} · tanpa kegiatan dibatalkan`;
+    $('hadir-keg').textContent = angka(h.kegiatan); $('hadir-total').textContent = angka(h.hadir); $('hadir-orang').textContent = angka(h.orang);
+    const maks = Math.max(...h.jenis.map((j) => j.hadir), 0);
+    batang($('hadir-jenis'), h.jenis.map((j) => ({ label: JENIS_KEGIATAN[j.jenis] || j.jenis, n: j.hadir, teks: `${angka(j.hadir)} hadir · ${angka(j.kegiatan)} keg.` })), maks);
+    if (!h.jenis.length) $('hadir-jenis').innerHTML = '<li class="dsb-ket">Belum ada kegiatan di periode ini.</li>';
+    $('hadir-teratas').innerHTML = h.teratas.length ? h.teratas.map((t) => `<li><a href="/kegiatan-isi.html?id=${t.id}"><span>${hurufAman(t.nama)}<small>${tglWib(t.mulai, { day: 'numeric', month: 'short', year: 'numeric' })}</small></span><strong>${angka(t.hadir)}</strong></a></li>`).join('')
+      : '<li class="dsb-ket">Belum ada kehadiran tercatat.</li>';
+    $('p-hadir').hidden = false;
+  } catch { if (ini === nomorMuat) $('p-hadir').hidden = true; }
+}
+
 async function muat() {
   simpanUrl();
   const ini = ++nomorMuat;
   $('isi').setAttribute('aria-busy', 'true'); $('isi').classList.add('memuat');
   try {
     const [dari, sampai] = rentang();
+    muatHadir(ini, dari, sampai);
     const hasil = await dbKirim('POST', 'rpc/dashboard_pengurus', {
       p_kab: f.kab || null, p_kec: f.kec || null, p_desa: f.desa || null, p_dari: dari, p_sampai: sampai });
     if (ini !== nomorMuat) return;
@@ -291,6 +309,7 @@ $('keluar').onclick = keluar;
   try {
     const p = await profilSaya();
     if (!p || !PERAN_LIHAT_JAMAAH.includes(p.peran)) { location.replace('/beranda.html'); return; }
+    lihatHadir = PERAN_ABSEN.includes(p.peran); // bendahara tidak melihat kehadiran
     [semuaKab, semuaKec, semuaDesa] = await Promise.all([
       dbGet('kabupaten?select=id,nama&order=nama'),
       dbGet('kecamatan?select=id,nama,kabupaten_id&order=nama'),

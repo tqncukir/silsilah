@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=62">
-<link rel="stylesheet" href="/css/app.css?v=62">
+<link rel="stylesheet" href="/css/tokens.css?v=63">
+<link rel="stylesheet" href="/css/app.css?v=63">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -49,6 +49,45 @@
       </div>
     </div>
     <dl class="rincian" id="l-rincian"></dl>
+  </section>
+
+  <section id="kehadiran" class="panel rekap" hidden aria-labelledby="h-judul">
+    <div class="panel-kepala">
+      <div>
+        <h2 id="h-judul" class="form-judul">Kehadiran</h2>
+        <p class="judul-sub" id="h-sub">Semua petugas, terbaru di atas.</p>
+      </div>
+      <p class="absen-jumlah" aria-live="polite"><strong id="h-jumlah">–</strong> <span>hadir</span></p>
+    </div>
+    <p id="h-pesan" class="pesan" role="alert"></p>
+
+    <h3 class="bagian-judul rekap-sub">Asal wilayah jamaah</h3>
+    <ol class="dsb-batang" id="h-wilayah"></ol>
+    <button type="button" class="tautan" id="h-wilayah-semua" hidden></button>
+
+    <h3 class="bagian-judul rekap-sub">Daftar hadir</h3>
+    <div class="rekap-alat">
+      <form class="saring rekap-saring" role="search" id="h-saring"><div class="saring-cari">
+        <label for="h-cari" class="sr-only">Cari nama atau Nomor Anggota yang hadir</label>
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="h-cari" type="search" placeholder="Cari nama atau Nomor Anggota" autocomplete="off" enterkeyhint="search">
+      </div></form>
+      <button type="button" class="btn btn-kedua btn-pas" id="h-unduh">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+        <span class="teks">Unduh CSV</span>
+      </button>
+    </div>
+    <div class="tabel-bungkus">
+      <table class="tabel">
+        <thead><tr><th scope="col" class="kol-no">No</th><th scope="col">Nomor Anggota</th><th scope="col">Nama</th><th scope="col">Kel/Desa</th><th scope="col">Kecamatan</th><th scope="col" class="kol-luas">Kab/Kota</th><th scope="col">Jam</th><th scope="col" class="kol-luas">Cara</th></tr></thead>
+        <tbody id="h-isi"><tr><td colspan="8" class="tabel-kosong">Memuat...</td></tr></tbody>
+      </table>
+    </div>
+    <nav class="halaman" id="h-halaman" aria-label="Pindah halaman daftar hadir" hidden>
+      <button type="button" class="hal-panah" id="h-sebelum" aria-label="Halaman sebelumnya"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <span id="h-posisi" class="hal-posisi" aria-live="polite"></span>
+      <button type="button" class="hal-panah" id="h-sesudah" aria-label="Halaman berikutnya"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </nav>
   </section>
 
   <form id="form" class="panel form" hidden novalidate aria-labelledby="f-judul">
@@ -106,7 +145,7 @@
     </div>
   </form>
 </main>
-<script src="/js/supa.js?v=62" defer></script>
-<script src="/js/kegiatan-isi.js?v=62" defer></script>
+<script src="/js/supa.js?v=63" defer></script>
+<script src="/js/kegiatan-isi.js?v=63" defer></script>
 </body>
 </html>

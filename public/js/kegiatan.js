@@ -5,7 +5,7 @@ const UKURAN = [10, 20, 50, 100];
 let PER_HALAMAN = (() => { let n = Number(q.get('n')); try { n ||= Number(localStorage.getItem('silsilah.perHalaman')); } catch {} return UKURAN.includes(n) ? n : 20; })();
 let halaman = Math.max(1, Number(q.get('h')) || 1);
 const SARING = ['cari', 'waktu', 'jenis', 'wilayah'];
-let tunda;
+let tunda, hitungHadir = false;
 
 const pesan = (t) => { $('pesan').textContent = t; };
 const wilayahTeks = (k) => k.kecamatan ? `Kec. ${k.kecamatan.nama}, ${k.kecamatan.kabupaten?.nama || ''}` : 'Pusat Cukir';
@@ -25,7 +25,7 @@ function simpanUrl() {
 function jalurData() {
   const awalHari = encodeURIComponent(isoWib(hariIniWib(), '00:00'));
   const w = $('waktu').value;
-  const p = ['select=id,jenis,nama,mulai,selesai,tempat,publik,dibatalkan,kecamatan(nama,kabupaten(nama))',
+  const p = [`select=id,jenis,nama,mulai,selesai,tempat,publik,dibatalkan,kecamatan(nama,kabupaten(nama))${hitungHadir ? ',kehadiran(count)' : ''}`,
     w === 'lewat' || w === 'semua' ? 'order=mulai.desc,id.desc' : 'order=mulai.asc,id.asc'];
   if (!w) p.push(`mulai=gte.${awalHari}`);
   if (w === 'lewat') p.push(`mulai=lt.${awalHari}`);
@@ -57,7 +57,7 @@ async function muat() {
       const [teks, kelas] = statusKegiatan(k);
       return `<tr data-id="${k.id}" tabindex="0">
         <td data-l="No" class="angka kol-no">${(dari + i + 1).toLocaleString('id-ID')}</td>
-        <td data-l="Nomor" class="angka">${tglWib(k.mulai, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })} · ${jamTeks(k)}</td>
+        <td data-l="Nomor" class="angka">${tglWib(k.mulai, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })} · ${jamTeks(k)}${hitungHadir && k.kehadiran?.[0]?.count ? ` · <strong>${Number(k.kehadiran[0].count).toLocaleString('id-ID')} hadir</strong>` : ''}</td>
         <td data-l="Nama" class="tabel-nama">${hurufAman(k.nama)}</td>
         <td data-l="Desa">${hurufAman(k.tempat)}<span class="hp-saja"> · ${hurufAman(wilayahTeks(k))}</span></td>
         <td data-l="Kecamatan">${hurufAman(wilayahTeks(k))}</td>
@@ -106,6 +106,7 @@ $('keluar').onclick = keluar;
     const p = await profilSaya();
     if (!p || !PERAN_LIHAT_KEGIATAN.includes(p.peran)) { location.replace('/beranda.html'); return; }
     $('tambah').hidden = !PERAN_KELOLA_KEGIATAN.includes(p.peran);
+    hitungHadir = PERAN_ABSEN.includes(p.peran); // jumlah hadir hanya untuk yang berhak melihat daftar hadir (RLS)
     $('jenis').innerHTML += Object.entries(JENIS_KEGIATAN).map(([v, t]) => `<option value="${v}">${t}</option>`).join('');
     const kec = await dbGet('kecamatan?select=id,nama,kabupaten(nama)&order=nama');
     $('wilayah').innerHTML += kec.map((k) => `<option value="${k.id}">Kec. ${hurufAman(k.nama)} (${hurufAman(k.kabupaten?.nama || '')})</option>`).join('');

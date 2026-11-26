@@ -742,3 +742,24 @@ li:nth-child(-n+3)>.bt-baris .bt-no{background:var(--hijau-jamiyyah);color:#FFFF
 .pindai-hasil{min-height:4.4em;display:flex;align-items:center;justify-content:center;font-size:var(--fs-isi);font-weight:600}
 .pindai-ok{color:#BFF2C9}
 .pindai-ingat{color:#FFE680}
+
+/* ===== Rekap kehadiran (Tahap 2 Langkah 4) ===== */
+.rekap{margin-top:16px}
+.rekap .rekap-sub{margin:20px 0 6px}
+.rekap-alat{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 10px}
+.rekap-saring{flex:1 1 240px;margin:0;padding:0;background:none;box-shadow:none}
+.rekap-alat .btn{flex:none}
+.rekap .tabel-bungkus{box-shadow:none;border:1px solid #E2ECD6}
+.dsb-hadir{grid-column:1 / -1}
+.hadir-angka{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0 4px}
+.hadir-angka div{padding:10px 12px;border-radius:12px;background:#F6F9F1}
+.hadir-angka dt{font-size:var(--fs-kecil);color:var(--abu)}
+.hadir-angka dd{margin:2px 0 0;font-size:1.375rem;font-weight:700;color:var(--hijau-jamiyyah);font-variant-numeric:tabular-nums}
+.hadir-dua{display:grid;gap:4px 24px}
+@media (min-width:900px){.hadir-dua{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.hadir-teratas{list-style:none;margin:0;padding:0}
+.hadir-teratas li{border-bottom:1px solid #EEF2E8}
+.hadir-teratas a{display:flex;justify-content:space-between;gap:12px;min-height:44px;align-items:center;padding:6px 4px;color:var(--hitam);text-decoration:none}
+.hadir-teratas a:hover{background:var(--hijau-pupus)}
+.hadir-teratas small{display:block;color:var(--abu);font-size:var(--fs-kecil)}
+.hadir-teratas strong{font-variant-numeric:tabular-nums;white-space:nowrap}
