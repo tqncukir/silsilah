@@ -16,8 +16,12 @@ function gambarKartu() {
   ];
   $('kta-data').innerHTML = baris.map(([k, v]) => `<div><dt>${k}</dt><dd>${hurufAman(String(v))}</dd></div>`).join('');
   const t = j.tanggal_daftar ? new Date(j.tanggal_daftar + 'T00:00:00') : null;
-  $('kta-tgl').textContent = t ? `Jombang, ${t.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }).replace('.', '')}` : 'Jombang';
+  $('kta-tgl').textContent = t ? t.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }).replace('.', '') : ''; // "Jombang," sudah ada di gambar master
   $('kartu').hidden = false;
+  // Isian panjang (nama, pekerjaan) dikecilkan sampai muat, tidak dipotong; ukuran ikut lebar kartu (cqw), jadi cukup sekali.
+  for (const dd of $('kta-data').querySelectorAll('dd')) {
+    for (let k = 0.95; dd.scrollWidth > dd.clientWidth && k >= 0.7; k -= 0.05) dd.style.fontSize = `calc(2.84cqw * ${k.toFixed(2)})`;
+  }
   document.title = `KTA ${j.nama} · SILSILAH TQN Cukir`;
 }
 

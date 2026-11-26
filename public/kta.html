@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=55">
-<link rel="stylesheet" href="/css/app.css?v=55">
+<link rel="stylesheet" href="/css/tokens.css?v=56">
+<link rel="stylesheet" href="/css/app.css?v=56">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -42,7 +42,7 @@
 
   <div class="kta-tata">
     <div class="kta-wadah">
-      <article class="kta kta-pola" id="kartu" aria-label="Kartu Anggota Jam'iyyah" hidden>
+      <article class="kta kta-master" id="kartu" aria-label="Kartu Anggota Jam'iyyah" hidden>
         <header class="kta-kepala">
           <img src="/icons/logo-96.png" alt="" width="40" height="40">
           <div>
@@ -56,11 +56,12 @@
           <div class="kta-qr">
             <div id="kta-qr" class="kta-qr-gambar" role="img" aria-label="QR KTA"></div>
             <p class="kta-pin" id="kta-pin" hidden>PIN <strong id="kta-pin-angka"></strong></p>
+            <p class="kta-versi" id="kta-versi"></p>
           </div>
           <dl class="kta-data" id="kta-data"></dl>
         </div>
         <footer class="kta-kaki">
-          <p class="kta-berlaku"><span>Masa Berlaku</span> : SEUMUR HIDUP <span class="kta-versi" id="kta-versi"></span></p>
+          <p class="kta-berlaku"><span>Masa Berlaku</span> : SEUMUR HIDUP</p>
           <div class="kta-ttd">
             <p id="kta-tgl"></p>
             <p>Ketua Thoriqoh</p>
@@ -94,8 +95,8 @@
   <p class="qr-besar-ket">Tunjukkan ke petugas untuk dipindai</p>
   <button type="button" class="btn btn-kedua" id="tutup-qr">Tutup</button>
 </div>
-<script src="/js/supa.js?v=55" defer></script>
-<script src="/js/qrcode.js?v=55" defer></script>
-<script src="/js/kta.js?v=55" defer></script>
+<script src="/js/supa.js?v=56" defer></script>
+<script src="/js/qrcode.js?v=56" defer></script>
+<script src="/js/kta.js?v=56" defer></script>
 </body>
 </html>
