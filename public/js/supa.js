@@ -141,6 +141,11 @@ function pasangMenuBawah(p) {
     <li><button type="button" id="menu-lain-keluar">Keluar</button></li></ul>`;
   document.body.append(nav, d);
   document.body.classList.add('ada-menu-bawah');
+  // Saat mengetik, keyboard HP bisa mengangkat menu bawah sehingga menutup isian/tombol Simpan: sembunyikan sementara.
+  const ketik = (el) => el && (el.tagName === 'TEXTAREA' || el.tagName === 'SELECT'
+    || (el.tagName === 'INPUT' && !/^(radio|checkbox|button|submit|reset|range|color|file)$/.test(el.type)));
+  document.addEventListener('focusin', (e) => document.body.classList.toggle('sedang-ketik', ketik(e.target)));
+  document.addEventListener('focusout', () => setTimeout(() => document.body.classList.toggle('sedang-ketik', ketik(document.activeElement)), 0));
   document.getElementById('menu-lain-buka').onclick = () => d.showModal();
   document.getElementById('menu-lain-tutup').onclick = () => d.close();
   document.getElementById('menu-lain-keluar').onclick = () => keluar();
