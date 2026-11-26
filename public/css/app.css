@@ -700,5 +700,21 @@ li:nth-child(-n+3)>.bt-baris .bt-no{background:var(--hijau-jamiyyah);color:#FFFF
 .pin-daftar li:last-child{border-bottom:0}
 .pin-daftar li .ket{display:block;margin:2px 0 0}
 .pin-daftar li.mati strong{color:var(--abu)}
-.pin-aksi{display:flex;gap:16px}
+.pin-aksi{display:flex;flex-wrap:wrap;gap:4px 16px}
+.pin-aksi .tautan{white-space:nowrap}
+.kec-isian{border:0;padding:0;margin:0 0 16px;min-width:0}
+.kec-isian[hidden]{display:none}
+.kec-isian legend{font-weight:600;margin:0 0 2px;padding:0}
+.kec-isian #kec-cari{margin:8px 0 0}
+.kec-daftar{margin:8px 0 0;max-height:280px;overflow-y:auto;border:1.5px solid #D5E3CF;border-radius:12px;padding:4px 12px;overscroll-behavior:contain}
+.kec-kab{margin:10px 0 2px;font-size:var(--fs-kecil);font-weight:600;color:var(--hijau-jamiyyah)}
+.kec-kab:first-child{margin-top:6px}
+.kec-daftar label{display:flex;align-items:center;gap:10px;min-height:44px;margin:0;font-weight:500;cursor:pointer;border-bottom:1px solid #F1F4EC}
+.kec-daftar label:last-child{border-bottom:0}
+.kec-daftar input{width:20px;height:20px;min-height:0;flex:none;accent-color:var(--hijau-jamiyyah)}
+.kec-daftar [hidden]{display:none}
+.kec-kosong{margin:12px 0;color:var(--abu)}
+.kec-jumlah{font-weight:500}
+.kec-batal{display:block;margin:12px auto 0;min-height:44px}
+.kec-batal[hidden]{display:none}
 .tautan-bahaya{color:#B3261E}

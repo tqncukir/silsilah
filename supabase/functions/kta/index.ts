@@ -2,8 +2,8 @@
 // Kunci tanda tangan KTA_KUNCI hanya dipasang admin pusat di rahasia Supabase (tidak di repo, tidak dipegang Claude).
 //   aksi "qr"   (login): kode QR untuk jamaah yang boleh dilihat akun ini (hak dijaga RLS).
 //   aksi "cek"  (publik): periksa kode dari QR KTA baru.
-//   aksi "lama" (publik): periksa KTA lama dengan Nomor Anggota + nama (dibatasi per IP).
-//   aksi "qrlama" (publik): periksa isi QR KTA lama (teks biasa "NOMOR  NAMA ALAMAT ..."), dibatasi per IP.
+//   aksi "lama" (publik): periksa KTA lama dengan Nomor Anggota + nama (Turnstile + dibatasi per IP).
+//   aksi "qrlama" (publik): periksa isi QR KTA lama (teks biasa "NOMOR  NAMA ALAMAT ..."), Turnstile + dibatasi per IP.
 import { createClient } from "npm:@supabase/supabase-js@2.49.4";
 
 const ASAL_BOLEH = ["https://silsilah.tqncukir.id", "https://silsilah-tqn.pages.dev", "http://localhost:8765"];
@@ -11,6 +11,20 @@ const URL_SB = Deno.env.get("SUPABASE_URL")!;
 const KUNCI_SERVIS = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const KUNCI_ANON = Deno.env.get("SUPABASE_ANON_KEY")!;
 const KUNCI_KTA = Deno.env.get("KTA_KUNCI") ?? "";
+const RAHASIA_TS = Deno.env.get("TURNSTILE_SECRET") ?? "";
+
+// Penangkal robot untuk cek KTA lama (token Turnstile sekali pakai dari halaman cek-kta).
+async function lolosRobot(token: unknown, ip: string) {
+  if (!RAHASIA_TS) return false;
+  const f = new FormData();
+  f.append("secret", RAHASIA_TS);
+  f.append("response", String(token ?? "").slice(0, 2048));
+  if (ip) f.append("remoteip", ip);
+  const r = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", body: f })
+    .then((x) => x.json()).catch(() => ({ success: false }));
+  return r.success === true;
+}
+const ROBOT = { pesan: "Pemeriksaan keamanan gagal. Muat ulang halaman lalu coba lagi." };
 
 function cors(asal: string | null) {
   const o = asal && ASAL_BOLEH.includes(asal) ? asal : ASAL_BOLEH[0];
@@ -63,7 +77,7 @@ Deno.serve(async (req) => {
   if (req.method !== "POST") return balas(h, 405, { pesan: "Metode tidak didukung." });
   if (KUNCI_KTA.length < 32) return balas(h, 503, { pesan: "Kunci KTA belum dipasang admin pusat." });
 
-  let b: { aksi?: string; jamaah_id?: number; kode?: string; nomor?: string; nama?: string; teks?: string };
+  let b: { aksi?: string; jamaah_id?: number; kode?: string; nomor?: string; nama?: string; teks?: string; turnstile?: string };
   try { b = await req.json(); } catch { return balas(h, 400, { pesan: "Data tidak terbaca." }); }
   const admin = createClient(URL_SB, KUNCI_SERVIS, { auth: { persistSession: false, autoRefreshToken: false } });
 
@@ -94,6 +108,7 @@ Deno.serve(async (req) => {
     const nama = rapikan(String(b.nama ?? "").slice(0, 120));
     if (!/^\d{10}$/.test(nomor) || nama.length < 3) return balas(h, 400, { pesan: "Isi Nomor Anggota (10 angka) dan nama sesuai kartu." });
     const ip = req.headers.get("cf-connecting-ip") ?? req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "";
+    if (!(await lolosRobot(b.turnstile, ip))) return balas(h, 403, ROBOT);
     const { data: boleh } = await admin.rpc("boleh_cek_kta", { p_ip: ip });
     if (!boleh) return balas(h, 429, { pesan: "Terlalu banyak pemeriksaan. Tunggu 15 menit lalu coba lagi." });
     const { data: info } = await admin.rpc("kta_info", { p_nomor: Number(nomor) });
@@ -106,6 +121,7 @@ Deno.serve(async (req) => {
     const m = /^(\d{10})\s+(\S[\s\S]*)$/.exec(String(b.teks ?? "").trim().slice(0, 400));
     if (!m) return balas(h, 400, { pesan: "QR ini bukan QR KTA TQN Cukir." });
     const ip = req.headers.get("cf-connecting-ip") ?? req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "";
+    if (!(await lolosRobot(b.turnstile, ip))) return balas(h, 403, ROBOT);
     const { data: boleh } = await admin.rpc("boleh_cek_kta", { p_ip: ip });
     if (!boleh) return balas(h, 429, { pesan: "Terlalu banyak pemeriksaan. Tunggu 15 menit lalu coba lagi." });
     const { data: info } = await admin.rpc("kta_info", { p_nomor: Number(m[1]) });

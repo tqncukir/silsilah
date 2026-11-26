@@ -1,6 +1,32 @@
 // Cek keaslian KTA (publik, tanpa login). QR KTA baru: kode di #hash. KTA lama: pindai QR teks biasa, atau ketik Nomor Anggota + nama.
 const $ = (id) => document.getElementById(id);
 
+// Pemeriksaan anti-robot (Turnstile) untuk cek KTA lama (ketik data atau QR lama). Token sekali pakai.
+let tsCek = null, tsToken = '', tsTunggu = [];
+const tsKabari = (t) => { tsToken = t; tsTunggu.splice(0).forEach((f) => f(t)); };
+window.tsSiap = () => {
+  tsCek = turnstile.render('#ts-cek', {
+    sitekey: TS_SITE, language: 'id', size: 'flexible', appearance: 'interaction-only',
+    callback: tsKabari,
+    'expired-callback': () => { tsToken = ''; },
+    'before-interactive-callback': () => { $('pesan').textContent = 'Ketuk kotak pemeriksaan keamanan di atas tombol Periksa, lalu tunggu sebentar.'; },
+  });
+};
+function tokenKeamanan(batas = 20000) {
+  if (tsToken) { const t = tsToken; tsToken = ''; return Promise.resolve(t); }
+  return new Promise((selesai) => {
+    const habis = setTimeout(() => { tsTunggu = tsTunggu.filter((f) => f !== ambil); selesai(''); }, batas);
+    const ambil = (t) => { clearTimeout(habis); tsToken = ''; selesai(t); };
+    tsTunggu.push(ambil);
+  });
+}
+const tsUlang = () => { if (tsCek !== null) turnstile.reset(tsCek); };
+async function tanyaAman(isi) {
+  const token = await tokenKeamanan();
+  if (!token) { const e = new Error('ts'); e.status = 403; e.pesan = 'Pemeriksaan keamanan belum berhasil. Periksa sinyal internet, lalu coba lagi.'; throw e; }
+  try { return await tanya({ ...isi, turnstile: token }); } finally { tsUlang(); }
+}
+
 async function tanya(isi) {
   const r = await fetch(`${SB_URL}/functions/v1/kta`, {
     method: 'POST', headers: { 'Content-Type': 'application/json', apikey: SB_KEY }, body: JSON.stringify(isi),
@@ -30,7 +56,7 @@ function tampil(h) {
   $('hasil').scrollIntoView({ block: 'nearest' });
 }
 
-const galat = (e) => e.status === 429 ? e.pesan : e.status === 503 ? 'Pemeriksaan KTA belum aktif. Coba lagi nanti.'
+const galat = (e) => (e.status === 429 || e.status === 403) && e.pesan ? e.pesan : e.status === 503 ? 'Pemeriksaan KTA belum aktif. Coba lagi nanti.'
   : e.status === 400 && e.pesan ? e.pesan : 'Belum bisa memeriksa. Periksa sinyal lalu coba lagi.';
 
 async function cekQr() {
@@ -48,7 +74,7 @@ $('form-lama').onsubmit = async (ev) => {
   if (!/^\d{10}$/.test(nomor)) { $('pesan').textContent = 'Nomor Anggota harus 10 angka.'; $('nomor').focus(); return; }
   if (nama.length < 3) { $('pesan').textContent = 'Isi nama sesuai kartu.'; $('nama').focus(); return; }
   const btn = $('periksa'); btn.disabled = true; btn.classList.add('sibuk'); $('pesan').textContent = '';
-  try { tampil(await tanya({ aksi: 'lama', nomor, nama })); }
+  try { tampil(await tanyaAman({ aksi: 'lama', nomor, nama })); }
   catch (e) { $('pesan').textContent = galat(e); }
   finally { btn.disabled = false; btn.classList.remove('sibuk'); }
 };
@@ -60,7 +86,7 @@ $('pindai').onclick = async () => {
   if (!k) { $('pesan').textContent = 'QR ini bukan QR KTA TQN Cukir.'; return; }
   if (k.jenis === 'baru') { if (location.hash.slice(1) === k.kode) cekQr(); else location.hash = k.kode; return; }
   $('ajak').textContent = 'Memeriksa QR KTA lama...';
-  try { tampil(await tanya({ aksi: 'qrlama', teks: k.teks })); $('ajak').textContent = 'Hasil pemeriksaan QR KTA lama:'; }
+  try { tampil(await tanyaAman({ aksi: 'qrlama', teks: k.teks })); $('ajak').textContent = 'Hasil pemeriksaan QR KTA lama:'; }
   catch (e) { $('ajak').textContent = ''; $('pesan').textContent = galat(e); }
 };
 window.addEventListener('hashchange', cekQr);
