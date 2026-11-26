@@ -90,7 +90,7 @@ Mulai: 2026-11-26 (Kang: "Mulai Tahap 2: modul 4 Kegiatan & Absensi").
 
 **Kalender sendiri** (permintaan Kang 2026-11-26: pemilih tanggal bawaan HP kecil dan berbahasa Inggris): `js/kalender.js` dipasang otomatis ke semua `input type=date` (Kegiatan, Ubah Data Jamaah, Pendaftaran). Isian jadi tombol besar bertulisan "Kamis, 26 November 2026"; ketuk → kalender besar bahasa Indonesia (kotak tanggal ≥44×48 px, Minggu merah, hari ini bergaris, pilihan Bulan + Tahun untuk tanggal lahir lama, panah, Hari ini, Kosongkan bila tidak wajib, Esc/Tutup/ketuk luar menutup, panah keyboard). Nilai tetap di input asli (YYYY-MM-DD), `value` yang diisi kode (mis. hasil baca KTP) ikut tampil, min/max dihormati (tanggal lahir tidak bisa masa depan), `aria-invalid` dan tanda `.otomatis` ikut ke tombol. Diuji 360/768/1280 bahasa browser Inggris: lulus. Versi cache v67.
 
-**Tahap 2 selesai dibangun (5 langkah).** Menunggu uji dan persetujuan Kang.
+**Tahap 2 selesai dan disetujui Kang 2026-11-26 ("Tahap 2 disetujui").** Tunggu Kang bilang "mulai" untuk tahap berikutnya (modul belum ditentukan Kang).
 
 ## Catatan
 - Alamat resmi: https://silsilah.tqncukir.id (domain tqncukir.id dibeli Kang di Domosquare 2026-11-26, nameserver dipindah ke Cloudflare akun jtccukir2022: damon/kira.ns.cloudflare.com; CNAME `silsilah` → silsilah-tqn.pages.dev, custom domain Pages; hostname Turnstile ditambah; ASAL_BOLEH fungsi `kta` v4 & `login-anggota` v7 ditambah). Alamat lama tetap jalan: https://silsilah-tqn.pages.dev. `tqncukir.id` dan `www.tqncukir.id` sengaja dibiarkan kosong (keputusan Kang 2026-11-26), nanti untuk website profil jamaah (agenda, berita, dll).
