@@ -929,3 +929,29 @@ a.app-keluar{display:inline-flex;align-items:center;text-decoration:none}
   .menu-lain a[aria-current="page"]{color:var(--hijau-jamiyyah);font-weight:700}
   .menu-lain #menu-lain-keluar{color:#A1241B}
 }
+
+/* ===== Footer bersama halaman web (permintaan Kang 2026-11-27) =====
+   Tampil di semua halaman; di HP, halaman aplikasi (menu bawah) tidak memakai footer. */
+.kaki{margin-top:24px;padding:0;text-align:left;background:var(--hijau-jamiyyah);color:#FFFFFF;border-top:3px solid var(--kuning-rosyid);font-size:var(--fs-kecil)}
+.kaki-isi{max-width:1120px;margin:0 auto;padding:24px 16px 12px;display:grid;gap:18px}
+.kaki-merek{display:flex;gap:12px;align-items:flex-start}
+.kaki-merek img{flex:none;border-radius:50%;background:#FFFFFF}
+.kaki-nama{margin:0;color:var(--kuning-rosyid);font-weight:800;letter-spacing:.12em;font-size:var(--fs-sub)}
+.kaki-ket{margin:2px 0 0;line-height:1.5;color:#E6F2EA}
+.kaki-tautan{display:flex;flex-wrap:wrap;gap:4px 8px}
+.kaki-tautan a{display:inline-flex;align-items:center;min-height:44px;padding:0 6px;color:#FFFFFF;font-weight:600;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(255,255,255,.45)}
+.kaki-tautan a:hover{text-decoration-color:var(--kuning-rosyid)}
+.kaki-tautan a:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:2px;border-radius:6px}
+.kaki-alamat{font-style:normal;line-height:1.6;color:#E6F2EA}
+.kaki-hak{margin:0;padding:10px 16px max(14px,env(safe-area-inset-bottom));text-align:center;border-top:1px solid rgba(255,255,255,.15);color:#CFE6D6}
+@media (min-width:768px){
+  .kaki-isi{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) minmax(0,1.3fr);gap:24px;padding-top:28px}
+  .kaki-tautan{flex-direction:column;gap:0}
+  .kaki-tautan a{min-height:36px}
+}
+@media (min-width:1024px){.kaki-isi{max-width:none;padding-left:32px;padding-right:32px}}
+@media (max-width:767px){.ada-menu-bawah .kaki{display:none}}
+@media print{.kaki{display:none}}
+/* Footer selalu di dasar layar walau isi halaman pendek */
+body:not(.hal-masuk):not(.hal-poster){min-height:100vh;display:flex;flex-direction:column}
+body:not(.hal-masuk):not(.hal-poster)>main{flex:1 0 auto;width:100%}
