@@ -51,6 +51,10 @@ Nomor Anggota: 1165100001 dst. KTA lama (QR teks biasa) tetap berlaku; KTA baru 
 | Putih | #FFFFFF | latar halaman |
 | Hitam | #1A1A1A | teks |
 
+**Warna pendukung "Arah A: Hijau mint"** (dipilih Kang 2026-11-27, di `tokens.css`): `--latar` #F3FAF5 (latar halaman), `--mint` #DDF4E5 (latar ikon/sorotan), `--garis` #D6ECDD (garis kartu), `--garis-lembut` #E8F3EB, `--garis-kuat` #B9DEC5, `--garis-isian` #8DB89B, `--latar-sorot` #EAF6EE, `--abu` #46554B, `--bayang`. Jangan menulis warna lepas; pakai token.
+
+**Irama tampilan (Kang 2026-11-27):** satu resep kartu (putih + garis `--garis` + `--bayang`, sudut 16px); semua halaman memakai kepala `.app-atas` yang sama; status biasa ditulis sebagai teks (`stat-biasa`), pil berwarna hanya untuk yang perlu perhatian; di HP (<768px) menu bawah 4 tombol (Beranda, Jamaah/KTA, Kegiatan/Agenda, Lainnya) dibuat otomatis oleh `pasangMenuBawah()` di `supa.js`; di laptop/komputer (≥1024px) tombol selebar isinya (tidak memanjang seperti di HP), daftar/tabel/Dashboard penuh layar, rincian & formulir (`.app-sempit`) maks ±960px di tengah.
+
 ## Teknologi (jangan diganti tanpa izin)
 - Frontend: HTML + CSS + JavaScript ringan, PWA (`manifest.webmanifest`, `sw.js`). Tanpa build step. Folder `public/`.
 - Hosting: Cloudflare Pages (gratis), terhubung ke repo ini: setiap push ke `main` otomatis tayang. Output directory: `public`, tanpa build command.

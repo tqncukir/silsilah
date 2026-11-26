@@ -8,7 +8,16 @@
   --hijau-pupus:#EEF6DC;    /* latar kartu info */
   --putih:#FFFFFF;
   --hitam:#1A1A1A;
-  --abu:#4A4A4A;
+  --abu:#46554B;            /* teks keterangan (abu kehijauan, kontras ≥7:1) */
+  /* Warna pendukung "Arah A: Hijau mint" (Kang 2026-11-27): segar, tetap di atas warna resmi KTA */
+  --latar:#F3FAF5;          /* latar halaman */
+  --latar-sorot:#EAF6EE;    /* baris disorot / hover */
+  --mint:#DDF4E5;           /* latar ikon & sorotan lembut */
+  --garis:#D6ECDD;          /* garis kartu */
+  --garis-lembut:#E8F3EB;   /* garis pemisah tipis */
+  --garis-kuat:#B9DEC5;     /* garis kartu saat disentuh */
+  --garis-isian:#8DB89B;    /* garis kotak isian */
+  --bayang:0 1px 3px rgba(11,72,34,.08);
   /* warna kelompok modul: hanya ikon & label kecil */
   --grup-pondasi:#1E9E3A; --grup-ruhani:#1E6FB8; --grup-kepedulian:#C99A00; --grup-amanah:#B3261E;
   --radius:14px; --gap:16px;

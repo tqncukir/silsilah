@@ -101,7 +101,50 @@ async function profilSaya() {
   nav('nav-dasbor', p && PERAN_LIHAT_JAMAAH.includes(p.peran));
   nav('nav-kegiatan', p && PERAN_LIHAT_KEGIATAN.includes(p.peran));
   nav('nav-ahli', p && PERAN_LIHAT_JAMAAH.includes(p.peran));
+  if (p) pasangMenuBawah(p);
   return p || null;
+}
+
+// ===== Menu bawah di HP (temuan f1, Kang 2026-11-27): 4 tombol besar, sisanya di "Lainnya" =====
+const IKON_MENU = {
+  beranda: '<path d="M3 11l9-7 9 7M5 10v10h5v-6h4v6h5V10"/>',
+  jamaah: '<circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M16 5.5a3 3 0 010 5.6M17.5 14.3c1.7.6 2.7 2.2 3 4.7"/>',
+  kegiatan: '<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+  kta: '<rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="8.5" cy="11" r="2"/><path d="M5.5 16c.6-1.5 1.6-2.2 3-2.2s2.4.7 3 2.2M14 10h4M14 13.5h4"/>',
+  lainnya: '<circle cx="5.5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18.5" cy="12" r="1.6"/>',
+};
+function pasangMenuBawah(p) {
+  if (!document.body.classList.contains('hal-app') || document.getElementById('menu-bawah')) return;
+  const anggota = p.peran === 'anggota', jalur = location.pathname;
+  const utama = anggota
+    ? [['beranda', 'Beranda', '/beranda.html'], ['kta', 'KTA', '/kta.html'], ['kegiatan', 'Agenda', '/agenda.html']]
+    : [['beranda', 'Beranda', '/beranda.html'],
+      ...(PERAN_LIHAT_JAMAAH.includes(p.peran) ? [['jamaah', 'Jamaah', '/jamaah.html']] : []),
+      ...(PERAN_LIHAT_KEGIATAN.includes(p.peran) ? [['kegiatan', 'Kegiatan', '/kegiatan.html']] : [])];
+  const lain = anggota
+    ? [['Haul', '/haul.html'], ['Ahli Kubur', '/ahli-kubur.html'], ['Cara pasang di HP', '/pasang.html']]
+    : [[ 'Dashboard Pengurus', '/dashboard.html', PERAN_LIHAT_JAMAAH ], ['Pendaftaran', '/pendaftaran.html', PERAN_UBAH_JAMAAH ],
+      ['Absensi', '/absensi.html', PERAN_ABSEN], ['Ahli Kubur', '/ahli-kubur.html', PERAN_LIHAT_JAMAAH], ['Haul', '/haul.html', PERAN_LIHAT_JAMAAH],
+      ['Atur PIN Pengurus', '/pengurus-pin.html', ['admin_pusat']], ['Agenda umum', '/agenda.html', null], ['Cara pasang di HP', '/pasang.html', null]]
+      .filter(([, , boleh]) => !boleh || boleh.includes(p.peran));
+  const aktif = (u) => jalur === u || (u === '/jamaah.html' && jalur.startsWith('/jamaah')) || (u === '/kegiatan.html' && /^\/(kegiatan|absensi)/.test(jalur));
+  const diLain = !utama.some(([, , u]) => aktif(u));
+  const ikon = (k) => `<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${IKON_MENU[k]}</svg>`;
+  const nav = document.createElement('nav');
+  nav.id = 'menu-bawah'; nav.className = 'menu-bawah'; nav.setAttribute('aria-label', 'Menu');
+  nav.innerHTML = utama.map(([k, t, u]) => `<a href="${u}"${aktif(u) ? ' aria-current="page"' : ''}>${ikon(k)}<span>${t}</span></a>`).join('')
+    + `<button type="button" id="menu-lain-buka" aria-haspopup="dialog"${diLain ? ' aria-current="page"' : ''}>${ikon('lainnya')}<span>Lainnya</span></button>`;
+  const d = document.createElement('dialog');
+  d.className = 'menu-lain'; d.setAttribute('aria-label', 'Menu lainnya');
+  d.innerHTML = `<div class="menu-lain-kepala"><p>Menu lainnya</p><button type="button" class="btn btn-kedua btn-pas" id="menu-lain-tutup">Tutup</button></div>
+    <ul>${lain.map(([t, u]) => `<li><a href="${u}"${jalur === u ? ' aria-current="page"' : ''}>${t}</a></li>`).join('')}
+    <li><button type="button" id="menu-lain-keluar">Keluar</button></li></ul>`;
+  document.body.append(nav, d);
+  document.body.classList.add('ada-menu-bawah');
+  document.getElementById('menu-lain-buka').onclick = () => d.showModal();
+  document.getElementById('menu-lain-tutup').onclick = () => d.close();
+  document.getElementById('menu-lain-keluar').onclick = () => keluar();
+  d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
 }
 
 // ===== Ahli Kubur (modul 5) =====
@@ -146,7 +189,7 @@ function statusKegiatan(k) {
   if (k.dibatalkan) return ['Dibatalkan', 'stat-wafat'];
   const now = Date.now(), awal = new Date(k.mulai).getTime(), akhir = k.selesai ? new Date(k.selesai).getTime() : awal + 3 * 3600e3;
   if (now > akhir) return ['Selesai', ''];
-  return now >= awal ? ['Berlangsung', 'stat-aktif'] : ['Akan datang', 'stat-aktif'];
+  return now >= awal ? ['Berlangsung', 'stat-aktif'] : ['Akan datang', 'stat-biasa'];
 }
 
 const NAMA_PERAN = {

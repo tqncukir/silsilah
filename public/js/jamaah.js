@@ -84,7 +84,7 @@ async function muat() {
         <td class="kol-luas">${hurufAman(j.pekerjaan || '–')}</td>
         <td class="kol-luas">${hurufAman(j.mursyid?.nama || '–')}</td>
         <td class="kol-luas angka">${j.tanggal_daftar ? new Date(j.tanggal_daftar + 'T00:00:00').toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '–'}</td>
-        <td data-l="Status"><span class="stat stat-${kelas}">${teks}</span></td>
+        <td data-l="Status"><span class="stat stat-${kelas === 'aktif' ? 'biasa' : kelas}">${teks}</span></td>
       </tr>`;
     }).join('') : `<tr><td colspan="13" class="tabel-kosong">Tidak ada jamaah yang cocok.${disaring ? ' <button type="button" class="tautan" id="hapus-saring">Hapus saringan</button>' : ''}</td></tr>`;
     $('hapus-saring')?.addEventListener('click', hapusSaring);

@@ -271,7 +271,7 @@ async function muat() {
     if (ini !== nomorMuat) return;
     data = hasil;
     isiPeriode(data.rentang);
-    if (!data.total) { keadaan('Belum ada data untuk pilihan ini.', 'Reset filter', reset); return; }
+    if (!data.total) { keadaan('Belum ada data untuk pilihan ini.', 'Hapus semua saringan', reset); return; }
     keadaan('');
     $('k-total').textContent = angka(data.total);
     $('k-kab').textContent = angka(data.kabupaten);
