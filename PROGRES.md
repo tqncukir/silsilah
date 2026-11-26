@@ -115,7 +115,7 @@ Mulai: 2026-11-26 (Kang: "Mulai Tahap 3: modul 5 Ahli Kubur").
 
 **Langkah 4, Portal Anggota** (2026-11-26), tanpa perubahan database: Beranda anggota mendapat ubin **Haul** (keterangan haul terdekat dari hari ini sampai akhir bulan depan, mis. "Terdekat: …, 16 Jumadilakhir · 2 haul sampai bulan depan") dan **Ahli Kubur**. `ahli-kubur.html` kini bisa dibuka anggota sebagai baca saja (tanpa Tambah, baris tidak membuka rincian, tanpa Nomor Anggota dari server); `haul.html` sudah bisa dibuka anggota sejak Langkah 3 (tanpa tautan rincian). Ubin Haul pengurus juga menampilkan haul terdekat. Berlaku juga untuk sesi KTA lama. Uji tiruan 360/768/1280 (anggota, anggota KTA lama, admin) + uji Ahli Kubur koordinator ulang: lulus. Versi cache v70.
 
-**Tahap 3 selesai dibangun (4 langkah).** Menunggu uji dan persetujuan Kang.
+**Tahap 3 selesai dan disetujui Kang 2026-11-26 ("Tahap 3 disetujui").** Tunggu Kang bilang "mulai" untuk tahap berikutnya.
 
 ## Catatan
 - Alamat resmi: https://silsilah.tqncukir.id (domain tqncukir.id dibeli Kang di Domosquare 2026-11-26, nameserver dipindah ke Cloudflare akun jtccukir2022: damon/kira.ns.cloudflare.com; CNAME `silsilah` → silsilah-tqn.pages.dev, custom domain Pages; hostname Turnstile ditambah; ASAL_BOLEH fungsi `kta` v4 & `login-anggota` v7 ditambah). Alamat lama tetap jalan: https://silsilah-tqn.pages.dev. `tqncukir.id` dan `www.tqncukir.id` sengaja dibiarkan kosong (keputusan Kang 2026-11-26), nanti untuk website profil jamaah (agenda, berita, dll).
