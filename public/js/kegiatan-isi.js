@@ -7,7 +7,20 @@ const pesan = (t) => { $('pesan').textContent = t; };
 const pesanForm = (t) => { $('pesan-form').textContent = t; $('pesan-form').className = 'pesan'; };
 const PILIH = 'id,jenis,nama,mulai,selesai,tempat,kecamatan_id,publik,dibatalkan,keterangan,kecamatan(nama,kabupaten(nama))';
 const tglIsian = (iso) => new Date(iso).toLocaleDateString('sv-SE', { timeZone: ZONA });
-const jamIsian = (iso) => new Date(iso).toLocaleTimeString('sv-SE', { timeZone: ZONA, hour: '2-digit', minute: '2-digit' });
+const jamIsian = (iso) => jamWib(iso).replace('.', ':'); // "19:30" untuk isian
+
+// Isian jam 24 jam sendiri (bukan input time bawaan HP, yang bisa tampil AM/PM). Menit kelipatan 5.
+const dua = (n) => String(n).padStart(2, '0');
+function isiPilihJam(idJam, idMenit, boleKosong) {
+  $(idJam).innerHTML = (boleKosong ? '<option value="">--</option>' : '<option value="">Jam</option>') + Array.from({ length: 24 }, (_, i) => `<option>${dua(i)}</option>`).join('');
+  $(idMenit).innerHTML = Array.from({ length: 12 }, (_, i) => `<option>${dua(i * 5)}</option>`).join('');
+}
+function aturJam(idJam, idMenit, hhmm) {
+  const [h, m] = hhmm ? hhmm.split(':') : ['', '00'];
+  if (m && ![...$(idMenit).options].some((o) => o.value === m)) $(idMenit).add(new Option(m, m)); // data lama di luar kelipatan 5
+  $(idJam).value = h; $(idMenit).value = m || '00';
+}
+const bacaJam = (idJam, idMenit) => $(idJam).value ? `${$(idJam).value}:${$(idMenit).value}` : '';
 const bolehUbah = (k) => PERAN_KELOLA_KEGIATAN.includes(peran) && (!kecBoleh || (k.kecamatan_id && kecBoleh.has(k.kecamatan_id)));
 
 function tampilLihat() {
@@ -20,7 +33,7 @@ function tampilLihat() {
   const beda = k.selesai && tglWib(k.selesai) !== tglWib(k.mulai);
   $('l-rincian').innerHTML = [
     ['Tanggal', tglWib(k.mulai) + (beda ? ` s.d. ${tglWib(k.selesai)}` : '')],
-    ['Jam', `${jamWib(k.mulai)}${k.selesai ? ` – ${jamWib(k.selesai)}` : ''} WIB`],
+    ['Jam', rentangJam(k.mulai, k.selesai)],
     ['Tempat', k.tempat],
     ['Wilayah', k.kecamatan ? `Kec. ${k.kecamatan.nama}, ${k.kecamatan.kabupaten?.nama || ''}` : 'Pusat Cukir'],
     ['Agenda umum', k.publik ? 'Tampil' : 'Tidak tampil (pengurus saja)'],
@@ -42,8 +55,8 @@ function tampilForm() {
   $('jenis').value = k?.jenis || '';
   $('nama').value = k?.nama || '';
   $('tanggal').value = k ? tglIsian(k.mulai) : hariIniWib();
-  $('jam-mulai').value = k ? jamIsian(k.mulai) : '';
-  $('jam-selesai').value = k?.selesai ? jamIsian(k.selesai) : '';
+  aturJam('jam-mulai', 'menit-mulai', k ? jamIsian(k.mulai) : '');
+  aturJam('jam-selesai', 'menit-selesai', k?.selesai ? jamIsian(k.selesai) : '');
   $('tempat').value = k?.tempat || '';
   $('wilayah').value = k ? (k.kecamatan_id ? String(k.kecamatan_id) : 'pusat') : ($('wilayah').options[0]?.value || '');
   document.querySelector(`[name=publik][value=${!k || k.publik ? 'ya' : 'tidak'}]`).checked = true;
@@ -68,12 +81,12 @@ $('form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const nama = $('nama').value.trim().replace(/\s+/g, ' ');
   const tempat = $('tempat').value.trim().replace(/\s+/g, ' ');
-  const tgl = $('tanggal').value, jm = $('jam-mulai').value, js = $('jam-selesai').value;
+  const tgl = $('tanggal').value, jm = bacaJam('jam-mulai', 'menit-mulai'), js = bacaJam('jam-selesai', 'menit-selesai');
   if (!$('jenis').value) return salah('jenis', 'Jenis kegiatan belum dipilih.');
   if (nama.length < 3) return salah('nama', 'Nama kegiatan belum diisi (minimal 3 huruf).');
   if (!tgl) return salah('tanggal', 'Tanggal belum diisi.');
-  if (!jm) return salah('jam-mulai', 'Jam mulai belum diisi.');
-  if (js && js <= jm) return salah('jam-selesai', 'Jam selesai harus sesudah jam mulai.');
+  if (!jm) return salah('jam-mulai', 'Jam mulai belum dipilih.');
+  if (js && js <= jm) return salah('jam-selesai', `Jam selesai harus sesudah jam mulai (${jm.replace(':', '.')} WIB).`);
   if (tempat.length < 3) return salah('tempat', 'Tempat belum diisi.');
   if (!$('wilayah').value) return salah('wilayah', 'Wilayah belum dipilih.');
   const wil = $('wilayah').value;
@@ -150,7 +163,7 @@ async function muatHadir() {
         <td data-l="Desa">${hurufAman(b.desa)}<span class="hp-saja"> · Kec. ${hurufAman(b.kecamatan)}</span></td>
         <td data-l="Kecamatan">${hurufAman(b.kecamatan)}</td>
         <td class="kol-luas">${hurufAman(b.kabupaten)}</td>
-        <td data-l="Status" class="angka">${jamWib(b.waktu)}</td>
+        <td data-l="Status" class="angka">${jamWib(b.waktu)} WIB</td>
         <td class="kol-luas">${CARA_TEKS[b.cara]}</td></tr>`).join('')
       : `<tr><td colspan="8" class="tabel-kosong">${$('h-cari').value.trim() ? 'Tidak ada yang cocok.' : 'Belum ada yang hadir.'}</td></tr>`;
     $('h-halaman').hidden = hTotal <= H_PER;
@@ -217,6 +230,7 @@ $('h-unduh').onclick = async () => {
     if (id) tugas.push(dbGet(`kegiatan?select=${PILIH}&id=eq.${encodeURIComponent(id)}`));
     const [kec, ...lain] = await Promise.all(tugas);
     if (peran === 'koordinator_wilayah') kecBoleh = new Set(lain.shift().map((w) => w.kecamatan_id));
+    isiPilihJam('jam-mulai', 'menit-mulai', false); isiPilihJam('jam-selesai', 'menit-selesai', true);
     $('jenis').innerHTML += Object.entries(JENIS_KEGIATAN).map(([v, t]) => `<option value="${v}">${t}</option>`).join('');
     // Wilayah: admin pusat & ketua = Pusat + semua kecamatan (per Kab/Kota); koordinator = kecamatannya saja.
     const pilihan = kec.filter((k) => !kecBoleh || kecBoleh.has(k.id));

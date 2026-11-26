@@ -9,7 +9,7 @@ async function muatRiwayat(terbatas) {
     const { baris, total } = await dbHalaman('kehadiran?select=waktu,cara,kegiatan(nama,jenis,tempat)&order=waktu.desc', 0, 9);
     $('riwayat-ket').textContent = total ? `${total.toLocaleString('id-ID')} kali hadir tercatat${total > 10 ? ' · 10 terakhir' : ''}.` : 'Belum ada kehadiran tercatat. Tunjukkan KTA ke petugas saat kegiatan.';
     $('riwayat-isi').innerHTML = baris.map((h) => `<li><strong>${hurufAman(h.kegiatan?.nama || 'Kegiatan pengurus')}</strong>
-      <span class="ket">${tglWib(h.waktu)} · jam ${jamWib(h.waktu)}${h.kegiatan ? ` · ${hurufAman(h.kegiatan.tempat)}` : ''}</span></li>`).join('');
+      <span class="ket">${tglWib(h.waktu)} · jam ${jamWib(h.waktu)} WIB${h.kegiatan ? ` · ${hurufAman(h.kegiatan.tempat)}` : ''}</span></li>`).join('');
   } catch { $('riwayat-ket').textContent = 'Riwayat hadir belum bisa dimuat. Coba muat ulang.'; }
 }
 function ketAgenda() {

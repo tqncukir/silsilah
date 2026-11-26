@@ -18,7 +18,7 @@ async function gambarAgenda(ol, batas, kosong = 'Belum ada agenda kegiatan.') {
         <span class="agenda-isi">
           <span class="agenda-jenis">${hurufAman(JENIS_KEGIATAN[k.jenis] || k.jenis)}</span>
           <strong>${hurufAman(k.nama)}</strong>
-          <span class="ket">${tglWib(k.mulai)} · ${jamWib(k.mulai)}${k.selesai ? `–${jamWib(k.selesai)}` : ''} WIB</span>
+          <span class="ket">${tglWib(k.mulai)} · ${rentangJam(k.mulai, k.selesai)}</span>
           <span class="ket">${hurufAman(k.tempat)} · ${hurufAman(k.wilayah)}</span>
         </span></li>`).join('') : `<li class="ket">${kosong}</li>`;
     return daftar.length;

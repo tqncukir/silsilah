@@ -10,8 +10,7 @@ let tunda, hitungHadir = false;
 const pesan = (t) => { $('pesan').textContent = t; };
 const wilayahTeks = (k) => k.kecamatan ? `Kec. ${k.kecamatan.nama}, ${k.kecamatan.kabupaten?.nama || ''}` : 'Pusat Cukir';
 function jamTeks(k) {
-  const s = k.selesai && tglWib(k.selesai) === tglWib(k.mulai) ? `–${jamWib(k.selesai)}` : '';
-  return `${jamWib(k.mulai)}${s} WIB`;
+  return rentangJam(k.mulai, k.selesai);
 }
 
 function simpanUrl() {

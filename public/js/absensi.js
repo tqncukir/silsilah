@@ -15,7 +15,7 @@ function tampilDaftar() {
   $('d-daftar').innerHTML = catatan.map((c, i) => `<li>
       <span class="absen-urut">${(catatan.length - i).toLocaleString('id-ID')}.</span>
       <span class="absen-isi"><strong>${hurufAman(c.nama)}</strong>
-        <span class="ket">${hurufAman(c.desa)} · ${jamWib(c.waktu)} · ${CARA[c.cara] || ''}</span></span>
+        <span class="ket">${hurufAman(c.desa)} · ${jamWib(c.waktu)} WIB · ${CARA[c.cara] || ''}</span></span>
       <button type="button" class="tautan" data-batal="${c.jamaah_id}" aria-label="Batalkan hadir ${hurufAman(c.nama)}">Batal</button>
     </li>`).join('');
 }
@@ -25,7 +25,7 @@ function artikan(h) {
   const siapa = h.nama ? `${h.nama} · ${h.desa}` : '';
   switch (h.hasil) {
     case 'hadir': return { kelas: 'ok', teks: `Hadir: ${siapa}` };
-    case 'sudah': return { kelas: 'ingat', teks: `Sudah tercatat jam ${jamWib(h.waktu)}: ${siapa}` };
+    case 'sudah': return { kelas: 'ingat', teks: `Sudah tercatat jam ${jamWib(h.waktu)} WIB: ${siapa}` };
     case 'tidak_dikenal': return { kelas: 'galat', teks: `Nomor ${h.nomor} tidak terdaftar. Periksa nomornya.` };
     case 'tidak_aktif': return { kelas: 'galat', teks: `${siapa} berstatus tidak aktif. Tidak dicatat; hubungi pengurus.` };
     case 'wafat': return { kelas: 'galat', teks: `${siapa} tercatat wafat. Tidak dicatat.` };
@@ -124,9 +124,9 @@ function aturIngat() {
 async function tampilPilih() {
   const awal = isoWib(hariIniWib(), '00:00');
   const besok = new Date(new Date(awal).getTime() + 24 * 3600e3).toISOString();
-  const daftar = await dbGet(`kegiatan?select=id,nama,mulai,tempat&dibatalkan=is.false&mulai=gte.${encodeURIComponent(awal)}&mulai=lt.${encodeURIComponent(besok)}&order=mulai.asc`);
+  const daftar = await dbGet(`kegiatan?select=id,nama,mulai,selesai,tempat&dibatalkan=is.false&mulai=gte.${encodeURIComponent(awal)}&mulai=lt.${encodeURIComponent(besok)}&order=mulai.asc`);
   $('p-daftar').innerHTML = daftar.length
-    ? daftar.map((k) => `<li><a class="menu-ubin" href="/absensi.html?kegiatan=${k.id}"><span><strong>${hurufAman(k.nama)}</strong><span class="menu-ket">${jamWib(k.mulai)} WIB · ${hurufAman(k.tempat)}</span></span></a></li>`).join('')
+    ? daftar.map((k) => `<li><a class="menu-ubin" href="/absensi.html?kegiatan=${k.id}"><span><strong>${hurufAman(k.nama)}</strong><span class="menu-ket">${rentangJam(k.mulai, k.selesai)} · ${hurufAman(k.tempat)}</span></span></a></li>`).join('')
     : '<li class="ket">Tidak ada kegiatan hari ini. <a href="/kegiatan.html">Lihat semua kegiatan</a>.</li>';
   $('pilih').hidden = false;
 }
@@ -145,7 +145,7 @@ $('keluar').onclick = keluar;
     $('kembali').href = `/kegiatan-isi.html?id=${keg.id}`; $('kembali-teks').textContent = 'Rincian kegiatan';
     $('a-jenis').textContent = `Absensi · ${JENIS_KEGIATAN[keg.jenis] || keg.jenis}`;
     $('a-nama').textContent = keg.nama;
-    $('a-waktu').textContent = `${tglWib(keg.mulai)} · ${jamWib(keg.mulai)} WIB · ${keg.tempat}`;
+    $('a-waktu').textContent = `${tglWib(keg.mulai)} · ${rentangJam(keg.mulai, keg.selesai)} · ${keg.tempat}`;
     aturIngat();
     muatCatatan(); tampilDaftar();
     $('absen').hidden = false;

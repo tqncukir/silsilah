@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=65">
-<link rel="stylesheet" href="/css/app.css?v=65">
+<link rel="stylesheet" href="/css/tokens.css?v=66">
+<link rel="stylesheet" href="/css/app.css?v=66">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -92,7 +92,7 @@
 
   <form id="form" class="panel form" hidden novalidate aria-labelledby="f-judul">
     <h1 id="f-judul">Tambah kegiatan</h1>
-    <p class="judul-sub" id="f-sub">Semua jam dalam WIB.</p>
+    <p class="judul-sub" id="f-sub">Jam memakai 24 jam WIB, misalnya 05.00 WIB pagi atau 19.30 WIB malam.</p>
     <div class="form-kisi">
       <h3 class="bagian-judul">Kegiatan</h3>
       <div class="isian">
@@ -108,15 +108,25 @@
         <label for="tanggal">Tanggal <span class="wajib">wajib</span></label>
         <input id="tanggal" type="date" required>
       </div>
-      <div class="isian k3 d2">
-        <label for="jam-mulai">Jam mulai <span class="wajib">wajib</span></label>
-        <input id="jam-mulai" type="time" required>
-      </div>
-      <div class="isian k3 d2">
-        <label for="jam-selesai">Jam selesai</label>
-        <input id="jam-selesai" type="time" aria-describedby="k-selesai">
-        <p class="ket" id="k-selesai">Boleh dikosongkan.</p>
-      </div>
+      <fieldset class="isian d2 jam-isian">
+        <legend>Jam mulai <span class="wajib">wajib</span></legend>
+        <div class="jam-pilih">
+          <label for="jam-mulai" class="sr-only">Jam mulai</label><select id="jam-mulai" required></select>
+          <span aria-hidden="true">.</span>
+          <label for="menit-mulai" class="sr-only">Menit mulai</label><select id="menit-mulai"></select>
+          <span>WIB</span>
+        </div>
+      </fieldset>
+      <fieldset class="isian d2 jam-isian" aria-describedby="k-selesai">
+        <legend>Jam selesai</legend>
+        <div class="jam-pilih">
+          <label for="jam-selesai" class="sr-only">Jam selesai</label><select id="jam-selesai"></select>
+          <span aria-hidden="true">.</span>
+          <label for="menit-selesai" class="sr-only">Menit selesai</label><select id="menit-selesai"></select>
+          <span>WIB</span>
+        </div>
+        <p class="ket" id="k-selesai">Boleh dikosongkan (pilih --).</p>
+      </fieldset>
       <div class="isian lebar">
         <label for="tempat">Tempat <span class="wajib">wajib</span></label>
         <input id="tempat" maxlength="160" required autocapitalize="words" placeholder="Masjid Pondok Cukir">
@@ -145,7 +155,7 @@
     </div>
   </form>
 </main>
-<script src="/js/supa.js?v=65" defer></script>
-<script src="/js/kegiatan-isi.js?v=65" defer></script>
+<script src="/js/supa.js?v=66" defer></script>
+<script src="/js/kegiatan-isi.js?v=66" defer></script>
 </body>
 </html>

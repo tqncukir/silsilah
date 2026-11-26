@@ -111,7 +111,10 @@ const JENIS_KEGIATAN = { khususiyah: 'Khususiyah/Tawajjuhan', manaqiban: 'Manaqi
 // Waktu kegiatan selalu WIB (Jombang), apa pun zona waktu HP.
 const ZONA = 'Asia/Jakarta';
 const tglWib = (iso, opsi = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) => new Date(iso).toLocaleDateString('id-ID', { timeZone: ZONA, ...opsi });
-const jamWib = (iso) => new Date(iso).toLocaleTimeString('id-ID', { timeZone: ZONA, hour: '2-digit', minute: '2-digit' }).replace(':', '.');
+// Jam selalu 24 jam (tanpa AM/PM), titik sebagai pemisah: 05.00, 19.30. Banyak jamaah desa tidak terbiasa AM/PM.
+const jamWib = (iso) => new Date(iso).toLocaleTimeString('en-GB', { timeZone: ZONA, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).replace(':', '.');
+// "05.00 WIB" atau "05.00 WIB sampai 15.00 WIB"
+const rentangJam = (mulai, selesai) => `${jamWib(mulai)} WIB${selesai ? ` sampai ${jamWib(selesai)} WIB` : ''}`;
 const isoWib = (tgl, jam) => `${tgl}T${jam}:00+07:00`;
 const hariIniWib = () => new Date().toLocaleDateString('sv-SE', { timeZone: ZONA });
 function statusKegiatan(k) {
