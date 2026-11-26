@@ -933,17 +933,9 @@ a.app-keluar{display:inline-flex;align-items:center;text-decoration:none}
 /* ===== Footer bersama halaman web (permintaan Kang 2026-11-27) =====
    Tampil di semua halaman; di HP, halaman aplikasi (menu bawah) tidak memakai footer. */
 .kaki{margin-top:24px;padding:0;text-align:left;background:var(--hijau-jamiyyah);color:#FFFFFF;border-top:3px solid var(--kuning-rosyid);font-size:var(--fs-kecil)}
-.kaki-isi{max-width:1120px;margin:0 auto;padding:24px 16px 12px;display:grid;gap:18px}
-.kaki-merek{display:flex;gap:12px;align-items:flex-start}
-.kaki-merek img{flex:none;border-radius:50%;background:#FFFFFF}
-.kaki-nama{margin:0;color:var(--kuning-rosyid);font-weight:800;letter-spacing:.12em;font-size:var(--fs-sub)}
-.kaki-ket{margin:2px 0 0;line-height:1.5;color:#E6F2EA}
-.kaki-alamat{font-style:normal;line-height:1.6;color:#E6F2EA}
+.kaki-isi{max-width:1120px;margin:0 auto;padding:20px 16px 12px}
+.kaki-alamat{font-style:normal;text-align:center;line-height:1.6;color:#E6F2EA}
 .kaki-hak{margin:0;padding:10px 16px max(14px,env(safe-area-inset-bottom));text-align:center;border-top:1px solid rgba(255,255,255,.15);color:#CFE6D6}
-@media (min-width:768px){
-  .kaki-isi{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);align-items:start;gap:24px;padding-top:28px}
-}
-@media (min-width:1024px){.kaki-isi{max-width:none;padding-left:32px;padding-right:32px}}
 @media (max-width:767px){.ada-menu-bawah .kaki{display:none}}
 @media print{.kaki{display:none}}
 /* Footer selalu di dasar layar walau isi halaman pendek */
