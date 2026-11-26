@@ -938,16 +938,10 @@ a.app-keluar{display:inline-flex;align-items:center;text-decoration:none}
 .kaki-merek img{flex:none;border-radius:50%;background:#FFFFFF}
 .kaki-nama{margin:0;color:var(--kuning-rosyid);font-weight:800;letter-spacing:.12em;font-size:var(--fs-sub)}
 .kaki-ket{margin:2px 0 0;line-height:1.5;color:#E6F2EA}
-.kaki-tautan{display:flex;flex-wrap:wrap;gap:4px 8px}
-.kaki-tautan a{display:inline-flex;align-items:center;min-height:44px;padding:0 6px;color:#FFFFFF;font-weight:600;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(255,255,255,.45)}
-.kaki-tautan a:hover{text-decoration-color:var(--kuning-rosyid)}
-.kaki-tautan a:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:2px;border-radius:6px}
 .kaki-alamat{font-style:normal;line-height:1.6;color:#E6F2EA}
 .kaki-hak{margin:0;padding:10px 16px max(14px,env(safe-area-inset-bottom));text-align:center;border-top:1px solid rgba(255,255,255,.15);color:#CFE6D6}
 @media (min-width:768px){
-  .kaki-isi{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) minmax(0,1.3fr);gap:24px;padding-top:28px}
-  .kaki-tautan{flex-direction:column;gap:0}
-  .kaki-tautan a{min-height:36px}
+  .kaki-isi{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);align-items:start;gap:24px;padding-top:28px}
 }
 @media (min-width:1024px){.kaki-isi{max-width:none;padding-left:32px;padding-right:32px}}
 @media (max-width:767px){.ada-menu-bawah .kaki{display:none}}
