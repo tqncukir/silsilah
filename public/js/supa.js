@@ -100,8 +100,15 @@ async function profilSaya() {
   nav('nav-daftar', p && PERAN_UBAH_JAMAAH.includes(p.peran));
   nav('nav-dasbor', p && PERAN_LIHAT_JAMAAH.includes(p.peran));
   nav('nav-kegiatan', p && PERAN_LIHAT_KEGIATAN.includes(p.peran));
+  nav('nav-ahli', p && PERAN_LIHAT_JAMAAH.includes(p.peran));
   return p || null;
 }
+
+// ===== Ahli Kubur (modul 5) =====
+// Halaman pengurus: peran yang melihat Data Jamaah. Ubah: admin pusat & ketua; koordinator untuk kecamatannya (RLS).
+const PERAN_KELOLA_AK = ['admin_pusat', 'ketua', 'koordinator_wilayah'];
+const JENIS_AK = { jamaah: 'Jamaah', keluarga: 'Keluarga jamaah', masyayikh: 'Masyayikh/Mursyid' };
+const HUBUNGAN_AK = ['Ayah', 'Ibu', 'Kakek', 'Nenek', 'Suami', 'Istri', 'Anak', 'Cucu', 'Saudara', 'Paman', 'Bibi', 'Mertua', 'Lainnya'];
 
 // ===== Kegiatan (modul 4) =====
 const PERAN_LIHAT_KEGIATAN = ['admin_pusat', 'ketua', 'bendahara', 'petugas_scan', 'koordinator_wilayah'];

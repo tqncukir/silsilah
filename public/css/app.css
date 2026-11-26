@@ -819,3 +819,12 @@ li:nth-child(-n+3)>.bt-baris .bt-no{background:var(--hijau-jamiyyah);color:#FFFF
 .kal-bawah{display:flex;justify-content:space-between;gap:12px;margin:10px 0 0}
 .kal-bawah [hidden]{display:none}
 @media (max-width:420px){.kalender{padding:12px}.kal-hari,.kal-kisi{gap:2px}.kal-arah{gap:6px;grid-template-columns:44px minmax(0,1.4fr) minmax(0,1fr) 44px}.kal-panah{width:44px}}
+
+/* ===== Ahli Kubur (Tahap 3) ===== */
+.form-kisi>[hidden],.pil[hidden]{display:none!important}
+.ak-ket{margin:-4px 0 12px}
+.ak-bin{font-weight:400;color:var(--abu);font-size:var(--fs-kecil)}
+.ak-jenis{font-size:var(--fs-kecil);font-weight:600;white-space:nowrap}
+.ak-jamaah{color:var(--hijau-jamiyyah)}
+.ak-keluarga{color:var(--abu)}
+.ak-masyayikh{color:var(--grup-ruhani)}

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ahli Kubur · SILSILAH TQN Cukir</title>
+<meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=68">
+<link rel="stylesheet" href="/css/app.css?v=68">
+</head>
+<body class="hal-app">
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <a href="/beranda.html">Beranda</a>
+      <a href="/dashboard.html" id="nav-dasbor" hidden>Dashboard Pengurus</a>
+      <a href="/jamaah.html" id="nav-jamaah" hidden>Data Jamaah</a>
+      <a href="/pendaftaran.html" id="nav-daftar" hidden>Pendaftaran</a>
+      <a href="/kegiatan.html" id="nav-kegiatan" hidden>Kegiatan</a>
+      <a href="/ahli-kubur.html" id="nav-ahli" aria-current="page">Ahli Kubur</a>
+    </nav>
+    <button class="app-keluar" id="keluar" type="button">Keluar</button>
+  </div>
+</header>
+
+<main class="app-isi app-sempit">
+  <a href="/ahli-kubur.html" class="kembali" id="kembali">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Daftar ahli kubur
+  </a>
+  <p id="pesan" class="pesan" role="alert"></p>
+
+  <section id="lihat" class="panel" hidden aria-labelledby="l-nama">
+    <div class="panel-kepala">
+      <div>
+        <p class="panel-label" id="l-jenis"></p>
+        <h1 id="l-nama"></h1>
+        <p class="judul-sub" id="l-bin"></p>
+      </div>
+      <div class="kepala-aksi">
+        <button type="button" class="btn btn-kedua btn-pas" id="ubah" hidden>Ubah</button>
+        <a class="btn btn-kedua btn-pas" id="ke-jamaah" hidden>Data jamaah</a>
+      </div>
+    </div>
+    <dl class="rincian" id="l-rincian"></dl>
+  </section>
+
+  <form id="form" class="panel form" hidden novalidate aria-labelledby="f-judul">
+    <h1 id="f-judul">Tambah ahli kubur</h1>
+    <p class="judul-sub" id="f-sub">Jamaah yang wafat tidak ditambah di sini: ubah statusnya menjadi Wafat di Data Jamaah, otomatis masuk daftar.</p>
+    <div class="form-kisi">
+      <fieldset class="isian lebar pilihan" id="isian-jenis">
+        <legend>Jenis <span class="wajib">wajib</span></legend>
+        <label class="pil"><input type="radio" name="jenis" value="keluarga" checked> Keluarga jamaah</label>
+        <label class="pil" id="pil-masyayikh"><input type="radio" name="jenis" value="masyayikh"> Masyayikh/Mursyid</label>
+      </fieldset>
+
+      <h3 class="bagian-judul">Almarhum/almarhumah</h3>
+      <div class="isian lebar" id="isian-nama">
+        <label for="nama">Nama <span class="wajib">wajib</span></label>
+        <input id="nama" maxlength="120" required autocapitalize="words" placeholder="Mbah Siti Aminah">
+      </div>
+      <p class="ket bagian-ket" id="ket-jamaah" hidden>Nama dan tanggal wafat jamaah diubah di Data Jamaah.</p>
+      <div class="isian">
+        <label for="bin">Bin/binti</label>
+        <input id="bin" maxlength="120" autocapitalize="words" placeholder="binti Abdullah" aria-describedby="k-bin">
+        <p class="ket" id="k-bin">Nama ayah, untuk dibacakan saat kirim doa.</p>
+      </div>
+      <div class="isian" id="isian-tgl">
+        <label for="tgl-wafat">Tanggal wafat</label>
+        <input id="tgl-wafat" type="date" min="1900-01-01">
+      </div>
+
+      <h3 class="bagian-judul">Makam dan keluarga</h3>
+      <div class="isian lebar">
+        <label for="makam">Lokasi makam</label>
+        <input id="makam" maxlength="160" autocapitalize="words" placeholder="Makam Umum Desa Cukir, Diwek">
+      </div>
+      <div class="isian lebar">
+        <label for="penghubung">Keluarga penghubung</label>
+        <input id="penghubung" maxlength="160" autocapitalize="words" placeholder="Nama ahli waris, misalnya Siti (anak)" aria-describedby="k-penghubung">
+        <p class="ket" id="k-penghubung">Nama saja, tanpa nomor HP.</p>
+      </div>
+
+      <h3 class="bagian-judul" id="b-titip">Dititipkan oleh jamaah</h3>
+      <div class="isian" id="isian-titip">
+        <label for="titip-nomor">Nomor Anggota yang menitipkan <span class="wajib" id="titip-wajib" hidden>wajib</span></label>
+        <div class="absen-ketik-baris">
+          <input id="titip-nomor" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="10 angka" aria-describedby="titip-nama">
+          <button type="button" class="btn btn-kedua btn-pas" id="titip-cek">Periksa</button>
+        </div>
+        <p class="ket" id="titip-nama" aria-live="polite"></p>
+      </div>
+      <div class="isian" id="isian-hubungan">
+        <label for="hubungan">Hubungan dengan yang menitipkan</label>
+        <select id="hubungan"><option value="">Pilih</option></select>
+      </div>
+
+      <h3 class="bagian-judul">Lainnya</h3>
+      <div class="isian lebar">
+        <label for="keterangan">Keterangan</label>
+        <input id="keterangan" maxlength="300" placeholder="Misalnya: haul biasanya diadakan keluarga di rumah">
+      </div>
+    </div>
+    <p id="pesan-form" class="pesan" role="alert"></p>
+    <div class="tombol-baris">
+      <button type="button" class="btn btn-kedua btn-pas" id="batal">Batal</button>
+      <button type="submit" class="btn btn-utama btn-pas btn-masuk" id="simpan"><span class="putar" aria-hidden="true"></span><span class="teks">Simpan</span></button>
+    </div>
+  </form>
+</main>
+<script src="/js/supa.js?v=68" defer></script>
+<script src="/js/kalender.js?v=68" defer></script>
+<script src="/js/ahli-kubur-isi.js?v=68" defer></script>
+</body>
+</html>
