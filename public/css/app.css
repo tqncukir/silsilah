@@ -788,3 +788,34 @@ li:nth-child(-n+3)>.bt-baris .bt-no{background:var(--hijau-jamiyyah);color:#FFFF
 .jam-pilih{display:flex;align-items:center;gap:6px;font-weight:600}
 .jam-pilih select{width:auto;min-width:76px;flex:1 1 0;font-variant-numeric:tabular-nums}
 .jam-pilih select[aria-invalid="true"]{border-color:#B3261E}
+
+/* ===== Kalender sendiri (besar, bahasa Indonesia) — js/kalender.js ===== */
+.tgl-tombol{display:flex;align-items:center;gap:10px;width:100%;min-height:48px;padding:8px 12px;border:1.5px solid #9DB89D;border-radius:12px;
+  background:#FFFFFF;color:var(--hitam);font:inherit;font-size:var(--fs-isian);font-weight:500;text-align:left;cursor:pointer}
+.tgl-tombol svg{flex:none;color:var(--hijau-jamiyyah)}
+.tgl-tombol.kosong span{color:#6B6B6B;font-weight:400}
+.tgl-tombol:hover{border-color:var(--hijau-daun)}
+.tgl-tombol:focus-visible{outline:none;border-color:var(--hijau-jamiyyah);box-shadow:0 0 0 4px rgba(11,107,46,.18)}
+.tgl-tombol[aria-invalid="true"]{border-color:#B3261E}
+.kalender{width:min(420px,calc(100% - 12px));max-width:none;padding:16px;border:0;border-radius:18px;background:#FFFFFF;color:var(--hitam);box-shadow:0 12px 40px rgba(0,0,0,.3)}
+.kalender::backdrop{background:rgba(0,0,0,.45)}
+.kal-kepala{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 12px}
+.kal-judul{margin:0;font-weight:600;color:var(--hijau-jamiyyah);font-size:var(--fs-sub)}
+.kal-arah{display:grid;grid-template-columns:48px minmax(0,1.4fr) minmax(0,1fr) 48px;gap:8px;align-items:center;margin:0 0 10px}
+.kal-arah select{width:100%;min-height:48px;padding:8px 10px;border:1.5px solid #9DB89D;border-radius:12px;background:#FFFFFF;color:var(--hitam);
+  font:inherit;font-size:var(--fs-isian);font-weight:600;cursor:pointer}
+.kal-panah{width:48px;height:48px;display:grid;place-items:center;border:0;border-radius:12px;background:var(--hijau-pupus);color:var(--hijau-jamiyyah);cursor:pointer}
+.kal-panah:disabled{background:#F3F3F1;color:#B5BCAE;cursor:not-allowed}
+.kal-hari,.kal-kisi{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;text-align:center}
+.kal-hari span{font-size:var(--fs-kecil);font-weight:600;color:var(--abu);padding:4px 0}
+.kal-kisi button{min-height:48px;border:2px solid transparent;border-radius:12px;background:#F6F9F1;color:var(--hitam);
+  font:inherit;font-size:1.125rem;font-weight:600;font-variant-numeric:tabular-nums;cursor:pointer}
+.kal-kisi button:hover:not(:disabled){background:var(--hijau-pupus);border-color:#C9DDB3}
+.kal-kisi .kal-minggu,.kal-hari .kal-minggu{color:#B3261E}
+.kal-kisi .kal-kini-hari{border-color:var(--hijau-daun)}
+.kal-kisi .kal-pilih,.kal-kisi .kal-pilih:hover:not(:disabled){background:var(--hijau-jamiyyah);border-color:var(--hijau-jamiyyah);color:#FFFFFF}
+.kal-kisi button:disabled{background:transparent;color:#C4C9BF;cursor:not-allowed}
+.kal-kisi button:focus-visible,.kal-panah:focus-visible,.kal-arah select:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:1px}
+.kal-bawah{display:flex;justify-content:space-between;gap:12px;margin:10px 0 0}
+.kal-bawah [hidden]{display:none}
+@media (max-width:420px){.kalender{padding:12px}.kal-hari,.kal-kisi{gap:2px}.kal-arah{gap:6px;grid-template-columns:44px minmax(0,1.4fr) minmax(0,1fr) 44px}.kal-panah{width:44px}}

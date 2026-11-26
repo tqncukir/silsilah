@@ -88,6 +88,8 @@ Mulai: 2026-11-26 (Kang: "Mulai Tahap 2: modul 4 Kegiatan & Absensi").
 
 **Jam 24 jam tanpa AM/PM** (perintah Kang 2026-11-26: banyak jamaah desa tidak paham AM/PM): isian jam di formulir kegiatan tidak lagi memakai `input type=time` bawaan HP (bisa tampil AM/PM), diganti pilihan Jam 00–23 + Menit (kelipatan 5) + "WIB". Semua tampilan jam memakai `jamWib` (24 jam, titik: 05.00) dan `rentangJam` ("05.00 WIB sampai 15.00 WIB") di `supa.js`; setiap jam berakhiran WIB (agenda, daftar kegiatan, rincian, absensi, daftar hadir, riwayat). Diuji dengan browser bahasa Inggris (en-US) + zona waktu New York: tidak ada AM/PM, jam tetap WIB benar. Versi cache v66.
 
+**Kalender sendiri** (permintaan Kang 2026-11-26: pemilih tanggal bawaan HP kecil dan berbahasa Inggris): `js/kalender.js` dipasang otomatis ke semua `input type=date` (Kegiatan, Ubah Data Jamaah, Pendaftaran). Isian jadi tombol besar bertulisan "Kamis, 26 November 2026"; ketuk → kalender besar bahasa Indonesia (kotak tanggal ≥44×48 px, Minggu merah, hari ini bergaris, pilihan Bulan + Tahun untuk tanggal lahir lama, panah, Hari ini, Kosongkan bila tidak wajib, Esc/Tutup/ketuk luar menutup, panah keyboard). Nilai tetap di input asli (YYYY-MM-DD), `value` yang diisi kode (mis. hasil baca KTP) ikut tampil, min/max dihormati (tanggal lahir tidak bisa masa depan), `aria-invalid` dan tanda `.otomatis` ikut ke tombol. Diuji 360/768/1280 bahasa browser Inggris: lulus. Versi cache v67.
+
 **Tahap 2 selesai dibangun (5 langkah).** Menunggu uji dan persetujuan Kang.
 
 ## Catatan
