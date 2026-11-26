@@ -47,7 +47,7 @@ async function muat() {
       return `<tr data-id="${hurufAman(a.kunci)}" tabindex="0">
         <td data-l="No" class="angka kol-no">${(dari + i + 1).toLocaleString('id-ID')}</td>
         <td data-l="Nama" class="tabel-nama">${hurufAman(a.nama)}${a.bin_binti ? ` <span class="ak-bin">${hurufAman(a.bin_binti)}</span>` : ''}</td>
-        <td data-l="Nomor" class="angka">${a.tanggal_wafat ? `Wafat ${tglPendek(a.tanggal_wafat)}` : 'Tanggal wafat belum diketahui'}<span class="hp-saja">${a.makam ? ` · ${hurufAman(a.makam)}` : ''}</span></td>
+        <td data-l="Nomor" class="angka">${a.tanggal_wafat ? `Wafat ${tglPendek(a.tanggal_wafat)} <span class="ak-hij">· ${teksHijriah(a.tanggal_wafat)}</span>` : 'Tanggal wafat belum diketahui'}<span class="hp-saja">${a.makam ? ` · ${hurufAman(a.makam)}` : ''}</span></td>
         <td data-l="Desa">${hurufAman(asal)}${a.kecamatan ? `<span class="hp-saja"> · Kec. ${hurufAman(a.kecamatan)}</span>` : ''}${a.penghubung_nama ? `<span class="hp-saja"> · titipan ${hurufAman(a.penghubung_nama)}</span>` : ''}</td>
         <td data-l="Kecamatan">${hurufAman(a.kecamatan || '–')}</td>
         <td class="kol-luas">${hurufAman(a.makam || '–')}</td>

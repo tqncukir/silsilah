@@ -110,6 +110,24 @@ const PERAN_KELOLA_AK = ['admin_pusat', 'ketua', 'koordinator_wilayah'];
 const JENIS_AK = { jamaah: 'Jamaah', keluarga: 'Keluarga jamaah', masyayikh: 'Masyayikh/Mursyid' };
 const HUBUNGAN_AK = ['Ayah', 'Ibu', 'Kakek', 'Nenek', 'Suami', 'Istri', 'Anak', 'Cucu', 'Saudara', 'Paman', 'Bibi', 'Mertua', 'Lainnya'];
 
+// Tanggal Hijriah (kalender Ummul Qura bawaan browser; bisa selisih 1 hari dengan rukyat, jadi selalu disebut perkiraan).
+const _hijBagian = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', { day: 'numeric', month: 'numeric', year: 'numeric', timeZone: 'UTC' });
+const _hijBulan = new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura', { month: 'long', timeZone: 'UTC' });
+const BULAN_HIJRIAH = []; // diisi di bawah: Muharam .. Zulhijah
+// YYYY-MM-DD -> { d, m, y } Hijriah
+function hijriah(iso) {
+  const [y, m, d] = iso.split('-').map(Number);
+  const p = Object.fromEntries(_hijBagian.formatToParts(new Date(Date.UTC(y, m - 1, d, 12))).map((x) => [x.type, x.value]));
+  return { d: Number(p.day), m: Number(p.month), y: Number(String(p.year).replace(/\D/g, '')) };
+}
+(() => { // nama bulan Hijriah urut 1..12 dalam bahasa Indonesia
+  for (let i = 0; i < 400; i++) {
+    const t = new Date(Date.UTC(2026, 0, 1 + i)), h = hijriah(t.toISOString().slice(0, 10));
+    BULAN_HIJRIAH[h.m - 1] = _hijBulan.format(new Date(Date.UTC(2026, 0, 1 + i, 12)));
+  }
+})();
+const teksHijriah = (iso) => { if (!iso) return ''; const h = hijriah(iso); return `${h.d} ${BULAN_HIJRIAH[h.m - 1]} ${h.y} H`; };
+
 // ===== Kegiatan (modul 4) =====
 const PERAN_LIHAT_KEGIATAN = ['admin_pusat', 'ketua', 'bendahara', 'petugas_scan', 'koordinator_wilayah'];
 const PERAN_KELOLA_KEGIATAN = ['admin_pusat', 'ketua', 'koordinator_wilayah']; // koordinator: kecamatannya (RLS)

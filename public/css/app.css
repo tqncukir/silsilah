@@ -828,3 +828,16 @@ li:nth-child(-n+3)>.bt-baris .bt-no{background:var(--hijau-jamiyyah);color:#FFFF
 .ak-jamaah{color:var(--hijau-jamiyyah)}
 .ak-keluarga{color:var(--abu)}
 .ak-masyayikh{color:var(--grup-ruhani)}
+.ak-hij{color:var(--abu);font-weight:400}
+.haul-pilih{margin:0 0 8px}
+.haul-ket{margin:0 0 12px}
+.haul-daftar{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.haul-item>a,.haul-item>div{display:flex;gap:12px;align-items:flex-start;padding:12px;background:#FFFFFF;border:1px solid #E2ECD6;border-radius:14px;color:var(--hitam);text-decoration:none}
+.haul-item>a:hover{border-color:#C9DDB3;background:#FBFDF7}
+.haul-item>a:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:2px}
+.haul-tgl{flex:none;display:grid;place-items:center;text-align:center;width:68px;padding:6px 0;border-radius:12px;background:#E4EEF8;color:var(--grup-ruhani);font-size:.8125rem;font-weight:600;line-height:1.15}
+.haul-tgl strong{font-size:1.375rem}
+.haul-isi{flex:1;min-width:0;display:grid;gap:2px}
+.haul-isi .ket{margin:0}
+.haul-kini>a,.haul-kini>div{border-color:var(--hijau-daun);background:var(--hijau-pupus)}
+.haul-lewat .haul-tgl{background:#F1F3EE;color:var(--abu)}

@@ -37,7 +37,7 @@ function tampilLihat() {
   $('l-jenis').textContent = JENIS_AK[d.jenis];
   $('l-nama').textContent = d.nama;
   $('l-bin').textContent = d.bin_binti || '';
-  const baris = [['Tanggal wafat', d.tanggal_wafat ? tglPanjang(d.tanggal_wafat) : 'Belum diketahui'], ['Lokasi makam', d.makam], ['Keluarga penghubung', d.keluarga_penghubung]];
+  const baris = [['Tanggal wafat', d.tanggal_wafat ? tglPanjang(d.tanggal_wafat) : 'Belum diketahui'], ['Tanggal wafat Hijriah', d.tanggal_wafat ? `${teksHijriah(d.tanggal_wafat)} (perkiraan)` : ''], ['Lokasi makam', d.makam], ['Keluarga penghubung', d.keluarga_penghubung]];
   if (d.jenis === 'jamaah') baris.push(['Nomor Anggota', String(d.jamaah.nomor_anggota)], ['Alamat', asalTeks(d.jamaah)]);
   if (d.jenis === 'keluarga') baris.push(['Dititipkan oleh', d.penghubung ? `${d.penghubung.nama} (${d.penghubung.nomor_anggota}) · ${asalTeks(d.penghubung)}` : (d.penghubung_jamaah_id ? 'Jamaah di luar wilayah akun ini' : '')],
     ['Hubungan', d.hubungan]);

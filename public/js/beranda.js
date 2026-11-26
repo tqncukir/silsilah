@@ -40,6 +40,7 @@ function ketAgenda() {
       $('menu').hidden = false; $('m-ruhani').hidden = false; $('m-ruhani-judul').hidden = false;
       $('m-absen').hidden = !PERAN_ABSEN.includes(p.peran);
       $('m-ahli').hidden = !PERAN_LIHAT_JAMAAH.includes(p.peran);
+      $('m-haul').hidden = !PERAN_LIHAT_JAMAAH.includes(p.peran);
       dbHalaman(`kegiatan?select=id&dibatalkan=is.false&mulai=gte.${encodeURIComponent(isoWib(hariIniWib(), '00:00'))}`, 0, 0).then(({ total }) => {
         $('m-kegiatan-ket').textContent = total ? `${total.toLocaleString('id-ID')} kegiatan akan datang` : 'Buat dan lihat jadwal kegiatan';
       }).catch(() => {});

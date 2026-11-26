@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Haul · SILSILAH TQN Cukir</title>
+<meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=69">
+<link rel="stylesheet" href="/css/app.css?v=69">
+</head>
+<body class="hal-app">
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <a href="/beranda.html">Beranda</a>
+      <a href="/dashboard.html" id="nav-dasbor" hidden>Dashboard Pengurus</a>
+      <a href="/jamaah.html" id="nav-jamaah" hidden>Data Jamaah</a>
+      <a href="/pendaftaran.html" id="nav-daftar" hidden>Pendaftaran</a>
+      <a href="/kegiatan.html" id="nav-kegiatan" hidden>Kegiatan</a>
+      <a href="/ahli-kubur.html" id="nav-ahli" aria-current="page">Ahli Kubur</a>
+    </nav>
+    <button class="app-keluar" id="keluar" type="button">Keluar</button>
+  </div>
+</header>
+
+<main class="app-isi app-sempit">
+  <a href="/ahli-kubur.html" class="kembali" id="kembali">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span id="kembali-teks">Daftar ahli kubur</span>
+  </a>
+  <div class="judul-baris">
+    <div>
+      <h1>Haul</h1>
+      <p class="judul-sub" id="ringkas" aria-live="polite">Memuat...</p>
+    </div>
+  </div>
+  <p id="pesan" class="pesan" role="alert"></p>
+  <fieldset class="pilihan haul-pilih">
+    <legend class="sr-only">Bulan Hijriah</legend>
+    <label class="pil"><input type="radio" name="bulan" value="0" checked> <span id="b-ini">Bulan ini</span></label>
+    <label class="pil"><input type="radio" name="bulan" value="1"> <span id="b-depan">Bulan depan</span></label>
+  </fieldset>
+  <p class="ket haul-ket">Tanggal Hijriah dan Masehi adalah perkiraan kalender Ummul Qura; bisa selisih 1 hari dengan penetapan rukyat. Haul ke-N dihitung dalam tahun Hijriah.</p>
+  <ol class="haul-daftar" id="daftar"><li class="ket">Memuat...</li></ol>
+</main>
+<script src="/js/supa.js?v=69" defer></script>
+<script src="/js/haul.js?v=69" defer></script>
+</body>
+</html>
