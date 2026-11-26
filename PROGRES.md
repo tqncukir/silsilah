@@ -37,9 +37,11 @@ Mulai: 2026-11-25 (Kang Salman: "Bismillah").
 
 - **Keputusan Kang 2026-11-26 ("setuju 1,2,3"):** (1) KTA lama tetap berlaku penuh: QR lama (teks biasa "NOMOR  NAMA ALAMAT KECAMATAN KOTA") bisa di-scan di Cek Keaslian; KTA digital mengikuti pola kartu fisik (kepala hijau Jam'iyyah, "Kartu Anggota Jam'iyyah (Rosyid)", Masa Berlaku Seumur Hidup, tanda tangan Ketua Thoriqoh KH. Syamsuddin Ali Al-Mursyid); KTA baru hanya untuk jamaah baru/hilang, pola sama, QR aman. (2) Login anggota cukup scan QR KTA tanpa PIN, HP diingat; QR lama = isi portal dibatasi (KTA digital, agenda, data dasar), QR baru = data lengkap; nomor kartu hilang bisa diblokir. (3) Dashboard Pengurus disetujui.
 
+- **Dibangun 2026-11-26:** pemindai QR bersama (`js/pindai.js`, BarcodeDetector atau jsQR); Cek Keaslian bisa scan QR lama/baru (fungsi `kta` aksi `qrlama`); Masuk: tombol utama "Pindai QR KTA", PIN di bagian lipat; QR lama = sesi terbatas (tabel `private.sesi_terbatas`, RPC `kartu_saya`, migrasi `20261125120000` dijalankan Kang); KTA digital ikut pola kartu fisik. Fungsi `kta` v3 dan `login-anggota` v4 dipasang lewat MCP (deploy_edge_function bisa langsung). Menunggu uji Kang di HP dengan KTA fisik.
+
 ## Berikutnya (satu per satu, tunggu persetujuan Kang)
 
-Setelah 7 langkah beres dan Kang setuju: impor 5.528 data asli.
+Uji Kang: scan KTA fisik di Cek Keaslian dan Masuk (HP). Setelah disetujui: tunggu perintah Kang untuk tahap berikutnya.
 
 ## Catatan
 - Alamat uji coba: https://silsilah-tqn.pages.dev
