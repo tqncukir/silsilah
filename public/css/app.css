@@ -641,3 +641,58 @@ li:nth-child(-n+3)>.bt-baris .bt-no{background:var(--hijau-jamiyyah);color:#FFFF
 .jk-k{background:repeating-linear-gradient(135deg,#9CA3AF 0 2px,#E5E7EB 2px 6px)}
 .jk-kotak.jk-k{background:repeating-linear-gradient(135deg,#9CA3AF 0 1.5px,#E5E7EB 1.5px 4px);box-shadow:inset 0 0 0 1px #9CA3AF}
 .dsb-jk .bt-nilai,.dsb-jk .bt-persen{color:var(--hitam)}
+
+/* Pemindai QR KTA */
+.btn-pindai{gap:10px;margin:0 0 16px}
+.pindai{width:min(480px,calc(100% - 24px));padding:0;border:0;border-radius:18px;background:#0E1A12;color:#FFFFFF;box-shadow:0 12px 40px rgba(0,0,0,.35)}
+.pindai::backdrop{background:rgba(0,0,0,.6)}
+.pindai-kepala{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px}
+.pindai-kepala h2{margin:0;font-size:var(--fs-sub);color:#FFFFFF}
+.pindai-tutup{background:#FFFFFF}
+.pindai-layar{position:relative;aspect-ratio:1/1;background:#000;overflow:hidden}
+.pindai-layar video{width:100%;height:100%;object-fit:cover;display:block}
+.pindai-bingkai{position:absolute;inset:18%;border:3px solid var(--kuning-rosyid);border-radius:18px;box-shadow:0 0 0 999px rgba(0,0,0,.35)}
+.pindai-ket{margin:0;padding:14px 16px 18px;font-size:var(--fs-kecil);text-align:center;color:#E6F0E3}
+.pindai-galat{color:#FFD7D2;font-weight:600}
+.masuk-pin{margin:16px 0 8px;border-top:1px solid #EEF2E8;padding-top:8px}
+.masuk-pin summary{min-height:44px;display:flex;align-items:center;cursor:pointer;color:var(--hijau-jamiyyah);font-weight:600;font-size:var(--fs-kecil)}
+.masuk-pin summary:focus-visible{outline:3px solid var(--hijau-jamiyyah);outline-offset:2px;border-radius:8px}
+.masuk-pin[open] summary{margin-bottom:8px}
+.btn-pindai .putar{display:none}
+.btn-pindai.sibuk{opacity:.8}
+
+/* KTA digital mengikuti pola kartu fisik (keputusan Kang 2026-11-26) */
+.kta-pola{position:relative;background:
+  radial-gradient(90% 40% at 12% 112%,#7CC35A 0 60%,transparent 61%),
+  radial-gradient(120% 46% at 80% 118%,#F6E27A 0 60%,transparent 61%),
+  radial-gradient(160% 55% at 45% 122%,#D8EC9A 0 60%,transparent 61%),
+  radial-gradient(130% 40% at 100% 0%,#FBF3C4 0 40%,transparent 41%),
+  linear-gradient(180deg,#FFFFFF 0 50%,#F6FAEA 100%)}
+.kta-pola .kta-kepala{margin:2.2cqw 2.6cqw 0;padding:1.6cqw 3cqw;border-radius:2.4cqw;border-bottom:0;
+  background:linear-gradient(90deg,#0B6B2E,#1E9E3A 70%,#6DBE45);gap:2.4cqw}
+.kta-pola .kta-kepala img{width:8.6cqw;height:8.6cqw;box-shadow:0 0 0 .4cqw #F2D300}
+.kta-pola .kta-kepala>div{flex:1;text-align:center;min-width:0}
+.kta-pola .kta-judul{font-size:4.1cqw;font-weight:800;color:#FFFFFF;letter-spacing:.02em;line-height:1.05}
+.kta-pola .kta-sub{margin:.4cqw 0 0;font-size:2.05cqw;font-weight:600;color:#FFFFFF;line-height:1.15}
+.kta-alamat{margin:.2cqw 0 0;font-size:1.9cqw;color:#F4F8E6;line-height:1.15}
+.kta-jenis{margin:1.6cqw 0 0;text-align:center;font-size:3.1cqw;font-weight:800;color:#1A2E6E;letter-spacing:.02em;
+  text-decoration:underline;text-underline-offset:.6cqw;text-decoration-thickness:.25cqw}
+.kta-pola .kta-badan{background:none;gap:3cqw;padding:1.4cqw 4cqw 0;align-items:flex-start}
+.kta-pola .kta-qr{width:21cqw;margin-top:1cqw}
+.kta-pola .kta-qr-gambar{width:21cqw;height:21cqw;padding:1cqw;border:0;border-radius:1cqw}
+.kta-pola .kta-data{margin:0;padding:0;border:0;display:grid;grid-template-columns:auto;gap:0;line-height:1.28;flex:1;min-width:0}
+.kta-pola .kta-data div{display:grid;grid-template-columns:15cqw minmax(0,1fr);align-items:baseline}
+.kta-pola .kta-data dt{font-size:2.55cqw;font-weight:600;color:#1A2E6E}
+.kta-pola .kta-data dd{margin:0;font-size:2.55cqw;font-weight:700;color:#1A2E6E;text-transform:uppercase;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.kta-pola .kta-data dd::before{content:": "}
+.kta-pola .kta-kaki{position:relative;margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;gap:2cqw;
+  padding:0 4cqw 2.2cqw;background:none;font-size:2.3cqw;color:#1A2E6E}
+.kta-berlaku{margin:0 0 3.2cqw;font-weight:700}
+.kta-berlaku span:first-child{font-weight:600}
+.kta-versi{display:block;font-weight:600;font-size:2cqw}
+.kta-versi:empty{display:none}
+.kta-ttd{text-align:center;font-weight:600;line-height:1.25}
+.kta-ttd p{margin:0}
+.kta-ttd-nama{margin-top:2.6cqw!important;font-weight:800}
+.kta-pola .kta-pin{font-size:2.2cqw;color:#1A2E6E}

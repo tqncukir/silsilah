@@ -1,4 +1,4 @@
-// Cek keaslian KTA (publik, tanpa login). QR KTA baru: kode di #hash. KTA lama: Nomor Anggota + nama.
+// Cek keaslian KTA (publik, tanpa login). QR KTA baru: kode di #hash. KTA lama: pindai QR teks biasa, atau ketik Nomor Anggota + nama.
 const $ = (id) => document.getElementById(id);
 
 async function tanya(isi) {
@@ -51,6 +51,17 @@ $('form-lama').onsubmit = async (ev) => {
   try { tampil(await tanya({ aksi: 'lama', nomor, nama })); }
   catch (e) { $('pesan').textContent = galat(e); }
   finally { btn.disabled = false; btn.classList.remove('sibuk'); }
+};
+$('pindai').onclick = async () => {
+  const teks = await pindaiQr({ judul: 'Pindai QR KTA' });
+  if (!teks) return;
+  const k = bacaKta(teks);
+  $('pesan').textContent = '';
+  if (!k) { $('pesan').textContent = 'QR ini bukan QR KTA TQN Cukir.'; return; }
+  if (k.jenis === 'baru') { if (location.hash.slice(1) === k.kode) cekQr(); else location.hash = k.kode; return; }
+  $('ajak').textContent = 'Memeriksa QR KTA lama...';
+  try { tampil(await tanya({ aksi: 'qrlama', teks: k.teks })); $('ajak').textContent = 'Hasil pemeriksaan QR KTA lama:'; }
+  catch (e) { $('ajak').textContent = ''; $('pesan').textContent = galat(e); }
 };
 window.addEventListener('hashchange', cekQr);
 cekQr();

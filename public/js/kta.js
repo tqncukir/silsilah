@@ -1,7 +1,7 @@
 // KTA Digital: kartu seperti asli, QR keaslian (ditandatangani di server dengan kunci admin pusat), PIN, cetak.
 const $ = (id) => document.getElementById(id);
 let id = new URLSearchParams(location.search).get('id');
-let j = null, peran = '';
+let j = null, peran = '', terbatas = false;
 
 const pesan = (t) => { $('pesan').textContent = t; };
 const pesanAksi = (t, ok) => { $('pesan-aksi').textContent = t; $('pesan-aksi').className = 'pesan' + (ok ? ' ok' : ''); };
@@ -11,13 +11,12 @@ const PILIH = 'id,nomor_anggota,nama,umur_daftar,pekerjaan,tanggal_daftar,aktif,
 function gambarKartu() {
   const kab = j.desa.kecamatan.kabupaten?.nama || '';
   const baris = [
-    ['Desa', j.desa.nama], ['Kecamatan', j.desa.kecamatan.nama], ['Kab/Kota', kab || '–'],
-    ['Umur', j.umur_daftar ? `${j.umur_daftar} tahun` : '–'], ['Pekerjaan', j.pekerjaan || '–'], ['Terdaftar', tgl(j.tanggal_daftar)],
-    ['Mursyid', j.mursyid?.nama || '–', 'lebar'],
+    ['Nomor', j.nomor_anggota], ['Nama', j.nama], ['Umur', j.umur_daftar ? `${j.umur_daftar} tahun` : '–'], ['Pekerjaan', j.pekerjaan || '–'],
+    ['Desa', j.desa.nama], ['Kecamatan', j.desa.kecamatan.nama], ['Kab/Kota', kab || '–'], ['Mursyid', j.mursyid?.nama || '–'],
   ];
-  $('kta-nama').textContent = j.nama;
-  $('kta-nomor').textContent = j.nomor_anggota;
-  $('kta-data').innerHTML = baris.map(([k, v, c]) => `<div${c ? ` class="${c}"` : ''}><dt>${k}</dt><dd>${hurufAman(String(v))}</dd></div>`).join('');
+  $('kta-data').innerHTML = baris.map(([k, v]) => `<div><dt>${k}</dt><dd>${hurufAman(String(v))}</dd></div>`).join('');
+  const t = j.tanggal_daftar ? new Date(j.tanggal_daftar + 'T00:00:00') : null;
+  $('kta-tgl').textContent = t ? `Jombang, ${t.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }).replace('.', '')}` : 'Jombang';
   $('kartu').hidden = false;
   document.title = `KTA ${j.nama} · SILSILAH TQN Cukir`;
 }
@@ -33,7 +32,17 @@ async function panggilKta(isi) {
   return b;
 }
 
+// Sesi dari QR KTA lama: QR digital sama dengan QR teks di kartu fisik (bukan QR bertanda tangan).
+function qrLama() {
+  const kab = j.desa.kecamatan.kabupaten?.nama || '';
+  const qr = qrcode(0, 'M');
+  qr.addData(`${j.nomor_anggota}  ${[j.nama, j.desa.nama, j.desa.kecamatan.nama, kab].join(' ').toUpperCase()}`);
+  qr.make();
+  $('kta-qr').innerHTML = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+}
+
 async function muatQr() {
+  if (terbatas) { qrLama(); return; }
   $('kta-qr').textContent = 'Memuat QR...';
   try {
     const { kode, versi } = await panggilKta({ aksi: 'qr', jamaah_id: j.id });
@@ -110,7 +119,11 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('qr-b
     }
     if (!id) { pesan('Jamaah belum dipilih.'); return; }
     if (!anggota) $('kembali').href = `/jamaah-isi.html?id=${encodeURIComponent(id)}`;
-    j = (await dbGet(`jamaah?select=${PILIH}&id=eq.${encodeURIComponent(id)}`))[0];
+    if (anggota) {
+      const k = await dbKirim('POST', 'rpc/kartu_saya', {});
+      terbatas = !!k?.terbatas;
+      j = k && { ...k, id: p.jamaah_id, desa: { nama: k.desa, kecamatan: { nama: k.kecamatan, kabupaten: { nama: k.kabupaten } } }, mursyid: { nama: k.mursyid } };
+    } else j = (await dbGet(`jamaah?select=${PILIH}&id=eq.${encodeURIComponent(id)}`))[0];
     if (!j) { pesan('Data jamaah tidak ditemukan atau akun ini tidak punya izin melihatnya.'); return; }
     gambarKartu();
     $('aksi').hidden = false;

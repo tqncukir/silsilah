@@ -3,6 +3,7 @@
 //   aksi "qr"   (login): kode QR untuk jamaah yang boleh dilihat akun ini (hak dijaga RLS).
 //   aksi "cek"  (publik): periksa kode dari QR KTA baru.
 //   aksi "lama" (publik): periksa KTA lama dengan Nomor Anggota + nama (dibatasi per IP).
+//   aksi "qrlama" (publik): periksa isi QR KTA lama (teks biasa "NOMOR  NAMA ALAMAT ..."), dibatasi per IP.
 import { createClient } from "npm:@supabase/supabase-js@2.49.4";
 
 const ASAL_BOLEH = ["https://silsilah-tqn.pages.dev", "http://localhost:8765"];
@@ -37,6 +38,23 @@ function samaAman(a: string, b: string) {
   return x === 0;
 }
 const rapikan = (t: string) => t.toLowerCase().replace(/[^a-z]/g, "");
+// Nama di QR lama diikuti alamat; ejaan nama di database sebagian sudah dibetulkan, jadi boleh beda sedikit.
+function jarak(a: string, b: string) {
+  const d = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i++) {
+    let kiri = d[0]; d[0] = i;
+    for (let j = 1; j <= b.length; j++) { const t = d[j]; d[j] = Math.min(d[j] + 1, d[j - 1] + 1, kiri + (a[i - 1] === b[j - 1] ? 0 : 1)); kiri = t; }
+  }
+  return d[b.length];
+}
+function namaCocok(sisaQr: string, nama: string) {
+  const q = rapikan(sisaQr), n = rapikan(nama);
+  if (n.length < 3) return false;
+  if (q.startsWith(n)) return true;
+  const batas = Math.max(1, Math.floor(n.length / 8));
+  for (let p = n.length - batas; p <= n.length + batas; p++) if (jarak(q.slice(0, p), n) <= batas) return true;
+  return false;
+}
 const statusDari = (r: { aktif: boolean; wafat: boolean }) => (r.wafat ? "Wafat" : r.aktif ? "Aktif" : "Tidak aktif");
 
 Deno.serve(async (req) => {
@@ -45,7 +63,7 @@ Deno.serve(async (req) => {
   if (req.method !== "POST") return balas(h, 405, { pesan: "Metode tidak didukung." });
   if (KUNCI_KTA.length < 32) return balas(h, 503, { pesan: "Kunci KTA belum dipasang admin pusat." });
 
-  let b: { aksi?: string; jamaah_id?: number; kode?: string; nomor?: string; nama?: string };
+  let b: { aksi?: string; jamaah_id?: number; kode?: string; nomor?: string; nama?: string; teks?: string };
   try { b = await req.json(); } catch { return balas(h, 400, { pesan: "Data tidak terbaca." }); }
   const admin = createClient(URL_SB, KUNCI_SERVIS, { auth: { persistSession: false, autoRefreshToken: false } });
 
@@ -82,6 +100,19 @@ Deno.serve(async (req) => {
     const r = info?.[0];
     if (!r || rapikan(r.nama) !== nama) return balas(h, 200, { hasil: "tidak_cocok" });
     return balas(h, 200, { hasil: "terdaftar", nomor, nama: r.nama, desa: r.desa, kecamatan: r.kecamatan, kabupaten: r.kabupaten, status: statusDari(r) });
+  }
+
+  if (b.aksi === "qrlama") {
+    const m = /^(\d{10})\s+(\S[\s\S]*)$/.exec(String(b.teks ?? "").trim().slice(0, 400));
+    if (!m) return balas(h, 400, { pesan: "QR ini bukan QR KTA TQN Cukir." });
+    const ip = req.headers.get("cf-connecting-ip") ?? req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "";
+    const { data: boleh } = await admin.rpc("boleh_cek_kta", { p_ip: ip });
+    if (!boleh) return balas(h, 429, { pesan: "Terlalu banyak pemeriksaan. Tunggu 15 menit lalu coba lagi." });
+    const { data: info } = await admin.rpc("kta_info", { p_nomor: Number(m[1]) });
+    const r = info?.[0];
+    if (!r || !namaCocok(m[2], r.nama)) return balas(h, 200, { hasil: "tidak_cocok", nomor: m[1] });
+    if (r.versi > 1) return balas(h, 200, { hasil: "diganti", nomor: m[1] });
+    return balas(h, 200, { hasil: "terdaftar", nomor: m[1], nama: r.nama, desa: r.desa, kecamatan: r.kecamatan, kabupaten: r.kabupaten, status: statusDari(r) });
   }
 
   return balas(h, 400, { pesan: "Aksi tidak dikenal." });

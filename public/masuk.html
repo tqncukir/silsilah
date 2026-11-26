@@ -9,8 +9,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=51">
-<link rel="stylesheet" href="/css/app.css?v=51">
+<link rel="stylesheet" href="/css/tokens.css?v=52">
+<link rel="stylesheet" href="/css/app.css?v=52">
 </head>
 <body class="hal-masuk">
 <header class="masuk-atas">
@@ -35,8 +35,17 @@
 <main class="masuk-isi">
   <section class="masuk-kartu" aria-labelledby="judul-masuk">
     <h1 id="judul-masuk">Assalamu'alaikum</h1>
-    <p class="masuk-ajak">Masuk dengan data di Kartu Anggota.</p>
+    <p class="masuk-ajak">Masuk cukup dengan memindai QR di Kartu Anggota (KTA).</p>
 
+    <button type="button" class="btn btn-utama btn-pindai" id="pindai">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8V5a1 1 0 011-1h3M16 4h3a1 1 0 011 1v3M20 16v3a1 1 0 01-1 1h-3M8 20H5a1 1 0 01-1-1v-3M7 12h10"/></svg>
+      <span class="teks">Pindai QR KTA</span>
+    </button>
+    <div id="ts-anggota" class="ts" aria-label="Pemeriksaan keamanan"></div>
+    <p id="pesan" class="pesan" role="alert" aria-live="assertive"></p>
+
+    <details class="masuk-pin" id="masuk-pin">
+      <summary>Masuk dengan PIN (pengurus atau KTA ber-PIN)</summary>
     <form id="form-anggota" class="form" autocomplete="off" novalidate>
       <div class="isian">
         <label for="nomor">Nomor Anggota</label>
@@ -55,19 +64,19 @@
         </div>
         <p id="ket-pin" class="ket">6 angka di KTA. Pengurus: 8 angka.</p>
       </div>
-      <div id="ts-anggota" class="ts" aria-label="Pemeriksaan keamanan"></div>
-      <p id="pesan" class="pesan" role="alert" aria-live="assertive"></p>
-      <button class="btn btn-utama btn-masuk" type="submit"><span class="putar" aria-hidden="true"></span><span class="teks">Masuk</span></button>
+      <button class="btn btn-kedua btn-masuk" type="submit"><span class="putar" aria-hidden="true"></span><span class="teks">Masuk</span></button>
     </form>
+    </details>
   </section>
 
   <aside class="masuk-bantuan">
-    <p><strong>Lupa PIN?</strong> Hubungi pengurus desa atau koordinator wilayah.</p>
+    <p><strong>Cukup sekali.</strong> Setelah masuk, HP ini diingat. Kartu hilang? Hubungi pengurus desa atau koordinator wilayah agar kartu diblokir.</p>
   </aside>
 
 </main>
-<script src="/js/supa.js?v=51" defer></script>
-<script src="/js/masuk.js?v=51" defer></script>
+<script src="/js/supa.js?v=52" defer></script>
+<script src="/js/pindai.js?v=52" defer></script>
+<script src="/js/masuk.js?v=52" defer></script>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=tsSiap&render=explicit" defer></script>
 </body>
 </html>

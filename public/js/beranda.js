@@ -21,6 +21,18 @@ $('keluar').onclick = keluar;
       }).catch(() => {});
     }
     if (p.peran === 'anggota' && p.jamaah_id) {
+      const k = await dbKirim('POST', 'rpc/kartu_saya', {});
+      if (k?.terbatas) {
+        const tglK = (d) => d ? new Date(d + 'T00:00:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+        $('rincian').innerHTML = [
+          ['Nomor Anggota', k.nomor_anggota], ['Status', k.wafat ? 'Wafat' : k.aktif ? 'Aktif' : 'Tidak aktif'], ['Mursyid', k.mursyid],
+          ['Tanggal daftar', tglK(k.tanggal_daftar)], ['Umur saat daftar', k.umur_daftar ? `${k.umur_daftar} tahun` : ''], ['Pekerjaan', k.pekerjaan],
+          ['Kab/Kota', k.kabupaten], ['Kecamatan', k.kecamatan], ['Kel/Desa', k.desa],
+        ].map(([a, v]) => `<div><dt>${a}</dt><dd>${v ? hurufAman(String(v)) : '–'}</dd></div>`).join('');
+        document.querySelector('.data-saya-ket').textContent = 'Masuk dengan KTA lama: yang tampil hanya data yang tercetak di kartu. Data lengkap bisa dilihat di pengurus desa.';
+        $('anggota').hidden = false;
+        return;
+      }
       const pilih = 'nomor_anggota,nama,tempat_lahir,tanggal_lahir,jenis_kelamin,status_kawin,kewarganegaraan,pekerjaan,alamat,rt_rw,tanggal_daftar,aktif,wafat,desa(nama,kecamatan(nama,kabupaten(nama))),mursyid(nama)';
       const [j] = await dbGet(`jamaah?select=${pilih}&id=eq.${p.jamaah_id}`);
       if (j) {

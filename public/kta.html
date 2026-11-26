@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=51">
-<link rel="stylesheet" href="/css/app.css?v=51">
+<link rel="stylesheet" href="/css/tokens.css?v=52">
+<link rel="stylesheet" href="/css/app.css?v=52">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -35,37 +35,37 @@
   <div class="judul-baris">
     <div>
       <h1>KTA Digital</h1>
-      <p class="judul-sub">QR di kartu bisa dipindai siapa saja untuk memastikan kartu ini asli.</p>
+      <p class="judul-sub">Tampilan sama dengan kartu fisik. QR di kartu bisa dipindai untuk cek keaslian dan absensi.</p>
     </div>
   </div>
   <p id="pesan" class="pesan" role="alert"></p>
 
   <div class="kta-tata">
     <div class="kta-wadah">
-      <article class="kta" id="kartu" aria-label="Kartu Tanda Anggota" hidden>
+      <article class="kta kta-pola" id="kartu" aria-label="Kartu Anggota Jam'iyyah" hidden>
         <header class="kta-kepala">
           <img src="/icons/logo-96.png" alt="" width="40" height="40">
           <div>
-            <p class="kta-judul">Kartu Anggota Jam'iyyah</p>
-            <p class="kta-sub">Thoriqoh Qodiriyah wa Naqsyabandiyah · Pusat Cukir Jombang</p>
+            <p class="kta-judul">JAM'IYYAH AHLITH THORIQOH</p>
+            <p class="kta-sub">Al Mu'tabarah Al Qodiriyah Wa Al Naqsyabandiyah Al Nahdliyah</p>
+            <p class="kta-alamat">Jl. Masjid No. 110 Cukir Diwek Jombang 61471</p>
           </div>
         </header>
+        <p class="kta-jenis">KARTU ANGGOTA JAM'IYYAH (ROSYID)</p>
         <div class="kta-badan">
-          <img class="kta-tanda-air" src="/icons/logo-96.png" alt="" width="96" height="96">
-          <div class="kta-kiri">
-            <p class="kta-nama" id="kta-nama"></p>
-            <p class="kta-nomor"><span>No. Anggota</span> <strong id="kta-nomor"></strong></p>
-            <dl class="kta-data" id="kta-data"></dl>
-          </div>
           <div class="kta-qr">
-            <div id="kta-qr" class="kta-qr-gambar" role="img" aria-label="QR keaslian KTA"></div>
-            <p class="kta-qr-ket">Pindai untuk cek keaslian</p>
+            <div id="kta-qr" class="kta-qr-gambar" role="img" aria-label="QR KTA"></div>
             <p class="kta-pin" id="kta-pin" hidden>PIN <strong id="kta-pin-angka"></strong></p>
           </div>
+          <dl class="kta-data" id="kta-data"></dl>
         </div>
         <footer class="kta-kaki">
-          <span>Al-Mursyid <strong>KH. Syamsuddin Ali</strong></span>
-          <span id="kta-versi"></span>
+          <p class="kta-berlaku"><span>Masa Berlaku</span> : SEUMUR HIDUP <span class="kta-versi" id="kta-versi"></span></p>
+          <div class="kta-ttd">
+            <p id="kta-tgl"></p>
+            <p>Ketua Thoriqoh</p>
+            <p class="kta-ttd-nama">KH. SYAMSUDDIN ALI AL - MURSYID</p>
+          </div>
         </footer>
       </article>
     </div>
@@ -94,8 +94,8 @@
   <p class="qr-besar-ket">Tunjukkan ke petugas untuk dipindai</p>
   <button type="button" class="btn btn-kedua" id="tutup-qr">Tutup</button>
 </div>
-<script src="/js/supa.js?v=51" defer></script>
-<script src="/js/qrcode.js?v=51" defer></script>
-<script src="/js/kta.js?v=51" defer></script>
+<script src="/js/supa.js?v=52" defer></script>
+<script src="/js/qrcode.js?v=52" defer></script>
+<script src="/js/kta.js?v=52" defer></script>
 </body>
 </html>
