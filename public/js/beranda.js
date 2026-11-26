@@ -22,6 +22,12 @@ $('keluar').onclick = keluar;
         $('m-jamaah-ket').textContent = `${total.toLocaleString('id-ID')} jamaah tercatat`;
       }).catch(() => {});
     }
+    if (PERAN_LIHAT_KEGIATAN.includes(p.peran)) {
+      $('menu').hidden = false; $('m-ruhani').hidden = false; $('m-ruhani-judul').hidden = false;
+      dbHalaman(`kegiatan?select=id&dibatalkan=is.false&mulai=gte.${encodeURIComponent(isoWib(hariIniWib(), '00:00'))}`, 0, 0).then(({ total }) => {
+        $('m-kegiatan-ket').textContent = total ? `${total.toLocaleString('id-ID')} kegiatan akan datang` : 'Buat dan lihat jadwal kegiatan';
+      }).catch(() => {});
+    }
     if (p.peran === 'anggota' && p.jamaah_id) {
       const k = (await kartuAwal?.janji) ?? await dbKirim('POST', 'rpc/kartu_saya', {});
       if (k?.terbatas) {

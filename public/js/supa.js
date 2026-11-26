@@ -99,7 +99,25 @@ async function profilSaya() {
   nav('nav-jamaah', p && PERAN_LIHAT_JAMAAH.includes(p.peran));
   nav('nav-daftar', p && PERAN_UBAH_JAMAAH.includes(p.peran));
   nav('nav-dasbor', p && PERAN_LIHAT_JAMAAH.includes(p.peran));
+  nav('nav-kegiatan', p && PERAN_LIHAT_KEGIATAN.includes(p.peran));
   return p || null;
+}
+
+// ===== Kegiatan (modul 4) =====
+const PERAN_LIHAT_KEGIATAN = ['admin_pusat', 'ketua', 'bendahara', 'petugas_scan', 'koordinator_wilayah'];
+const PERAN_KELOLA_KEGIATAN = ['admin_pusat', 'ketua', 'koordinator_wilayah']; // koordinator: kecamatannya (RLS)
+const JENIS_KEGIATAN = { khususiyah: 'Khususiyah/Tawajjuhan', manaqiban: 'Manaqiban', haul: 'Haul/Acara akbar', pengajian: 'Pengajian/lainnya' };
+// Waktu kegiatan selalu WIB (Jombang), apa pun zona waktu HP.
+const ZONA = 'Asia/Jakarta';
+const tglWib = (iso, opsi = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) => new Date(iso).toLocaleDateString('id-ID', { timeZone: ZONA, ...opsi });
+const jamWib = (iso) => new Date(iso).toLocaleTimeString('id-ID', { timeZone: ZONA, hour: '2-digit', minute: '2-digit' }).replace(':', '.');
+const isoWib = (tgl, jam) => `${tgl}T${jam}:00+07:00`;
+const hariIniWib = () => new Date().toLocaleDateString('sv-SE', { timeZone: ZONA });
+function statusKegiatan(k) {
+  if (k.dibatalkan) return ['Dibatalkan', 'stat-wafat'];
+  const now = Date.now(), awal = new Date(k.mulai).getTime(), akhir = k.selesai ? new Date(k.selesai).getTime() : awal + 3 * 3600e3;
+  if (now > akhir) return ['Selesai', ''];
+  return now >= awal ? ['Berlangsung', 'stat-aktif'] : ['Akan datang', 'stat-aktif'];
 }
 
 const NAMA_PERAN = {

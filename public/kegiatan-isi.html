@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Kegiatan · SILSILAH TQN Cukir</title>
+<meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=61">
+<link rel="stylesheet" href="/css/app.css?v=61">
+</head>
+<body class="hal-app">
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <a href="/beranda.html">Beranda</a>
+      <a href="/dashboard.html" id="nav-dasbor" hidden>Dashboard Pengurus</a>
+      <a href="/jamaah.html" id="nav-jamaah" hidden>Data Jamaah</a>
+      <a href="/pendaftaran.html" id="nav-daftar" hidden>Pendaftaran</a>
+      <a href="/kegiatan.html" id="nav-kegiatan" aria-current="page">Kegiatan</a>
+    </nav>
+    <button class="app-keluar" id="keluar" type="button">Keluar</button>
+  </div>
+</header>
+
+<main class="app-isi app-sempit">
+  <a href="/kegiatan.html" class="kembali" id="kembali">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Daftar kegiatan
+  </a>
+  <p id="pesan" class="pesan" role="alert"></p>
+
+  <section id="lihat" class="panel" hidden aria-labelledby="l-nama">
+    <div class="panel-kepala">
+      <div>
+        <p class="panel-label" id="l-jenis"></p>
+        <h1 id="l-nama"></h1>
+        <span id="l-status" class="stat"></span>
+      </div>
+      <div class="kepala-aksi">
+        <button type="button" class="btn btn-kedua btn-pas" id="ubah" hidden>Ubah</button>
+        <button type="button" class="btn btn-kedua btn-pas" id="batalkan" hidden>Batalkan kegiatan</button>
+      </div>
+    </div>
+    <dl class="rincian" id="l-rincian"></dl>
+  </section>
+
+  <form id="form" class="panel form" hidden novalidate aria-labelledby="f-judul">
+    <h1 id="f-judul">Tambah kegiatan</h1>
+    <p class="judul-sub" id="f-sub">Semua jam dalam WIB.</p>
+    <div class="form-kisi">
+      <h3 class="bagian-judul">Kegiatan</h3>
+      <div class="isian">
+        <label for="jenis">Jenis <span class="wajib">wajib</span></label>
+        <select id="jenis" required><option value="">Pilih jenis</option></select>
+      </div>
+      <div class="isian lebar">
+        <label for="nama">Nama kegiatan <span class="wajib">wajib</span></label>
+        <input id="nama" maxlength="120" required autocapitalize="sentences" placeholder="Khususiyah Malam Jumat Legi">
+      </div>
+      <h3 class="bagian-judul">Waktu dan tempat</h3>
+      <div class="isian d2">
+        <label for="tanggal">Tanggal <span class="wajib">wajib</span></label>
+        <input id="tanggal" type="date" required>
+      </div>
+      <div class="isian k3 d2">
+        <label for="jam-mulai">Jam mulai <span class="wajib">wajib</span></label>
+        <input id="jam-mulai" type="time" required>
+      </div>
+      <div class="isian k3 d2">
+        <label for="jam-selesai">Jam selesai</label>
+        <input id="jam-selesai" type="time" aria-describedby="k-selesai">
+        <p class="ket" id="k-selesai">Boleh dikosongkan.</p>
+      </div>
+      <div class="isian lebar">
+        <label for="tempat">Tempat <span class="wajib">wajib</span></label>
+        <input id="tempat" maxlength="160" required autocapitalize="words" placeholder="Masjid Pondok Cukir">
+      </div>
+      <div class="isian">
+        <label for="wilayah">Wilayah <span class="wajib">wajib</span></label>
+        <select id="wilayah" required aria-describedby="k-wilayah"></select>
+        <p class="ket" id="k-wilayah">Pusat = kegiatan seluruh jamaah.</p>
+      </div>
+      <h3 class="bagian-judul">Lainnya</h3>
+      <fieldset class="isian lebar pilihan" aria-describedby="k-publik">
+        <legend>Tampil di agenda umum</legend>
+        <label class="pil"><input type="radio" name="publik" value="ya" checked> Ya, tampil</label>
+        <label class="pil"><input type="radio" name="publik" value="tidak"> Tidak, untuk pengurus saja</label>
+      </fieldset>
+      <p class="ket bagian-ket" id="k-publik">Agenda umum bisa dilihat siapa saja tanpa masuk: nama, tanggal, jam, tempat. Daftar hadir tetap rahasia.</p>
+      <div class="isian lebar">
+        <label for="keterangan">Keterangan</label>
+        <input id="keterangan" maxlength="500" placeholder="Misalnya: membawa KTA, pakai baju putih">
+      </div>
+    </div>
+    <p id="pesan-form" class="pesan" role="alert"></p>
+    <div class="tombol-baris">
+      <button type="button" class="btn btn-kedua btn-pas" id="batal">Batal</button>
+      <button type="submit" class="btn btn-utama btn-pas btn-masuk" id="simpan"><span class="putar" aria-hidden="true"></span><span class="teks">Simpan</span></button>
+    </div>
+  </form>
+</main>
+<script src="/js/supa.js?v=61" defer></script>
+<script src="/js/kegiatan-isi.js?v=61" defer></script>
+</body>
+</html>
