@@ -5,6 +5,7 @@ $('keluar').onclick = keluar;
 (async () => {
   sesiDariTautan();
   try {
+    const kartuAwal = await kartuSayaAwal().catch(() => null);
     const p = await profilSaya();
     if (!p) {
       $('salam').textContent = 'Akun belum punya peran';
@@ -21,7 +22,7 @@ $('keluar').onclick = keluar;
       }).catch(() => {});
     }
     if (p.peran === 'anggota' && p.jamaah_id) {
-      const k = await dbKirim('POST', 'rpc/kartu_saya', {});
+      const k = (await kartuAwal?.janji) ?? await dbKirim('POST', 'rpc/kartu_saya', {});
       if (k?.terbatas) {
         const tglK = (d) => d ? new Date(d + 'T00:00:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
         $('rincian').innerHTML = [

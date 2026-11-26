@@ -41,6 +41,8 @@ Mulai: 2026-11-25 (Kang Salman: "Bismillah").
 
 - **Perbaikan 2026-11-26 (laporan Kang):** scan QR saat Masuk sempat ditolak "Pemeriksaan keamanan belum selesai" (Turnstile belum siap/kedaluwarsa saat tombol ditekan). Sekarang `masuk.js` menunggu token Turnstile (callback, maks 20 detik, token sekali pakai) dengan tombol "Memeriksa...", dan memberi tahu bila kotak keamanan perlu diketuk. Diuji dengan Turnstile tiruan lambat (4 detik): berhasil masuk. Versi cache v53.
 
+- **Percepatan 2026-11-26 (laporan Kang "pembacaan database lama"):** database sendiri cepat (10-40 ms per permintaan di log server); yang lama adalah langkah yang berurutan lewat sinyal HP. `login-anggota` v5: cek Turnstile, batas IP, dan data kartu berjalan bersamaan (tidak ada data dikembalikan sebelum cek robot dan batas IP lolos; jalur PIN tetap cek robot dulu). Beranda dan KTA anggota: `kartu_saya` diambil bersamaan dengan profil (`kartuSayaAwal()` di `supa.js`, token disegarkan sekali dulu). Uji tiruan sinyal lambat 800 ms: Beranda anggota 1 kali tunggu (0,9 dtk) bukan 2. Versi cache v54.
+
 ## Berikutnya (satu per satu, tunggu persetujuan Kang)
 
 Uji Kang: scan KTA fisik di Cek Keaslian dan Masuk (HP). Setelah disetujui: tunggu perintah Kang untuk tahap berikutnya.

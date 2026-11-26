@@ -81,18 +81,23 @@ Deno.serve(async (req) => {
   f.append("secret", RAHASIA_TS);
   f.append("response", String(b.turnstile ?? ""));
   if (ip) f.append("remoteip", ip);
-  const ts = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", body: f })
+  const tsJanji = fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", body: f })
     .then((r) => r.json()).catch(() => ({ success: false }));
-  if (!ts.success) return balas(h, 403, { pesan: "Pemeriksaan robot gagal. Muat ulang halaman lalu coba lagi." });
+  const ROBOT = { pesan: "Pemeriksaan robot gagal. Muat ulang halaman lalu coba lagi." };
 
   const admin = createClient(URL_SB, KUNCI_SERVIS, { auth: { persistSession: false, autoRefreshToken: false } });
   let hasil: { status?: string; mode?: string; peran?: string; jamaah_id?: number; nama?: string; user_id?: string | null } | undefined;
 
   if (lewatQr) {
-    // 2a. Scan QR KTA (dibatasi per IP)
-    const { data: boleh } = await admin.rpc("boleh_cek_kta", { p_ip: ip });
+    // 2a. Scan QR KTA (dibatasi per IP). Cek robot, batas IP, dan data kartu berjalan bersamaan;
+    //     tidak ada yang dikembalikan sebelum cek robot dan batas IP lolos.
+    const [ts, { data: boleh }, { data: info }] = await Promise.all([
+      tsJanji,
+      admin.rpc("boleh_cek_kta", { p_ip: ip }),
+      admin.rpc("kta_info", { p_nomor: Number(nomor) }),
+    ]);
+    if (!ts.success) return balas(h, 403, ROBOT);
     if (!boleh) return balas(h, 429, { pesan: "Terlalu banyak percobaan. Tunggu 15 menit lalu coba lagi." });
-    const { data: info } = await admin.rpc("kta_info", { p_nomor: Number(nomor) });
     const r = info?.[0];
     if (!r) return balas(h, 401, { pesan: SALAH_QR });
     if (qrBaru) {
@@ -108,7 +113,8 @@ Deno.serve(async (req) => {
     if (pg && !pg.aktif) return balas(h, 403, { pesan: "Akun ini dinonaktifkan. Hubungi pengurus." });
     hasil = { status: "ok", mode: "anggota", peran: "anggota", jamaah_id: r.jamaah_id, nama: r.nama, user_id: pg?.user_id ?? null };
   } else {
-    // 2b. Cek PIN (dengan batas salah) di database
+    // 2b. Cek PIN (dengan batas salah) di database, hanya setelah cek robot lolos
+    if (!(await tsJanji).success) return balas(h, 403, ROBOT);
     const { data: cek, error } = await admin.rpc("cek_login", { p_nomor: Number(nomor), p_desa: desa, p_pin: pin, p_ip: ip });
     if (error) return balas(h, 500, { pesan: "Terjadi gangguan. Coba lagi sebentar." });
     hasil = cek?.[0];

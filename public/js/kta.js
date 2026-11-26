@@ -106,6 +106,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('qr-b
 
 (async () => {
   try {
+    const kartuAwal = await kartuSayaAwal().catch(() => null);
     const p = await profilSaya();
     const anggota = p?.peran === 'anggota';
     if (!p || !(PERAN_LIHAT_JAMAAH.includes(p.peran) || (anggota && p.jamaah_id))) { location.replace('/beranda.html'); return; }
@@ -120,7 +121,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('qr-b
     if (!id) { pesan('Jamaah belum dipilih.'); return; }
     if (!anggota) $('kembali').href = `/jamaah-isi.html?id=${encodeURIComponent(id)}`;
     if (anggota) {
-      const k = await dbKirim('POST', 'rpc/kartu_saya', {});
+      const k = (await kartuAwal?.janji) ?? await dbKirim('POST', 'rpc/kartu_saya', {});
       terbatas = !!k?.terbatas;
       j = k && { ...k, id: p.jamaah_id, desa: { nama: k.desa, kecamatan: { nama: k.kecamatan, kabupaten: { nama: k.kabupaten } } }, mursyid: { nama: k.mursyid } };
     } else j = (await dbGet(`jamaah?select=${PILIH}&id=eq.${encodeURIComponent(id)}`))[0];

@@ -48,6 +48,17 @@ async function dbGet(jalur) {
   return r.json();
 }
 
+// Untuk akun anggota: mulai ambil kartu_saya bersamaan dengan profil (hemat satu kali tunggu di HP).
+// Token disegarkan dulu (sekali) agar dua permintaan tidak menyegarkan token bersamaan.
+async function kartuSayaAwal() {
+  const t = await tokenAktif();
+  if (!t) return null;
+  let email = '';
+  try { email = JSON.parse(atob(t.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))).email || ''; } catch {}
+  // dibungkus { janji } agar await di pemanggil tidak ikut menunggu permintaannya selesai
+  return email.endsWith('@anggota.silsilah.invalid') ? { janji: dbKirim('POST', 'rpc/kartu_saya', {}).catch(() => null) } : null;
+}
+
 async function keluar() {
   const t = await tokenAktif();
   if (t) await fetch(`${SB_URL}/auth/v1/logout`, { method: 'POST', headers: { apikey: SB_KEY, Authorization: `Bearer ${t}` } }).catch(() => {});
