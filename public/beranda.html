@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=63">
-<link rel="stylesheet" href="/css/app.css?v=63">
+<link rel="stylesheet" href="/css/tokens.css?v=64">
+<link rel="stylesheet" href="/css/app.css?v=64">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -79,6 +79,15 @@
         <span class="menu-ikon grup-pondasi" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><rect x="2.5" y="5" width="19" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="8.5" cy="11" r="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5.5 16c.5-1.5 1.6-2.3 3-2.3s2.5.8 3 2.3M14 10h4.5M14 13.5h3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
         <span><strong>KTA Saya</strong><span class="menu-ket">Kartu anggota digital dengan QR keaslian</span></span>
       </a>
+      <a class="menu-ubin" href="/agenda.html">
+        <span class="menu-ikon grup-ruhani" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h3M8 17h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        <span><strong>Agenda Kegiatan</strong><span class="menu-ket" id="m-agenda-ket">Jadwal khususiyah, manaqiban, haul, pengajian</span></span>
+      </a>
+    </div>
+    <div class="panel data-saya" id="riwayat">
+      <h2 class="form-judul">Riwayat hadir saya</h2>
+      <p class="ket" id="riwayat-ket">Memuat...</p>
+      <ol class="riwayat-daftar" id="riwayat-isi"></ol>
     </div>
     <div class="panel data-saya">
       <h2 class="form-judul">Data saya</h2>
@@ -87,7 +96,8 @@
     </div>
   </section>
 </main>
-<script src="/js/supa.js?v=63" defer></script>
-<script src="/js/beranda.js?v=63" defer></script>
+<script src="/js/supa.js?v=64" defer></script>
+<script src="/js/agenda.js?v=64" defer></script>
+<script src="/js/beranda.js?v=64" defer></script>
 </body>
 </html>

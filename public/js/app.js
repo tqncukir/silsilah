@@ -17,3 +17,6 @@ const terpasang = matchMedia('(display-mode: standalone)').matches || navigator.
 if (ios && !terpasang) document.getElementById('panduan-ios').hidden = false;
 addEventListener('offline', () => kabar('Sinyal terputus. Halaman tetap bisa dibuka.'));
 function kabar(t) { const s = document.getElementById('status'); s.textContent = t; s.classList.add('tampil'); setTimeout(() => s.classList.remove('tampil'), 4000); }
+// Agenda terdekat di halaman depan (publik, tanpa login)
+const agenda = document.getElementById('agenda');
+if (agenda && typeof gambarAgenda === 'function') gambarAgenda(agenda, 3, 'Belum ada agenda kegiatan yang akan datang.');

@@ -763,3 +763,21 @@ li:nth-child(-n+3)>.bt-baris .bt-no{background:var(--hijau-jamiyyah);color:#FFFF
 .hadir-teratas a:hover{background:var(--hijau-pupus)}
 .hadir-teratas small{display:block;color:var(--abu);font-size:var(--fs-kecil)}
 .hadir-teratas strong{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* ===== Agenda kegiatan (Tahap 2 Langkah 5) ===== */
+.agenda-bagian{margin:8px 0 var(--gap)}
+.agenda-bagian h2{margin:0 0 8px}
+.agenda-daftar{list-style:none;margin:0 0 8px;padding:0;display:grid;gap:8px}
+.agenda-item{display:flex;gap:12px;align-items:flex-start;padding:12px;background:#FFFFFF;border:1px solid #E2ECD6;border-radius:14px}
+.agenda-tgl{flex:none;display:grid;place-items:center;width:52px;padding:6px 0;border-radius:12px;background:var(--hijau-pupus);
+  color:var(--hijau-jamiyyah);font-size:var(--fs-kecil);font-weight:600;line-height:1.1}
+.agenda-tgl strong{font-size:1.375rem}
+.agenda-isi{min-width:0;display:grid;gap:2px}
+.agenda-isi .ket{margin:0}
+.agenda-jenis{font-size:var(--fs-kecil);font-weight:600;color:var(--grup-ruhani)}
+.agenda-semua{display:inline-flex;align-items:center}
+.riwayat-daftar{list-style:none;margin:8px 0 0;padding:0}
+.riwayat-daftar li{display:grid;gap:2px;padding:8px 0;border-bottom:1px solid #EEF2E8}
+.riwayat-daftar li:last-child{border-bottom:0}
+.riwayat-daftar .ket{margin:0}
+#riwayat{margin-top:16px}

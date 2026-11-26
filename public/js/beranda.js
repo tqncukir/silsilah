@@ -2,6 +2,20 @@
 const $ = (id) => document.getElementById(id);
 $('keluar').onclick = keluar;
 
+// Portal Anggota: riwayat hadir sendiri (RLS: hanya baris milik anggota; sesi KTA lama tidak punya jamaah_id).
+async function muatRiwayat(terbatas) {
+  if (terbatas) { $('riwayat-ket').textContent = 'Masuk dengan KTA lama: riwayat hadir belum bisa ditampilkan. Minta KTA baru ke pengurus.'; return; }
+  try {
+    const { baris, total } = await dbHalaman('kehadiran?select=waktu,cara,kegiatan(nama,jenis,tempat)&order=waktu.desc', 0, 9);
+    $('riwayat-ket').textContent = total ? `${total.toLocaleString('id-ID')} kali hadir tercatat${total > 10 ? ' · 10 terakhir' : ''}.` : 'Belum ada kehadiran tercatat. Tunjukkan KTA ke petugas saat kegiatan.';
+    $('riwayat-isi').innerHTML = baris.map((h) => `<li><strong>${hurufAman(h.kegiatan?.nama || 'Kegiatan pengurus')}</strong>
+      <span class="ket">${tglWib(h.waktu)} · jam ${jamWib(h.waktu)}${h.kegiatan ? ` · ${hurufAman(h.kegiatan.tempat)}` : ''}</span></li>`).join('');
+  } catch { $('riwayat-ket').textContent = 'Riwayat hadir belum bisa dimuat. Coba muat ulang.'; }
+}
+function ketAgenda() {
+  ambilAgenda(1).then((d) => { if (d[0]) $('m-agenda-ket').textContent = `Terdekat: ${d[0].nama}, ${tglWib(d[0].mulai, { day: 'numeric', month: 'short' })}`; }).catch(() => {});
+}
+
 (async () => {
   sesiDariTautan();
   try {
@@ -40,6 +54,7 @@ $('keluar').onclick = keluar;
         ].map(([a, v]) => `<div><dt>${a}</dt><dd>${v ? hurufAman(String(v)) : '–'}</dd></div>`).join('');
         document.querySelector('.data-saya-ket').textContent = 'Masuk dengan KTA lama: yang tampil hanya data yang tercetak di kartu. Data lengkap bisa dilihat di pengurus.';
         $('anggota').hidden = false;
+        muatRiwayat(true); ketAgenda();
         return;
       }
       const pilih = 'nomor_anggota,nama,tempat_lahir,tanggal_lahir,jenis_kelamin,status_kawin,kewarganegaraan,pekerjaan,alamat,rt_rw,tanggal_daftar,aktif,wafat,desa(nama,kecamatan(nama,kabupaten(nama))),mursyid(nama)';
@@ -57,6 +72,7 @@ $('keluar').onclick = keluar;
           ['Dusun/Jalan', j.alamat], ['RT/RW', j.rt_rw],
         ].map(([k, v]) => `<div><dt>${k}</dt><dd>${v ? hurufAman(v) : '–'}</dd></div>`).join('');
         $('anggota').hidden = false;
+        muatRiwayat(false); ketAgenda();
       }
     }
   } catch (e) { tanganiGalat(e, (t) => { $('pesan').textContent = t; }); }
