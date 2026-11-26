@@ -67,6 +67,7 @@ Mulai: 2026-11-26 (Kang: "Mulai Tahap 2: modul 4 Kegiatan & Absensi").
 - Pembuat kegiatan: admin pusat & ketua (semua kegiatan), koordinator wilayah (hanya kecamatannya).
 - Agenda publik tanpa login (nama, jenis, tanggal, jam, tempat); daftar hadir tetap rahasia.
 - Kegiatan cukup satu hari (jam selesai di tanggal yang sama); kegiatan lebih dari sehari tidak perlu (Kang 2026-11-26).
+- Absen QR KTA baru: tanda tangan tidak dicek dulu, hanya nomor + versi kartu, agar scan cepat; penjagaan lewat nama + desa yang tampil ke petugas. Bisa ditambah nanti bila KTA baru sudah banyak atau ada kasus titip absen (Kang 2026-11-26).
 
 **Rencana langkah (satu per satu, tunggu persetujuan Kang):**
 1. Database kegiatan & kehadiran (tabel, RLS, fungsi catat/batal hadir, agenda publik).
