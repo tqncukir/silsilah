@@ -58,6 +58,24 @@ Mulai: 2026-11-25 (Kang Salman: "Bismillah").
 
 Login scan QR KTA di HP sudah dicoba Kang dan lancar (2026-11-26); KTA master disetujui. **Tahap 1 selesai.** Tunggu Kang bilang "mulai" untuk tahap berikutnya (Tahap 2 belum ditentukan Kang).
 
+## Tahap 2: Modul 4 Kegiatan & Absensi
+Mulai: 2026-11-26 (Kang: "Mulai Tahap 2: modul 4 Kegiatan & Absensi").
+
+**Keputusan konsep Kang (2026-11-26):**
+- Jenis kegiatan: Khususiyah/Tawajjuhan, Manaqiban, Haul/Acara akbar, Pengajian/lainnya (nama bebas).
+- Absen: petugas memindai KTA jamaah (QR lama atau baru); bisa ketik Nomor Anggota bila kartu tertinggal. Jamaah tidak absen sendiri.
+- Pembuat kegiatan: admin pusat & ketua (semua kegiatan), koordinator wilayah (hanya kecamatannya).
+- Agenda publik tanpa login (nama, jenis, tanggal, jam, tempat); daftar hadir tetap rahasia.
+
+**Rencana langkah (satu per satu, tunggu persetujuan Kang):**
+1. Database kegiatan & kehadiran (tabel, RLS, fungsi catat/batal hadir, agenda publik).
+2. Halaman Kegiatan (pengurus): daftar, tambah, ubah, batalkan.
+3. Halaman Absensi: pilih kegiatan, scan KTA beruntun, ketik nomor, daftar hadir langsung tampil, batal hadir.
+4. Rekap: jumlah hadir per kegiatan dan per wilayah, unduh CSV, angka di Dashboard Pengurus.
+5. Agenda publik di halaman depan + Portal Anggota: agenda dan riwayat hadir saya.
+
+**Langkah 1, Database** (2026-11-26): migrasi `20261126030000_kegiatan_absensi.sql`. Tabel `kegiatan` (jenis, nama, mulai/selesai, tempat, kecamatan kosong = pusat, publik, dibatalkan; tidak bisa dihapus; pembuat dan waktu dikunci trigger; setiap perubahan masuk `log_perubahan`) dan `kehadiran` (satu jamaah sekali per kegiatan; cara qr_baru/qr_lama/ketik; hanya ditulis lewat fungsi). Hak: buat/ubah kegiatan = admin pusat & ketua (semua), koordinator (kecamatannya); absen & lihat daftar hadir = admin pusat, ketua, petugas scan (semua), koordinator (kegiatan kecamatannya); anggota hanya riwayat hadirnya sendiri; bendahara dan tamu tidak melihat daftar hadir; sesi terbatas (QR lama) ditolak. `catat_hadir(kegiatan, nomor, cara, versi)`: hasil hadir/sudah/tidak_dikenal/tidak_aktif/wafat/kartu_diganti (+ nama, desa untuk dicocokkan petugas); petugas & koordinator hanya 3 jam sebelum s.d. 12 jam sesudah kegiatan, admin pusat & ketua kapan saja (melengkapi absen); QR baru dicek versi kartunya (kartu hilang yang sudah diganti ditolak; tanda tangan QR tidak dicek di sini). `batal_hadir`: admin pusat & ketua kapan saja, petugas/koordinator hanya catatannya sendiri ≤1 hari, tercatat di log. `agenda_publik(dari, batas)` untuk tamu: hanya kegiatan publik yang belum lewat dan tidak dibatalkan, maks 100. Diuji di Postgres lokal (semua 22 migrasi + 33 skenario peran lulus). **Menunggu Kang menjalankan migrasi di SQL Editor.**
+
 ## Catatan
 - Alamat resmi: https://silsilah.tqncukir.id (domain tqncukir.id dibeli Kang di Domosquare 2026-11-26, nameserver dipindah ke Cloudflare akun jtccukir2022: damon/kira.ns.cloudflare.com; CNAME `silsilah` → silsilah-tqn.pages.dev, custom domain Pages; hostname Turnstile ditambah; ASAL_BOLEH fungsi `kta` v4 & `login-anggota` v7 ditambah). Alamat lama tetap jalan: https://silsilah-tqn.pages.dev. `tqncukir.id` dan `www.tqncukir.id` sengaja dibiarkan kosong (keputusan Kang 2026-11-26), nanti untuk website profil jamaah (agenda, berita, dll).
 - GitHub App Claude dan Cloudflare Pages hanya diberi akses ke repo `silsilah`.
