@@ -5,7 +5,7 @@ const UKURAN = [10, 20, 50, 100];
 let PER_HALAMAN = (() => { let n = Number(q.get('n')); try { n ||= Number(localStorage.getItem('silsilah.perHalaman')); } catch {} return UKURAN.includes(n) ? n : 20; })();
 let halaman = Math.max(1, Number(q.get('h')) || 1);
 const SARING = ['cari', 'jenis', 'kabupaten', 'kecamatan'];
-let semuaKec = [], tunda;
+let semuaKec = [], tunda, bacaSaja = false; // anggota: baca saja, tanpa rincian
 
 const pesan = (t) => { $('pesan').textContent = t; };
 const tglPendek = (d) => d ? new Date(d + 'T00:00:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : '–';
@@ -44,7 +44,7 @@ async function muat() {
       ? `Menampilkan nomor ${(dari + 1).toLocaleString('id-ID')}–${(dari + baris.length).toLocaleString('id-ID')} dari ${total.toLocaleString('id-ID')} · ${PER_HALAMAN} per halaman` : '';
     $('isi-tabel').innerHTML = baris.length ? baris.map((a, i) => {
       const asal = a.desa || '';
-      return `<tr data-id="${hurufAman(a.kunci)}" tabindex="0">
+      return `<tr data-id="${hurufAman(a.kunci)}"${bacaSaja ? '' : ' tabindex="0"'}>
         <td data-l="No" class="angka kol-no">${(dari + i + 1).toLocaleString('id-ID')}</td>
         <td data-l="Nama" class="tabel-nama">${hurufAman(a.nama)}${a.bin_binti ? ` <span class="ak-bin">${hurufAman(a.bin_binti)}</span>` : ''}</td>
         <td data-l="Nomor" class="angka">${a.tanggal_wafat ? `Wafat ${tglPendek(a.tanggal_wafat)} <span class="ak-hij">· ${teksHijriah(a.tanggal_wafat)}</span>` : 'Tanggal wafat belum diketahui'}<span class="hp-saja">${a.makam ? ` · ${hurufAman(a.makam)}` : ''}</span></td>
@@ -63,7 +63,7 @@ async function muat() {
   } catch (e) { $('ringkas').textContent = '–'; tanganiGalat(e, pesan); }
 }
 
-const buka = (kunci) => { location.href = `/ahli-kubur-isi.html?kunci=${encodeURIComponent(kunci)}`; };
+const buka = (kunci) => { if (!bacaSaja) location.href = `/ahli-kubur-isi.html?kunci=${encodeURIComponent(kunci)}`; };
 $('isi-tabel').addEventListener('click', (e) => { const tr = e.target.closest('tr[data-id]'); if (tr) buka(tr.dataset.id); });
 $('isi-tabel').addEventListener('keydown', (e) => { const tr = e.target.closest('tr[data-id]'); if (tr && e.key === 'Enter') buka(tr.dataset.id); });
 $('saring').addEventListener('submit', (e) => e.preventDefault());
@@ -86,7 +86,9 @@ $('keluar').onclick = keluar;
 (async () => {
   try {
     const p = await profilSaya();
-    if (!p || !PERAN_LIHAT_JAMAAH.includes(p.peran)) { location.replace('/beranda.html'); return; }
+    if (!p) { location.replace('/beranda.html'); return; }
+    bacaSaja = !PERAN_LIHAT_JAMAAH.includes(p.peran); // anggota (Portal Anggota)
+    $('tabel').classList.toggle('baca', bacaSaja);
     $('tambah').hidden = !PERAN_KELOLA_AK.includes(p.peran);
     $('jenis').innerHTML += Object.entries(JENIS_AK).map(([v, t]) => `<option value="${v}">${t}</option>`).join('');
     const [kab, kec] = await Promise.all([dbGet('kabupaten?select=id,nama&order=nama'), dbGet('kecamatan?select=id,nama,kabupaten_id,kabupaten(nama)&order=nama')]);

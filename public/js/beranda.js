@@ -16,6 +16,19 @@ function ketAgenda() {
   ambilAgenda(1).then((d) => { if (d[0]) $('m-agenda-ket').textContent = `Terdekat: ${d[0].nama}, ${tglWib(d[0].mulai, { day: 'numeric', month: 'short' })}`; }).catch(() => {});
 }
 
+// Haul terdekat (Hijriah) untuk keterangan ubin Haul. Ringkas: tanggal Hijriah hari ini sampai akhir bulan depan.
+function ketHaul(id) {
+  dbKirim('POST', 'rpc/tanggal_ahli_kubur', {}).then((rows) => {
+    const kini = hijriah(hariIniWib()), depan = kini.m === 12 ? { m: 1, y: kini.y + 1 } : { m: kini.m + 1, y: kini.y };
+    const urut = (h) => (h.m === kini.m ? 0 : 100) + h.d;
+    const calon = rows.map((a) => ({ a, h: hijriah(a.tanggal_wafat) }))
+      .filter(({ h }) => (h.m === kini.m && h.d >= kini.d && kini.y - h.y >= 1) || (h.m === depan.m && depan.y - h.y >= 1))
+      .sort((x, y) => urut(x.h) - urut(y.h));
+    const el = document.getElementById(id); if (!el) return;
+    el.textContent = calon.length ? `Terdekat: ${calon[0].a.nama}, ${calon[0].h.d} ${BULAN_HIJRIAH[calon[0].h.m - 1]}${calon.length > 1 ? ` · ${calon.length} haul sampai bulan depan` : ''}` : 'Tidak ada haul sampai bulan depan';
+  }).catch(() => {});
+}
+
 (async () => {
   sesiDariTautan();
   try {
@@ -41,6 +54,7 @@ function ketAgenda() {
       $('m-absen').hidden = !PERAN_ABSEN.includes(p.peran);
       $('m-ahli').hidden = !PERAN_LIHAT_JAMAAH.includes(p.peran);
       $('m-haul').hidden = !PERAN_LIHAT_JAMAAH.includes(p.peran);
+      ketHaul('m-haul-ket');
       dbHalaman(`kegiatan?select=id&dibatalkan=is.false&mulai=gte.${encodeURIComponent(isoWib(hariIniWib(), '00:00'))}`, 0, 0).then(({ total }) => {
         $('m-kegiatan-ket').textContent = total ? `${total.toLocaleString('id-ID')} kegiatan akan datang` : 'Buat dan lihat jadwal kegiatan';
       }).catch(() => {});
@@ -56,7 +70,7 @@ function ketAgenda() {
         ].map(([a, v]) => `<div><dt>${a}</dt><dd>${v ? hurufAman(String(v)) : '–'}</dd></div>`).join('');
         document.querySelector('.data-saya-ket').textContent = 'Masuk dengan KTA lama: yang tampil hanya data yang tercetak di kartu. Data lengkap bisa dilihat di pengurus.';
         $('anggota').hidden = false;
-        muatRiwayat(true); ketAgenda();
+        muatRiwayat(true); ketAgenda(); ketHaul('a-haul-ket');
         return;
       }
       const pilih = 'nomor_anggota,nama,tempat_lahir,tanggal_lahir,jenis_kelamin,status_kawin,kewarganegaraan,pekerjaan,alamat,rt_rw,tanggal_daftar,aktif,wafat,desa(nama,kecamatan(nama,kabupaten(nama))),mursyid(nama)';
@@ -74,7 +88,7 @@ function ketAgenda() {
           ['Dusun/Jalan', j.alamat], ['RT/RW', j.rt_rw],
         ].map(([k, v]) => `<div><dt>${k}</dt><dd>${v ? hurufAman(v) : '–'}</dd></div>`).join('');
         $('anggota').hidden = false;
-        muatRiwayat(false); ketAgenda();
+        muatRiwayat(false); ketAgenda(); ketHaul('a-haul-ket');
       }
     }
   } catch (e) { tanganiGalat(e, (t) => { $('pesan').textContent = t; }); }

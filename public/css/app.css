@@ -841,3 +841,6 @@ li:nth-child(-n+3)>.bt-baris .bt-no{background:var(--hijau-jamiyyah);color:#FFFF
 .haul-isi .ket{margin:0}
 .haul-kini>a,.haul-kini>div{border-color:var(--hijau-daun);background:var(--hijau-pupus)}
 .haul-lewat .haul-tgl{background:#F1F3EE;color:var(--abu)}
+
+.tabel.baca tbody tr[data-id]{cursor:default}
+.tabel.baca tbody tr[data-id]:hover{background:transparent}
