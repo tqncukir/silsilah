@@ -194,15 +194,33 @@ function gambarCatatan() {
 }
 
 function gambarPekerjaan() {
-  const kel = new Map(); let kosong = 0;
-  for (const { p, n } of data.pekerjaan) { const k = kelompokPekerjaan(p); if (k === null) kosong += n; else kel.set(k, (kel.get(k) || 0) + n); }
+  const kel = new Map(), isian = new Map(); let kosong = 0;
+  for (const { p, n } of data.pekerjaan) {
+    const k = kelompokPekerjaan(p); if (k === null) { kosong += n; continue; }
+    kel.set(k, (kel.get(k) || 0) + n);
+    const t = String(p).trim(); if (!isian.has(k)) isian.set(k, new Map());
+    isian.get(k).set(t, (isian.get(k).get(t) || 0) + n);
+  }
   const urut = [...kel].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'id'));
-  const lima = urut.slice(0, 5), lainnya = urut.slice(5).reduce((a, [, n]) => a + n, 0);
-  const baris = lima.map(([label, n]) => ({ label, n }));
-  if (lainnya) baris.push({ label: `Lainnya (${angka(urut.length - 5)} kelompok)`, n: lainnya });
-  if (kosong) baris.push({ label: 'Belum diisi', n: kosong });
+  const lima = urut.slice(0, 5), sisa = urut.slice(5), lainnya = sisa.reduce((a, [, n]) => a + n, 0);
+  const baris = lima.map(([label, n]) => ({ label, n, aksi: false }));
+  if (lainnya) baris.push({ label: `Lainnya (${angka(sisa.length)} kelompok)`, n: lainnya, petunjuk: '. Ketuk untuk melihat rinciannya' });
+  if (kosong) baris.push({ label: 'Belum diisi', n: kosong, aksi: false });
   for (const b of baris) b.teks = `${angka(b.n)} (${persen(b.n, data.total)})`;
-  batang($('pekerjaan'), baris, Math.max(...baris.map((b) => b.n)));
+  batang($('pekerjaan'), baris, Math.max(...baris.map((b) => b.n)), { tombol: true });
+  for (const b of $('pekerjaan').querySelectorAll('button')) b.onclick = () => bukaLainnya(sisa, lainnya, isian);
+}
+
+// Rincian "Lainnya" pekerjaan: semua kelompok di luar 5 terbanyak (dari data yang sudah dimuat, tanpa permintaan baru)
+function bukaLainnya(sisa, jumlah, isian) {
+  $('daftar-judul').textContent = 'Pekerjaan lainnya';
+  $('daftar-ket').textContent = `${angka(sisa.length)} kelompok · ${angka(jumlah)} jamaah · ${teksWilayah()} · ${teksPeriode()}`;
+  $('daftar-isi').innerHTML = sisa.map(([k, n]) => {
+    const v = [...(isian.get(k) || [])].filter(([t]) => rapikanTeks(t) !== rapikanTeks(k));
+    return `<li class="dd-baris"><span class="dd-nama">${hurufAman(k)}</span><span class="bt-nilai">${angka(n)} <span class="bt-persen">(${persen(n, data.total)})</span></span>${
+      v.length ? `<span class="dd-alamat">Tertulis: ${v.sort((a, b) => b[1] - a[1]).map(([t, m]) => `${hurufAman(t)} (${angka(m)})`).join(', ')}</span>` : ''}</li>`;
+  }).join('');
+  $('daftar').showModal();
 }
 
 function gambarJk() {
