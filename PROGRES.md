@@ -335,6 +335,28 @@ Mulai: 2026-11-27 (Kang: "Mulai Tahap 8: modul 8 Ekonomi Jamaah").
 
 **Tahap 8 selesai dan disetujui Kang 2026-11-27 ("Tahap 8 disetujui").** Tunggu Kang bilang "mulai" untuk tahap berikutnya. Modul tersisa: 7 Kesehatan (12 Dashboard & Laporan sebagian sudah ada).
 
+## Tahap 9: Modul 7 Kesehatan
+Mulai: 2026-11-27 (Kang: "Mulai Tahap 9: modul 7 Kesehatan").
+
+**Keputusan konsep Kang (2026-11-27):**
+- Dicatat: **jamaah sakit** (sedang sakit/dirawat + kunjungan/jenguk pengurus sampai sembuh) dan **kebutuhan khusus** (kursi roda, pendamping, dll.) untuk kegiatan & ziarah.
+- **Tanpa nama penyakit**: cukup tempat (di rumah / dirawat di RS, nama RS), kondisi umum, kebutuhan khusus.
+- Yang melihat: **ketua & dokter pendamping** (semua), **koordinator** (jamaah wilayahnya). Khodim hanya daftar kebutuhan khusus saat kegiatan/ziarah. Admin pusat angka saja.
+- **Pengurus yang mencatat** (setelah mendapat kabar); anggota tidak melapor lewat aplikasi.
+
+**Usulan Claude (berlaku kecuali Kang ubah):**
+- Catatan sakit: jamaah aktif & hidup; tempat (Di rumah / Rawat inap + nama RS/puskesmas); kondisi umum (Ringan / Sedang / Berat); tanggal mulai; status Sedang sakit → Sembuh, atau Wafat (status jamaah tetap diubah di Data Jamaah); keterangan singkat tanpa nama penyakit, nomor HP, NIK; satu jamaah hanya satu catatan "sedang sakit" pada satu waktu.
+- Kunjungan: per catatan sakit — tanggal, siapa yang menjenguk (nama ketik), catatan singkat (mis. "didoakan, diberi santunan"). Tombol **Ajukan bantuan** (jenis Sakit) menuju Bantuan Sosial.
+- Kebutuhan khusus (tetap, per jamaah): pilihan centang Kursi roda, Alat bantu jalan, Perlu pendamping, Sulit naik tangga, Gangguan penglihatan, Gangguan pendengaran, Lainnya (+ keterangan singkat). Tampil di daftar peserta Ziarah & Umroh untuk peran yang berhak; khodim melihat nama + kebutuhan khusus saja (tanpa catatan sakit).
+- Pencatat = yang melihat (ketua, dokter, koordinator wilayahnya). Admin pusat & lainnya: angka tanpa nama di Dashboard. Anggota tidak melihat apa pun (termasuk dirinya). Gol. darah tetap seperti sekarang (admin pusat & ketua).
+- Tidak ada yang dihapus; semua perubahan masuk `log_perubahan`.
+
+**Rencana langkah (satu per satu, tunggu persetujuan Kang):**
+1. Database: catatan sakit, kunjungan, kebutuhan khusus; hak akses; ringkasan tanpa nama.
+2. Halaman Jamaah Sakit: daftar (sedang sakit di atas; saring status, kondisi, wilayah), catat sakit, rincian + catat kunjungan + tandai sembuh/wafat, tombol Ajukan bantuan.
+3. Kebutuhan khusus: isian di rincian Data Jamaah + daftar sendiri; tampil di daftar peserta Ziarah & Umroh; halaman untuk khodim.
+4. Beranda (kelompok Kepedulian) + panel Dashboard (angka tanpa nama) + panel Kesehatan di rincian Data Jamaah.
+
 ## Perbaikan 2026-11-27: ikon aplikasi di taskbar hitam (laporan Kang)
 Ikon baru berlatar lingkaran putih seperti logo di kepala halaman: `icons/icon-192-v2.png`, `icon-512-v2.png`, `apple-touch-icon-v2.png` (kotak putih). Manifest, semua `<link rel=icon>`, apple-touch-icon, gambar panduan pasang, dan sw.js memakai file baru; versi v100. Ikon yang sudah terpasang berganti setelah Chrome memperbarui (bisa sampai 1 hari) atau setelah aplikasi dicopot lalu dipasang ulang.
 
