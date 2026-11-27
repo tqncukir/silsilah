@@ -986,3 +986,19 @@ body:not(.hal-masuk):not(.hal-poster)>main{flex:1 0 auto;width:100%}
 .angka-baris strong{display:block;font-size:1.5rem;line-height:1.2;color:var(--hijau-jamiyyah);font-variant-numeric:tabular-nums}
 .angka-baris span{display:block;font-size:var(--fs-kecil);color:var(--abu)}
 @media (min-width:640px){.angka-baris{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+/* Peserta perjalanan */
+.ps-keluarga{margin:12px 0 0;padding:4px 16px 16px;border:1px solid var(--garis);border-radius:12px;background:var(--latar)}
+.ps-keluarga[hidden],#ps-kel-buka[hidden]{display:none}
+#ps-kel-buka{margin:0}
+.ps-alat .rekap-saring{flex:1 1 220px}
+.ps-status select{min-height:44px;padding:8px 12px;border:1.5px solid var(--garis-isian);border-radius:10px;font:inherit;font-size:var(--fs-isian);background:#FFFFFF;color:var(--hitam);cursor:pointer}
+.ps-status select:focus{outline:none;border-color:var(--hijau-jamiyyah);box-shadow:0 0 0 4px rgba(11,107,46,.18)}
+.ps-aksi{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px}
+.ps-aksi .btn{min-height:44px;padding:0 14px;font-size:var(--fs-kecil)}
+@media (min-width:1024px){.ps-aksi{flex-wrap:nowrap;white-space:nowrap}}
+.ps-kel{display:block;font-size:var(--fs-kecil);font-weight:400;color:var(--abu)}
+.ps-batal .tabel-nama{text-decoration:line-through;text-decoration-color:var(--abu)}
+@media (max-width:767px){
+  .ps-tabel td[data-l="Aksi"]{grid-column:2 / -1;margin-top:8px}
+}

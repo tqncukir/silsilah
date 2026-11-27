@@ -22,6 +22,17 @@ function aturJam(hhmm) {
 }
 const bolehUbah = (k) => PERAN_KELOLA_PERJALANAN.includes(peran) && (!kecBoleh || (k.kecamatan_id && kecBoleh.has(k.kecamatan_id)));
 
+// Angka ringkas peserta (hanya peran yang berhak melihat peserta). Koordinator di perjalanan pusat hanya melihat kecamatannya.
+function gambarAngka() {
+  const k = data, r = ringkas, sebagian = kecBoleh && !k.kecamatan_id;
+  $('l-angka').hidden = !r;
+  if (!r) return;
+  const kotak = (n, label, sub) => `<li><strong>${n}</strong><span>${label}</span>${sub ? `<span>${sub}</span>` : ''}</li>`;
+  $('l-angka').innerHTML = kotak(angka(r.peserta), sebagian ? 'Peserta dari kecamatan Anda' : 'Peserta', r.peserta ? `${angka(r.jamaah)} jamaah · ${angka(r.keluarga)} keluarga` : '')
+    + kotak(angka(r.lunas), 'Lunas') + kotak(angka(r.peserta - r.lunas), 'Belum lunas')
+    + (sebagian ? '' : k.kuota ? kotak(angka(Math.max(k.kuota - r.peserta, 0)), 'Sisa kuota', `dari ${angka(k.kuota)} orang`) : kotak('–', 'Sisa kuota', 'Kuota tanpa batas'));
+}
+
 function tampilLihat() {
   const k = data, [teks, kelas] = statusPerjalanan(k);
   document.title = `${k.nama} · SILSILAH TQN Cukir`;
@@ -29,15 +40,7 @@ function tampilLihat() {
   $('l-nama').textContent = k.nama;
   $('l-status').textContent = teks;
   $('l-status').className = `stat ${kelas}`;
-  // Angka ringkas peserta (hanya peran yang berhak melihat peserta). Koordinator di perjalanan pusat hanya melihat kecamatannya.
-  const r = ringkas, sebagian = kecBoleh && !k.kecamatan_id;
-  $('l-angka').hidden = !r;
-  if (r) {
-    const kotak = (n, label, sub) => `<li><strong>${n}</strong><span>${label}</span>${sub ? `<span>${sub}</span>` : ''}</li>`;
-    $('l-angka').innerHTML = kotak(angka(r.peserta), sebagian ? 'Peserta dari kecamatan Anda' : 'Peserta', r.peserta ? `${angka(r.jamaah)} jamaah · ${angka(r.keluarga)} keluarga` : '')
-      + kotak(angka(r.lunas), 'Lunas') + kotak(angka(r.peserta - r.lunas), 'Belum lunas')
-      + (sebagian ? '' : k.kuota ? kotak(angka(Math.max(k.kuota - r.peserta, 0)), 'Sisa kuota', `dari ${angka(k.kuota)} orang`) : kotak('–', 'Sisa kuota', 'Kuota tanpa batas'));
-  }
+  gambarAngka();
   $('l-rincian').innerHTML = [
     ['Berangkat', `${tglWib(k.berangkat)}, kumpul ${jamWib(k.berangkat)} WIB`],
     ['Pulang', k.pulang && k.pulang !== tglIsian(k.berangkat) ? tglPanjang(k.pulang) : 'Hari yang sama'],
@@ -53,6 +56,7 @@ function tampilLihat() {
   $('batalkan').hidden = !boleh;
   $('batalkan').textContent = k.dibatalkan ? 'Aktifkan lagi' : 'Batalkan perjalanan';
   $('form').hidden = true; $('lihat').hidden = false;
+  tampilPeserta();
 }
 
 function tampilForm() {
@@ -71,7 +75,7 @@ function tampilForm() {
   document.querySelector(`[name=publik][value=${!k || k.publik ? 'ya' : 'tidak'}]`).checked = true;
   $('keterangan').value = k?.keterangan || '';
   pesanForm('');
-  $('lihat').hidden = true; $('form').hidden = false;
+  $('lihat').hidden = true; $('form').hidden = false; $('peserta').hidden = true;
   $('nama').focus();
 }
 
@@ -142,10 +146,200 @@ $('batalkan').onclick = async () => {
     const [hasil] = await dbKirim('PATCH', `perjalanan?id=eq.${data.id}&select=${PILIH}`, { dibatalkan: batal });
     if (!hasil) throw new Error('ditolak');
     data = hasil; tampilLihat(); pesan('');
+    if (bolehLihatPeserta()) muatPeserta();
   } catch (err) {
     if (err.message === 'belum-masuk' || err.message === 'gagal-401') return location.replace('/masuk.html');
     pesan(galatTeks(err, 'Belum berhasil. Coba lagi.'));
   } finally { btn.disabled = false; }
+};
+
+// ===== Peserta (Langkah 3): daftarkan lewat pindai KTA / ketik nomor, keluarga, tanda lunas, batal ikut, unduh CSV =====
+// Semua hak diperiksa lagi di database (daftar_peserta_jamaah, daftar_peserta_keluarga, atur_lunas, atur_batal_peserta).
+const PS_PER = 20;
+let psHal = 1, psTunda;
+const psHasil = (kelas, teks) => { $('ps-hasil').textContent = teks; $('ps-hasil').className = 'pesan' + (kelas === 'ok' ? ' ok' : kelas === 'ingat' ? ' ingat' : ''); };
+const psPesan = (t) => { $('ps-pesan').textContent = t; };
+// Koordinator di perjalanan kecamatan lain tidak punya peserta yang boleh dilihat: bagian disembunyikan.
+const bolehLihatPeserta = () => PERAN_PESERTA.includes(peran) && (!kecBoleh || !data.kecamatan_id || kecBoleh.has(data.kecamatan_id));
+const bolehDaftar = () => PERAN_KELOLA_PERJALANAN.includes(peran) && bolehLihatPeserta() && !data.dibatalkan;
+
+function tampilPeserta() {
+  if (!data || !bolehLihatPeserta()) { $('peserta').hidden = true; return; }
+  $('peserta').hidden = false;
+  $('ps-aksi').hidden = !bolehDaftar();
+  $('ps-sub').textContent = data.dibatalkan ? 'Perjalanan dibatalkan: peserta tidak bisa ditambah. Daftar tetap tersimpan.'
+    : kecBoleh && !data.kecamatan_id ? 'Perjalanan pusat: yang tampil dan bisa didaftarkan hanya jamaah kecamatan Anda.'
+    : 'Urut nama. Tanda lunas diubah lewat tombol di tiap baris.';
+}
+
+async function muatRingkas() {
+  try { ringkas = await dbKirim('POST', 'rpc/ringkas_peserta', { p_perjalanan_id: data.id }); gambarAngka(); } catch {}
+}
+
+function teksHasil(h) {
+  const siapa = h.nama ? `${h.nama} · ${h.desa}` : '';
+  switch (h.hasil) {
+    case 'terdaftar': return ['ok', `Terdaftar: ${siapa}`];
+    case 'ikut_lagi': return ['ok', `Ikut lagi: ${siapa}`];
+    case 'sudah': return ['ingat', `Sudah terdaftar: ${siapa}`];
+    case 'tidak_dikenal': return ['galat', `Nomor ${h.nomor} tidak terdaftar. Periksa nomornya.`];
+    case 'tidak_aktif': return ['galat', `${siapa} berstatus tidak aktif. Tidak didaftarkan; hubungi pengurus.`];
+    case 'wafat': return ['galat', `${siapa} tercatat wafat. Tidak didaftarkan.`];
+    case 'kartu_diganti': return ['galat', `Kartu ini sudah diganti (dilaporkan hilang): ${siapa}. Tidak didaftarkan.`];
+    case 'penuh': return ['galat', `Kuota sudah penuh (${angka(h.kuota)} orang). ${siapa} belum didaftarkan.`];
+    default: return ['galat', 'Hasil tidak dikenal. Coba lagi.'];
+  }
+}
+function teksGalat(e, dasar) {
+  if (e.message === 'belum-masuk' || e.message === 'gagal-401') { location.replace('/masuk.html'); return ''; }
+  if (e.message === 'Failed to fetch') return 'Sinyal terputus. Belum tersimpan, coba lagi.';
+  if (['P0001', '22023'].includes(e.detail?.code) && e.detail.message) return e.detail.message; // pesan dari database
+  if (e.detail?.code === '42501') return e.detail.message && e.detail.message !== 'tidak berhak' ? e.detail.message : 'Akun ini tidak berhak mengubah peserta ini.';
+  return dasar;
+}
+
+let psSegarkan;
+const segarkanNanti = () => { clearTimeout(psSegarkan); psSegarkan = setTimeout(() => { muatPeserta(); muatRingkas(); }, 400); };
+async function daftarkan(nomor, versi = null) {
+  try {
+    const h = await dbKirim('POST', 'rpc/daftar_peserta_jamaah', { p_perjalanan_id: data.id, p_nomor: Number(nomor), p_versi: versi });
+    const [kelas, teks] = teksHasil(h);
+    if (['terdaftar', 'ikut_lagi'].includes(h.hasil)) segarkanNanti();
+    return { kelas, teks };
+  } catch (e) { return { kelas: 'galat', teks: teksGalat(e, 'Belum terdaftar. Coba lagi.') }; }
+}
+
+$('ps-pindai').onclick = () => pindaiQr({
+  judul: `Peserta: ${data.nama.length > 26 ? data.nama.slice(0, 25) + '…' : data.nama}`,
+  ket: 'Arahkan kamera ke QR di kartu. Kartu berikutnya bisa langsung dipindai.',
+  beruntun: async (teks) => {
+    const k = bacaKta(teks);
+    if (!k) return { teks: 'Ini bukan QR KTA TQN Cukir.', kelas: 'pindai-galat' };
+    const h = k.jenis === 'baru' ? await daftarkan(k.kode.split('-')[1], Number(k.kode.split('-')[2])) : await daftarkan(k.nomor);
+    psHasil(h.kelas, h.teks);
+    return { teks: h.teks, kelas: { ok: 'pindai-ok', ingat: 'pindai-ingat', galat: 'pindai-galat' }[h.kelas] };
+  },
+});
+
+$('ps-ketik').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const n = $('ps-nomor').value.replace(/\D/g, '');
+  if (n.length !== 10) { $('ps-nomor').setAttribute('aria-invalid', 'true'); psHasil('galat', 'Nomor Anggota harus 10 angka.'); $('ps-nomor').focus(); return; }
+  $('ps-daftar').disabled = true;
+  const h = await daftarkan(n);
+  $('ps-daftar').disabled = false;
+  psHasil(h.kelas, h.teks);
+  if (h.kelas !== 'galat') $('ps-nomor').value = '';
+  $('ps-nomor').focus();
+});
+for (const id of ['ps-nomor', 'ps-kel-nomor']) $(id).addEventListener('input', (e) => {
+  const v = e.target.value.replace(/\D/g, ''); if (v !== e.target.value) e.target.value = v; e.target.removeAttribute('aria-invalid');
+});
+$('ps-kel-nama').addEventListener('input', (e) => e.target.removeAttribute('aria-invalid'));
+
+// Keluarga (bukan jamaah): nama + jamaah penghubung + hubungan
+$('ps-kel-hub').innerHTML += HUBUNGAN_AK.map((h) => `<option>${h}</option>`).join('');
+const bukaKeluarga = (buka) => {
+  $('ps-keluarga').hidden = !buka; $('ps-kel-buka').hidden = buka; $('ps-kel-buka').setAttribute('aria-expanded', String(buka));
+  if (buka) $('ps-kel-nama').focus();
+};
+$('ps-kel-buka').onclick = () => bukaKeluarga(true);
+$('ps-kel-batal').onclick = () => { bukaKeluarga(false); $('ps-kel-buka').focus(); };
+$('ps-keluarga').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const nama = $('ps-kel-nama').value.trim().replace(/\s+/g, ' '), nomor = $('ps-kel-nomor').value;
+  const salahK = (id, t) => { $(id).setAttribute('aria-invalid', 'true'); $(id).focus(); psHasil('galat', t); };
+  if (nama.length < 2) return salahK('ps-kel-nama', 'Nama peserta belum diisi.');
+  if (/\d{5,}/.test(nama)) return salahK('ps-kel-nama', 'Jangan menulis nomor HP atau NIK di nama.');
+  if (nomor.length !== 10) return salahK('ps-kel-nomor', 'Nomor Anggota penghubung harus 10 angka.');
+  const btn = $('ps-kel-simpan'); btn.disabled = true; btn.classList.add('sibuk');
+  try {
+    const h = await dbKirim('POST', 'rpc/daftar_peserta_keluarga', { p_perjalanan_id: data.id, p_nama: nama, p_nomor_penghubung: Number(nomor), p_hubungan: $('ps-kel-hub').value || null });
+    psHasil('ok', `Terdaftar: ${h.nama} (keluarga ${h.penghubung} · ${h.desa})`);
+    $('ps-kel-nama').value = ''; $('ps-kel-hub').value = ''; $('ps-kel-nama').focus();
+    segarkanNanti();
+  } catch (err) { psHasil('galat', teksGalat(err, 'Keluarga belum terdaftar. Coba lagi.')); }
+  finally { btn.disabled = false; btn.classList.remove('sibuk'); }
+});
+
+async function muatPeserta() {
+  psPesan('');
+  try {
+    const dari = (psHal - 1) * PS_PER;
+    const baris = await dbKirim('POST', 'rpc/daftar_peserta', { p_perjalanan_id: data.id, p_cari: $('ps-cari').value.trim() || null,
+      p_status: $('ps-status').value || null, p_dari: dari, p_batas: PS_PER });
+    const total = Number(baris[0]?.total || 0), jmlHal = Math.max(1, Math.ceil(total / PS_PER));
+    if (psHal > jmlHal && total) { psHal = jmlHal; return muatPeserta(); }
+    const disaring = $('ps-cari').value.trim() || $('ps-status').value;
+    $('ps-isi').innerHTML = baris.length ? baris.map((b, i) => {
+      const status = b.batal ? '<span class="stat stat-wafat">Batal ikut</span>' : b.lunas ? '<span class="stat stat-biasa">Lunas</span>' : '<span class="stat stat-tidak">Belum lunas</span>';
+      const aksi = [
+        b.batal ? '' : `<button type="button" class="btn btn-kedua btn-pas" data-lunas="${b.id}" data-nilai="${!b.lunas}">${b.lunas ? 'Batalkan lunas' : 'Tandai lunas'}</button>`,
+        b.boleh_ubah && bolehDaftar() ? `<button type="button" class="tautan" data-batal="${b.id}" data-nilai="${!b.batal}">${b.batal ? 'Ikutkan lagi' : 'Batal ikut'}</button>` : '',
+      ].join('');
+      const kel = b.keluarga ? `<span class="ps-kel">Keluarga${b.hubungan ? ` (${hurufAman(b.hubungan)})` : ''} dari ${hurufAman(b.penghubung_nama)}</span>` : '';
+      return `<tr data-id="${b.id}"${b.batal ? ' class="ps-batal"' : ''} data-nama="${hurufAman(b.nama)}">
+        <td data-l="No" class="angka kol-no">${(dari + i + 1).toLocaleString('id-ID')}</td>
+        <td data-l="Nama" class="tabel-nama">${hurufAman(b.nama)}${kel}</td>
+        <td data-l="Nomor" class="angka">${b.keluarga ? `<span class="hp-saja">Penghubung </span>${b.penghubung_nomor}` : b.nomor_anggota}</td>
+        <td data-l="Desa">${hurufAman(b.desa)}<span class="hp-saja"> · Kec. ${hurufAman(b.kecamatan)}</span></td>
+        <td data-l="Kecamatan">${hurufAman(b.kecamatan)}</td>
+        <td class="kol-luas">${hurufAman(b.kabupaten)}</td>
+        <td data-l="Status">${status}</td>
+        <td data-l="Aksi"><div class="ps-aksi">${aksi}</div></td></tr>`;
+    }).join('') : `<tr><td colspan="8" class="tabel-kosong">${disaring ? 'Tidak ada peserta yang cocok.' : bolehDaftar() ? 'Belum ada peserta. Pindai KTA atau ketik Nomor Anggota di atas.' : 'Belum ada peserta.'}</td></tr>`;
+    $('ps-halaman').hidden = total <= PS_PER;
+    $('ps-posisi').innerHTML = `<strong>${psHal}</strong> / ${jmlHal}<span class="sr-only"> halaman</span>`;
+    $('ps-sebelum').disabled = psHal <= 1; $('ps-sesudah').disabled = psHal >= jmlHal;
+    $('ps-unduh').disabled = !ringkas?.peserta && !total;
+  } catch (e) { const t = teksGalat(e, 'Daftar peserta belum bisa dimuat. Coba muat ulang.'); if (t) psPesan(t); }
+}
+
+$('ps-isi').addEventListener('click', async (e) => {
+  const b = e.target.closest('[data-lunas],[data-batal]');
+  if (!b) return;
+  const nama = b.closest('tr').dataset.nama, nilai = b.dataset.nilai === 'true';
+  const lunas = 'lunas' in b.dataset;
+  if (lunas && !nilai && !confirm(`Batalkan tanda lunas ${nama}?\n\nStatusnya kembali "Belum lunas". Bisa ditandai lunas lagi.`)) return;
+  if (!lunas && nilai && !confirm(`${nama} batal ikut?\n\nNamanya tetap tersimpan dengan tanda "Batal ikut" dan tidak dihitung peserta. Bisa diikutkan lagi.`)) return;
+  b.disabled = true;
+  try {
+    await dbKirim('POST', lunas ? 'rpc/atur_lunas' : 'rpc/atur_batal_peserta',
+      lunas ? { p_peserta_id: Number(b.dataset.lunas), p_lunas: nilai } : { p_peserta_id: Number(b.dataset.batal), p_batal: nilai }, 'return=minimal');
+    psHasil(lunas ? 'ok' : 'ingat', lunas ? `${nama}: ${nilai ? 'lunas' : 'belum lunas'}.` : nilai ? `${nama} batal ikut.` : `${nama} ikut lagi.`);
+    muatPeserta(); muatRingkas();
+  } catch (err) { b.disabled = false; psHasil('galat', teksGalat(err, 'Belum tersimpan. Coba lagi.')); }
+});
+
+$('ps-saring').addEventListener('submit', (e) => e.preventDefault());
+$('ps-cari').addEventListener('input', () => { clearTimeout(psTunda); psTunda = setTimeout(() => { psHal = 1; muatPeserta(); }, 300); });
+$('ps-status').addEventListener('change', () => { psHal = 1; muatPeserta(); });
+$('ps-sebelum').onclick = () => { psHal--; muatPeserta(); };
+$('ps-sesudah').onclick = () => { psHal++; muatPeserta(); };
+
+// Daftar rombongan (CSV untuk Excel Indonesia): pemisah ;, BOM UTF-8, nilai berawalan = + - @ diberi '. Tanpa yang batal ikut.
+const selCsv = (v) => { let t = String(v ?? ''); if (/^[=+\-@\t\r]/.test(t)) t = "'" + t; return /[";\n\r]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t; };
+$('ps-unduh').onclick = async () => {
+  const btn = $('ps-unduh'); btn.disabled = true; btn.querySelector('.teks').textContent = 'Menyiapkan...';
+  try {
+    const semua = [];
+    for (let dari = 0; ; dari += 1000) {
+      const b = await dbKirim('POST', 'rpc/daftar_peserta', { p_perjalanan_id: data.id, p_dari: dari, p_batas: 1000 });
+      semua.push(...b);
+      if (b.length < 1000) break;
+    }
+    const tgl = tglIsian(data.berangkat);
+    const baris = [['No', 'Nama', 'Jenis peserta', 'Nomor Anggota', 'Penghubung', 'Hubungan', 'Kel/Desa', 'Kecamatan', 'Kab/Kota', 'Pembayaran']]
+      .concat(semua.map((b, i) => [i + 1, b.nama, b.keluarga ? 'Keluarga' : 'Jamaah', b.keluarga ? '' : b.nomor_anggota,
+        b.keluarga ? `${b.penghubung_nama} (${b.penghubung_nomor})` : '', b.hubungan || '', b.desa, b.kecamatan, b.kabupaten, b.lunas ? 'Lunas' : 'Belum lunas']));
+    const isi = '﻿' + baris.map((r) => r.map(selCsv).join(';')).join('\r\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([isi], { type: 'text/csv;charset=utf-8' }));
+    a.download = `rombongan-${tgl}-${data.nama.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40)}.csv`;
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  } catch (e) { const t = teksGalat(e, 'Daftar belum bisa diunduh. Coba lagi.'); if (t) psPesan(t); }
+  finally { btn.disabled = false; btn.querySelector('.teks').textContent = 'Unduh daftar rombongan'; }
 };
 
 (async () => {
@@ -170,6 +364,7 @@ $('batalkan').onclick = async () => {
       ringkas = lain[1] || null;
       if (!data) { pesan('Perjalanan tidak ditemukan atau akun ini tidak punya izin melihatnya.'); return; }
       tampilLihat();
+      if (bolehLihatPeserta()) muatPeserta();
     } else if (PERAN_KELOLA_PERJALANAN.includes(peran)) {
       if (kecBoleh && !kecBoleh.size) { pesan('Akun koordinator ini belum diberi wilayah. Hubungi admin pusat.'); return; }
       tampilForm();

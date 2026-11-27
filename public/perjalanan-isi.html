@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=87">
-<link rel="stylesheet" href="/css/app.css?v=87">
+<link rel="stylesheet" href="/css/tokens.css?v=88">
+<link rel="stylesheet" href="/css/app.css?v=88">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -51,6 +51,86 @@
     </div>
     <ul class="angka-baris" id="l-angka" hidden aria-label="Ringkasan peserta"></ul>
     <dl class="rincian" id="l-rincian"></dl>
+  </section>
+
+  <section id="peserta" class="panel rekap" hidden aria-labelledby="ps-judul">
+    <div class="panel-kepala">
+      <div>
+        <h2 id="ps-judul" class="form-judul">Peserta</h2>
+        <p class="judul-sub" id="ps-sub">Urut nama. Ketuk tombol di tiap baris untuk menandai lunas.</p>
+      </div>
+    </div>
+
+    <div class="absen-aksi" id="ps-aksi" hidden>
+      <button type="button" class="btn btn-utama btn-pindai" id="ps-pindai">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8V5a1 1 0 011-1h3M16 4h3a1 1 0 011 1v3M20 16v3a1 1 0 01-1 1h-3M8 20H5a1 1 0 01-1-1v-3M7 12h10"/></svg>
+        <span class="teks">Pindai KTA peserta</span>
+      </button>
+      <p class="ket">Kamera tetap menyala: pindai kartu satu per satu, lalu Tutup bila selesai.</p>
+      <form class="form absen-ketik" id="ps-ketik" novalidate>
+        <label for="ps-nomor">Kartu tertinggal? Ketik Nomor Anggota</label>
+        <div class="absen-ketik-baris">
+          <input id="ps-nomor" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="10 angka" aria-describedby="ps-hasil">
+          <button type="submit" class="btn btn-kedua btn-pas" id="ps-daftar">Daftarkan</button>
+        </div>
+      </form>
+      <button type="button" class="btn btn-kedua btn-pas" id="ps-kel-buka" aria-expanded="false" aria-controls="ps-keluarga">Tambah keluarga (bukan jamaah)</button>
+      <form class="form ps-keluarga" id="ps-keluarga" hidden novalidate aria-labelledby="ps-kel-judul">
+        <h3 class="bagian-judul" id="ps-kel-judul">Keluarga jamaah</h3>
+        <div class="form-kisi">
+          <div class="isian lebar">
+            <label for="ps-kel-nama">Nama peserta <span class="wajib">wajib</span></label>
+            <input id="ps-kel-nama" maxlength="120" autocapitalize="words" autocomplete="off">
+          </div>
+          <div class="isian">
+            <label for="ps-kel-nomor">Nomor Anggota penghubung <span class="wajib">wajib</span></label>
+            <input id="ps-kel-nomor" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="10 angka" aria-describedby="ps-kel-ket">
+          </div>
+          <div class="isian">
+            <label for="ps-kel-hub">Hubungan dengan penghubung</label>
+            <select id="ps-kel-hub"><option value="">Pilih</option></select>
+          </div>
+          <p class="ket bagian-ket" id="ps-kel-ket">Penghubung = jamaah yang mendaftarkan keluarganya. Jangan menulis nomor HP atau NIK.</p>
+        </div>
+        <div class="tombol-baris">
+          <button type="button" class="btn btn-kedua btn-pas" id="ps-kel-batal">Batal</button>
+          <button type="submit" class="btn btn-utama btn-pas btn-masuk" id="ps-kel-simpan"><span class="putar" aria-hidden="true"></span><span class="teks">Daftarkan keluarga</span></button>
+        </div>
+      </form>
+    </div>
+    <p id="ps-hasil" class="pesan" role="status" aria-live="polite"></p>
+
+    <div class="rekap-alat ps-alat">
+      <form class="saring rekap-saring" role="search" id="ps-saring"><div class="saring-cari">
+        <label for="ps-cari" class="sr-only">Cari nama peserta, penghubung, atau Nomor Anggota</label>
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="ps-cari" type="search" placeholder="Cari nama atau Nomor Anggota" autocomplete="off" enterkeyhint="search">
+      </div></form>
+      <label class="ps-status"><span class="sr-only">Tampilkan</span>
+        <select id="ps-status">
+          <option value="">Semua peserta</option>
+          <option value="belum">Belum lunas</option>
+          <option value="lunas">Lunas</option>
+          <option value="batal">Batal ikut</option>
+        </select>
+      </label>
+      <button type="button" class="btn btn-kedua btn-pas" id="ps-unduh">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+        <span class="teks">Unduh daftar rombongan</span>
+      </button>
+    </div>
+    <p id="ps-pesan" class="pesan" role="alert"></p>
+    <div class="tabel-bungkus">
+      <table class="tabel ps-tabel">
+        <thead><tr><th scope="col" class="kol-no">No</th><th scope="col">Nama</th><th scope="col">Nomor Anggota</th><th scope="col">Kel/Desa</th><th scope="col">Kecamatan</th><th scope="col" class="kol-luas">Kab/Kota</th><th scope="col">Pembayaran</th><th scope="col"><span class="sr-only">Aksi</span></th></tr></thead>
+        <tbody id="ps-isi"><tr><td colspan="8" class="tabel-kosong">Memuat...</td></tr></tbody>
+      </table>
+    </div>
+    <nav class="halaman" id="ps-halaman" aria-label="Pindah halaman daftar peserta" hidden>
+      <button type="button" class="hal-panah" id="ps-sebelum" aria-label="Halaman sebelumnya"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <span id="ps-posisi" class="hal-posisi" aria-live="polite"></span>
+      <button type="button" class="hal-panah" id="ps-sesudah" aria-label="Halaman berikutnya"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </nav>
   </section>
 
   <form id="form" class="panel form" hidden novalidate aria-labelledby="f-judul">
@@ -129,8 +209,9 @@
   </div>
   <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
 </footer>
-<script src="/js/supa.js?v=87" defer></script>
-<script src="/js/kalender.js?v=87" defer></script>
-<script src="/js/perjalanan-isi.js?v=87" defer></script>
+<script src="/js/supa.js?v=88" defer></script>
+<script src="/js/kalender.js?v=88" defer></script>
+<script src="/js/pindai.js?v=88" defer></script>
+<script src="/js/perjalanan-isi.js?v=88" defer></script>
 </body>
 </html>
