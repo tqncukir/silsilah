@@ -225,6 +225,36 @@ Mulai: 2026-11-27 (Kang: "Mulai Tahap 6: modul 6 Bantuan Sosial").
 
 **Tahap 6 selesai dan disetujui Kang 2026-11-27 ("Tahap 6 disetujui").** Tunggu Kang bilang "mulai" untuk tahap berikutnya. Modul tersisa: 7 Kesehatan, 8 Ekonomi Jamaah, 14 Aset & Wakaf (12 Dashboard & Laporan sebagian sudah ada).
 
+## Tahap 7: Modul 14 Aset & Wakaf
+Mulai: 2026-11-27 (Kang: "Mulai Tahap 7: modul 14 Aset & Wakaf").
+
+**Keputusan konsep Kang (2026-11-27):**
+- Dicatat: **tanah/bangunan wakaf + barang inventaris** yayasan.
+- Tanah wakaf dicatat **lengkap dokumen**: lokasi, luas, wakif, nadzir, nomor AIW/sertifikat, status sertifikat, peruntukan.
+- Hak akses: **nadzir, ketua, admin pusat mencatat**; bendahara melihat. Peran lain dan anggota tidak melihat apa pun.
+- **Tidak ada yang tampil di halaman publik.**
+
+**Usulan Claude (berlaku kecuali Kang ubah):**
+- Tanah wakaf:
+  - Lokasi = kabupaten/kecamatan/desa dari daftar wilayah, plus alamat singkat.
+  - Luas dalam m².
+  - Wakif = nama ketik bebas (tidak harus jamaah). Nadzir = nama ketik.
+  - Nomor AIW, nomor sertifikat wakaf, tanggal ikrar.
+  - Status sertifikat: Belum ada AIW → AIW → Proses sertifikat → Bersertifikat.
+  - Peruntukan: Masjid/Musholla, Pondok/Madrasah, Makam, Kantor, Lahan produktif, Lainnya.
+  - Kondisi: Baik, Perlu perbaikan, Rusak.
+- Barang inventaris:
+  - Nama, kategori (Elektronik/Sound, Kendaraan, Perabot, Perlengkapan ibadah, Lainnya), jumlah, tahun perolehan, cara perolehan (Beli, Hibah/wakaf), perkiraan nilai.
+  - Lokasi simpan, kondisi Baik/Perlu perbaikan/Rusak, pemegang (ketik nama).
+- Aset tidak pernah dihapus: status **Aktif / Dilepas** (rusak dibuang, dijual, hilang) wajib dengan alasan. Semua perubahan masuk log.
+- Foto dan file dokumen (scan sertifikat) belum disimpan di tahap ini. Cukup nomor dokumen dan keterangan letak arsip fisik, supaya hemat dan gratis.
+- Pembelian barang tidak otomatis ke Buku Kas; bendahara tetap mencatat sendiri.
+
+**Rencana langkah (satu per satu, tunggu persetujuan Kang):**
+1. Database: tabel tanah wakaf + barang inventaris, status, hak akses (RLS), log, ringkasan jumlah.
+2. Halaman Aset & Wakaf: dua tab (Tanah wakaf, Barang), daftar + saring + cari, formulir tambah/ubah, rincian, Lepas aset (alasan).
+3. Ubin di Beranda (kelompok Amanah & Tata Kelola) + panel ringkas di Dashboard Pengurus (jumlah tanah, total luas, status sertifikat, jumlah barang per kondisi).
+
 ## Perbaikan 2026-11-27: ikon aplikasi di taskbar hitam (laporan Kang)
 Ikon baru berlatar lingkaran putih seperti logo di kepala halaman: `icons/icon-192-v2.png`, `icon-512-v2.png`, `apple-touch-icon-v2.png` (kotak putih). Manifest, semua `<link rel=icon>`, apple-touch-icon, gambar panduan pasang, dan sw.js memakai file baru; versi v100. Ikon yang sudah terpasang berganti setelah Chrome memperbarui (bisa sampai 1 hari) atau setelah aplikasi dicopot lalu dipasang ulang.
 
