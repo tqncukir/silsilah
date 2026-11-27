@@ -3,7 +3,7 @@
 ## POSISI TERAKHIR (baca ini dulu) — diperbarui 2026-11-27
 - **Semua 10 tahap selesai dan disetujui Kang** (Tahap 10 Pemeriksaan disetujui 2026-11-27): 14 modul terbangun (Tahap 9 Kesehatan disetujui 2026-11-27). Versi cache terakhir **v112**. Migrasi terakhir yang sudah dijalankan Kang: `20261127110000_kecepatan_rls.sql` (Tahap 10). Advisors terakhir: 0 error, 49 peringatan, 11 info (semua jenis yang disengaja).
 - **Serah terima 2026-11-27 (malam):** proyek diteruskan ke akun Claude **goindotea** (perintah Kang). Akun baru tidak membawa skill/memori akun lama: semua aturan ada di `CLAUDE.md` (termasuk "Cara kerja agen" dan "Cara uji") dan riwayat ada di file ini. Cara uji database lokal terbukti jalan (stub di CLAUDE.md; data wilayah contoh diisi langsung karena ekstensi `http` tidak ada).
-- **Langkah berikutnya: Tahap 10 Pemeriksaan menyeluruh** (dipilih Kang 2026-11-27). **Tahap 10 selesai dan disetujui Kang (2026-11-27).** Langkah berikutnya: tunggu Kang memilih tahap baru (usul Claude: backup bulanan ke luar Supabase).
+- **Langkah berikutnya: tunggu Kang memilih tahap baru** (Tahap 10 Pemeriksaan selesai & disetujui 2026-11-27) (usul Claude: backup bulanan ke luar Supabase).
 
 ## Tahap 1: Data Jamaah, Pendaftaran, KTA, Portal Anggota, Hak Akses
 Mulai: 2026-11-25 (Kang Salman: "Bismillah").
