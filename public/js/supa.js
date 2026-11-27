@@ -103,6 +103,7 @@ async function profilSaya() {
   nav('nav-ahli', p && PERAN_LIHAT_JAMAAH.includes(p.peran));
   nav('nav-perjalanan', p && PERAN_LIHAT_PERJALANAN.includes(p.peran));
   nav('nav-kas', p && PERAN_LIHAT_KAS.includes(p.peran));
+  nav('nav-bantuan', p && PERAN_BANTUAN.includes(p.peran));
   if (p) pasangMenuBawah(p);
   return p || null;
 }
@@ -128,6 +129,7 @@ function pasangMenuBawah(p) {
     : [[ 'Dashboard Pengurus', '/dashboard.html', PERAN_LIHAT_JAMAAH ], ['Pendaftaran', '/pendaftaran.html', PERAN_UBAH_JAMAAH ],
       ['Absensi', '/absensi.html', PERAN_ABSEN], ['Ahli Kubur', '/ahli-kubur.html', PERAN_LIHAT_JAMAAH], ['Haul', '/haul.html', PERAN_LIHAT_JAMAAH],
       ['Ziarah & Umroh', '/perjalanan.html', PERAN_LIHAT_PERJALANAN],
+      ['Bantuan Sosial', '/bantuan.html', PERAN_BANTUAN],
       ['Buku Kas', '/kas.html', PERAN_LIHAT_KAS],
       ['Atur PIN Pengurus', '/pengurus-pin.html', ['admin_pusat']], ['Agenda umum', '/agenda.html', null], ['Cara pasang di HP', '/pasang.html', null]]
       .filter(([, , boleh]) => !boleh || boleh.includes(p.peran));
@@ -238,6 +240,15 @@ const PERAN_LIHAT_KAS = ['admin_pusat', 'ketua', 'bendahara', 'koordinator_wilay
 const PERAN_CATAT_KAS = ['bendahara', 'koordinator_wilayah'];
 const ARAH_KAS = { masuk: 'Masuk', keluar: 'Keluar' };
 const rupiah = (n) => 'Rp ' + Number(n || 0).toLocaleString('id-ID');
+
+// ===== Bantuan Sosial (modul 6) =====
+// Nama penerima (data ekonomi, rahasia): ketua, bendahara, koordinator (wilayahnya). Ajukan: ketiganya; setujui/tolak: ketua;
+// salurkan: bendahara & koordinator. Admin pusat hanya angka ringkas (Dashboard). Semua dijaga di database.
+const PERAN_BANTUAN = ['ketua', 'bendahara', 'koordinator_wilayah'];
+const JENIS_BANTUAN = { duka: 'Santunan duka', sakit: 'Sakit', sembako: 'Sembako', pendidikan: 'Pendidikan', bencana: 'Bencana', lainnya: 'Lainnya' };
+const STATUS_BANTUAN = { diajukan: ['Menunggu persetujuan', 'stat-tidak'], disetujui: ['Siap disalurkan', 'stat-aktif'],
+  disalurkan: ['Disalurkan', 'stat-biasa'], ditolak: ['Ditolak', 'stat-wafat'], dibatalkan: ['Dibatalkan', 'stat-wafat'] };
+const teksBantuan = (b) => b.bentuk === 'uang' ? rupiah(b.nilai) : `${b.barang}${b.nilai ? ` (± ${rupiah(b.nilai)})` : ''}`;
 
 const NAMA_PERAN = {
   admin_pusat: 'Admin Pusat', ketua: 'Ketua', bendahara: 'Bendahara', nadzir: 'Nadzir',

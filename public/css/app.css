@@ -1083,3 +1083,20 @@ body:not(.hal-masuk):not(.hal-poster)>main{flex:1 0 auto;width:100%}
   .lap-angka strong,.kas-angka strong{font-size:1.25rem}
 }
 @media (max-width:639px){.lap-angka li:first-child{grid-column:1 / -1}}
+
+/* Bantuan Sosial */
+.bs-rahasia{margin:-4px 0 8px}
+.bs-angka{margin:4px 0 14px}
+.bs-angka li{padding:0}
+.bs-kotak{display:block;width:100%;min-height:44px;padding:10px 12px;border:0;border-radius:12px;background:none;font:inherit;text-align:left;color:inherit;cursor:pointer}
+.bs-kotak:hover{background:var(--mint)}
+.bs-kotak:focus-visible{outline:3px solid var(--hijau-jamiyyah);outline-offset:2px}
+@media (max-width:639px){.bs-angka li:last-child{grid-column:1 / -1}}
+@media (min-width:640px){.bs-angka{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.bs-aksi{margin:18px 0 0;padding-top:14px;border-top:1px solid var(--garis-lembut)}
+.bs-aksi[hidden]{display:none}
+.bs-aksi .bagian-judul{margin:0 0 4px}
+.bs-aksi .form-kisi{margin-top:8px}
+.bs-penerima{margin:6px 0 0;font-weight:600}
+.bs-penerima.galat{color:#8C1D18}
+@media (max-width:767px){.tabel .kol-tablet{display:none}}

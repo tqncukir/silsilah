@@ -78,6 +78,13 @@ function ketHaul(id) {
       $('menu').hidden = false; $('m-jamaah').hidden = false; $('nav-jamaah').hidden = false; $('m-amanah').hidden = false; $('m-amanah-judul').hidden = false;
       $('m-tambah').hidden = !PERAN_UBAH_JAMAAH.includes(p.peran);
       $('m-pin').hidden = p.peran !== 'admin_pusat';
+      if (PERAN_BANTUAN.includes(p.peran)) {
+        $('m-peduli').hidden = false; $('m-peduli-judul').hidden = false;
+        dbKirim('POST', 'rpc/ringkas_bantuan', {}).then((r) => {
+          const tunggu = p.peran === 'ketua' ? r.diajukan : p.peran === 'bendahara' || p.peran === 'koordinator_wilayah' ? r.disetujui : 0;
+          if (tunggu) $('m-bantuan-ket').textContent = p.peran === 'ketua' ? `${tunggu} pengajuan menunggu persetujuan` : `${tunggu} bantuan siap disalurkan`;
+        }).catch(() => {});
+      }
       if (PERAN_LIHAT_KAS.includes(p.peran)) {
         $('m-kas').hidden = false;
         dbKirim('POST', 'rpc/saldo_kas', {}).then((k) => {
