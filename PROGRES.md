@@ -261,6 +261,7 @@ Mulai: 2026-11-27 (Kang: "Mulai Tahap 7: modul 14 Aset & Wakaf").
 - RLS: lihat = admin pusat, ketua, bendahara, nadzir; tambah/ubah = admin pusat, ketua, nadzir; tanpa hapus; sesi KTA lama dan peran lain tidak melihat; anon tertutup. Pembuat & waktu dibuat terkunci; semua perubahan masuk `log_perubahan`.
 - `ringkas_aset()`: jumlah & luas tanah aktif, belum bersertifikat, perlu perhatian, per status sertifikat & peruntukan; barang (jenis, unit, nilai, per kondisi & kategori, dilepas).
 - Diuji Postgres lokal: semua migrasi + uji lama + 31 skenario aset (nadzir, ketua, admin, bendahara, koordinator, petugas, anggota, sesi terbatas, tamu) lulus.
+- Migrasi sudah dijalankan Kang (2026-11-27). Advisors (Rerun linter): 0 error; peringatan 33 → 35 (`desa_id_aset`, `ringkas_aset` "SECURITY DEFINER bisa dipanggil pengguna login", keduanya memeriksa hak sendiri); info tetap 7. Aman.
 
 ## Perbaikan 2026-11-27: ikon aplikasi di taskbar hitam (laporan Kang)
 Ikon baru berlatar lingkaran putih seperti logo di kepala halaman: `icons/icon-192-v2.png`, `icon-512-v2.png`, `apple-touch-icon-v2.png` (kotak putih). Manifest, semua `<link rel=icon>`, apple-touch-icon, gambar panduan pasang, dan sw.js memakai file baru; versi v100. Ikon yang sudah terpasang berganti setelah Chrome memperbarui (bisa sampai 1 hari) atau setelah aplikasi dicopot lalu dipasang ulang.
