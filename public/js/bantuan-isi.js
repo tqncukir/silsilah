@@ -20,6 +20,17 @@ const galatTeks = (err, dasar) => {
 };
 const keMasuk = (err) => { if (err.message === 'belum-masuk' || err.message === 'gagal-401') { location.replace('/masuk.html'); return true; } return false; };
 
+// Kondisi ekonomi penerima (modul 8; rpc daftar_ekonomi — hanya jamaah aktif & hidup yang sudah/ belum didata).
+const ekoTersimpan = {};
+async function kondisiEkonomi(jamaahId) {
+  if (!(jamaahId in ekoTersimpan)) {
+    try { const [x] = await dbKirim('POST', 'rpc/daftar_ekonomi', { p_jamaah_id: jamaahId, p_batas: 1 }); ekoTersimpan[jamaahId] = x || null; }
+    catch { return null; }
+  }
+  const x = ekoTersimpan[jamaahId];
+  return x ? (x.tingkat ? `${TINGKAT_EKONOMI[x.tingkat][0]} · ${x.tanggungan} tanggungan` : 'Belum didata') : null;
+}
+
 // ===== Rincian =====
 async function muatData() {
   const [b] = await dbKirim('POST', 'rpc/daftar_bantuan', { p_id: Number(id), p_batas: 1 });
@@ -53,6 +64,10 @@ function tampilLihat() {
     : 'Tandai setelah barang diterima penerima. Barang tidak dicatat di Buku Kas; bila dibeli dari kas, catat pembeliannya di Buku Kas.';
   $('batal-form').hidden = !b.boleh_batal;
   $('form').hidden = true; $('lihat').hidden = false;
+  kondisiEkonomi(b.jamaah_id).then((t) => {
+    if (!t || data !== b) return;
+    $('l-rincian').insertAdjacentHTML('beforeend', `<div><dt>Kondisi ekonomi</dt><dd><a href="/ekonomi-isi.html?jamaah=${b.jamaah_id}">${hurufAman(t)}</a></dd></div>`);
+  });
 }
 
 async function segarkan(teks) {
@@ -134,12 +149,14 @@ async function cekPenerima() {
   if (n.length !== 10) { $('penerima').textContent = ''; return; }
   $('penerima').textContent = 'Mencari...';
   try {
-    const [j] = await dbGet(`jamaah?select=nama,aktif,wafat,desa(nama,kecamatan(nama))&nomor_anggota=eq.${n}`);
+    const [j] = await dbGet(`jamaah?select=id,nama,aktif,wafat,desa(nama,kecamatan(nama))&nomor_anggota=eq.${n}`);
     if (!j) { $('penerima').textContent = peran === 'koordinator_wilayah' ? 'Nomor tidak ditemukan di wilayah Anda.' : 'Nomor Anggota tidak terdaftar.'; $('penerima').className = 'bs-penerima galat'; return; }
     const status = j.wafat ? ' · wafat (hanya santunan duka)' : !j.aktif ? ' · tidak aktif' : '';
     $('penerima').textContent = `${j.nama} · ${j.desa?.nama || ''}, Kec. ${j.desa?.kecamatan?.nama || ''}${status}`;
     if (!j.wafat && !j.aktif) $('penerima').className = 'bs-penerima galat';
     penerimaOk = j.wafat || j.aktif;
+    const eko = !j.wafat && j.aktif ? await kondisiEkonomi(j.id) : null;
+    if (eko && $('nomor').value === n) $('penerima').textContent += ` · Kondisi ekonomi: ${eko}`;
   } catch { $('penerima').textContent = 'Belum bisa memeriksa nomor. Periksa sinyal.'; }
 }
 $('nomor').addEventListener('input', () => {

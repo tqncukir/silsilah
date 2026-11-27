@@ -104,6 +104,7 @@ async function profilSaya() {
   nav('nav-perjalanan', p && PERAN_LIHAT_PERJALANAN.includes(p.peran));
   nav('nav-kas', p && PERAN_LIHAT_KAS.includes(p.peran));
   nav('nav-bantuan', p && PERAN_BANTUAN.includes(p.peran));
+  nav('nav-ekonomi', p && PERAN_EKONOMI.includes(p.peran));
   nav('nav-aset', p && PERAN_LIHAT_ASET.includes(p.peran));
   if (p) pasangMenuBawah(p);
   return p || null;
@@ -131,6 +132,7 @@ function pasangMenuBawah(p) {
       ['Absensi', '/absensi.html', PERAN_ABSEN], ['Ahli Kubur', '/ahli-kubur.html', PERAN_LIHAT_JAMAAH], ['Haul', '/haul.html', PERAN_LIHAT_JAMAAH],
       ['Ziarah & Umroh', '/perjalanan.html', PERAN_LIHAT_PERJALANAN],
       ['Bantuan Sosial', '/bantuan.html', PERAN_BANTUAN],
+      ['Ekonomi Jamaah', '/ekonomi.html', PERAN_EKONOMI],
       ['Buku Kas', '/kas.html', PERAN_LIHAT_KAS],
       ['Aset & Wakaf', '/aset.html', PERAN_LIHAT_ASET],
       ['Atur PIN Pengurus', '/pengurus-pin.html', ['admin_pusat']], ['Agenda umum', '/agenda.html', null], ['Cara pasang di HP', '/pasang.html', null]]
@@ -251,6 +253,12 @@ const JENIS_BANTUAN = { duka: 'Santunan duka', sakit: 'Sakit', sembako: 'Sembako
 const STATUS_BANTUAN = { diajukan: ['Menunggu persetujuan', 'stat-tidak'], disetujui: ['Siap disalurkan', 'stat-aktif'],
   disalurkan: ['Disalurkan', 'stat-biasa'], ditolak: ['Ditolak', 'stat-wafat'], dibatalkan: ['Dibatalkan', 'stat-wafat'] };
 const teksBantuan = (b) => b.bentuk === 'uang' ? rupiah(b.nilai) : `${b.barang}${b.nilai ? ` (± ${rupiah(b.nilai)})` : ''}`;
+
+// ===== Ekonomi Jamaah (modul 8) =====
+// Kondisi ekonomi (rahasia): sama dengan Bantuan Sosial — ketua, bendahara, koordinator (wilayahnya). Dijaga di database.
+const PERAN_EKONOMI = PERAN_BANTUAN;
+const TINGKAT_EKONOMI = { mampu: ['Mampu', 'stat-biasa'], cukup: ['Cukup', 'stat-biasa'],
+  kurang: ['Kurang mampu', 'stat-tidak'], sangat_kurang: ['Sangat kurang mampu', 'stat-wafat'] };
 
 // ===== Aset & Wakaf (modul 14) =====
 // Lihat: admin pusat, ketua, bendahara, nadzir. Catat: admin pusat, ketua, nadzir. Dijaga RLS. Tidak ada yang publik.

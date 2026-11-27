@@ -33,6 +33,21 @@ function tampilLihat() {
   $('ke-ahli').hidden = !j.wafat; $('ke-ahli').href = `/ahli-kubur-isi.html?kunci=j${j.id}`;
   $('form').hidden = true; $('lihat').hidden = false;
   $('bantuan').hidden = !PERAN_BANTUAN.includes(peran);
+  $('ekonomi').hidden = !PERAN_EKONOMI.includes(peran) || !j.aktif || j.wafat;
+}
+
+// Kondisi ekonomi (rahasia; rpc daftar_ekonomi, hanya jamaah aktif & hidup; koordinator hanya wilayahnya).
+async function muatEkonomi() {
+  if ($('ekonomi').hidden) return;
+  try {
+    const [x] = await dbKirim('POST', 'rpc/daftar_ekonomi', { p_jamaah_id: data.id, p_batas: 1 });
+    if (!x) { $('ekonomi').hidden = true; return; }
+    $('ek-ubah').href = `/ekonomi-isi.html?jamaah=${data.id}${x.tingkat ? '' : '&ubah=1'}`;
+    $('ek-ubah').textContent = x.tingkat ? 'Lihat & ubah' : 'Isi kondisi';
+    $('ek-isi').textContent = x.tingkat
+      ? `${TINGKAT_EKONOMI[x.tingkat][0]} · ${x.tanggungan} tanggungan · didata ${tglWib(x.didata_tgl + 'T12:00:00+07:00', { day: 'numeric', month: 'short', year: 'numeric' })}`
+      : 'Belum didata. Rahasia: hanya ketua, bendahara, dan koordinator wilayahnya yang melihat.';
+  } catch { $('ekonomi').hidden = true; }
 }
 
 // Riwayat bantuan sosial (rpc daftar_bantuan; koordinator hanya wilayahnya — di luar wilayah daftar kosong & bagian disembunyikan).
@@ -74,7 +89,7 @@ function tampilForm() {
   aturWafat();
   aturUmur();
   pesanForm('');
-  $('lihat').hidden = true; $('form').hidden = false; $('bantuan').hidden = true;
+  $('lihat').hidden = true; $('form').hidden = false; $('bantuan').hidden = true; $('ekonomi').hidden = true;
   $('nama').focus();
 }
 
@@ -152,7 +167,7 @@ $('form').addEventListener('submit', async (e) => {
       $('ubah').hidden = !bisaUbah || (kecBoleh && !kecBoleh.has(data.desa.kecamatan_id));
       $('lihat-kta').href = `/kta.html?id=${encodeURIComponent(id)}`; $('lihat-kta').hidden = false;
       tampilLihat();
-      muatBantuan();
+      muatBantuan(); muatEkonomi();
     } else if (bisaUbah) {
       tampilForm();
     } else location.replace('/jamaah.html');

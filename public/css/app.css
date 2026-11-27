@@ -1110,3 +1110,10 @@ body:not(.hal-masuk):not(.hal-poster)>main{flex:1 0 auto;width:100%}
 .aset-aksi{margin-top:20px;padding-top:16px;border-top:1px solid var(--garis-lembut)}
 .aset-aksi .form-kisi{margin-top:8px}
 .aset-angka{margin:12px 0 14px}
+/* ===== Ekonomi Jamaah (modul 8) ===== */
+.eko-angka li:last-child{grid-column:auto}
+@media (min-width:768px){.eko-angka{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.form-kisi>.eko-penuh{grid-column:1 / -1}
+.form-kisi .eko-ket{margin:-6px 0 4px}
+.stat-biasa.eko-belum{color:var(--abu);font-weight:500}
+@media (max-width:767px){.eko-panjang{display:none}}

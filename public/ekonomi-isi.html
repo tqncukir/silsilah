@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Kondisi Ekonomi · SILSILAH TQN Cukir</title>
+<meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=105">
+<link rel="stylesheet" href="/css/app.css?v=105">
+</head>
+<body class="hal-app">
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <a href="/beranda.html">Beranda</a>
+      <a href="/dashboard.html" id="nav-dasbor" hidden>Dashboard Pengurus</a>
+      <a href="/jamaah.html" id="nav-jamaah" hidden>Data Jamaah</a>
+      <a href="/pendaftaran.html" id="nav-daftar" hidden>Pendaftaran</a>
+      <a href="/kegiatan.html" id="nav-kegiatan" hidden>Kegiatan</a>
+      <a href="/ahli-kubur.html" id="nav-ahli" hidden>Ahli Kubur</a>
+      <a href="/perjalanan.html" id="nav-perjalanan" hidden>Ziarah &amp; Umroh</a>
+      <a href="/bantuan.html" id="nav-bantuan" hidden>Bantuan Sosial</a>
+      <a href="/ekonomi.html" id="nav-ekonomi" aria-current="page">Ekonomi Jamaah</a>
+      <a href="/kas.html" id="nav-kas" hidden>Buku Kas</a>
+      <a href="/aset.html" id="nav-aset" hidden>Aset &amp; Wakaf</a>
+    </nav>
+    <button class="app-keluar" id="keluar" type="button">Keluar</button>
+  </div>
+</header>
+
+<main class="app-isi">
+  <a href="/ekonomi.html" class="kembali" id="kembali">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Ekonomi Jamaah
+  </a>
+  <p id="pesan" class="pesan" role="alert"></p>
+
+  <section id="lihat" class="panel" hidden aria-labelledby="l-nama">
+    <div class="panel-kepala">
+      <div>
+        <p class="panel-label">Kondisi ekonomi · rahasia</p>
+        <h1 id="l-nama"></h1>
+        <span id="l-tingkat" class="stat"></span>
+      </div>
+      <div class="kepala-aksi">
+        <button type="button" class="btn btn-utama btn-pas" id="ubah">Ubah</button>
+        <a href="/bantuan-isi.html" class="btn btn-kedua btn-pas" id="ajukan">Ajukan bantuan</a>
+        <a href="/jamaah.html" class="btn btn-kedua btn-pas" id="ke-jamaah">Data jamaah</a>
+      </div>
+    </div>
+    <dl class="rincian" id="l-rincian"></dl>
+  </section>
+
+  <form id="form" class="panel form" hidden novalidate aria-labelledby="f-judul">
+    <h1 id="f-judul">Isi kondisi ekonomi</h1>
+    <p class="judul-sub" id="f-sub"></p>
+    <div class="form-kisi">
+      <fieldset class="isian lebar pilihan eko-penuh" id="tingkat-isian" aria-describedby="t-ket">
+        <legend>Kondisi ekonomi <span class="wajib">wajib</span></legend>
+        <label class="pil"><input type="radio" name="tingkat" value="mampu"> Mampu</label>
+        <label class="pil"><input type="radio" name="tingkat" value="cukup"> Cukup</label>
+        <label class="pil"><input type="radio" name="tingkat" value="kurang"> Kurang mampu</label>
+        <label class="pil"><input type="radio" name="tingkat" value="sangat_kurang"> Sangat kurang mampu</label>
+      </fieldset>
+      <p class="ket eko-ket eko-penuh" id="t-ket">Mampu: kebutuhan tercukupi dan bisa membantu sesama. Cukup: kebutuhan pokok tercukupi. Kurang mampu: kebutuhan pokok sering kurang. Sangat kurang mampu: perlu dibantu segera.</p>
+      <div class="isian sepertiga">
+        <label for="tanggungan">Jumlah tanggungan <span class="wajib">wajib</span></label>
+        <input id="tanggungan" inputmode="numeric" maxlength="2" autocomplete="off" aria-describedby="tg-ket">
+        <p class="ket" id="tg-ket">Orang yang dinafkahi, mis. istri, anak, orang tua. 0 bila tidak ada.</p>
+      </div>
+      <div class="isian sepertiga">
+        <label for="tanggal">Tanggal didata <span class="wajib">wajib</span></label>
+        <input id="tanggal" type="date" required>
+      </div>
+      <div class="isian lebar">
+        <label for="keterangan">Keterangan</label>
+        <input id="keterangan" maxlength="200" aria-describedby="k-ket" placeholder="Mis. buruh tani musiman, rumah numpang orang tua">
+        <p class="ket" id="k-ket">Singkat saja. Jangan menulis angka penghasilan, nama penyakit, nomor HP, atau NIK.</p>
+      </div>
+    </div>
+    <p id="pesan-form" class="pesan" role="alert"></p>
+    <div class="tombol-baris">
+      <button type="button" class="btn btn-kedua btn-pas" id="batal">Batal</button>
+      <button type="submit" class="btn btn-utama btn-pas btn-masuk" id="simpan"><span class="putar" aria-hidden="true"></span><span class="teks">Simpan</span></button>
+    </div>
+  </form>
+</main>
+<footer class="kaki">
+  <div class="kaki-isi">
+    <address class="kaki-alamat">TQN Pusat Cukir Jombang<br>Jl. Masjid No. 110 Cukir, Diwek, Jombang 61471</address>
+  </div>
+  <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
+</footer>
+<script src="/js/supa.js?v=105" defer></script>
+<script src="/js/kalender.js?v=105" defer></script>
+<script src="/js/ekonomi-isi.js?v=105" defer></script>
+</body>
+</html>
