@@ -1,5 +1,10 @@
 # PROGRES SILSILAH TQN Cukir
 
+## POSISI TERAKHIR (baca ini dulu) — diperbarui 2026-11-27
+- **Semua 9 tahap selesai dan disetujui Kang**: 14 modul terbangun (Tahap 9 Kesehatan disetujui 2026-11-27). Versi cache terakhir **v110**. Migrasi terakhir yang sudah dijalankan Kang: `20261127090000_kesehatan.sql`. Advisors terakhir: 0 error, 49 peringatan, 11 info (semua jenis yang disengaja, lihat Tahap 9).
+- **Serah terima 2026-11-27:** proyek diteruskan dari akun Claude **celupherbal** (perintah Kang). Akun baru tidak membawa skill/memori akun lama: semua aturan ada di `CLAUDE.md` (termasuk bagian "Cara kerja agen" dan "Cara uji") dan riwayat ada di file ini.
+- **Langkah berikutnya: belum ditentukan Kang.** Pilihan yang sudah ditawarkan (tunggu Kang memilih satu, jangan mulai sendiri): (1) backup bulanan data ke luar Supabase (aturan 13), (2) notifikasi di HP (pengingat agenda/haul), (3) berita & profil di bagian publik, (4) pemeriksaan menyeluruh (keamanan, kecepatan, tampilan semua halaman) sebelum dipakai ribuan jamaah.
+
 ## Tahap 1: Data Jamaah, Pendaftaran, KTA, Portal Anggota, Hak Akses
 Mulai: 2026-11-25 (Kang Salman: "Bismillah").
 
@@ -54,7 +59,7 @@ Mulai: 2026-11-25 (Kang Salman: "Bismillah").
   2. **Wilayah Koordinator di Atur PIN Pengurus:** pilih peran Koordinator Wilayah → muncul daftar kecamatan (kelompok per Kab/Kota, ada pencarian, wajib minimal 1). Di daftar pengurus tampil "Wilayah: ..." dan tombol **Ubah wilayah** (tanpa ganti PIN). Migrasi `20261126020000_wilayah_koordinator.sql`: tabel `private.pengurus_wilayah` (per jamaah, karena akun pengurus baru dibuat saat pertama masuk), diselaraskan ke `pengguna_wilayah` (yang dipakai RLS) langsung bila akun sudah ada, atau otomatis lewat trigger saat akun dibuat/peran berubah; ganti peran ke selain koordinator = wilayah dikosongkan. `atur_pin_pengurus` kini 4 argumen (`p_kecamatan`), fungsi baru `atur_wilayah_pengurus`, `daftar_pin_pengurus` + kolom `kecamatan_id`, `wilayah`. Diuji di database (8 skenario, rollback) dan tiruan 360/768/1280. Versi cache v59. Menunggu uji Kang.
 - **Teks 2026-11-26 (permintaan Kang):** "pengurus desa" diganti "pengurus" (pengurus thoriqoh, bukan pengurus desa) di Masuk, Data saya (Beranda), dan keterangan sesi KTA lama. Versi cache v60.
 
-## Berikutnya (satu per satu, tunggu persetujuan Kang)
+## Berikutnya setelah Tahap 1 (sudah lewat)
 
 Login scan QR KTA di HP sudah dicoba Kang dan lancar (2026-11-26); KTA master disetujui. **Tahap 1 selesai.** Tunggu Kang bilang "mulai" untuk tahap berikutnya (Tahap 2 belum ditentukan Kang).
 
