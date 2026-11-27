@@ -107,6 +107,7 @@ async function profilSaya() {
   nav('nav-ekonomi', p && PERAN_EKONOMI.includes(p.peran));
   nav('nav-usaha', !!p);
   nav('nav-sakit', p && PERAN_KESEHATAN.includes(p.peran));
+  nav('nav-kebutuhan', p && PERAN_KEBUTUHAN.includes(p.peran));
   nav('nav-aset', p && PERAN_LIHAT_ASET.includes(p.peran));
   if (p) pasangMenuBawah(p);
   return p || null;
@@ -137,6 +138,7 @@ function pasangMenuBawah(p) {
       ['Ekonomi Jamaah', '/ekonomi.html', PERAN_EKONOMI],
       ['Usaha Jamaah', '/usaha.html', null],
       ['Jamaah Sakit', '/sakit.html', PERAN_KESEHATAN],
+      ['Kebutuhan Khusus', '/kebutuhan.html', PERAN_KEBUTUHAN],
       ['Buku Kas', '/kas.html', PERAN_LIHAT_KAS],
       ['Aset & Wakaf', '/aset.html', PERAN_LIHAT_ASET],
       ['Atur PIN Pengurus', '/pengurus-pin.html', ['admin_pusat']], ['Agenda umum', '/agenda.html', null], ['Cara pasang di HP', '/pasang.html', null]]
@@ -217,7 +219,7 @@ function statusKegiatan(k) {
 // ===== Ziarah & Umroh (modul 10) =====
 // Lihat perjalanan: pengurus (petugas scan tanpa peserta). Buat/ubah: sama dengan kegiatan (koordinator: kecamatannya, RLS).
 // Peserta & tanda Lunas: admin pusat, ketua, bendahara, koordinator (dibatasi di database).
-const PERAN_LIHAT_PERJALANAN = ['admin_pusat', 'ketua', 'bendahara', 'petugas_scan', 'koordinator_wilayah'];
+const PERAN_LIHAT_PERJALANAN = ['admin_pusat', 'ketua', 'bendahara', 'petugas_scan', 'koordinator_wilayah', 'dokter', 'khodim'];
 const PERAN_KELOLA_PERJALANAN = ['admin_pusat', 'ketua', 'koordinator_wilayah'];
 const PERAN_PESERTA = ['admin_pusat', 'ketua', 'bendahara', 'koordinator_wilayah'];
 const JENIS_PERJALANAN = { ziarah: 'Ziarah', umroh: 'Umroh' };
@@ -277,6 +279,7 @@ const KONDISI_SAKIT = { ringan: ['Ringan', 'stat-biasa'], sedang: ['Sedang', 'st
 const STATUS_SAKIT = { sakit: 'Sedang sakit', sembuh: 'Sembuh', wafat: 'Wafat' };
 const KEBUTUHAN_KHUSUS = { kursi_roda: 'Kursi roda', alat_jalan: 'Alat bantu jalan', pendamping: 'Perlu pendamping', tangga: 'Sulit naik tangga',
   penglihatan: 'Gangguan penglihatan', pendengaran: 'Gangguan pendengaran', lainnya: 'Lainnya' };
+const PERAN_KEBUTUHAN = [...PERAN_KESEHATAN, 'khodim']; // khodim: hanya peserta perjalanan, tanpa catatan sakit
 const teksKebutuhan = (k) => (k || []).map((x) => KEBUTUHAN_KHUSUS[x] || x).join(', ');
 
 // ===== Aset & Wakaf (modul 14) =====

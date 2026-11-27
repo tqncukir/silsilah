@@ -1121,3 +1121,5 @@ body:not(.hal-masuk):not(.hal-poster)>main{flex:1 0 auto;width:100%}
 .stat-biasa.usaha-jenis{color:var(--abu);font-weight:500;white-space:normal}
 @media (max-width:767px){.stat-biasa.usaha-jenis{text-align:right}}
 .bs-baris small{display:block;color:var(--abu);font-size:var(--fs-kecil)}
+.ps-kel.keb-teks{color:var(--hijau-jamiyyah)}
+.keb-pilihan .pil input[type=checkbox]{width:20px;height:20px;accent-color:var(--hijau-jamiyyah)}

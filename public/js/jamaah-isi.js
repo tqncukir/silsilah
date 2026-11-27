@@ -34,6 +34,17 @@ function tampilLihat() {
   $('form').hidden = true; $('lihat').hidden = false;
   $('bantuan').hidden = !PERAN_BANTUAN.includes(peran);
   $('ekonomi').hidden = !PERAN_EKONOMI.includes(peran) || !j.aktif || j.wafat;
+  $('kesehatan').hidden = !PERAN_KESEHATAN.includes(peran) || j.wafat;
+}
+
+// Kesehatan (rahasia; rpc daftar_kebutuhan; koordinator hanya wilayahnya — di luar wilayah bagian disembunyikan).
+async function muatKesehatan() {
+  if ($('kesehatan').hidden) return;
+  try {
+    const [k] = await dbKirim('POST', 'rpc/daftar_kebutuhan', { p_jamaah_id: data.id, p_batas: 1 });
+    const ada = k && k.kebutuhan?.length;
+    $('ks-isi').innerHTML = `<li><a href="/kebutuhan-isi.html?jamaah=${data.id}"><span>Kebutuhan khusus<small>${ada ? hurufAman(teksKebutuhan(k.kebutuhan) + (k.keterangan ? ` (${k.keterangan})` : '')) : 'Tidak ada yang dicatat'}</small></span><span class="ket">${ada ? 'Ubah' : 'Isi'}</span></a></li>`;
+  } catch { $('kesehatan').hidden = true; }
 }
 
 // Kondisi ekonomi (rahasia; rpc daftar_ekonomi, hanya jamaah aktif & hidup; koordinator hanya wilayahnya).
@@ -89,7 +100,7 @@ function tampilForm() {
   aturWafat();
   aturUmur();
   pesanForm('');
-  $('lihat').hidden = true; $('form').hidden = false; $('bantuan').hidden = true; $('ekonomi').hidden = true;
+  $('lihat').hidden = true; $('form').hidden = false; $('bantuan').hidden = true; $('ekonomi').hidden = true; $('kesehatan').hidden = true;
   $('nama').focus();
 }
 
@@ -167,7 +178,7 @@ $('form').addEventListener('submit', async (e) => {
       $('ubah').hidden = !bisaUbah || (kecBoleh && !kecBoleh.has(data.desa.kecamatan_id));
       $('lihat-kta').href = `/kta.html?id=${encodeURIComponent(id)}`; $('lihat-kta').hidden = false;
       tampilLihat();
-      muatBantuan(); muatEkonomi();
+      muatBantuan(); muatEkonomi(); muatKesehatan();
     } else if (bisaUbah) {
       tampilForm();
     } else location.replace('/jamaah.html');

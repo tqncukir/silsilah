@@ -262,9 +262,16 @@ $('ps-keluarga').addEventListener('submit', async (e) => {
   finally { btn.disabled = false; btn.classList.remove('sibuk'); }
 });
 
+// Kebutuhan khusus peserta (rpc daftar_kebutuhan; hanya peran kesehatan, koordinator: peserta wilayahnya). Dimuat sekali.
+let kebPeserta = null;
+const muatKebPeserta = () => kebPeserta ??= (PERAN_KESEHATAN.includes(peran)
+  ? dbKirim('POST', 'rpc/daftar_kebutuhan', { p_perjalanan_id: data.id, p_batas: 1000 }).then((r) => new Map(r.map((x) => [x.jamaah_id, x]))).catch(() => new Map())
+  : Promise.resolve(new Map()));
+
 async function muatPeserta() {
   psPesan('');
   try {
+    const keb = await muatKebPeserta();
     const dari = (psHal - 1) * PS_PER;
     const baris = await dbKirim('POST', 'rpc/daftar_peserta', { p_perjalanan_id: data.id, p_cari: $('ps-cari').value.trim() || null,
       p_status: $('ps-status').value || null, p_dari: dari, p_batas: PS_PER });
@@ -278,9 +285,11 @@ async function muatPeserta() {
         b.boleh_ubah && bolehDaftar() ? `<button type="button" class="tautan" data-batal="${b.id}" data-nilai="${!b.batal}">${b.batal ? 'Ikutkan lagi' : 'Batal ikut'}</button>` : '',
       ].join('');
       const kel = b.keluarga ? `<span class="ps-kel">Keluarga${b.hubungan ? ` (${hurufAman(b.hubungan)})` : ''} dari ${hurufAman(b.penghubung_nama)}</span>` : '';
+      const kk = b.jamaah_id && keb.get(b.jamaah_id);
+      const kebTeks = kk ? `<span class="ps-kel keb-teks">Perlu dibantu: ${hurufAman(teksKebutuhan(kk.kebutuhan))}${kk.keterangan ? ` (${hurufAman(kk.keterangan)})` : ''}</span>` : '';
       return `<tr data-id="${b.id}"${b.batal ? ' class="ps-batal"' : ''} data-nama="${hurufAman(b.nama)}">
         <td data-l="No" class="angka kol-no">${(dari + i + 1).toLocaleString('id-ID')}</td>
-        <td data-l="Nama" class="tabel-nama">${hurufAman(b.nama)}${kel}</td>
+        <td data-l="Nama" class="tabel-nama">${hurufAman(b.nama)}${kel}${kebTeks}</td>
         <td data-l="Nomor" class="angka">${b.keluarga ? `<span class="hp-saja">Penghubung </span>${b.penghubung_nomor}` : b.nomor_anggota}</td>
         <td data-l="Desa">${hurufAman(b.desa)}<span class="hp-saja"> · Kec. ${hurufAman(b.kecamatan)}</span></td>
         <td data-l="Kecamatan">${hurufAman(b.kecamatan)}</td>
@@ -364,6 +373,8 @@ $('ps-unduh').onclick = async () => {
       ringkas = lain[1] || null;
       if (!data) { pesan('Perjalanan tidak ditemukan atau akun ini tidak punya izin melihatnya.'); return; }
       tampilLihat();
+      $('ke-kebutuhan').hidden = !PERAN_KEBUTUHAN.includes(peran);
+      $('ke-kebutuhan').href = `/kebutuhan.html?perjalanan=${data.id}`;
       if (bolehLihatPeserta()) muatPeserta();
     } else if (PERAN_KELOLA_PERJALANAN.includes(peran)) {
       if (kecBoleh && !kecBoleh.size) { pesan('Akun koordinator ini belum diberi wilayah. Hubungi admin pusat.'); return; }

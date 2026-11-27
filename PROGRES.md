@@ -371,6 +371,14 @@ Mulai: 2026-11-27 (Kang: "Mulai Tahap 9: modul 7 Kesehatan").
 - Menu "Jamaah Sakit" di kepala semua halaman (ketua, dokter, koordinator) + lembar Lainnya HP. `supa.js`: `PERAN_KESEHATAN`, `TEMPAT_SAKIT`, `KONDISI_SAKIT`, `STATUS_SAKIT`, `KEBUTUHAN_KHUSUS`, `teksKebutuhan()`.
 - Uji tiruan 360/768/1280 (dokter, ketua, koordinator; admin, bendahara, anggota, khodim dialihkan; catat, ubah, kunjungan, sembuh, kembalikan, dari Data Jamaah, jenis bantuan): 102 lulus. Versi cache v108. Menunggu uji Kang.
 
+**Langkah 3, Kebutuhan khusus** (2026-11-27, Kang: "lanjut langkah 3"), tanpa perubahan database.
+- `kebutuhan.html` + `js/kebutuhan.js` (ketua, dokter, koordinator, khodim; lainnya dialihkan): cari, saring **Perjalanan** (30 perjalanan terbaru yang tidak dibatalkan; "Semua jamaah" atau peserta satu perjalanan), Kebutuhan, Kab/Kota → Kecamatan; tabel No, Nama, Kebutuhan, Kel/Desa, Kecamatan, Nomor Anggota, Keterangan; baris diketuk = formulir. **Khodim**: wajib pilih perjalanan dulu, tanpa Nomor Anggota, tanpa tombol catat, baris tidak bisa diketuk.
+- `kebutuhan-isi.html` + `js/kebutuhan-isi.js` (ketua, dokter, koordinator): jamaah lewat Nomor Anggota/Pindai KTA (pilihan terisi dari data yang ada) atau terkunci `?jamaah=<id>`; 7 kotak centang kebutuhan (boleh lebih dari satu; kosongkan semua = tidak perlu dibantu); keterangan (wajib bila "Lainnya"; tolak HP/NIK) → `simpan_kebutuhan`.
+- **Ziarah & Umroh**: dokter & khodim kini boleh membuka daftar & rincian perjalanan (`PERAN_LIHAT_PERJALANAN`), tanpa daftar peserta. Tombol **Kebutuhan khusus peserta** di rincian (ketua, dokter, koordinator, khodim) → `kebutuhan.html?perjalanan=<id>`. Di daftar peserta, ketua & koordinator melihat baris hijau kecil "Perlu dibantu: Kursi roda, …" di bawah nama (dimuat sekali; koordinator hanya peserta wilayahnya); admin pusat & bendahara tidak.
+- **Data Jamaah** (rincian): panel **Kesehatan** untuk ketua & koordinator (jamaah hidup): "Kebutuhan khusus …" + Isi/Ubah. (Dokter tidak membuka Data Jamaah.)
+- Menu "Kebutuhan Khusus" di kepala (ketua, dokter, koordinator, khodim) + lembar Lainnya HP. `supa.js`: `PERAN_KEBUTUHAN`.
+- Uji tiruan 360/768/1280 (dokter, khodim, ketua, koordinator, bendahara, admin, anggota): 91 lulus; uji Jamaah Sakit ulang 102 lulus. Versi cache v109. Menunggu uji Kang.
+
 ## Perbaikan 2026-11-27: ikon aplikasi di taskbar hitam (laporan Kang)
 Ikon baru berlatar lingkaran putih seperti logo di kepala halaman: `icons/icon-192-v2.png`, `icon-512-v2.png`, `apple-touch-icon-v2.png` (kotak putih). Manifest, semua `<link rel=icon>`, apple-touch-icon, gambar panduan pasang, dan sw.js memakai file baru; versi v100. Ikon yang sudah terpasang berganti setelah Chrome memperbarui (bisa sampai 1 hari) atau setelah aplikasi dicopot lalu dipasang ulang.
 
