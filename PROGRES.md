@@ -3,7 +3,7 @@
 ## POSISI TERAKHIR (baca ini dulu) — diperbarui 2026-11-27
 - **Semua 9 tahap selesai dan disetujui Kang**: 14 modul terbangun (Tahap 9 Kesehatan disetujui 2026-11-27). Versi cache terakhir **v110**. Migrasi terakhir yang sudah dijalankan Kang: `20261127090000_kesehatan.sql`. Advisors terakhir: 0 error, 49 peringatan, 11 info (semua jenis yang disengaja, lihat Tahap 9).
 - **Serah terima 2026-11-27:** proyek diteruskan dari akun Claude **celupherbal** (perintah Kang). Akun baru tidak membawa skill/memori akun lama: semua aturan ada di `CLAUDE.md` (termasuk bagian "Cara kerja agen" dan "Cara uji") dan riwayat ada di file ini.
-- **Langkah berikutnya: Tahap 10 Pemeriksaan menyeluruh** (dipilih Kang 2026-11-27). Rencana di bagian Tahap 10 paling bawah; tunggu Kang: "lanjut langkah 1".
+- **Langkah berikutnya: Tahap 10 Pemeriksaan menyeluruh** (dipilih Kang 2026-11-27). Langkah 1 selesai; migrasi `20261127100000_pemeriksaan_keamanan.sql` **perlu dijalankan Kang**. Tunggu Kang: "lanjut langkah 2".
 
 ## Tahap 1: Data Jamaah, Pendaftaran, KTA, Portal Anggota, Hak Akses
 Mulai: 2026-11-25 (Kang Salman: "Bismillah").
@@ -420,3 +420,13 @@ Dipilih Kang 2026-11-27 (dari 4 pilihan: backup, notifikasi, berita, pemeriksaan
 3. Kecepatan: ukuran file per halaman (huruf, ikon, JS), cache PWA & daftar INTI, indeks untuk pencarian & saringan dengan ±5.500 jamaah (EXPLAIN di data tiruan sebanyak itu), pagination.
 4. Tampilan semua 38 halaman per peran di 360/768/1280: tanpa geser samping, tanpa galat konsol, huruf ≥14px, target sentuh ≥44px, kontras, teks konsisten.
 5. Laporan akhir untuk Kang + daftar yang perlu Kang lakukan sendiri (mis. cek Advisors, uji di HP).
+
+**Langkah 1, Keamanan database** (2026-11-27, Kang: "lanjut langkah 1"): migrasi `20261127100000_pemeriksaan_keamanan.sql` (**perlu dijalankan Kang**).
+- Diperiksa di Postgres lokal (semua 30 migrasi dari nol + data tiruan 2 kecamatan): 28 tabel semua ber-RLS; tabel rahasia (`ekonomi_jamaah`, `sakit`, `kunjungan_sakit`, `kebutuhan_khusus`, `bantuan`) tertutup total; 55 fungsi `security definer` semua `search_path = ''`; tamu hanya bisa `agenda_publik`; `cek_login`, `kta_info`, `boleh_cek_kta`, `tandai_sesi_terbatas` hanya server.
+- Matriks 32 bacaan × 14 pemakai (admin, ketua, bendahara, nadzir, koordinator A/B, petugas, khodim, dokter, anggota, anggota KTA lama, akun tanpa peran, ketua nonaktif, tamu) + 40 percobaan tulis/naik peran: sesuai keputusan Kang, kecuali 3 temuan di bawah.
+- **Temuan & perbaikan:**
+  1. **Admin pusat bisa membaca isi `log_perubahan` data rahasia** lewat API (tingkat ekonomi per jamaah, jamaah sakit + RS, bantuan + nominal, perubahan nominal bisyaroh). Dibetulkan: fungsi `private.boleh_baca_log` — ketua tetap semua; admin pusat tanpa log ekonomi, kesehatan, bantuan, dan transaksi kategori rahasia (termasuk yang pernah dipindah ke/dari bisyaroh). Halaman aplikasi tidak memakai log, jadi tampilan tidak berubah.
+  2. **Ketua/koordinator bisa mengganti Nomor Anggota** langsung lewat API (KTA jadi tidak berlaku). Dibetulkan: pemicu `kunci_nomor` menolak ubah `nomor_anggota` & `dibuat_pada` dari aplikasi; fungsi server (mis. `ganti_kta`) tetap jalan.
+  3. **Hak tabel berlebih**: tamu punya hak penuh di `jamaah_goldar` & `wilayah_resmi` (tertahan RLS, data tidak terbuka), pengguna login punya TRUNCATE/TRIGGER/REFERENCES (tidak bisa lewat API, tapi TRUNCATE melewati RLS). Dicabut untuk semua tabel + default tabel baru.
+- **Catatan, tidak diubah (untuk Kang):** admin pusat secara teknis bisa menonaktifkan akunnya sendiri lewat API langsung (halaman Atur PIN sudah mencegah); risiko kecil karena hanya admin sendiri.
+- Uji ulang setelah perbaikan (31 migrasi dari nol): matriks sama kecuali log admin; nomor ditolak, ubah alamat & ganti KTA tetap bisa; upsert gol. darah tetap bisa. Menunggu Kang menjalankan migrasi, lalu Claude cek Advisors.
