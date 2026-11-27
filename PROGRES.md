@@ -263,6 +263,19 @@ Mulai: 2026-11-27 (Kang: "Mulai Tahap 7: modul 14 Aset & Wakaf").
 - Diuji Postgres lokal: semua migrasi + uji lama + 31 skenario aset (nadzir, ketua, admin, bendahara, koordinator, petugas, anggota, sesi terbatas, tamu) lulus.
 - Migrasi sudah dijalankan Kang (2026-11-27). Advisors (Rerun linter): 0 error; peringatan 33 → 35 (`desa_id_aset`, `ringkas_aset` "SECURITY DEFINER bisa dipanggil pengguna login", keduanya memeriksa hak sendiri); info tetap 7. Aman.
 
+**Langkah 2, Halaman Aset & Wakaf** (2026-11-27, Kang: "lanjut langkah 2"), tanpa perubahan database.
+- `aset.html` + `js/aset.js` (admin pusat, ketua, bendahara, nadzir; lainnya dialihkan ke Beranda):
+  - Tab **Tanah wakaf / Barang**; kotak angka dari `ringkas_aset` (tanah: jumlah, total luas, belum bersertifikat, perlu perbaikan; barang: jenis & unit, perkiraan nilai, perlu perbaikan, dilepas).
+  - Cari (tanah: nama/wakif/alamat; barang: nama/lokasi/pemegang). Saring Sertifikat & Peruntukan atau Kategori & Kondisi, plus Status (Aktif bawaan / Dilepas / Semua).
+  - Tabel + kartu di HP. Pil hanya untuk yang perlu perhatian (Belum ada AIW, perlu perbaikan, rusak, dilepas). Tombol Tambah hanya untuk pencatat.
+- `aset-isi.html` + `js/aset-isi.js`:
+  - Formulir tanah: nama, lokasi diketik dengan saran wilayah (`desa_id_aset`), luas (boleh "1.250,5"), peruntukan, wakif, nadzir, dokumen (status sertifikat, tanggal ikrar, nomor AIW, nomor sertifikat wajib bila Bersertifikat, letak dokumen asli).
+  - Formulir barang: kategori, jumlah, cara & tahun perolehan, perkiraan nilai (format Rp), lokasi simpan, pemegang.
+  - Bersama: kondisi, keterangan (tolak nomor ≥8 digit).
+  - Rincian + **Ubah**, **Lepas aset** (tanggal + alasan + konfirmasi), **Aktifkan kembali** (konfirmasi). Bendahara hanya melihat.
+- Menu "Aset & Wakaf" di kepala halaman pengurus + Lainnya (HP). Konstanta di `supa.js`: `PERAN_LIHAT_ASET`, `PERAN_CATAT_ASET`, label sertifikat/peruntukan/kondisi/kategori/perolehan, `luasTeks()`.
+- Uji tiruan 360/768/1280 (nadzir, ketua, bendahara; koordinator, anggota, petugas dialihkan): 189 pemeriksaan lulus. Versi cache v103.
+
 ## Perbaikan 2026-11-27: ikon aplikasi di taskbar hitam (laporan Kang)
 Ikon baru berlatar lingkaran putih seperti logo di kepala halaman: `icons/icon-192-v2.png`, `icon-512-v2.png`, `apple-touch-icon-v2.png` (kotak putih). Manifest, semua `<link rel=icon>`, apple-touch-icon, gambar panduan pasang, dan sw.js memakai file baru; versi v100. Ikon yang sudah terpasang berganti setelah Chrome memperbarui (bisa sampai 1 hari) atau setelah aplikasi dicopot lalu dipasang ulang.
 

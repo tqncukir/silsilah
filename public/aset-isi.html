@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Aset &amp; Wakaf · SILSILAH TQN Cukir</title>
+<meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=103">
+<link rel="stylesheet" href="/css/app.css?v=103">
+</head>
+<body class="hal-app">
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <a href="/beranda.html">Beranda</a>
+      <a href="/dashboard.html" id="nav-dasbor" hidden>Dashboard Pengurus</a>
+      <a href="/jamaah.html" id="nav-jamaah" hidden>Data Jamaah</a>
+      <a href="/pendaftaran.html" id="nav-daftar" hidden>Pendaftaran</a>
+      <a href="/kegiatan.html" id="nav-kegiatan" hidden>Kegiatan</a>
+      <a href="/ahli-kubur.html" id="nav-ahli" hidden>Ahli Kubur</a>
+      <a href="/perjalanan.html" id="nav-perjalanan" hidden>Ziarah &amp; Umroh</a>
+      <a href="/bantuan.html" id="nav-bantuan" hidden>Bantuan Sosial</a>
+      <a href="/kas.html" id="nav-kas" hidden>Buku Kas</a>
+      <a href="/aset.html" id="nav-aset" aria-current="page">Aset &amp; Wakaf</a>
+    </nav>
+    <button class="app-keluar" id="keluar" type="button">Keluar</button>
+  </div>
+</header>
+
+<main class="app-isi">
+  <a href="/aset.html" class="kembali" id="kembali">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span id="kembali-teks">Aset &amp; Wakaf</span>
+  </a>
+  <p id="pesan" class="pesan" role="alert"></p>
+
+  <section id="lihat" class="panel" hidden aria-labelledby="l-nama">
+    <div class="panel-kepala">
+      <div>
+        <p class="panel-label" id="l-label"></p>
+        <h1 id="l-nama"></h1>
+        <p class="kas-jumlah-besar" id="l-besar"></p>
+        <span id="l-status" class="stat"></span>
+      </div>
+      <div class="kepala-aksi">
+        <button type="button" class="btn btn-kedua btn-pas" id="ubah" hidden>Ubah</button>
+      </div>
+    </div>
+    <dl class="rincian" id="l-rincian"></dl>
+
+    <form class="aset-aksi form" id="lepas" hidden novalidate aria-labelledby="lp-j">
+      <h2 class="bagian-judul" id="lp-j">Lepas aset</h2>
+      <p class="ket">Untuk aset yang sudah tidak dimiliki atau dipakai lagi (rusak dibuang, dijual, hilang, ditukar). Data tetap tersimpan dengan tanda "Dilepas".</p>
+      <div class="form-kisi">
+        <div class="isian">
+          <label for="lp-tanggal">Tanggal dilepas <span class="wajib">wajib</span></label>
+          <input id="lp-tanggal" type="date" required>
+        </div>
+        <div class="isian lebar">
+          <label for="lp-alasan">Alasan <span class="wajib">wajib</span></label>
+          <input id="lp-alasan" maxlength="200" autocomplete="off" placeholder="Mis. rusak berat, dibuang">
+        </div>
+      </div>
+      <div class="tombol-baris">
+        <button type="submit" class="btn btn-kedua btn-pas" id="lp-kirim">Tandai dilepas</button>
+      </div>
+    </form>
+    <div class="aset-aksi" id="aktifkan-bungkus" hidden>
+      <p class="ket">Aset ini sudah dilepas. Bila keliru, aktifkan kembali.</p>
+      <div class="tombol-baris"><button type="button" class="btn btn-kedua btn-pas" id="aktifkan">Aktifkan kembali</button></div>
+    </div>
+  </section>
+
+  <form id="form" class="panel form" hidden novalidate aria-labelledby="f-judul">
+    <h1 id="f-judul">Tambah tanah wakaf</h1>
+    <p class="judul-sub" id="f-sub"></p>
+    <div class="form-kisi">
+      <div class="isian lebar">
+        <label for="nama" id="nama-label">Nama <span class="wajib">wajib</span></label>
+        <input id="nama" maxlength="120" autocomplete="off" required>
+      </div>
+
+      <h3 class="bagian-judul" data-grup="tanah">Lokasi</h3>
+      <div class="isian d2" data-grup="tanah">
+        <label for="kabupaten">Kab/Kota <span class="wajib">wajib</span></label>
+        <input id="kabupaten" maxlength="60" autocomplete="off" aria-describedby="k-prov">
+        <p class="ket" id="k-prov"></p>
+      </div>
+      <div class="isian k3 d2" data-grup="tanah">
+        <label for="kecamatan">Kecamatan <span class="wajib">wajib</span></label>
+        <input id="kecamatan" maxlength="60" autocomplete="off">
+      </div>
+      <div class="isian k3 d2" data-grup="tanah">
+        <label for="desa">Kel/Desa <span class="wajib">wajib</span></label>
+        <input id="desa" maxlength="60" autocomplete="off">
+      </div>
+      <div class="isian lebar" data-grup="tanah">
+        <label for="alamat">Dusun/Jalan</label>
+        <input id="alamat" maxlength="200" autocomplete="off">
+      </div>
+      <div class="isian k3" data-grup="tanah">
+        <label for="luas">Luas (m²) <span class="wajib">wajib</span></label>
+        <input id="luas" inputmode="decimal" autocomplete="off" placeholder="Mis. 450">
+      </div>
+      <div class="isian k3" data-grup="tanah">
+        <label for="peruntukan">Peruntukan <span class="wajib">wajib</span></label>
+        <select id="peruntukan"></select>
+      </div>
+      <div class="isian" data-grup="tanah">
+        <label for="wakif">Wakif (yang mewakafkan) <span class="wajib">wajib</span></label>
+        <input id="wakif" maxlength="120" autocomplete="off">
+      </div>
+      <div class="isian" data-grup="tanah">
+        <label for="nadzir">Nadzir</label>
+        <input id="nadzir" maxlength="120" autocomplete="off">
+      </div>
+
+      <h3 class="bagian-judul" data-grup="tanah">Dokumen</h3>
+      <div class="isian" data-grup="tanah">
+        <label for="sertifikat">Status sertifikat</label>
+        <select id="sertifikat"></select>
+      </div>
+      <div class="isian" data-grup="tanah">
+        <label for="tgl-ikrar">Tanggal ikrar wakaf</label>
+        <input id="tgl-ikrar" type="date">
+      </div>
+      <div class="isian" data-grup="tanah">
+        <label for="no-aiw">Nomor AIW</label>
+        <input id="no-aiw" maxlength="60" autocomplete="off">
+      </div>
+      <div class="isian" data-grup="tanah">
+        <label for="no-sertifikat" id="no-sertifikat-label">Nomor sertifikat wakaf</label>
+        <input id="no-sertifikat" maxlength="60" autocomplete="off">
+      </div>
+      <div class="isian lebar" data-grup="tanah">
+        <label for="letak-arsip">Letak dokumen asli</label>
+        <input id="letak-arsip" maxlength="120" autocomplete="off" placeholder="Mis. lemari arsip kantor pusat, map hijau">
+      </div>
+
+      <div class="isian k3" data-grup="barang">
+        <label for="kategori">Kategori <span class="wajib">wajib</span></label>
+        <select id="kategori"></select>
+      </div>
+      <div class="isian k3" data-grup="barang">
+        <label for="jumlah">Jumlah (unit) <span class="wajib">wajib</span></label>
+        <input id="jumlah" inputmode="numeric" maxlength="5" autocomplete="off" value="1">
+      </div>
+      <div class="isian k3" data-grup="barang">
+        <label for="cara">Cara perolehan</label>
+        <select id="cara"></select>
+      </div>
+      <div class="isian k3" data-grup="barang">
+        <label for="tahun">Tahun perolehan</label>
+        <input id="tahun" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="Mis. 2024">
+      </div>
+      <div class="isian" data-grup="barang">
+        <label for="nilai">Perkiraan nilai</label>
+        <div class="kas-rp"><span aria-hidden="true">Rp</span><input id="nilai" inputmode="numeric" autocomplete="off" placeholder="0"></div>
+      </div>
+      <div class="isian" data-grup="barang">
+        <label for="lokasi">Lokasi simpan</label>
+        <input id="lokasi" maxlength="120" autocomplete="off" placeholder="Mis. gudang kantor pusat">
+      </div>
+      <div class="isian" data-grup="barang">
+        <label for="pemegang">Pemegang / penanggung jawab</label>
+        <input id="pemegang" maxlength="120" autocomplete="off">
+      </div>
+
+      <div class="isian k3">
+        <label for="kondisi">Kondisi</label>
+        <select id="kondisi"></select>
+      </div>
+      <div class="isian lebar">
+        <label for="keterangan">Keterangan</label>
+        <input id="keterangan" maxlength="300" autocomplete="off" aria-describedby="k-ket">
+        <p class="ket" id="k-ket">Jangan menulis nomor HP atau NIK.</p>
+      </div>
+    </div>
+    <p id="pesan-form" class="pesan" role="alert"></p>
+    <div class="tombol-baris">
+      <button type="button" class="btn btn-kedua btn-pas" id="batal">Batal</button>
+      <button type="submit" class="btn btn-utama btn-pas btn-masuk" id="simpan"><span class="putar" aria-hidden="true"></span><span class="teks">Simpan</span></button>
+    </div>
+  </form>
+</main>
+<footer class="kaki">
+  <div class="kaki-isi">
+    <address class="kaki-alamat">TQN Pusat Cukir Jombang<br>Jl. Masjid No. 110 Cukir, Diwek, Jombang 61471</address>
+  </div>
+  <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
+</footer>
+<script src="/js/supa.js?v=103" defer></script>
+<script src="/js/kalender.js?v=103" defer></script>
+<script src="/js/wilayah.js?v=103" defer></script>
+<script src="/js/aset-isi.js?v=103" defer></script>
+</body>
+</html>

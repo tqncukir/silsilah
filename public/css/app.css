@@ -1101,3 +1101,12 @@ body:not(.hal-masuk):not(.hal-poster)>main{flex:1 0 auto;width:100%}
 .bs-penerima.galat{color:#8C1D18}
 @media (max-width:767px){.tabel .kol-tablet{display:none}}
 .hadir-teratas .bs-baris{display:flex;justify-content:space-between;gap:12px;min-height:44px;align-items:center;padding:6px 4px}
+/* ===== Aset & Wakaf (modul 14) ===== */
+.aset-tab{display:flex;gap:4px;margin:16px 0 0;padding:4px;border:1px solid var(--garis);border-radius:14px;background:var(--latar-sorot)}
+.aset-tab button{flex:1;min-height:44px;padding:8px 16px;border:0;border-radius:10px;background:none;font:inherit;font-weight:600;color:var(--abu);cursor:pointer}
+.aset-tab button[aria-selected="true"]{background:var(--putih);color:var(--hijau-jamiyyah);box-shadow:var(--bayang)}
+.aset-tab button:focus-visible{outline:3px solid var(--hijau-jamiyyah);outline-offset:2px}
+@media (min-width:768px){.aset-tab{display:inline-flex}.aset-tab button{flex:0 0 auto;min-width:160px}}
+.aset-aksi{margin-top:20px;padding-top:16px;border-top:1px solid var(--garis-lembut)}
+.aset-aksi .form-kisi{margin-top:8px}
+.aset-angka{margin:12px 0 14px}
