@@ -385,7 +385,7 @@ Mulai: 2026-11-27 (Kang: "Mulai Tahap 9: modul 7 Kesehatan").
 - **Data Jamaah** (panel Kesehatan): baris catatan sakit — "Sedang sakit · berat, Rawat inap di …, sejak …, dijenguk N kali" (ke rincian) atau "Tidak tercatat sedang sakit — Catat sakit" (jamaah aktif) — di atas baris Kebutuhan khusus.
 - Uji tiruan 360/768/1280: Beranda & Dashboard 104 lulus (ketua, dokter, khodim, admin, bendahara, anggota, dll.), Kebutuhan + Data Jamaah 91 lulus. Versi cache v110. Menunggu uji Kang.
 
-**Tahap 9 selesai dibangun (4 langkah).** Menunggu cek dan persetujuan Kang.
+**Tahap 9 selesai dan disetujui Kang 2026-11-27 ("Tahap 9 disetujui").** Semua 14 modul sudah terbangun (modul 12 Dashboard & Laporan terisi bertahap dari tiap modul). Tunggu perintah Kang berikutnya.
 
 ## Perbaikan 2026-11-27: ikon aplikasi di taskbar hitam (laporan Kang)
 Ikon baru berlatar lingkaran putih seperti logo di kepala halaman: `icons/icon-192-v2.png`, `icon-512-v2.png`, `apple-touch-icon-v2.png` (kotak putih). Manifest, semua `<link rel=icon>`, apple-touch-icon, gambar panduan pasang, dan sw.js memakai file baru; versi v100. Ikon yang sudah terpasang berganti setelah Chrome memperbarui (bisa sampai 1 hari) atau setelah aplikasi dicopot lalu dipasang ulang.
