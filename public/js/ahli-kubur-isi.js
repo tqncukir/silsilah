@@ -46,7 +46,7 @@ function tampilLihat() {
   $('ubah').hidden = !bolehUbah();
   $('ke-jamaah').hidden = d.jenis !== 'jamaah';
   if (d.jenis === 'jamaah') $('ke-jamaah').href = `/jamaah-isi.html?id=${d.jamaah.id}`;
-  $('form').hidden = true; $('lihat').hidden = false; document.querySelector('main').classList.remove('app-sempit'); // rincian penuh layar, formulir sempit (Kang 2026-11-27)
+  $('form').hidden = true; $('lihat').hidden = false;
 }
 
 function aturJenis() {
@@ -68,7 +68,7 @@ function tampilForm() {
   $('titip-nama').textContent = titip ? `${titip.nama} · ${titip.desa}` : '';
   $('hubungan').value = d?.hubungan || '';
   aturJenis(); pesanForm('');
-  $('lihat').hidden = true; $('form').hidden = false; document.querySelector('main').classList.add('app-sempit');
+  $('lihat').hidden = true; $('form').hidden = false;
   (d?.jenis === 'jamaah' ? $('bin') : $('nama')).focus();
 }
 

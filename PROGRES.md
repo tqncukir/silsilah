@@ -165,7 +165,7 @@ Mulai: 2026-11-27 (Kang: "Mulai Tahap 4: modul 10 Ziarah & Umroh").
 
 - **Rincian perjalanan penuh layar** (permintaan Kang 2026-11-27): di laptop/komputer rincian + daftar peserta `perjalanan-isi.html` selebar halaman daftar (kelas `app-sempit` dilepas saat melihat, dipasang lagi saat formulir Tambah/Ubah). Versi cache v90.
 
-- **Halaman lain penuh layar** (permintaan Kang 2026-11-27: "agar data yang terlihat lebih banyak"): rincian Data Jamaah, Kegiatan (+ daftar hadir), Ahli Kubur memakai pola yang sama (penuh saat melihat, `app-sempit` hanya saat formulir Tambah/Ubah); Haul dan Lengkapi Jenis Kelamin penuh layar. Tetap sempit: Pendaftaran (formulir), Absensi (kamera + catatan), KTA (kartu). Versi cache v91.
+- **Halaman lain penuh layar** (permintaan Kang 2026-11-27: "agar data yang terlihat lebih banyak"): semua halaman aplikasi penuh layar di laptop/komputer, termasuk rincian & formulir (Data Jamaah, Kegiatan + daftar hadir, Ahli Kubur, Ziarah & Umroh + peserta, Haul, Lengkapi Jenis Kelamin, Pendaftaran — permintaan Kang setelah cek Pendaftaran). Ini menggantikan aturan "rincian & formulir maks ±960px" (temuan c). Tetap sempit hanya Absensi (kamera + catatan) dan KTA (kartu). Versi cache v92.
 
 **Tahap 4 (4 langkah) selesai dibangun.** Menunggu Kang mencoba di HP (anggota peserta + Dashboard) dan menyetujui Tahap 4.
 

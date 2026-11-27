@@ -55,8 +55,7 @@ function tampilLihat() {
   $('ubah').hidden = !boleh || k.dibatalkan;
   $('batalkan').hidden = !boleh;
   $('batalkan').textContent = k.dibatalkan ? 'Aktifkan lagi' : 'Batalkan perjalanan';
-  // Rincian + daftar peserta penuh layar seperti halaman daftar (permintaan Kang 2026-11-27); formulir tetap sempit.
-  $('form').hidden = true; $('lihat').hidden = false; document.querySelector('main').classList.remove('app-sempit');
+  $('form').hidden = true; $('lihat').hidden = false;
   tampilPeserta();
 }
 
@@ -76,7 +75,7 @@ function tampilForm() {
   document.querySelector(`[name=publik][value=${!k || k.publik ? 'ya' : 'tidak'}]`).checked = true;
   $('keterangan').value = k?.keterangan || '';
   pesanForm('');
-  $('lihat').hidden = true; $('form').hidden = false; $('peserta').hidden = true; document.querySelector('main').classList.add('app-sempit');
+  $('lihat').hidden = true; $('form').hidden = false; $('peserta').hidden = true;
   $('nama').focus();
 }
 
