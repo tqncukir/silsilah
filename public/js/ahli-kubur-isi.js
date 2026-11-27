@@ -42,7 +42,7 @@ function tampilLihat() {
   if (d.jenis === 'keluarga') baris.push(['Dititipkan oleh', d.penghubung ? `${d.penghubung.nama} (${d.penghubung.nomor_anggota}) · ${asalTeks(d.penghubung)}` : (d.penghubung_jamaah_id ? 'Jamaah di luar wilayah akun ini' : '')],
     ['Hubungan', d.hubungan]);
   baris.push(['Keterangan', d.keterangan]);
-  $('l-rincian').innerHTML = baris.map(([k, v]) => `<div><dt>${k}</dt><dd>${v ? hurufAman(v) : '–'}</dd></div>`).join('');
+  $('l-rincian').innerHTML = baris.map(([k, v]) => `<div${String(v ?? '').length > 28 ? ' class="penuh"' : ''}><dt>${k}</dt><dd>${v ? hurufAman(v) : '–'}</dd></div>`).join('');
   $('ubah').hidden = !bolehUbah();
   $('ke-jamaah').hidden = d.jenis !== 'jamaah';
   if (d.jenis === 'jamaah') $('ke-jamaah').href = `/jamaah-isi.html?id=${d.jamaah.id}`;

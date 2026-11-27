@@ -50,7 +50,7 @@ function tampilLihat() {
     ['Kuota', k.kuota ? `${angka(k.kuota)} orang` : 'Tanpa batas'],
     ['Tampil untuk anggota', k.publik ? 'Ya' : 'Pengurus saja'],
     ['Keterangan', k.keterangan],
-  ].filter(([, v]) => v).map(([a, v]) => `<div><dt>${a}</dt><dd>${hurufAman(v)}</dd></div>`).join('');
+  ].filter(([, v]) => v).map(([a, v]) => `<div${String(v ?? '').length > 28 ? ' class="penuh"' : ''}><dt>${a}</dt><dd>${hurufAman(v)}</dd></div>`).join('');
   const boleh = bolehUbah(k);
   $('ubah').hidden = !boleh || k.dibatalkan;
   $('batalkan').hidden = !boleh;

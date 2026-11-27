@@ -167,6 +167,8 @@ Mulai: 2026-11-27 (Kang: "Mulai Tahap 4: modul 10 Ziarah & Umroh").
 
 - **Halaman lain penuh layar** (permintaan Kang 2026-11-27: "agar data yang terlihat lebih banyak"): semua halaman aplikasi penuh layar di laptop/komputer, termasuk rincian & formulir (Data Jamaah, Kegiatan + daftar hadir, Ahli Kubur, Ziarah & Umroh + peserta, Haul, Lengkapi Jenis Kelamin, Pendaftaran — permintaan Kang setelah cek Pendaftaran). Ini menggantikan aturan "rincian & formulir maks ±960px" (temuan c). Tetap sempit hanya Absensi (kamera + catatan) dan KTA (kartu). Versi cache v92.
 
+- **Poles semua halaman** (2026-11-27, diperiksa 19 halaman di 360 & 1440; Kang: "kerjakan semua" temuan a–e): (a) laptop ≥1024: kotak cari + pilihan saringan satu baris (`.saring:has(.saring-pilih)` flex, `.saring-pilih` display contents) di Data Jamaah, Kegiatan, Ahli Kubur, Ziarah & Umroh; (b) Lengkapi jenis kelamin di laptop: kartu berdampingan (grid minmax 440px), tombol dekat nama; (c) isian Ketik Nomor Anggota (`.absen-ketik-baris`) maks 560px di ≥768; (d) rincian di HP dua kolom, isian panjang (>28 huruf, kelas `penuh`) selebar kartu — semua `dl.rincian` (jamaah, kegiatan, ahli kubur, perjalanan, pendaftaran, Data saya); (e) halaman depan di laptop dua kolom (sambutan kiri, agenda kanan; `main.depan`), Agenda kartu 2–3 kolom (`main.agenda-hal`). Uji ulang semua halaman 360/1024/1440 tanpa galat/geser, uji Ziarah & Umroh 210 + 96 + 96 lulus. Versi cache v93.
+
 **Tahap 4 (4 langkah) selesai dibangun.** Menunggu Kang mencoba di HP (anggota peserta + Dashboard) dan menyetujui Tahap 4.
 
 ## Perbaikan 2026-11-27: "Pemeriksaan keamanan belum berhasil" di komputer lain (laporan Kang)

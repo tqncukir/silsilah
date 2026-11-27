@@ -199,7 +199,7 @@ $('form').addEventListener('submit', async (e) => {
       ['Kecamatan', KTP.judul($('kecamatan').value.replace(/\s+/g, ' '))], ['Kel/Desa', KTP.judul($('desa').value.replace(/\s+/g, ' '))],
       ['Dusun/Jalan', [siapKirim.alamat, ktp.rt_rw && `RT/RW ${ktp.rt_rw}`].filter(Boolean).join(', ')],
     ];
-    $('k-rincian').innerHTML = baris.map(([k, v]) => `<div><dt>${k}</dt><dd>${v ? hurufAman(v) : '<span class="kosong">Belum diisi</span>'}</dd></div>`).join('');
+    $('k-rincian').innerHTML = baris.map(([k, v]) => `<div${String(v ?? '').length > 28 ? ' class="penuh"' : ''}><dt>${k}</dt><dd>${v ? hurufAman(v) : '<span class="kosong">Belum diisi</span>'}</dd></div>`).join('');
     $('pesan-konfirmasi').textContent = '';
     tampil('konfirmasi');
     $('k-judul').focus();

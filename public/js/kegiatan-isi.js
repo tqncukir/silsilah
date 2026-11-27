@@ -38,7 +38,7 @@ function tampilLihat() {
     ['Wilayah', k.kecamatan ? `Kec. ${k.kecamatan.nama}, ${k.kecamatan.kabupaten?.nama || ''}` : 'Pusat Cukir'],
     ['Agenda umum', k.publik ? 'Tampil' : 'Tidak tampil (pengurus saja)'],
     ['Keterangan', k.keterangan],
-  ].map(([a, v]) => `<div><dt>${a}</dt><dd>${v ? hurufAman(v) : '–'}</dd></div>`).join('');
+  ].map(([a, v]) => `<div${String(v ?? '').length > 28 ? ' class="penuh"' : ''}><dt>${a}</dt><dd>${v ? hurufAman(v) : '–'}</dd></div>`).join('');
   const boleh = bolehUbah(k);
   $('ubah').hidden = !boleh || k.dibatalkan;
   $('batalkan').hidden = !boleh;

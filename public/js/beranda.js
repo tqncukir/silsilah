@@ -107,7 +107,7 @@ function ketHaul(id) {
           ['Nomor Anggota', k.nomor_anggota], ['Status', k.wafat ? 'Wafat' : k.aktif ? 'Aktif' : 'Tidak aktif'], ['Mursyid', k.mursyid],
           ['Tanggal daftar', tglK(k.tanggal_daftar)], ['Umur saat daftar', k.umur_daftar ? `${k.umur_daftar} tahun` : ''], ['Pekerjaan', k.pekerjaan],
           ['Kab/Kota', k.kabupaten], ['Kecamatan', k.kecamatan], ['Kel/Desa', k.desa],
-        ].map(([a, v]) => `<div><dt>${a}</dt><dd>${v ? hurufAman(String(v)) : '–'}</dd></div>`).join('');
+        ].map(([a, v]) => `<div${String(v ?? '').length > 28 ? ' class="penuh"' : ''}><dt>${a}</dt><dd>${v ? hurufAman(String(v)) : '–'}</dd></div>`).join('');
         document.querySelector('.data-saya-ket').textContent = 'Masuk dengan KTA lama: yang tampil hanya data yang tercetak di kartu. Data lengkap bisa dilihat di pengurus.';
         $('anggota').hidden = false;
         muatRiwayat(true); ketAgenda(); ketHaul('a-haul-ket'); muatZiarah(true);
@@ -126,7 +126,7 @@ function ketHaul(id) {
           ['Kewarganegaraan', j.kewarganegaraan], ['Pekerjaan', j.pekerjaan],
           ['Kab/Kota', j.desa.kecamatan.kabupaten?.nama], ['Kecamatan', j.desa.kecamatan.nama], ['Kel/Desa', j.desa.nama],
           ['Dusun/Jalan', j.alamat], ['RT/RW', j.rt_rw],
-        ].map(([k, v]) => `<div><dt>${k}</dt><dd>${v ? hurufAman(v) : '–'}</dd></div>`).join('');
+        ].map(([k, v]) => `<div${String(v ?? '').length > 28 ? ' class="penuh"' : ''}><dt>${k}</dt><dd>${v ? hurufAman(v) : '–'}</dd></div>`).join('');
         $('anggota').hidden = false;
         muatRiwayat(false); ketAgenda(); ketHaul('a-haul-ket'); muatZiarah(false);
       }

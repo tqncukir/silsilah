@@ -1004,3 +1004,31 @@ body:not(.hal-masuk):not(.hal-poster)>main{flex:1 0 auto;width:100%}
 @media (max-width:767px){
   .ps-tabel td[data-l="Aksi"]{grid-column:2 / -1;margin-top:8px}
 }
+
+/* ===== Poles 2026-11-27 (temuan a–e, Kang: "kerjakan semua") ===== */
+/* a. Laptop: kotak cari + saringan satu baris (tabel naik, data terlihat lebih banyak) */
+@media (min-width:1024px){
+  .saring:has(.saring-pilih){display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px}
+  .saring:has(.saring-pilih) .saring-cari{flex:1 1 280px}
+  .saring .saring-pilih{display:contents}
+  .saring .saring-pilih label{flex:0 1 190px;min-width:150px}
+  .saring .saring-ulang{flex-basis:100%}
+}
+/* b. Lengkapi jenis kelamin: kartu berdampingan, tombol dekat nama */
+@media (min-width:1024px){
+  .jk-isi-daftar{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));background:none;border:0;box-shadow:none;gap:10px;overflow:visible}
+  .jk-isi{background:#FFFFFF;border:1px solid var(--garis);border-radius:16px;box-shadow:var(--bayang)}
+  .jk-isi+.jk-isi{border-top:1px solid var(--garis)}
+  .jk-isi-selesai{background:var(--latar-sorot)}
+  .jk-isi-daftar>.ket{grid-column:1 / -1}
+}
+/* c. Isian pendek (Nomor Anggota 10 angka) tidak memanjang selebar layar */
+@media (min-width:768px){.absen-ketik-baris{max-width:560px}}
+/* d. Rincian di HP dua kolom; isian panjang (.penuh) selebar kartu */
+@media (max-width:639px){.rincian{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px}.rincian>.penuh{grid-column:1 / -1}}
+/* e. Halaman depan & Agenda di laptop */
+@media (min-width:1024px){
+  main.depan{max-width:1120px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:start;padding-top:48px}
+  main.agenda-hal{max-width:1120px}
+  main.agenda-hal .agenda-daftar{grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+}

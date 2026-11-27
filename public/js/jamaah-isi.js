@@ -29,7 +29,7 @@ function tampilLihat() {
     ['Dusun/Jalan', j.alamat], ['RT/RW', j.rt_rw],
   ];
   if (j.wafat) baris.push(['Tanggal wafat', tgl(j.tanggal_wafat)]);
-  $('l-rincian').innerHTML = baris.map(([k, v]) => `<div><dt>${k}</dt><dd>${v ? hurufAman(v) : '–'}</dd></div>`).join('');
+  $('l-rincian').innerHTML = baris.map(([k, v]) => `<div${String(v ?? '').length > 28 ? ' class="penuh"' : ''}><dt>${k}</dt><dd>${v ? hurufAman(v) : '–'}</dd></div>`).join('');
   $('ke-ahli').hidden = !j.wafat; $('ke-ahli').href = `/ahli-kubur-isi.html?kunci=j${j.id}`;
   $('form').hidden = true; $('lihat').hidden = false;
 }
