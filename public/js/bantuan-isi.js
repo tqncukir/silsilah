@@ -220,7 +220,8 @@ $('form').addEventListener('submit', async (e) => {
     } else {
       $('form').hidden = false; $('lihat').hidden = true;
       aturBentuk();
-      const awal = new URLSearchParams(location.search).get('nomor');
+      const awal = new URLSearchParams(location.search).get('nomor'), jenisAwal = new URLSearchParams(location.search).get('jenis');
+      if (jenisAwal && JENIS_BANTUAN[jenisAwal]) document.querySelector(`[name=jenis][value="${jenisAwal}"]`).checked = true;
       if (/^\d{10}$/.test(awal || '')) { $('nomor').value = awal; cekPenerima(); document.querySelector('[name=jenis]').focus(); }
       else $('nomor').focus();
     }

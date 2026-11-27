@@ -106,6 +106,7 @@ async function profilSaya() {
   nav('nav-bantuan', p && PERAN_BANTUAN.includes(p.peran));
   nav('nav-ekonomi', p && PERAN_EKONOMI.includes(p.peran));
   nav('nav-usaha', !!p);
+  nav('nav-sakit', p && PERAN_KESEHATAN.includes(p.peran));
   nav('nav-aset', p && PERAN_LIHAT_ASET.includes(p.peran));
   if (p) pasangMenuBawah(p);
   return p || null;
@@ -135,6 +136,7 @@ function pasangMenuBawah(p) {
       ['Bantuan Sosial', '/bantuan.html', PERAN_BANTUAN],
       ['Ekonomi Jamaah', '/ekonomi.html', PERAN_EKONOMI],
       ['Usaha Jamaah', '/usaha.html', null],
+      ['Jamaah Sakit', '/sakit.html', PERAN_KESEHATAN],
       ['Buku Kas', '/kas.html', PERAN_LIHAT_KAS],
       ['Aset & Wakaf', '/aset.html', PERAN_LIHAT_ASET],
       ['Atur PIN Pengurus', '/pengurus-pin.html', ['admin_pusat']], ['Agenda umum', '/agenda.html', null], ['Cara pasang di HP', '/pasang.html', null]]
@@ -266,6 +268,16 @@ const TINGKAT_EKONOMI = { mampu: ['Mampu', 'stat-biasa'], cukup: ['Cukup', 'stat
 const PERAN_CATAT_USAHA = ['admin_pusat', 'ketua', 'koordinator_wilayah'];
 const JENIS_USAHA = { makanan: 'Makanan & minuman', pertanian: 'Pertanian & peternakan', toko: 'Toko/kelontong', kerajinan: 'Kerajinan',
   pakaian: 'Pakaian', herbal: 'Herbal & kesehatan', jasa: 'Jasa', lainnya: 'Lainnya' };
+
+// ===== Kesehatan (modul 7) =====
+// Rahasia, tanpa nama penyakit: ketua & dokter (semua), koordinator (jamaah wilayahnya). Khodim: kebutuhan khusus peserta perjalanan.
+const PERAN_KESEHATAN = ['ketua', 'dokter', 'koordinator_wilayah'];
+const TEMPAT_SAKIT = { rumah: 'Di rumah', rawat_inap: 'Rawat inap' };
+const KONDISI_SAKIT = { ringan: ['Ringan', 'stat-biasa'], sedang: ['Sedang', 'stat-tidak'], berat: ['Berat', 'stat-wafat'] };
+const STATUS_SAKIT = { sakit: 'Sedang sakit', sembuh: 'Sembuh', wafat: 'Wafat' };
+const KEBUTUHAN_KHUSUS = { kursi_roda: 'Kursi roda', alat_jalan: 'Alat bantu jalan', pendamping: 'Perlu pendamping', tangga: 'Sulit naik tangga',
+  penglihatan: 'Gangguan penglihatan', pendengaran: 'Gangguan pendengaran', lainnya: 'Lainnya' };
+const teksKebutuhan = (k) => (k || []).map((x) => KEBUTUHAN_KHUSUS[x] || x).join(', ');
 
 // ===== Aset & Wakaf (modul 14) =====
 // Lihat: admin pusat, ketua, bendahara, nadzir. Catat: admin pusat, ketua, nadzir. Dijaga RLS. Tidak ada yang publik.

@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Catatan Sakit · SILSILAH TQN Cukir</title>
+<meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=108">
+<link rel="stylesheet" href="/css/app.css?v=108">
+</head>
+<body class="hal-app">
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <a href="/beranda.html">Beranda</a>
+      <a href="/dashboard.html" id="nav-dasbor" hidden>Dashboard Pengurus</a>
+      <a href="/jamaah.html" id="nav-jamaah" hidden>Data Jamaah</a>
+      <a href="/pendaftaran.html" id="nav-daftar" hidden>Pendaftaran</a>
+      <a href="/kegiatan.html" id="nav-kegiatan" hidden>Kegiatan</a>
+      <a href="/ahli-kubur.html" id="nav-ahli" hidden>Ahli Kubur</a>
+      <a href="/perjalanan.html" id="nav-perjalanan" hidden>Ziarah &amp; Umroh</a>
+      <a href="/bantuan.html" id="nav-bantuan" hidden>Bantuan Sosial</a>
+      <a href="/ekonomi.html" id="nav-ekonomi" hidden>Ekonomi Jamaah</a>
+      <a href="/usaha.html" id="nav-usaha" hidden>Usaha Jamaah</a>
+      <a href="/sakit.html" id="nav-sakit" aria-current="page">Jamaah Sakit</a>
+      <a href="/kas.html" id="nav-kas" hidden>Buku Kas</a>
+      <a href="/aset.html" id="nav-aset" hidden>Aset &amp; Wakaf</a>
+    </nav>
+    <button class="app-keluar" id="keluar" type="button">Keluar</button>
+  </div>
+</header>
+
+<main class="app-isi">
+  <a href="/sakit.html" class="kembali" id="kembali">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Jamaah Sakit
+  </a>
+  <p id="pesan" class="pesan" role="alert"></p>
+
+  <section id="lihat" class="panel" hidden aria-labelledby="l-nama">
+    <div class="panel-kepala">
+      <div>
+        <p class="panel-label">Jamaah sakit · rahasia</p>
+        <h1 id="l-nama"></h1>
+        <span id="l-status" class="stat"></span>
+      </div>
+      <div class="kepala-aksi">
+        <button type="button" class="btn btn-utama btn-pas" id="ubah">Ubah</button>
+        <a href="/bantuan-isi.html" class="btn btn-kedua btn-pas" id="ajukan">Ajukan bantuan</a>
+        <a href="/jamaah.html" class="btn btn-kedua btn-pas" id="ke-jamaah">Data jamaah</a>
+      </div>
+    </div>
+    <dl class="rincian" id="l-rincian"></dl>
+
+    <div class="bs-aksi">
+      <h2 class="bagian-judul">Kunjungan</h2>
+      <ol class="hadir-teratas" id="kj-isi"><li class="dsb-ket">Memuat...</li></ol>
+    </div>
+    <form class="bs-aksi form" id="kunjung" novalidate aria-labelledby="kj-j">
+      <h2 class="bagian-judul" id="kj-j">Catat kunjungan</h2>
+      <div class="form-kisi">
+        <div class="isian sepertiga">
+          <label for="kj-tanggal">Tanggal <span class="wajib">wajib</span></label>
+          <input id="kj-tanggal" type="date" required>
+        </div>
+        <div class="isian sepertiga">
+          <label for="kj-siapa">Yang menjenguk <span class="wajib">wajib</span></label>
+          <input id="kj-siapa" maxlength="120" autocomplete="off" placeholder="Mis. Ust. Hasan dan pengurus Diwek">
+        </div>
+        <div class="isian sepertiga">
+          <label for="kj-catatan">Catatan</label>
+          <input id="kj-catatan" maxlength="200" autocomplete="off" placeholder="Mis. didoakan, diberi santunan">
+        </div>
+      </div>
+      <div class="tombol-baris">
+        <button type="submit" class="btn btn-kedua btn-pas" id="kj-kirim">Catat kunjungan</button>
+      </div>
+    </form>
+
+    <form class="bs-aksi form" id="selesai" novalidate aria-labelledby="sl-j">
+      <h2 class="bagian-judul" id="sl-j">Sudah sembuh?</h2>
+      <div class="form-kisi">
+        <fieldset class="isian pilihan sepertiga">
+          <legend>Keadaan <span class="wajib">wajib</span></legend>
+          <label class="pil"><input type="radio" name="akhir" value="sembuh" checked> Sembuh</label>
+          <label class="pil"><input type="radio" name="akhir" value="wafat"> Wafat</label>
+        </fieldset>
+        <div class="isian sepertiga">
+          <label for="sl-tanggal">Tanggal <span class="wajib">wajib</span></label>
+          <input id="sl-tanggal" type="date" required>
+        </div>
+      </div>
+      <p class="ket" id="sl-ket" hidden>Bila wafat, ubah juga status jamaah di Data Jamaah agar masuk Daftar Ahli Kubur.</p>
+      <div class="tombol-baris">
+        <button type="submit" class="btn btn-kedua btn-pas" id="sl-kirim">Simpan keadaan</button>
+      </div>
+    </form>
+
+    <div class="bs-aksi" id="buka-lagi" hidden>
+      <p class="ket">Salah tandai? Catatan ini bisa dikembalikan ke "sedang sakit".</p>
+      <button type="button" class="btn btn-kedua btn-pas" id="bl-kirim">Kembalikan ke sedang sakit</button>
+    </div>
+  </section>
+
+  <form id="form" class="panel form" hidden novalidate aria-labelledby="f-judul">
+    <h1 id="f-judul">Catat jamaah sakit</h1>
+    <p class="judul-sub">Tanpa nama penyakit. Cukup tempat dirawat dan kondisi umumnya.</p>
+    <div class="form-kisi">
+      <h3 class="bagian-judul">Jamaah</h3>
+      <div class="isian lebar" id="jamaah-isian">
+        <label for="nomor">Nomor Anggota <span class="wajib">wajib</span></label>
+        <div class="absen-ketik-baris">
+          <input id="nomor" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="10 angka" aria-describedby="jamaah">
+          <button type="button" class="btn btn-kedua btn-pas" id="pindai">Pindai KTA</button>
+        </div>
+        <p class="bs-penerima" id="jamaah" aria-live="polite"></p>
+      </div>
+      <p class="lebar bs-penerima" id="jamaah-tetap" hidden></p>
+      <h3 class="bagian-judul">Keadaan</h3>
+      <fieldset class="isian lebar pilihan" id="tempat-isian">
+        <legend>Dirawat di <span class="wajib">wajib</span></legend>
+        <label class="pil"><input type="radio" name="tempat" value="rumah"> Di rumah</label>
+        <label class="pil"><input type="radio" name="tempat" value="rawat_inap"> Rawat inap</label>
+      </fieldset>
+      <div class="isian lebar" id="rs-isian" hidden>
+        <label for="nama-rs">Nama rumah sakit/puskesmas</label>
+        <input id="nama-rs" maxlength="80" autocomplete="off" placeholder="Mis. RSUD Jombang">
+      </div>
+      <fieldset class="isian lebar pilihan eko-penuh" id="kondisi-isian" aria-describedby="k-kond">
+        <legend>Kondisi umum <span class="wajib">wajib</span></legend>
+        <label class="pil"><input type="radio" name="kondisi" value="ringan"> Ringan</label>
+        <label class="pil"><input type="radio" name="kondisi" value="sedang"> Sedang</label>
+        <label class="pil"><input type="radio" name="kondisi" value="berat"> Berat</label>
+      </fieldset>
+      <p class="ket eko-ket eko-penuh" id="k-kond">Ringan: masih bisa beraktivitas. Sedang: banyak berbaring, perlu dibantu. Berat: tidak bisa bangun atau dirawat intensif.</p>
+      <div class="isian sepertiga">
+        <label for="mulai">Mulai sakit <span class="wajib">wajib</span></label>
+        <input id="mulai" type="date" required>
+      </div>
+      <div class="isian lebar">
+        <label for="keterangan">Keterangan</label>
+        <input id="keterangan" maxlength="200" autocomplete="off" aria-describedby="k-ket" placeholder="Mis. lemas setelah jatuh, butuh dijenguk">
+        <p class="ket" id="k-ket">Jangan menulis nama penyakit, nomor HP, atau NIK.</p>
+      </div>
+    </div>
+    <p id="pesan-form" class="pesan" role="alert"></p>
+    <div class="tombol-baris">
+      <button type="button" class="btn btn-kedua btn-pas" id="batal">Batal</button>
+      <button type="submit" class="btn btn-utama btn-pas btn-masuk" id="simpan"><span class="putar" aria-hidden="true"></span><span class="teks">Simpan</span></button>
+    </div>
+  </form>
+</main>
+<footer class="kaki">
+  <div class="kaki-isi">
+    <address class="kaki-alamat">TQN Pusat Cukir Jombang<br>Jl. Masjid No. 110 Cukir, Diwek, Jombang 61471</address>
+  </div>
+  <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
+</footer>
+<script src="/js/supa.js?v=108" defer></script>
+<script src="/js/kalender.js?v=108" defer></script>
+<script src="/js/pindai.js?v=108" defer></script>
+<script src="/js/sakit-isi.js?v=108" defer></script>
+</body>
+</html>
