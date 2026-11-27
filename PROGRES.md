@@ -276,6 +276,13 @@ Mulai: 2026-11-27 (Kang: "Mulai Tahap 7: modul 14 Aset & Wakaf").
 - Menu "Aset & Wakaf" di kepala halaman pengurus + Lainnya (HP). Konstanta di `supa.js`: `PERAN_LIHAT_ASET`, `PERAN_CATAT_ASET`, label sertifikat/peruntukan/kondisi/kategori/perolehan, `luasTeks()`.
 - Uji tiruan 360/768/1280 (nadzir, ketua, bendahara; koordinator, anggota, petugas dialihkan): 189 pemeriksaan lulus. Versi cache v103.
 
+**Langkah 3, Beranda & Dashboard** (2026-11-27, Kang: "lanjut langkah 3"), tanpa perubahan database.
+- **Beranda:** ubin **Aset & Wakaf** di kelompok Amanah & Tata Kelola untuk admin pusat, ketua, bendahara, nadzir, dengan keterangan "N tanah wakaf (luas) · N jenis barang". Untuk nadzir, Dashboard Pengurus dan judul Pondasi Jamaah yang kosong disembunyikan.
+- **Dashboard Pengurus:** panel **Aset & Wakaf** (admin pusat, ketua, bendahara; tidak ikut saringan). Isinya: jumlah tanah wakaf aktif, total luas, jenis barang; batang tanah per status sertifikat dan barang per kondisi; perkiraan nilai barang + unit; tautan ke Aset & Wakaf.
+- Uji tiruan 360/768/1280: 60 (Beranda & Dashboard) + 189 (Aset) + 18 (riwayat bantuan) lulus, uji semua halaman lulus. Versi cache v104.
+
+**Tahap 7 menunggu cek dan persetujuan Kang.**
+
 ## Perbaikan 2026-11-27: ikon aplikasi di taskbar hitam (laporan Kang)
 Ikon baru berlatar lingkaran putih seperti logo di kepala halaman: `icons/icon-192-v2.png`, `icon-512-v2.png`, `apple-touch-icon-v2.png` (kotak putih). Manifest, semua `<link rel=icon>`, apple-touch-icon, gambar panduan pasang, dan sw.js memakai file baru; versi v100. Ikon yang sudah terpasang berganti setelah Chrome memperbarui (bisa sampai 1 hari) atau setelah aplikasi dicopot lalu dipasang ulang.
 

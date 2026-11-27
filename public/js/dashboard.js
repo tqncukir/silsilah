@@ -7,7 +7,7 @@ const BULAN = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', '
 const TINGKAT = { kabupaten: 'kabupaten/kota', kecamatan: 'kecamatan', desa: 'desa' };
 
 let semuaKab = [], semuaKec = [], semuaDesa = [];
-let data = null, bolehUbah = false, semuaSebaran = false, nomorMuat = 0, lihatHadir = false, lihatZiarah = false, lihatKas = false, lihatBantuan = false, peranSaya = '';
+let data = null, bolehUbah = false, semuaSebaran = false, nomorMuat = 0, lihatHadir = false, lihatZiarah = false, lihatKas = false, lihatBantuan = false, lihatAset = false, peranSaya = '';
 const f = { kab: q.get('kab') || '', kec: q.get('kec') || '', desa: q.get('desa') || '', periode: q.get('periode') || '', dari: q.get('dari') || '', sampai: q.get('sampai') || '' };
 
 const namaKab = (id) => semuaKab.find((k) => String(k.id) === String(id))?.nama || '';
@@ -395,6 +395,26 @@ async function muatKas() {
   } catch { $('p-kas').hidden = true; }
 }
 
+// Aset & Wakaf (rpc ringkas_aset): admin pusat, ketua, bendahara. Tidak ikut saringan wilayah/periode.
+async function muatAset() {
+  if (!lihatAset) return;
+  try {
+    const r = await dbKirim('POST', 'rpc/ringkas_aset', {});
+    const t = r.tanah, b = r.barang;
+    $('as-tanah').textContent = angka(t.jumlah);
+    $('as-luas').textContent = luasTeks(t.luas_m2);
+    $('as-barang').textContent = angka(b.jenis);
+    $('as-nilai').textContent = b.nilai ? `Perkiraan nilai barang: ${rupiah(b.nilai)} (${angka(b.unit)} unit).` : '';
+    const ser = Object.keys(SERTIFIKAT_WAKAF).map((k) => ({ label: SERTIFIKAT_WAKAF[k], n: Number(r.per_sertifikat[k] || 0) })).filter((x) => x.n);
+    batang($('as-sertifikat'), ser.map((x) => ({ ...x, teks: angka(x.n) })), Math.max(...ser.map((x) => x.n), 0));
+    if (!ser.length) $('as-sertifikat').innerHTML = '<li class="dsb-ket">Belum ada tanah wakaf yang dicatat.</li>';
+    const kon = Object.keys(KONDISI_ASET).map((k) => ({ label: KONDISI_ASET[k], n: Number(r.per_kondisi[k] || 0) })).filter((x) => x.n);
+    batang($('as-kondisi'), kon.map((x) => ({ ...x, teks: `${angka(x.n)} jenis` })), Math.max(...kon.map((x) => x.n), 0));
+    if (!kon.length) $('as-kondisi').innerHTML = '<li class="dsb-ket">Belum ada barang yang dicatat.</li>';
+    $('p-aset').hidden = false;
+  } catch { $('p-aset').hidden = true; }
+}
+
 async function muat() {
   simpanUrl();
   const ini = ++nomorMuat;
@@ -452,6 +472,7 @@ $('keluar').onclick = keluar;
     lihatHadir = PERAN_ABSEN.includes(p.peran); // bendahara tidak melihat kehadiran
     lihatZiarah = PERAN_PESERTA.includes(p.peran); // petugas scan tidak melihat peserta perjalanan
     lihatKas = PERAN_LIHAT_KAS.includes(p.peran);
+    lihatAset = PERAN_LIHAT_ASET.includes(p.peran);
     lihatBantuan = ['admin_pusat', ...PERAN_BANTUAN].includes(p.peran); peranSaya = p.peran;
     [semuaKab, semuaKec, semuaDesa] = await Promise.all([
       dbGet('kabupaten?select=id,nama&order=nama'),
@@ -462,6 +483,7 @@ $('keluar').onclick = keluar;
     isiFilter();
     muat();
     muatKas();
+    muatAset();
   } catch (e) {
     if (e.message === 'belum-masuk' || e.message === 'gagal-401') { location.replace('/masuk.html'); return; }
     keadaan('Data gagal dimuat.', 'Coba lagi', () => location.reload());

@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=103">
-<link rel="stylesheet" href="/css/app.css?v=103">
+<link rel="stylesheet" href="/css/tokens.css?v=104">
+<link rel="stylesheet" href="/css/app.css?v=104">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -172,6 +172,21 @@
             <p class="dsb-ket"><a href="/kas-laporan.html" class="tautan">Buka laporan tahunan</a></p></div>
         </div>
       </section>
+      <section class="panel dsb-panel dsb-hadir" id="p-aset" hidden aria-labelledby="g-aset">
+        <div class="dsb-kepala"><span class="dsb-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M5 20V11l7-6 7 6v9M9.5 20v-5h5v5"/></svg></span><h2 id="g-aset" class="dsb-judul">Aset &amp; Wakaf</h2></div>
+        <p class="dsb-ket">Aset aktif saat ini, tidak ikut saringan di atas. Aset yang sudah dilepas tidak dihitung.</p>
+        <dl class="hadir-angka">
+          <div><dt>Tanah wakaf</dt><dd id="as-tanah">–</dd></div>
+          <div><dt>Total luas</dt><dd id="as-luas">–</dd></div>
+          <div><dt>Jenis barang</dt><dd id="as-barang">–</dd></div>
+        </dl>
+        <div class="hadir-dua">
+          <div><h3 class="bagian-judul rekap-sub">Tanah per status sertifikat</h3><ol class="dsb-batang" id="as-sertifikat"></ol></div>
+          <div><h3 class="bagian-judul rekap-sub">Barang per kondisi</h3><ol class="dsb-batang" id="as-kondisi"></ol>
+            <p class="dsb-ket" id="as-nilai"></p>
+            <p class="dsb-ket"><a href="/aset.html" class="tautan">Buka Aset &amp; Wakaf</a></p></div>
+        </div>
+      </section>
       <section class="panel dsb-panel dsb-hadir" id="p-ziarah" hidden aria-labelledby="g-ziarah">
         <div class="dsb-kepala"><span class="dsb-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V9l7-5 7 5v11M3 20h18M10 20v-5h4v5M12 4V2"/></svg></span><h2 id="g-ziarah" class="dsb-judul">Ziarah &amp; Umroh</h2></div>
         <p class="dsb-ket" id="zr-ket"></p>
@@ -204,8 +219,8 @@
   <ul class="dsb-daftar" id="daftar-isi"></ul>
 </dialog>
 
-<script src="/js/supa.js?v=103" defer></script>
-<script src="/js/aturan-dashboard.js?v=103" defer></script>
-<script src="/js/dashboard.js?v=103" defer></script>
+<script src="/js/supa.js?v=104" defer></script>
+<script src="/js/aturan-dashboard.js?v=104" defer></script>
+<script src="/js/dashboard.js?v=104" defer></script>
 </body>
 </html>

@@ -95,6 +95,16 @@ function ketHaul(id) {
         $('m-jamaah-ket').textContent = `${total.toLocaleString('id-ID')} jamaah tercatat`;
       }).catch(() => {});
     }
+    if (PERAN_LIHAT_ASET.includes(p.peran)) {
+      $('menu').hidden = false; $('m-amanah').hidden = false; $('m-amanah-judul').hidden = false; $('m-aset').hidden = false;
+      $('m-dasbor').hidden = !PERAN_LIHAT_JAMAAH.includes(p.peran);
+      // Nadzir tidak punya menu Pondasi Jamaah: sembunyikan judul kelompok yang kosong.
+      if (!PERAN_LIHAT_JAMAAH.includes(p.peran)) { $('m-pondasi-judul').hidden = true; $('m-pondasi').hidden = true; }
+      dbKirim('POST', 'rpc/ringkas_aset', {}).then((r) => {
+        const t = r.tanah, b = r.barang;
+        if (t.jumlah || b.jenis) $('m-aset-ket').textContent = `${t.jumlah.toLocaleString('id-ID')} tanah wakaf (${luasTeks(t.luas_m2)}) · ${b.jenis.toLocaleString('id-ID')} jenis barang`;
+      }).catch(() => {});
+    }
     if (PERAN_LIHAT_KEGIATAN.includes(p.peran)) {
       $('menu').hidden = false; $('m-ruhani').hidden = false; $('m-ruhani-judul').hidden = false;
       $('m-absen').hidden = !PERAN_ABSEN.includes(p.peran);
