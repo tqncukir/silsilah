@@ -12,6 +12,39 @@ async function muatRiwayat(terbatas) {
       <span class="ket">${tglWib(h.waktu)} · jam ${jamWib(h.waktu)} WIB${h.kegiatan ? ` · ${hurufAman(h.kegiatan.tempat)}` : ''}</span></li>`).join('');
   } catch { $('riwayat-ket').textContent = 'Riwayat hadir belum bisa dimuat. Coba muat ulang.'; }
 }
+// Portal Anggota: Ziarah & Umroh. Perjalanan saya = baris peserta milik saya + keluarga yang saya daftarkan (RLS);
+// sesi KTA lama tidak punya jamaah_id. Rombongan dibuka = perjalanan tampil untuk anggota yang belum lewat.
+async function muatZiarah(terbatas) {
+  const hari = hariIniWib();
+  const pBuka = dbGet(`perjalanan?select=id,jenis,nama,tujuan,berangkat,pulang,tempat_kumpul&dibatalkan=is.false&publik=is.true&or=${encodeURIComponent(`(berangkat.gte.${isoWib(hari, '00:00')},pulang.gte.${hari})`)}&order=berangkat.asc&limit=5`).catch(() => null);
+  const pSaya = terbatas ? Promise.resolve([]) : dbGet('peserta_perjalanan?select=id,jamaah_id,nama,hubungan,lunas,batal,perjalanan(id,jenis,nama,tujuan,berangkat,pulang,tempat_kumpul,dibatalkan)&order=id.desc&limit=50').catch(() => null);
+  const [buka, saya] = await Promise.all([pBuka, pSaya]);
+  const jenis = (p) => JENIS_PERJALANAN[p.jenis] || p.jenis;
+  // Kelompokkan per perjalanan, terbaru berangkat di atas (maks 10 perjalanan)
+  const per = new Map();
+  for (const s of saya || []) if (s.perjalanan) { if (!per.has(s.perjalanan.id)) per.set(s.perjalanan.id, { p: s.perjalanan, orang: [] }); per.get(s.perjalanan.id).orang.push(s); }
+  const daftar = [...per.values()].sort((a, b) => b.p.berangkat.localeCompare(a.p.berangkat)).slice(0, 10);
+  const statusOrang = (s) => `${s.jamaah_id ? 'Anda' : `${hurufAman(s.nama)}${s.hubungan ? ` (${hurufAman(s.hubungan)})` : ''}`}: ${s.batal ? 'batal ikut' : s.lunas ? '<strong>lunas</strong>' : 'belum lunas'}`;
+  if (terbatas) $('zs-ket').textContent = 'Masuk dengan KTA lama: perjalanan Anda belum bisa ditampilkan. Minta KTA baru ke pengurus.';
+  else if (saya === null) $('zs-ket').textContent = 'Perjalanan Anda belum bisa dimuat. Coba muat ulang.';
+  else $('zs-ket').textContent = daftar.length ? `Terdaftar di ${daftar.length.toLocaleString('id-ID')} perjalanan.` : 'Anda belum terdaftar di perjalanan mana pun. Ingin ikut? Hubungi pengurus atau koordinator wilayah.';
+  $('zs-isi').innerHTML = daftar.map(({ p, orang }) => {
+    const [st] = statusPerjalanan(p);
+    return `<li><strong>${hurufAman(p.nama)}</strong>
+      <span class="ket">${jenis(p)} · ${waktuPerjalanan(p)}${p.tempat_kumpul ? ` · ${hurufAman(p.tempat_kumpul)}` : ''}</span>
+      <span class="ket">${p.dibatalkan ? '<strong>Perjalanan dibatalkan</strong>' : st === 'Selesai' ? 'Sudah selesai' : orang.map(statusOrang).join(' · ')}</span></li>`;
+  }).join('');
+  const sudah = new Set(daftar.map((d) => d.p.id));
+  const lain = (buka || []).filter((p) => !sudah.has(p.id));
+  $('zb-ket').textContent = buka === null ? 'Belum bisa dimuat. Coba muat ulang.'
+    : lain.length ? 'Ingin ikut? Hubungi pengurus atau koordinator wilayah untuk didaftarkan.' : 'Belum ada rombongan lain yang dibuka.';
+  $('zb-isi').innerHTML = lain.map((p) => `<li><strong>${hurufAman(p.nama)}</strong>
+    <span class="ket">${jenis(p)} · ${waktuPerjalanan(p)}</span>
+    ${p.tujuan || p.tempat_kumpul ? `<span class="ket">${[p.tujuan, p.tempat_kumpul && `kumpul di ${p.tempat_kumpul}`].filter(Boolean).map(hurufAman).join(' · ')}</span>` : ''}</li>`).join('');
+  const akan = daftar.filter(({ p }) => !p.dibatalkan && statusPerjalanan(p)[0] !== 'Selesai');
+  $('a-ziarah-ket').textContent = akan.length ? `Anda terdaftar: ${akan[0].p.nama}` : lain.length ? `${lain.length} rombongan dibuka` : 'Perjalanan Anda dan rombongan yang dibuka';
+}
+
 function ketAgenda() {
   ambilAgenda(1).then((d) => { if (d[0]) $('m-agenda-ket').textContent = `Terdekat: ${d[0].nama}, ${tglWib(d[0].mulai, { day: 'numeric', month: 'short' })}`; }).catch(() => {});
 }
@@ -77,7 +110,7 @@ function ketHaul(id) {
         ].map(([a, v]) => `<div><dt>${a}</dt><dd>${v ? hurufAman(String(v)) : '–'}</dd></div>`).join('');
         document.querySelector('.data-saya-ket').textContent = 'Masuk dengan KTA lama: yang tampil hanya data yang tercetak di kartu. Data lengkap bisa dilihat di pengurus.';
         $('anggota').hidden = false;
-        muatRiwayat(true); ketAgenda(); ketHaul('a-haul-ket');
+        muatRiwayat(true); ketAgenda(); ketHaul('a-haul-ket'); muatZiarah(true);
         return;
       }
       const pilih = 'nomor_anggota,nama,tempat_lahir,tanggal_lahir,jenis_kelamin,status_kawin,kewarganegaraan,pekerjaan,alamat,rt_rw,tanggal_daftar,aktif,wafat,desa(nama,kecamatan(nama,kabupaten(nama))),mursyid(nama)';
@@ -95,7 +128,7 @@ function ketHaul(id) {
           ['Dusun/Jalan', j.alamat], ['RT/RW', j.rt_rw],
         ].map(([k, v]) => `<div><dt>${k}</dt><dd>${v ? hurufAman(v) : '–'}</dd></div>`).join('');
         $('anggota').hidden = false;
-        muatRiwayat(false); ketAgenda(); ketHaul('a-haul-ket');
+        muatRiwayat(false); ketAgenda(); ketHaul('a-haul-ket'); muatZiarah(false);
       }
     }
   } catch (e) { tanganiGalat(e, (t) => { $('pesan').textContent = t; }); }

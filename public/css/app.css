@@ -823,7 +823,9 @@ li:nth-child(-n+3)>.bt-baris .bt-no{background:var(--hijau-jamiyyah);color:#FFFF
 .riwayat-daftar li{display:grid;gap:2px;padding:8px 0;border-bottom:1px solid var(--garis-lembut)}
 .riwayat-daftar li:last-child{border-bottom:0}
 .riwayat-daftar .ket{margin:0}
-#riwayat{margin-top:16px}
+#riwayat,#ziarah{margin-top:16px}
+#ziarah .bagian-judul{margin:16px 0 4px}
+#ziarah:focus{outline:none}
 
 /* Isian jam 24 jam (tanpa AM/PM) */
 .jam-isian{border:0;padding:0;min-width:0}

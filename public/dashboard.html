@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=88">
-<link rel="stylesheet" href="/css/app.css?v=88">
+<link rel="stylesheet" href="/css/tokens.css?v=89">
+<link rel="stylesheet" href="/css/app.css?v=89">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -142,6 +142,19 @@
           <div><h3 class="bagian-judul rekap-sub">Paling ramai</h3><ol class="hadir-teratas" id="hadir-teratas"></ol></div>
         </div>
       </section>
+      <section class="panel dsb-panel dsb-hadir" id="p-ziarah" hidden aria-labelledby="g-ziarah">
+        <div class="dsb-kepala"><span class="dsb-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V9l7-5 7 5v11M3 20h18M10 20v-5h4v5M12 4V2"/></svg></span><h2 id="g-ziarah" class="dsb-judul">Ziarah &amp; Umroh</h2></div>
+        <p class="dsb-ket" id="zr-ket"></p>
+        <dl class="hadir-angka">
+          <div><dt>Perjalanan</dt><dd id="zr-perjalanan">–</dd></div>
+          <div><dt>Peserta</dt><dd id="zr-peserta">–</dd></div>
+          <div><dt>Lunas</dt><dd id="zr-lunas">–</dd></div>
+        </dl>
+        <div class="hadir-dua">
+          <div><h3 class="bagian-judul rekap-sub">Per jenis</h3><ol class="dsb-batang" id="zr-jenis"></ol></div>
+          <div><h3 class="bagian-judul rekap-sub">Perjalanan terbaru</h3><ol class="hadir-teratas" id="zr-terbaru"></ol></div>
+        </div>
+      </section>
     </div>
   </div>
 </main>
@@ -161,8 +174,8 @@
   <ul class="dsb-daftar" id="daftar-isi"></ul>
 </dialog>
 
-<script src="/js/supa.js?v=88" defer></script>
-<script src="/js/aturan-dashboard.js?v=88" defer></script>
-<script src="/js/dashboard.js?v=88" defer></script>
+<script src="/js/supa.js?v=89" defer></script>
+<script src="/js/aturan-dashboard.js?v=89" defer></script>
+<script src="/js/dashboard.js?v=89" defer></script>
 </body>
 </html>

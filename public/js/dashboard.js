@@ -7,7 +7,7 @@ const BULAN = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', '
 const TINGKAT = { kabupaten: 'kabupaten/kota', kecamatan: 'kecamatan', desa: 'desa' };
 
 let semuaKab = [], semuaKec = [], semuaDesa = [];
-let data = null, bolehUbah = false, semuaSebaran = false, nomorMuat = 0, lihatHadir = false;
+let data = null, bolehUbah = false, semuaSebaran = false, nomorMuat = 0, lihatHadir = false, lihatZiarah = false;
 const f = { kab: q.get('kab') || '', kec: q.get('kec') || '', desa: q.get('desa') || '', periode: q.get('periode') || '', dari: q.get('dari') || '', sampai: q.get('sampai') || '' };
 
 const namaKab = (id) => semuaKab.find((k) => String(k.id) === String(id))?.nama || '';
@@ -328,6 +328,26 @@ async function muatMursyid(ini, dari, sampai) {
   } catch { if (ini === nomorMuat) $('p-mursyid').hidden = true; }
 }
 
+// Ziarah & Umroh (rpc dashboard_perjalanan, migrasi 20261127030000, ikut RLS): wilayah = asal peserta, periode = tanggal berangkat.
+// Panel hanya untuk peran yang melihat peserta; tersembunyi bila gagal / migrasi belum dijalankan.
+async function muatZiarah(ini, dari, sampai) {
+  if (!lihatZiarah) return;
+  try {
+    const z = await dbKirim('POST', 'rpc/dashboard_perjalanan', { p_kab: f.kab || null, p_kec: f.kec || null, p_desa: f.desa || null, p_dari: dari, p_sampai: sampai });
+    if (ini !== nomorMuat) return;
+    $('zr-ket').textContent = `${teksWilayah()} · ${teksPeriode()}. Wilayah = asal peserta; perjalanan dibatalkan dan peserta batal ikut tidak dihitung.`;
+    $('zr-perjalanan').textContent = angka(z.perjalanan);
+    $('zr-peserta').textContent = angka(z.peserta);
+    $('zr-lunas').textContent = z.peserta ? `${angka(z.lunas)} (${persen(z.lunas, z.peserta)})` : '0';
+    batang($('zr-jenis'), z.jenis.map((j) => ({ label: JENIS_PERJALANAN[j.jenis] || j.jenis, n: j.peserta,
+      teks: `${angka(j.peserta)} peserta · ${angka(j.perjalanan)} perj.` })), Math.max(...z.jenis.map((j) => j.peserta), 0));
+    if (!z.jenis.length) $('zr-jenis').innerHTML = '<li class="dsb-ket">Belum ada perjalanan di periode ini.</li>';
+    $('zr-terbaru').innerHTML = z.terbaru.length ? z.terbaru.map((t) => `<li><a href="/perjalanan-isi.html?id=${t.id}"><span>${hurufAman(t.nama)}<small>${tglWib(t.berangkat, { day: 'numeric', month: 'short', year: 'numeric' })} · ${angka(t.lunas)} lunas${t.kuota ? ` · kuota ${angka(t.kuota)}` : ''}</small></span><strong>${angka(t.peserta)}</strong></a></li>`).join('')
+      : '<li class="dsb-ket">Belum ada perjalanan.</li>';
+    $('p-ziarah').hidden = false;
+  } catch { if (ini === nomorMuat) $('p-ziarah').hidden = true; }
+}
+
 async function muat() {
   simpanUrl();
   const ini = ++nomorMuat;
@@ -336,6 +356,7 @@ async function muat() {
     const [dari, sampai] = rentang();
     muatHadir(ini, dari, sampai);
     muatMursyid(ini, dari, sampai);
+    muatZiarah(ini, dari, sampai);
     const hasil = await dbKirim('POST', 'rpc/dashboard_pengurus', {
       p_kab: f.kab || null, p_kec: f.kec || null, p_desa: f.desa || null, p_dari: dari, p_sampai: sampai });
     if (ini !== nomorMuat) return;
@@ -381,6 +402,7 @@ $('keluar').onclick = keluar;
     if (!p || !PERAN_LIHAT_JAMAAH.includes(p.peran)) { location.replace('/beranda.html'); return; }
     bolehUbah = PERAN_UBAH_JAMAAH.includes(p.peran);
     lihatHadir = PERAN_ABSEN.includes(p.peran); // bendahara tidak melihat kehadiran
+    lihatZiarah = PERAN_PESERTA.includes(p.peran); // petugas scan tidak melihat peserta perjalanan
     [semuaKab, semuaKec, semuaDesa] = await Promise.all([
       dbGet('kabupaten?select=id,nama&order=nama'),
       dbGet('kecamatan?select=id,nama,kabupaten_id&order=nama'),
