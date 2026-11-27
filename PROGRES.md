@@ -283,6 +283,25 @@ Mulai: 2026-11-27 (Kang: "Mulai Tahap 7: modul 14 Aset & Wakaf").
 
 **Tahap 7 selesai dan disetujui Kang 2026-11-27 ("Tahap 7 disetujui").** Tunggu Kang bilang "mulai" untuk tahap berikutnya. Modul tersisa: 7 Kesehatan, 8 Ekonomi Jamaah (12 Dashboard & Laporan sebagian sudah ada).
 
+## Tahap 8: Modul 8 Ekonomi Jamaah
+Mulai: 2026-11-27 (Kang: "Mulai Tahap 8: modul 8 Ekonomi Jamaah").
+
+**Keputusan konsep Kang (2026-11-27):**
+- Isi: **pendataan kondisi ekonomi** jamaah (rahasia, untuk sasaran Bantuan Sosial) + **direktori usaha/UMKM jamaah** (supaya saling belanja).
+- Kondisi ekonomi dicatat: **tingkat** (Mampu / Cukup / Kurang mampu / Sangat kurang mampu) + **jumlah tanggungan** + tanggal didata. Tanpa angka penghasilan.
+- Yang melihat kondisi ekonomi: **sama dengan Bantuan Sosial** — ketua, bendahara, koordinator (jamaah wilayahnya). Admin pusat & peran lain hanya angka tanpa nama di Dashboard.
+- Direktori usaha: tampil untuk **anggota yang login + pengurus**, **tanpa nomor HP** (aturan privasi tetap); pembeli datang ke alamat atau lewat pengurus.
+
+**Usulan Claude (berlaku kecuali Kang ubah):**
+- Kondisi ekonomi: satu data per jamaah (jamaah aktif & hidup); tabel tertutup total, hanya lewat fungsi (seperti Bantuan Sosial); pendata = ketua, bendahara, koordinator (wilayahnya); keterangan singkat boleh (tanpa nama penyakit, tanpa angka ≥8 digit); setiap perubahan masuk `log_perubahan` (riwayat tingkat bisa dilihat). Anggota tidak melihat data ekonomi, termasuk dirinya. Di Bantuan Sosial (ajukan & rincian) tampil tingkat ekonomi penerima untuk peran yang berhak, dan bisa disaring "kurang mampu yang belum pernah dibantu".
+- Direktori usaha: pemilik = jamaah terdaftar (satu jamaah boleh lebih dari satu usaha); nama usaha, jenis (Makanan & minuman, Pertanian & peternakan, Toko/kelontong, Kerajinan, Pakaian, Herbal & kesehatan, Jasa, Lainnya), produk/keterangan singkat, desa + alamat singkat, hari/jam buka (boleh kosong); tanpa nomor HP dan tanpa foto (hemat, gratis). Dicatat pengurus (admin pusat, ketua, koordinator wilayahnya) atas permintaan jamaah; status Buka / Tutup (tidak dihapus). Direktori tidak pernah menampilkan kondisi ekonomi.
+
+**Rencana langkah (satu per satu, tunggu persetujuan Kang):**
+1. Database: kondisi ekonomi (tertutup, lewat fungsi) + usaha jamaah (RLS), log, ringkasan tanpa nama.
+2. Halaman Kondisi Ekonomi (ketua, bendahara, koordinator): daftar + saring tingkat/wilayah/"belum didata", isi & ubah (juga dari rincian Data Jamaah), tingkat ekonomi tampil di Bantuan Sosial.
+3. Halaman Usaha Jamaah: daftar kartu + cari + saring jenis/wilayah; tambah, ubah, tandai tutup (pengurus); baca saja untuk anggota.
+4. Beranda (kelompok Kepedulian & Kesejahteraan) + Portal Anggota (Usaha Jamaah) + panel Dashboard (sebaran tingkat tanpa nama, usaha per jenis).
+
 ## Perbaikan 2026-11-27: ikon aplikasi di taskbar hitam (laporan Kang)
 Ikon baru berlatar lingkaran putih seperti logo di kepala halaman: `icons/icon-192-v2.png`, `icon-512-v2.png`, `apple-touch-icon-v2.png` (kotak putih). Manifest, semua `<link rel=icon>`, apple-touch-icon, gambar panduan pasang, dan sw.js memakai file baru; versi v100. Ikon yang sudah terpasang berganti setelah Chrome memperbarui (bisa sampai 1 hari) atau setelah aplikasi dicopot lalu dipasang ulang.
 
