@@ -302,6 +302,15 @@ Mulai: 2026-11-27 (Kang: "Mulai Tahap 8: modul 8 Ekonomi Jamaah").
 3. Halaman Usaha Jamaah: daftar kartu + cari + saring jenis/wilayah; tambah, ubah, tandai tutup (pengurus); baca saja untuk anggota.
 4. Beranda (kelompok Kepedulian & Kesejahteraan) + Portal Anggota (Usaha Jamaah) + panel Dashboard (sebaran tingkat tanpa nama, usaha per jenis).
 
+**Langkah 1, Database** (2026-11-27, Kang: "lanjut langkah 1"): migrasi `20261127080000_ekonomi_jamaah.sql` (**perlu dijalankan Kang**).
+- Tabel `ekonomi_jamaah` (satu baris per jamaah: tingkat mampu/cukup/kurang/sangat_kurang, tanggungan 0–30, tanggal didata, keterangan ≤200 tanpa angka ≥8 digit). **Tertutup total** (tanpa policy, tanpa hak tabel), hanya lewat fungsi; setiap tambah/ubah masuk `log_perubahan` (riwayat tingkat).
+- `simpan_ekonomi(jamaah, tingkat, tanggungan, tanggal, keterangan)`: ketua, bendahara (semua), koordinator (wilayahnya; memakai `boleh_lihat_bantuan`); hanya jamaah aktif & hidup; tanggal tidak di depan.
+- `daftar_ekonomi(tingkat, kab, kec, desa, belum, belum_dibantu, cari, jamaah, offset, batas)`: jamaah aktif & hidup + kondisi + berapa kali dibantu & terakhir; sangat kurang mampu di atas; peran sama. Admin pusat, petugas, nadzir, anggota, sesi KTA lama ditolak.
+- `ringkas_ekonomi(kab, kec, desa)` tanpa nama: jamaah, sudah/belum didata, per tingkat, kurang mampu yang belum pernah dibantu, rata-rata tanggungan; admin pusat, ketua, bendahara, koordinator (wilayahnya).
+- Tabel `usaha_jamaah` (pemilik jamaah aktif, nama, jenis 8 pilihan, produk, desa lokasi, alamat, jam buka, Buka/Tutup; tanpa HP/foto: angka ≥8 digit ditolak; pemilik tidak bisa diganti; tanpa hapus; log). RLS tabel hanya untuk pencatat: admin pusat & ketua (semua), koordinator (pemilik di wilayahnya); hak kolom tulis terbatas.
+- `daftar_usaha(cari, jenis, kab, kec, status, jamaah, id, offset, batas)`: semua peran yang login termasuk anggota & sesi KTA lama; selain pencatat hanya yang Buka, pemilik hidup, tanpa Nomor Anggota; cari nama usaha/produk/pemilik; kolom `boleh_ubah`. `ringkas_usaha(kab, kec)`: buka, tutup, pemilik, per jenis. Tidak pernah menyertakan kondisi ekonomi.
+- Diuji Postgres lokal: semua 31 migrasi + 60 skenario (ketua, bendahara, admin, koordinator A/B, petugas, nadzir, anggota, sesi KTA lama, tamu, tanpa peran) lulus. (Ditemukan & dibetulkan: upsert membuat catatan "insert" palsu di log.)
+
 ## Perbaikan 2026-11-27: ikon aplikasi di taskbar hitam (laporan Kang)
 Ikon baru berlatar lingkaran putih seperti logo di kepala halaman: `icons/icon-192-v2.png`, `icon-512-v2.png`, `apple-touch-icon-v2.png` (kotak putih). Manifest, semua `<link rel=icon>`, apple-touch-icon, gambar panduan pasang, dan sw.js memakai file baru; versi v100. Ikon yang sudah terpasang berganti setelah Chrome memperbarui (bisa sampai 1 hari) atau setelah aplikasi dicopot lalu dipasang ulang.
 
