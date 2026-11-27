@@ -45,6 +45,13 @@ async function muatZiarah(terbatas) {
   $('a-ziarah-ket').textContent = akan.length ? `Anda terdaftar: ${akan[0].p.nama}` : lain.length ? `${lain.length} rombongan dibuka` : 'Perjalanan Anda dan rombongan yang dibuka';
 }
 
+// Jumlah usaha jamaah yang buka (rpc ringkas_usaha; semua yang login).
+function ketUsaha(id) {
+  dbKirim('POST', 'rpc/ringkas_usaha', {}).then((r) => {
+    if (Number(r.buka)) document.getElementById(id).textContent = `${Number(r.buka).toLocaleString('id-ID')} usaha dari ${Number(r.pemilik).toLocaleString('id-ID')} jamaah · mari saling belanja`;
+  }).catch(() => {});
+}
+
 function ketAgenda() {
   ambilAgenda(1).then((d) => { if (d[0]) $('m-agenda-ket').textContent = `Terdekat: ${d[0].nama}, ${tglWib(d[0].mulai, { day: 'numeric', month: 'short' })}`; }).catch(() => {});
 }
@@ -78,8 +85,15 @@ function ketHaul(id) {
       $('menu').hidden = false; $('m-jamaah').hidden = false; $('nav-jamaah').hidden = false; $('m-amanah').hidden = false; $('m-amanah-judul').hidden = false;
       $('m-tambah').hidden = !PERAN_UBAH_JAMAAH.includes(p.peran);
       $('m-pin').hidden = p.peran !== 'admin_pusat';
+      if (PERAN_EKONOMI.includes(p.peran)) {
+        $('m-ekonomi').hidden = false;
+        dbKirim('POST', 'rpc/ringkas_ekonomi', {}).then((r) => {
+          const kurang = Number(r.kurang) + Number(r.sangat_kurang);
+          $('m-ekonomi-ket').textContent = `${kurang.toLocaleString('id-ID')} kurang mampu · ${Number(r.belum).toLocaleString('id-ID')} belum didata`;
+        }).catch(() => {});
+      }
       if (PERAN_BANTUAN.includes(p.peran)) {
-        $('m-peduli').hidden = false; $('m-peduli-judul').hidden = false;
+        $('m-bantuan').hidden = false;
         dbKirim('POST', 'rpc/ringkas_bantuan', {}).then((r) => {
           const tunggu = p.peran === 'ketua' ? r.diajukan : p.peran === 'bendahara' || p.peran === 'koordinator_wilayah' ? r.disetujui : 0;
           if (tunggu) $('m-bantuan-ket').textContent = p.peran === 'ketua' ? `${tunggu} pengajuan menunggu persetujuan` : `${tunggu} bantuan siap disalurkan`;
@@ -94,6 +108,10 @@ function ketHaul(id) {
       dbHalaman('jamaah?select=id', 0, 0).then(({ total }) => {
         $('m-jamaah-ket').textContent = `${total.toLocaleString('id-ID')} jamaah tercatat`;
       }).catch(() => {});
+    }
+    if (p.peran !== 'anggota') {
+      $('menu').hidden = false; $('m-peduli').hidden = false; $('m-peduli-judul').hidden = false; $('m-usaha').hidden = false;
+      ketUsaha('m-usaha-ket');
     }
     if (PERAN_LIHAT_ASET.includes(p.peran)) {
       $('menu').hidden = false; $('m-amanah').hidden = false; $('m-amanah-judul').hidden = false; $('m-aset').hidden = false;
@@ -133,7 +151,7 @@ function ketHaul(id) {
         ].map(([a, v]) => `<div${String(v ?? '').length > 28 ? ' class="penuh"' : ''}><dt>${a}</dt><dd>${v ? hurufAman(String(v)) : '–'}</dd></div>`).join('');
         document.querySelector('.data-saya-ket').textContent = 'Masuk dengan KTA lama: yang tampil hanya data yang tercetak di kartu. Data lengkap bisa dilihat di pengurus.';
         $('anggota').hidden = false;
-        muatRiwayat(true); ketAgenda(); ketHaul('a-haul-ket'); muatZiarah(true);
+        muatRiwayat(true); ketAgenda(); ketHaul('a-haul-ket'); ketUsaha('a-usaha-ket'); muatZiarah(true);
         return;
       }
       const pilih = 'nomor_anggota,nama,tempat_lahir,tanggal_lahir,jenis_kelamin,status_kawin,kewarganegaraan,pekerjaan,alamat,rt_rw,tanggal_daftar,aktif,wafat,desa(nama,kecamatan(nama,kabupaten(nama))),mursyid(nama)';
@@ -151,7 +169,7 @@ function ketHaul(id) {
           ['Dusun/Jalan', j.alamat], ['RT/RW', j.rt_rw],
         ].map(([k, v]) => `<div${String(v ?? '').length > 28 ? ' class="penuh"' : ''}><dt>${k}</dt><dd>${v ? hurufAman(v) : '–'}</dd></div>`).join('');
         $('anggota').hidden = false;
-        muatRiwayat(false); ketAgenda(); ketHaul('a-haul-ket'); muatZiarah(false);
+        muatRiwayat(false); ketAgenda(); ketHaul('a-haul-ket'); ketUsaha('a-usaha-ket'); muatZiarah(false);
       }
     }
   } catch (e) { tanganiGalat(e, (t) => { $('pesan').textContent = t; }); }

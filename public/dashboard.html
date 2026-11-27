@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=106">
-<link rel="stylesheet" href="/css/app.css?v=106">
+<link rel="stylesheet" href="/css/tokens.css?v=107">
+<link rel="stylesheet" href="/css/app.css?v=107">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -160,6 +160,30 @@
           <div><h3 class="bagian-judul rekap-sub">Dalam proses</h3><ol class="hadir-teratas" id="bs-proses"></ol></div>
         </div>
       </section>
+      <section class="panel dsb-panel dsb-hadir" id="p-ekonomi" hidden aria-labelledby="g-ekonomi">
+        <div class="dsb-kepala"><span class="dsb-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V12M10 20V8M16 20v-5M3 20h18M14 6l3-3 3 3M17 3v6"/></svg></span><h2 id="g-ekonomi" class="dsb-judul">Kondisi Ekonomi Jamaah</h2></div>
+        <p class="dsb-ket" id="ek-ket"></p>
+        <dl class="hadir-angka">
+          <div><dt>Jamaah aktif</dt><dd id="ek-jamaah">–</dd></div>
+          <div><dt>Sudah didata</dt><dd id="ek-didata">–</dd></div>
+          <div><dt>Kurang mampu</dt><dd id="ek-kurang">–</dd></div>
+        </dl>
+        <div class="hadir-dua">
+          <div><h3 class="bagian-judul rekap-sub">Per kondisi</h3><ol class="dsb-batang" id="ek-tingkat"></ol></div>
+          <div><h3 class="bagian-judul rekap-sub">Perlu perhatian</h3><ol class="hadir-teratas" id="ek-perhatian"></ol></div>
+        </div>
+      </section>
+      <section class="panel dsb-panel dsb-hadir" id="p-usaha" hidden aria-labelledby="g-usaha">
+        <div class="dsb-kepala"><span class="dsb-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l1.5-4.5h13L20 9M4 9h16v1.5a2.5 2.5 0 01-5 0 2.5 2.5 0 01-5 0 2.5 2.5 0 01-5 0zM5 13v7h14v-7M10 20v-4h4v4"/></svg></span><h2 id="g-usaha" class="dsb-judul">Usaha Jamaah</h2></div>
+        <p class="dsb-ket" id="us-ket"></p>
+        <dl class="hadir-angka">
+          <div><dt>Usaha buka</dt><dd id="us-buka">–</dd></div>
+          <div><dt>Pemilik</dt><dd id="us-pemilik">–</dd></div>
+          <div><dt>Tutup</dt><dd id="us-tutup">–</dd></div>
+        </dl>
+        <h3 class="bagian-judul rekap-sub">Usaha buka per jenis</h3><ol class="dsb-batang" id="us-jenis"></ol>
+        <p class="dsb-ket"><a href="/usaha.html" class="tautan">Buka Usaha Jamaah</a></p>
+      </section>
       <section class="panel dsb-panel dsb-hadir" id="p-kas" hidden aria-labelledby="g-kas">
         <div class="dsb-kepala"><span class="dsb-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h14a2 2 0 012 2v9a2 2 0 01-2 2H5a1 1 0 01-1-1V7zM4 7l11-3v3M15 13.5h2"/></svg></span><h2 id="g-kas" class="dsb-judul">Keuangan</h2></div>
         <p class="dsb-ket" id="kas-ket"></p>
@@ -221,8 +245,8 @@
   <ul class="dsb-daftar" id="daftar-isi"></ul>
 </dialog>
 
-<script src="/js/supa.js?v=106" defer></script>
-<script src="/js/aturan-dashboard.js?v=106" defer></script>
-<script src="/js/dashboard.js?v=106" defer></script>
+<script src="/js/supa.js?v=107" defer></script>
+<script src="/js/aturan-dashboard.js?v=107" defer></script>
+<script src="/js/dashboard.js?v=107" defer></script>
 </body>
 </html>

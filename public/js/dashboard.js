@@ -7,7 +7,7 @@ const BULAN = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', '
 const TINGKAT = { kabupaten: 'kabupaten/kota', kecamatan: 'kecamatan', desa: 'desa' };
 
 let semuaKab = [], semuaKec = [], semuaDesa = [];
-let data = null, bolehUbah = false, semuaSebaran = false, nomorMuat = 0, lihatHadir = false, lihatZiarah = false, lihatKas = false, lihatBantuan = false, lihatAset = false, peranSaya = '';
+let data = null, bolehUbah = false, semuaSebaran = false, nomorMuat = 0, lihatHadir = false, lihatZiarah = false, lihatKas = false, lihatBantuan = false, lihatAset = false, lihatEkonomi = false, peranSaya = '';
 const f = { kab: q.get('kab') || '', kec: q.get('kec') || '', desa: q.get('desa') || '', periode: q.get('periode') || '', dari: q.get('dari') || '', sampai: q.get('sampai') || '' };
 
 const namaKab = (id) => semuaKab.find((k) => String(k.id) === String(id))?.nama || '';
@@ -371,6 +371,46 @@ async function muatBantuanDsb(ini, dari, sampai) {
   } catch { if (ini === nomorMuat) $('p-bantuan').hidden = true; }
 }
 
+// Kondisi ekonomi (rpc ringkas_ekonomi, tanpa nama): admin pusat, ketua, bendahara semua; koordinator wilayahnya (database).
+// Ikut saringan wilayah (sampai desa); tidak ikut periode: keadaan jamaah aktif saat ini.
+async function muatEkonomiDsb(ini) {
+  if (!lihatEkonomi) return;
+  try {
+    const r = await dbKirim('POST', 'rpc/ringkas_ekonomi', { p_kab: f.kab ? Number(f.kab) : null, p_kec: f.kec ? Number(f.kec) : null, p_desa: f.desa ? Number(f.desa) : null });
+    if (ini !== nomorMuat) return;
+    const kurang = Number(r.kurang) + Number(r.sangat_kurang);
+    $('ek-ket').textContent = `${teksWilayah()} · jamaah aktif saat ini (tidak ikut periode). Tanpa nama.`;
+    $('ek-jamaah').textContent = angka(r.jamaah);
+    $('ek-didata').textContent = r.jamaah ? `${angka(r.didata)} (${persen(r.didata, r.jamaah)})` : '0';
+    $('ek-kurang').textContent = angka(kurang);
+    const t = ['sangat_kurang', 'kurang', 'cukup', 'mampu'].map((k) => ({ label: TINGKAT_EKONOMI[k][0], n: Number(r[k] || 0) }));
+    batang($('ek-tingkat'), t.map((x) => ({ ...x, teks: r.didata ? `${angka(x.n)} (${persen(x.n, r.didata)})` : angka(x.n) })), Math.max(...t.map((x) => x.n), 0));
+    if (!Number(r.didata)) $('ek-tingkat').innerHTML = '<li class="dsb-ket">Belum ada jamaah yang didata.</li>';
+    const ke = PERAN_EKONOMI.includes(peranSaya);
+    const baris = (n, label, url) => `<li>${ke ? `<a href="${url}">` : '<div class="bs-baris">'}<span>${label}</span><strong>${angka(n)}</strong>${ke ? '</a>' : '</div>'}</li>`;
+    $('ek-perhatian').innerHTML = baris(r.kurang_belum_dibantu, 'Kurang mampu, belum pernah dibantu', '/ekonomi.html?dibantu=belum')
+      + baris(r.belum, 'Belum didata', '/ekonomi.html?tingkat=belum')
+      + (r.rata_tanggungan != null ? `<li class="dsb-ket">Rata-rata tanggungan: ${Number(r.rata_tanggungan).toLocaleString('id-ID')} orang</li>` : '');
+    $('p-ekonomi').hidden = false;
+  } catch { if (ini === nomorMuat) $('p-ekonomi').hidden = true; }
+}
+
+// Usaha jamaah (rpc ringkas_usaha; semua yang login). Ikut saringan wilayah sampai kecamatan (lokasi usaha).
+async function muatUsahaDsb(ini) {
+  try {
+    const r = await dbKirim('POST', 'rpc/ringkas_usaha', { p_kab: f.kab ? Number(f.kab) : null, p_kec: f.kec ? Number(f.kec) : null });
+    if (ini !== nomorMuat) return;
+    $('us-ket').textContent = `${teksWilayah()}${f.desa ? ' (dihitung sampai kecamatan)' : ''} · lokasi usaha, keadaan saat ini.`;
+    $('us-buka').textContent = angka(r.buka);
+    $('us-pemilik').textContent = angka(r.pemilik);
+    $('us-tutup').textContent = angka(r.tutup);
+    const j = Object.entries(r.jenis || {}).map(([k, n]) => ({ label: JENIS_USAHA[k] || k, n: Number(n) })).sort((a, b) => b.n - a.n);
+    batang($('us-jenis'), j.map((x) => ({ ...x, teks: angka(x.n) })), Math.max(...j.map((x) => x.n), 0));
+    if (!j.length) $('us-jenis').innerHTML = '<li class="dsb-ket">Belum ada usaha jamaah yang dicatat.</li>';
+    $('p-usaha').hidden = false;
+  } catch { if (ini === nomorMuat) $('p-usaha').hidden = true; }
+}
+
 async function muatKas() {
   if (!lihatKas) return;
   try {
@@ -425,6 +465,8 @@ async function muat() {
     muatMursyid(ini, dari, sampai);
     muatZiarah(ini, dari, sampai);
     muatBantuanDsb(ini, dari, sampai);
+    muatEkonomiDsb(ini);
+    muatUsahaDsb(ini);
     const hasil = await dbKirim('POST', 'rpc/dashboard_pengurus', {
       p_kab: f.kab || null, p_kec: f.kec || null, p_desa: f.desa || null, p_dari: dari, p_sampai: sampai });
     if (ini !== nomorMuat) return;
@@ -474,6 +516,7 @@ $('keluar').onclick = keluar;
     lihatKas = PERAN_LIHAT_KAS.includes(p.peran);
     lihatAset = PERAN_LIHAT_ASET.includes(p.peran);
     lihatBantuan = ['admin_pusat', ...PERAN_BANTUAN].includes(p.peran); peranSaya = p.peran;
+    lihatEkonomi = lihatBantuan; // admin pusat: angka saja (tanpa nama, tanpa tautan daftar)
     [semuaKab, semuaKec, semuaDesa] = await Promise.all([
       dbGet('kabupaten?select=id,nama&order=nama'),
       dbGet('kecamatan?select=id,nama,kabupaten_id&order=nama'),

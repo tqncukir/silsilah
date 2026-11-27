@@ -327,6 +327,14 @@ Mulai: 2026-11-27 (Kang: "Mulai Tahap 8: modul 8 Ekonomi Jamaah").
 - Menu "Usaha Jamaah" di kepala semua halaman (semua peran) + lembar Lainnya HP (pengurus & anggota). `supa.js`: `PERAN_CATAT_USAHA`, `JENIS_USAHA`.
 - Uji tiruan 360/768/1280 (ketua, koordinator tambah & wilayah lain, anggota baca saja tanpa Nomor Anggota, petugas, isi kiriman POST/PATCH, tandai tutup): 98 lulus; uji Ekonomi ulang 99 lulus. Versi cache v106. Menunggu uji Kang.
 
+**Langkah 4, Beranda + Portal Anggota + Dashboard** (2026-11-27, Kang: "lanjut langkah 4"), tanpa perubahan database.
+- **Beranda pengurus**, kelompok **Kepedulian & Kesejahteraan** kini tampil untuk semua pengurus: ubin **Bantuan Sosial** (ketua, bendahara, koordinator), **Ekonomi Jamaah** (peran yang sama; "N kurang mampu · N belum didata" dari `ringkas_ekonomi`), **Usaha Jamaah** (semua pengurus; "N usaha dari N jamaah · mari saling belanja" dari `ringkas_usaha`). Admin pusat, petugas, nadzir: hanya ubin Usaha di kelompok itu.
+- **Portal Anggota**: ubin **Usaha Jamaah** (ikon kuning Kepedulian), juga untuk sesi KTA lama.
+- **Dashboard Pengurus**: panel **Kondisi Ekonomi Jamaah** tanpa nama (admin pusat, ketua, bendahara, koordinator wilayahnya): Jamaah aktif, Sudah didata (+ persen), Kurang mampu; batang per kondisi; "Perlu perhatian": kurang mampu belum pernah dibantu, belum didata (tautan ke daftar hanya untuk ketua, bendahara, koordinator; admin angka saja), rata-rata tanggungan; ikut saringan wilayah sampai desa, tidak ikut periode. Panel **Usaha Jamaah** (semua peran Dashboard): usaha buka, pemilik, tutup, batang per jenis, tautan; ikut saringan wilayah sampai kecamatan.
+- Uji tiruan 360/768/1280 (Beranda ketua, admin, petugas, nadzir, anggota KTA lama; Dashboard ketua, admin, petugas): 64 lulus; uji Ekonomi 99 & Usaha 98 ulang lulus. Versi cache v107. Menunggu uji Kang.
+
+**Tahap 8 selesai dibangun (4 langkah).** Menunggu cek dan persetujuan Kang.
+
 ## Perbaikan 2026-11-27: ikon aplikasi di taskbar hitam (laporan Kang)
 Ikon baru berlatar lingkaran putih seperti logo di kepala halaman: `icons/icon-192-v2.png`, `icon-512-v2.png`, `apple-touch-icon-v2.png` (kotak putih). Manifest, semua `<link rel=icon>`, apple-touch-icon, gambar panduan pasang, dan sw.js memakai file baru; versi v100. Ikon yang sudah terpasang berganti setelah Chrome memperbarui (bisa sampai 1 hari) atau setelah aplikasi dicopot lalu dipasang ulang.
 
