@@ -3,7 +3,7 @@
 ## POSISI TERAKHIR (baca ini dulu) — diperbarui 2026-11-27
 - **Semua 10 tahap selesai dan disetujui Kang** (Tahap 10 Pemeriksaan disetujui 2026-11-27): 14 modul terbangun (Tahap 9 Kesehatan disetujui 2026-11-27). Versi cache terakhir **v112**. Migrasi terakhir yang sudah dijalankan Kang: `20261127110000_kecepatan_rls.sql` (Tahap 10). Advisors terakhir: 0 error, 49 peringatan, 11 info (semua jenis yang disengaja).
 - **Serah terima 2026-11-27 (malam):** proyek diteruskan ke akun Claude **goindotea** (perintah Kang). Akun baru tidak membawa skill/memori akun lama: semua aturan ada di `CLAUDE.md` (termasuk "Cara kerja agen" dan "Cara uji") dan riwayat ada di file ini. Cara uji database lokal terbukti jalan (stub di CLAUDE.md; data wilayah contoh diisi langsung karena ekstensi `http` tidak ada).
-- **Langkah berikutnya: tunggu Kang memilih tahap baru** (Tahap 10 Pemeriksaan selesai & disetujui 2026-11-27) (usul Claude: backup bulanan ke luar Supabase).
+- **Tahap 11 Backup harian ke Google Drive: dimulai 2026-11-28** (akun goindotea). File sudah di repo dan diuji; **menunggu Kang memasang** (5 langkah di Tahap 11) lalu cek & setujui.
 
 ## Tahap 1: Data Jamaah, Pendaftaran, KTA, Portal Anggota, Hak Akses
 Mulai: 2026-11-25 (Kang Salman: "Bismillah").
@@ -479,3 +479,24 @@ Dipilih Kang 2026-11-27 (dari 4 pilihan: backup, notifikasi, berita, pemeriksaan
   5. Data yang masih perlu dilengkapi pengurus: jenis kelamin yang ditandai ragu (halaman Lengkapi jenis kelamin), alamat impor yang ditandai `cek`, PIN KTA untuk jamaah asli (dibuat lewat halaman KTA).
 - Fungsi login lama `cek_login_anggota` sudah tidak ada (sudah diganti `cek_login`).
 
+
+## Tahap 11: Backup harian ke Google Drive
+Mulai: 2026-11-28 (Kang: "mulai").
+
+**Keputusan Kang:** backup disimpan di Google Drive akun organisasi jtccukir2022@gmail.com (seperti aplikasi Kang yang lain), **setiap hari jam 01.15 WIB** (bukan bulanan).
+**Usulan Claude (berlaku kecuali Kang ubah):** simpan 30 backup harian terakhir + 1 per bulan selama 12 bulan (±42 file, masing-masing beberapa ratus KB–MB); file dikunci kata sandi (7z AES-256, nama file isi ikut tersembunyi) yang hanya Kang pegang; penjadwal GitHub Actions (gratis); email peringatan bila 30 jam tidak ada backup baru. R2 Cloudflare tidak dipakai (perlu kartu pembayaran).
+
+**Isi:**
+- `.github/workflows/backup.yml`: tiap 18.15 UTC (01.15 WIB, bisa telat 5–30 menit) + tombol jalankan manual. `pg_dump` 17: skema `public` + `private` (struktur, data, RLS, fungsi) dan data `auth.users` + `auth.identities`; gagal bila isi tabel < 20; dikunci `BACKUP_SANDI`, diuji buka, dikirim ke Apps Script. Langkah akhir memanggil API "enable" agar jadwal tidak dimatikan GitHub setelah 60 hari sepi. Gagal → GitHub mengirim email ke akun tqncukir.
+- `backup/drive-penerima.gs` (Apps Script di akun jtccukir2022): `doPost` cek token → simpan `silsilah-YYYY-MM-DD.7z` di folder "Backup SILSILAH" → rapikan (`pilihHapus`); `cekHarian` 07.00 WIB email bila >30 jam tanpa backup; `pasang()` sekali (token + folder + jadwal cek).
+- Rahasia GitHub (diisi Kang, tidak pernah di repo/Claude): `SUPABASE_DB_URL`, `BACKUP_SANDI`, `DRIVE_URL`, `DRIVE_TOKEN`.
+- **Uji Claude (2026-11-28, database lokal + data contoh):** salin → kunci → buka → pulihkan ke database kosong: 36 tabel jumlah barisnya sama persis, 63 aturan RLS, 108 fungsi, RLS aktif di 34 tabel; sandi salah ditolak; ukuran ±36 KB. Satu-satunya yang tidak ikut: trigger `pengguna_baru` di `auth.users` (milik skema auth) — dibuat ulang saat memulihkan (lihat di bawah). Aturan simpan diuji 547 hari: tersisa 42 file (30 harian + 12 awal bulan), file lain di folder tidak tersentuh.
+
+**Yang perlu Kang pasang (sekali saja):**
+1. **Apps Script** (login jtccukir2022@gmail.com): script.google.com → Proyek baru, nama "Backup SILSILAH" → hapus isi, tempel isi `backup/drive-penerima.gs` → Simpan → pilih fungsi `pasang` → Jalankan → izinkan akses (Drive, Gmail) → buka **Log eksekusi**, salin TOKEN.
+2. **Terapkan** → Deployment baru → jenis **Aplikasi web**; Jalankan sebagai: **Saya**; Akses: **Siapa saja** → Terapkan → salin URL `.../exec`.
+3. **Supabase** → project Silsilah → tombol **Connect** → **Session pooler** → salin alamatnya, ganti `[YOUR-PASSWORD]` dengan kata sandi database (lupa? Database Settings → Reset database password).
+4. **GitHub** tqncukir/silsilah → Settings → Secrets and variables → Actions → New repository secret, 4 kali: `SUPABASE_DB_URL` (no. 3), `BACKUP_SANDI` (kata sandi buatan Kang, min. 12 huruf, **catat di tempat aman, tanpa ini backup tidak bisa dibuka**), `DRIVE_URL` (no. 2), `DRIVE_TOKEN` (no. 1).
+5. Uji: GitHub → Actions → **Backup harian** → Run workflow. Hijau = cek folder "Backup SILSILAH" di Drive jtccukir2022.
+
+**Cara memulihkan (bila suatu saat perlu, dikerjakan Claude bersama Kang):** unduh `.7z` dari Drive → buka dengan 7-Zip/ZArchiver + `BACKUP_SANDI` → `silsilah.dump` (`pg_restore --no-owner -d <db>`) lalu `auth.dump` (`pg_restore --data-only`) → jalankan ulang baris `create trigger pengguna_baru` dari `20261125020000_login.sql` → pasang lagi rahasia Edge Functions (`KTA_KUNCI`, `TURNSTILE_SECRET`) dan fungsi dari `supabase/functions/`.

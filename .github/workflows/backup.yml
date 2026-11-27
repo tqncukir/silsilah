@@ -1,0 +1,77 @@
+# Backup harian SILSILAH: tiap hari 01.15 WIB (18.15 UTC), bisa telat 5-30 menit bila GitHub ramai.
+# Rahasia (diisi Kang di Settings > Secrets and variables > Actions, tidak pernah di repo):
+#   SUPABASE_DB_URL  alamat Session pooler Supabase (berisi kata sandi database)
+#   BACKUP_SANDI     kata sandi pembuka file .7z (hanya Kang yang tahu)
+#   DRIVE_URL        alamat Web app Apps Script (backup/drive-penerima.gs)
+#   DRIVE_TOKEN      token dari fungsi pasang() di Apps Script
+name: Backup harian
+
+on:
+  schedule:
+    - cron: '15 18 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write   # hanya untuk menjaga jadwal tetap hidup (lihat langkah terakhir)
+
+concurrency: backup
+
+jobs:
+  backup:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      DB: ${{ secrets.SUPABASE_DB_URL }}
+      SANDI: ${{ secrets.BACKUP_SANDI }}
+      DRIVE_URL: ${{ secrets.DRIVE_URL }}
+      DRIVE_TOKEN: ${{ secrets.DRIVE_TOKEN }}
+    steps:
+      - name: Cek rahasia lengkap
+        run: |
+          for v in DB SANDI DRIVE_URL DRIVE_TOKEN; do
+            [ -n "${!v}" ] || { echo "::error::Rahasia $v belum diisi"; exit 1; }
+          done
+          [ ${#SANDI} -ge 12 ] || { echo "::error::BACKUP_SANDI minimal 12 huruf"; exit 1; }
+
+      - name: Pasang pg_dump 17 dan 7-Zip
+        run: |
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y >/dev/null
+          sudo apt-get install -y -qq postgresql-client-17 7zip >/dev/null
+
+      - name: Salin database
+        run: |
+          umask 077
+          export PATH=/usr/lib/postgresql/17/bin:$PATH PGCONNECT_TIMEOUT=30
+          mkdir -p out
+          pg_dump "$DB" -Fc --no-owner --no-privileges -n public -n private -f out/silsilah.dump
+          pg_dump "$DB" -Fc --data-only -t auth.users -t auth.identities -f out/auth.dump
+          n=$(pg_restore -l out/silsilah.dump | grep -c 'TABLE DATA')
+          echo "Isi tabel tersalin: $n"
+          [ "$n" -ge 20 ] || { echo "::error::Backup terlalu sedikit isinya ($n tabel)"; exit 1; }
+
+      - name: Kunci dengan kata sandi
+        run: |
+          umask 077
+          TGL=$(TZ=Asia/Jakarta date +%F)
+          echo "NAMA=silsilah-$TGL.7z" >> "$GITHUB_ENV"
+          7z a -t7z -mx=9 -mhe=on -p"$SANDI" "silsilah-$TGL.7z" ./out/* >/dev/null
+          rm -rf out
+          7z t -p"$SANDI" "silsilah-$TGL.7z" >/dev/null
+          ls -l "silsilah-$TGL.7z"
+
+      - name: Kirim ke Google Drive
+        run: |
+          umask 077
+          base64 -w0 "$NAMA" > data.b64
+          jq -n --arg t "$DRIVE_TOKEN" --arg n "$NAMA" --rawfile d data.b64 '{token:$t,name:$n,data:$d}' > isi.json
+          jawab=$(curl -sS -L --max-time 300 -H 'Content-Type: application/json' --data-binary @isi.json "$DRIVE_URL")
+          rm -f isi.json data.b64
+          echo "$jawab" | jq -e '.ok == true' >/dev/null || { echo "::error::Drive menolak: $(echo "$jawab" | head -c 300)"; exit 1; }
+          echo "Tersimpan di Drive: $NAMA ($(echo "$jawab" | jq -r .ukuran) byte), file lama dirapikan: $(echo "$jawab" | jq -r .dihapus)"
+
+      - name: Jaga jadwal tetap hidup
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/backup.yml/enable" || true
