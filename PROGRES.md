@@ -169,13 +169,13 @@ Mulai: 2026-11-27 (Kang: "Mulai Tahap 4: modul 10 Ziarah & Umroh").
 
 - **Poles semua halaman** (2026-11-27, diperiksa 19 halaman di 360 & 1440; Kang: "kerjakan semua" temuan a–e): (a) laptop ≥1024: kotak cari + pilihan saringan satu baris (`.saring:has(.saring-pilih)` flex, `.saring-pilih` display contents) di Data Jamaah, Kegiatan, Ahli Kubur, Ziarah & Umroh; (b) Lengkapi jenis kelamin di laptop: kartu berdampingan (grid minmax 440px), tombol dekat nama; (c) isian Ketik Nomor Anggota (`.absen-ketik-baris`) maks 560px di ≥768; (d) rincian di HP dua kolom, isian panjang (>28 huruf, kelas `penuh`) selebar kartu — semua `dl.rincian` (jamaah, kegiatan, ahli kubur, perjalanan, pendaftaran, Data saya); (e) halaman depan di laptop dua kolom (sambutan kiri, agenda kanan; `main.depan`), Agenda kartu 2–3 kolom (`main.agenda-hal`). Uji ulang semua halaman 360/1024/1440 tanpa galat/geser, uji Ziarah & Umroh 210 + 96 + 96 lulus. Versi cache v93.
 
-**Tahap 4 (4 langkah) selesai dibangun.** Menunggu Kang mencoba di HP (anggota peserta + Dashboard) dan menyetujui Tahap 4.
+**Tahap 4 selesai dan disetujui Kang 2026-11-27 ("Tahap 4 dan 5 disetujui").**
 
 ## Perbaikan 2026-11-27: "Pemeriksaan keamanan belum berhasil" di komputer lain (laporan Kang)
 Kotak centang tidak muncul sama sekali = Turnstile diblokir/gagal diam-diam. `masuk.js` kini: (1) skrip Turnstile tidak termuat → pesan langsung (dan otomatis setelah 8 dtk) "tidak bisa dimuat di perangkat ini… pemblokir iklan/antivirus/jaringan kantor… coba Incognito/hotspot HP"; (2) `error-callback`/`timeout-callback`/`unsupported-callback` → pesan sesuai kode (alamat tidak dikenali 1102xx, browser lama 1105xx, diblokir 2005xx, gagal 3xxxxx/6xxxxx: cek jam, VPN, pemblokir) + **kode ditulis** untuk dilaporkan, kotak dimunculkan ulang (appearance always), tombol Masuk tidak lagi menunggu 20 dtk. Uji tiruan 360/1280 (diblokir, galat 600010, berhasil): 20/20 + kiriman normal benar. Versi cache v85. Kang mencoba lagi di komputer itu: sudah bisa masuk (2026-11-27).
 
 ## Tahap 5: Modul 9 Keuangan Yayasan
-Mulai: 2026-11-27 (Kang: "Mulai Tahap 5: modul 9 Keuangan Yayasan"). Catatan: Tahap 4 belum diucapkan "disetujui" secara resmi; Kang langsung memulai Tahap 5.
+Mulai: 2026-11-27 (Kang: "Mulai Tahap 5: modul 9 Keuangan Yayasan"). Tahap 4 kemudian disetujui bersama Tahap 5.
 
 **Keputusan konsep Kang (2026-11-27):**
 - Buku kas masuk-keluar: setiap pemasukan dan pengeluaran dicatat per tanggal dan kategori, saldo dihitung otomatis.
@@ -199,7 +199,7 @@ Mulai: 2026-11-27 (Kang: "Mulai Tahap 5: modul 9 Keuangan Yayasan"). Catatan: Ta
 
 **Langkah 4, Dashboard** (2026-11-27, Kang: "lanjut langkah 4"), tanpa perubahan database: panel **Keuangan** di Dashboard Pengurus (admin pusat, ketua, bendahara, koordinator; petugas scan tidak): Saldo semua kas, Masuk & Keluar bulan ini (kas utama = Kas Pusat bila terlihat, koordinator: kas kecamatannya), Saldo per kas (Kas Pusat dulu, maks 8, tautan ke Buku Kas), Keluar bulan ini per kategori (bisyaroh mengikuti aturan database), tautan Laporan tahunan. Memakai `saldo_kas` + `laporan_kas`; tidak ikut saringan wilayah/periode (tertulis di keterangan panel). Uji tiruan 360/768/1280 (admin, bendahara, petugas scan, migrasi Ziarah tidak ada): 126 pemeriksaan lulus; uji Buku Kas ulang 150 lulus. Versi cache v97.
 
-**Tahap 5 (4 langkah) selesai dibangun.** Menunggu Kang mencoba (akun bendahara: catat beberapa transaksi, lihat laporan, Laporan Infaq umum, Dashboard) dan menyetujui Tahap 5. Tahap 4 juga belum diucapkan "disetujui".
+**Tahap 5 selesai dan disetujui Kang 2026-11-27 ("Tahap 4 dan 5 disetujui").** Tunggu Kang bilang "mulai" untuk tahap berikutnya. Modul tersisa: 6 Bantuan Sosial, 7 Kesehatan, 8 Ekonomi Jamaah, 14 Aset & Wakaf (12 Dashboard & Laporan sebagian sudah ada).
 
 ## Catatan
 - Alamat resmi: https://silsilah.tqncukir.id (domain tqncukir.id dibeli Kang di Domosquare 2026-11-26, nameserver dipindah ke Cloudflare akun jtccukir2022: damon/kira.ns.cloudflare.com; CNAME `silsilah` → silsilah-tqn.pages.dev, custom domain Pages; hostname Turnstile ditambah; ASAL_BOLEH fungsi `kta` v4 & `login-anggota` v7 ditambah). Alamat lama tetap jalan: https://silsilah-tqn.pages.dev. `tqncukir.id` dan `www.tqncukir.id` sengaja dibiarkan kosong (keputusan Kang 2026-11-26), nanti untuk website profil jamaah (agenda, berita, dll).
