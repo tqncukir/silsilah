@@ -1,4 +1,4 @@
-// Laporan kas tahunan bersama (pengurus: laporan_kas, publik: laporan_publik). Data: saldo_awal, masuk, keluar,
+// Laporan kas tahunan bersama (pengurus: laporan_kas). Data: saldo_awal, masuk, keluar,
 // bulan [{b, masuk, keluar}], kategori [{arah, nama, jumlah}]. Bisyaroh sudah digabung di database bila perlu.
 const BLN_PENDEK = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 const angkaRp = (n) => Number(n || 0).toLocaleString('id-ID');
