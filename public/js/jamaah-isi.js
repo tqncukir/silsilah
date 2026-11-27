@@ -32,6 +32,22 @@ function tampilLihat() {
   $('l-rincian').innerHTML = baris.map(([k, v]) => `<div${String(v ?? '').length > 28 ? ' class="penuh"' : ''}><dt>${k}</dt><dd>${v ? hurufAman(v) : '–'}</dd></div>`).join('');
   $('ke-ahli').hidden = !j.wafat; $('ke-ahli').href = `/ahli-kubur-isi.html?kunci=j${j.id}`;
   $('form').hidden = true; $('lihat').hidden = false;
+  $('bantuan').hidden = !PERAN_BANTUAN.includes(peran);
+}
+
+// Riwayat bantuan sosial (rpc daftar_bantuan; koordinator hanya wilayahnya — di luar wilayah daftar kosong & bagian disembunyikan).
+async function muatBantuan() {
+  if (!PERAN_BANTUAN.includes(peran)) return;
+  $('bs-ajukan').href = `/bantuan-isi.html?nomor=${data.nomor_anggota}`;
+  try {
+    const b = await dbKirim('POST', 'rpc/daftar_bantuan', { p_jamaah_id: data.id, p_batas: 10 });
+    $('bs-isi').innerHTML = b.length ? b.map((x) => {
+      const [st] = STATUS_BANTUAN[x.status];
+      const waktu = x.disalurkan_tgl ? tglWib(x.disalurkan_tgl + 'T12:00:00+07:00', { day: 'numeric', month: 'short', year: 'numeric' }) : tglWib(x.diajukan_pada, { day: 'numeric', month: 'short', year: 'numeric' });
+      return `<li><a href="/bantuan-isi.html?id=${x.id}"><span>${hurufAman(JENIS_BANTUAN[x.jenis])}: ${hurufAman(teksBantuan(x))}<small>${st} · ${waktu}</small></span></a></li>`;
+    }).join('') + (Number(b[0].total) > b.length ? `<li class="dsb-ket">Menampilkan ${b.length} terbaru dari ${b[0].total}. Lihat semua di halaman Bantuan Sosial.</li>` : '')
+      : '<li class="dsb-ket">Belum pernah menerima atau diajukan bantuan.</li>';
+  } catch { $('bantuan').hidden = true; }
 }
 
 function aturWafat() { $('isian-wafat').hidden = document.querySelector('[name=status]:checked').value !== 'wafat'; }
@@ -58,7 +74,7 @@ function tampilForm() {
   aturWafat();
   aturUmur();
   pesanForm('');
-  $('lihat').hidden = true; $('form').hidden = false;
+  $('lihat').hidden = true; $('form').hidden = false; $('bantuan').hidden = true;
   $('nama').focus();
 }
 
@@ -136,6 +152,7 @@ $('form').addEventListener('submit', async (e) => {
       $('ubah').hidden = !bisaUbah || (kecBoleh && !kecBoleh.has(data.desa.kecamatan_id));
       $('lihat-kta').href = `/kta.html?id=${encodeURIComponent(id)}`; $('lihat-kta').hidden = false;
       tampilLihat();
+      muatBantuan();
     } else if (bisaUbah) {
       tampilForm();
     } else location.replace('/jamaah.html');

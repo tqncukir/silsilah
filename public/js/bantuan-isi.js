@@ -203,7 +203,9 @@ $('form').addEventListener('submit', async (e) => {
     } else {
       $('form').hidden = false; $('lihat').hidden = true;
       aturBentuk();
-      $('nomor').focus();
+      const awal = new URLSearchParams(location.search).get('nomor');
+      if (/^\d{10}$/.test(awal || '')) { $('nomor').value = awal; cekPenerima(); document.querySelector('[name=jenis]').focus(); }
+      else $('nomor').focus();
     }
   } catch (e) { tanganiGalat(e, pesan); }
 })();

@@ -1100,3 +1100,4 @@ body:not(.hal-masuk):not(.hal-poster)>main{flex:1 0 auto;width:100%}
 .bs-penerima{margin:6px 0 0;font-weight:600}
 .bs-penerima.galat{color:#8C1D18}
 @media (max-width:767px){.tabel .kol-tablet{display:none}}
+.hadir-teratas .bs-baris{display:flex;justify-content:space-between;gap:12px;min-height:44px;align-items:center;padding:6px 4px}

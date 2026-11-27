@@ -7,7 +7,7 @@ const BULAN = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', '
 const TINGKAT = { kabupaten: 'kabupaten/kota', kecamatan: 'kecamatan', desa: 'desa' };
 
 let semuaKab = [], semuaKec = [], semuaDesa = [];
-let data = null, bolehUbah = false, semuaSebaran = false, nomorMuat = 0, lihatHadir = false, lihatZiarah = false, lihatKas = false;
+let data = null, bolehUbah = false, semuaSebaran = false, nomorMuat = 0, lihatHadir = false, lihatZiarah = false, lihatKas = false, lihatBantuan = false, peranSaya = '';
 const f = { kab: q.get('kab') || '', kec: q.get('kec') || '', desa: q.get('desa') || '', periode: q.get('periode') || '', dari: q.get('dari') || '', sampai: q.get('sampai') || '' };
 
 const namaKab = (id) => semuaKab.find((k) => String(k.id) === String(id))?.nama || '';
@@ -350,6 +350,27 @@ async function muatZiarah(ini, dari, sampai) {
 
 // Keuangan (rpc saldo_kas + laporan_kas kas utama tahun ini). Tidak ikut saringan wilayah/periode: angka kas apa adanya.
 // Kas utama = Kas Pusat bila terlihat, selain itu kas pertama (koordinator: kas kecamatannya). Bisyaroh ikut aturan database.
+// Bantuan Sosial (rpc ringkas_bantuan, tanpa nama): admin pusat, ketua, bendahara semua; koordinator wilayahnya (database).
+// Saringan wilayah sampai kecamatan (bukan desa); periode = tanggal diajukan.
+async function muatBantuanDsb(ini, dari, sampai) {
+  if (!lihatBantuan) return;
+  try {
+    const r = await dbKirim('POST', 'rpc/ringkas_bantuan', { p_kab: f.kab ? Number(f.kab) : null, p_kec: f.kec ? Number(f.kec) : null, p_dari: dari, p_sampai: sampai });
+    if (ini !== nomorMuat) return;
+    $('bs-ket').textContent = `${teksWilayah()}${f.desa ? ' (dihitung sampai kecamatan)' : ''} · ${teksPeriode()} (tanggal diajukan). Tanpa nama penerima.`;
+    $('bs-salur').textContent = angka(r.disalurkan);
+    $('bs-penerima').textContent = angka(r.penerima);
+    $('bs-nilai').textContent = rupiah(r.nilai_uang);
+    batang($('bs-jenis'), r.jenis.map((j) => ({ label: JENIS_BANTUAN[j.jenis] || j.jenis, n: j.n, teks: `${angka(j.n)} · ${rupiah(j.nilai)}` })), Math.max(...r.jenis.map((j) => j.n), 0));
+    if (!r.jenis.length) $('bs-jenis').innerHTML = '<li class="dsb-ket">Belum ada bantuan disalurkan di periode ini.</li>';
+    const ke = PERAN_BANTUAN.includes(peranSaya);
+    const baris = (n, label, st) => `<li>${ke ? `<a href="/bantuan.html?status=${st}">` : '<div class="bs-baris">'}<span>${label}</span><strong>${angka(n)}</strong>${ke ? '</a>' : '</div>'}</li>`;
+    $('bs-proses').innerHTML = baris(r.diajukan, 'Menunggu persetujuan ketua', 'diajukan') + baris(r.disetujui, 'Disetujui, belum disalurkan', 'disetujui')
+      + baris(r.ditolak, 'Ditolak', 'ditolak') + (r.nilai_barang ? `<li class="dsb-ket">Perkiraan nilai barang disalurkan: ${rupiah(r.nilai_barang)}</li>` : '');
+    $('p-bantuan').hidden = false;
+  } catch { if (ini === nomorMuat) $('p-bantuan').hidden = true; }
+}
+
 async function muatKas() {
   if (!lihatKas) return;
   try {
@@ -383,6 +404,7 @@ async function muat() {
     muatHadir(ini, dari, sampai);
     muatMursyid(ini, dari, sampai);
     muatZiarah(ini, dari, sampai);
+    muatBantuanDsb(ini, dari, sampai);
     const hasil = await dbKirim('POST', 'rpc/dashboard_pengurus', {
       p_kab: f.kab || null, p_kec: f.kec || null, p_desa: f.desa || null, p_dari: dari, p_sampai: sampai });
     if (ini !== nomorMuat) return;
@@ -430,6 +452,7 @@ $('keluar').onclick = keluar;
     lihatHadir = PERAN_ABSEN.includes(p.peran); // bendahara tidak melihat kehadiran
     lihatZiarah = PERAN_PESERTA.includes(p.peran); // petugas scan tidak melihat peserta perjalanan
     lihatKas = PERAN_LIHAT_KAS.includes(p.peran);
+    lihatBantuan = ['admin_pusat', ...PERAN_BANTUAN].includes(p.peran); peranSaya = p.peran;
     [semuaKab, semuaKec, semuaDesa] = await Promise.all([
       dbGet('kabupaten?select=id,nama&order=nama'),
       dbGet('kecamatan?select=id,nama,kabupaten_id&order=nama'),
