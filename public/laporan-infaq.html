@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Laporan Infaq · SILSILAH TQN Cukir</title>
+<meta name="description" content="Laporan infaq dan keuangan Jamaah TQN Pusat Cukir Jombang: uang masuk, keluar, dan saldo per bulan.">
+<meta name="theme-color" content="#0B6B2E">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SILSILAH">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=96">
+<link rel="stylesheet" href="/css/app.css?v=96">
+</head>
+<body>
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <span class="app-sub">TQN Pusat Cukir Jombang</span>
+    <a href="/masuk.html" class="app-keluar">Masuk</a>
+  </div>
+</header>
+<main class="agenda-hal lap-hal">
+  <a href="/" class="kembali">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Halaman depan
+  </a>
+  <h1>Laporan Infaq</h1>
+  <p class="kecil">Amanah infaq jamaah: uang masuk, uang keluar, dan saldo setiap bulan. Ringkasan saja, tanpa rincian per transaksi dan tanpa nama pemberi.</p>
+  <div class="lap-pilih">
+    <label id="lp-kas-label"><span>Kas</span><select id="lp-kas"></select></label>
+    <label><span>Tahun</span><select id="lp-tahun"></select></label>
+  </div>
+  <p id="pesan" class="pesan" role="alert"></p>
+  <ul class="angka-baris lap-angka" id="lp-angka" aria-label="Ringkasan tahun"><li class="dsb-ket">Memuat...</li></ul>
+  <section class="panel lap-panel" aria-labelledby="lp-j-bulan">
+    <h2 class="form-judul" id="lp-j-bulan">Per bulan</h2>
+    <p class="ket">Dalam rupiah. Saldo = saldo di akhir bulan.</p>
+    <div class="lap-bungkus">
+      <table class="lap-tabel">
+        <thead><tr><th scope="col">Bulan</th><th scope="col">Masuk</th><th scope="col">Keluar</th><th scope="col" class="lap-selisih">Selisih</th><th scope="col">Saldo</th></tr></thead>
+        <tbody id="lp-bulan"></tbody>
+        <tfoot id="lp-total"></tfoot>
+      </table>
+    </div>
+  </section>
+  <div class="lap-dua">
+    <section class="panel lap-panel" aria-labelledby="lp-j-masuk"><h2 class="form-judul" id="lp-j-masuk">Uang masuk per kategori</h2><ol class="dsb-batang" id="lp-masuk"></ol></section>
+    <section class="panel lap-panel" aria-labelledby="lp-j-keluar"><h2 class="form-judul" id="lp-j-keluar">Uang keluar per kategori</h2><ol class="dsb-batang lap-keluar" id="lp-keluar"></ol></section>
+  </div>
+  <p class="kecil">Ada pertanyaan tentang laporan ini? Hubungi bendahara atau pengurus.</p>
+</main>
+<footer class="kaki">
+  <div class="kaki-isi">
+    <address class="kaki-alamat">TQN Pusat Cukir Jombang<br>Jl. Masjid No. 110 Cukir, Diwek, Jombang 61471</address>
+  </div>
+  <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
+</footer>
+<script src="/js/supa.js?v=96" defer></script>
+<script src="/js/laporan.js?v=96" defer></script>
+<script src="/js/laporan-infaq.js?v=96" defer></script>
+</body>
+</html>

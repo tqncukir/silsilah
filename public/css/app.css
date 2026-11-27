@@ -1054,3 +1054,32 @@ body:not(.hal-masuk):not(.hal-poster)>main{flex:1 0 auto;width:100%}
 .kas-batal-form .bagian-judul{margin:0 0 4px}
 .kas-rp{display:flex;align-items:center;gap:8px;font-weight:700}
 .kas-rp input{flex:1;min-width:0;font-variant-numeric:tabular-nums;font-weight:600}
+
+/* Laporan kas (pengurus & publik) */
+.lap-hal .kecil{max-width:72ch}
+.lap-pilih{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 12px}
+.lap-pilih label{display:grid;gap:2px;font-size:var(--fs-kecil);font-weight:600;flex:1 1 150px;max-width:280px}
+.lap-pilih label[hidden]{display:none}
+.lap-pilih select{min-height:44px;padding:8px 12px;border:1.5px solid var(--garis-isian);border-radius:10px;font:inherit;font-size:var(--fs-isian);background:#FFFFFF;color:var(--hitam)}
+.lap-angka{margin:0 0 14px}
+.lap-panel{margin:0 0 14px}
+.lap-panel .ket{margin:2px 0 8px}
+.lap-bungkus{overflow-x:auto}
+.lap-tabel{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:var(--fs-kecil)}
+.lap-tabel th,.lap-tabel td{padding:9px 6px;text-align:right;border-bottom:1px solid var(--garis-lembut);white-space:nowrap}
+.lap-tabel thead th{color:var(--abu);font-weight:600}
+.lap-tabel th:first-child{text-align:left}
+.lap-tabel tbody th{font-weight:600}
+.lap-tabel tfoot th,.lap-tabel tfoot td{font-weight:800;border-bottom:0;border-top:2px solid var(--garis-kuat)}
+.lap-sepi td{color:var(--abu)}
+.lap-kosong{text-align:center!important;color:var(--abu)}
+.lap-keluar .bt-isi{background:var(--abu)}
+.lap-dua{display:grid;gap:14px}
+@media (max-width:479px){.lap-selisih{display:none}}
+@media (min-width:768px){.lap-tabel{font-size:var(--fs-isi)}.lap-dua{grid-template-columns:repeat(2,minmax(0,1fr))}.lap-dua .lap-panel{margin:0}}
+@media (max-width:479px){
+  .lap-panel{padding-left:12px;padding-right:12px}
+  .lap-tabel th,.lap-tabel td{padding:8px 3px}
+  .lap-angka strong,.kas-angka strong{font-size:1.25rem}
+}
+@media (max-width:639px){.lap-angka li:first-child{grid-column:1 / -1}}

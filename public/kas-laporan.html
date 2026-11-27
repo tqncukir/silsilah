@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Laporan Kas · SILSILAH TQN Cukir</title>
+<meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=96">
+<link rel="stylesheet" href="/css/app.css?v=96">
+</head>
+<body class="hal-app">
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <a href="/beranda.html">Beranda</a>
+      <a href="/dashboard.html" id="nav-dasbor" hidden>Dashboard Pengurus</a>
+      <a href="/jamaah.html" id="nav-jamaah" hidden>Data Jamaah</a>
+      <a href="/pendaftaran.html" id="nav-daftar" hidden>Pendaftaran</a>
+      <a href="/kegiatan.html" id="nav-kegiatan" hidden>Kegiatan</a>
+      <a href="/ahli-kubur.html" id="nav-ahli" hidden>Ahli Kubur</a>
+      <a href="/perjalanan.html" id="nav-perjalanan" hidden>Ziarah &amp; Umroh</a>
+      <a href="/kas.html" id="nav-kas" aria-current="page">Buku Kas</a>
+    </nav>
+    <button class="app-keluar" id="keluar" type="button">Keluar</button>
+  </div>
+</header>
+
+<main class="app-isi">
+  <a href="/kas.html" class="kembali">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Buku Kas
+  </a>
+  <div class="judul-baris">
+    <div>
+      <h1>Laporan Kas</h1>
+      <p class="judul-sub" id="lp-sub">Ringkasan tahunan per bulan dan per kategori. Transaksi dibatalkan tidak dihitung.</p>
+    </div>
+    <button type="button" class="btn btn-kedua btn-pas" id="unduh" disabled>
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+      <span class="teks">Unduh CSV</span>
+    </button>
+  </div>
+  <div class="lap-pilih">
+    <label id="lp-kas-label"><span>Kas</span><select id="lp-kas"></select></label>
+    <label><span>Tahun</span><select id="lp-tahun"></select></label>
+  </div>
+  <p id="pesan" class="pesan" role="alert"></p>
+  <ul class="angka-baris lap-angka" id="lp-angka" aria-label="Ringkasan tahun"><li class="dsb-ket">Memuat...</li></ul>
+  <section class="panel lap-panel" aria-labelledby="lp-j-bulan">
+    <h2 class="form-judul" id="lp-j-bulan">Per bulan</h2>
+    <p class="ket">Dalam rupiah. Saldo = saldo di akhir bulan.</p>
+    <div class="lap-bungkus">
+      <table class="lap-tabel">
+        <thead><tr><th scope="col">Bulan</th><th scope="col">Masuk</th><th scope="col">Keluar</th><th scope="col" class="lap-selisih">Selisih</th><th scope="col">Saldo</th></tr></thead>
+        <tbody id="lp-bulan"></tbody>
+        <tfoot id="lp-total"></tfoot>
+      </table>
+    </div>
+  </section>
+  <div class="lap-dua">
+    <section class="panel lap-panel" aria-labelledby="lp-j-masuk"><h2 class="form-judul" id="lp-j-masuk">Uang masuk per kategori</h2><ol class="dsb-batang" id="lp-masuk"></ol></section>
+    <section class="panel lap-panel" aria-labelledby="lp-j-keluar"><h2 class="form-judul" id="lp-j-keluar">Uang keluar per kategori</h2><ol class="dsb-batang lap-keluar" id="lp-keluar"></ol></section>
+  </div>
+</main>
+<footer class="kaki">
+  <div class="kaki-isi">
+    <address class="kaki-alamat">TQN Pusat Cukir Jombang<br>Jl. Masjid No. 110 Cukir, Diwek, Jombang 61471</address>
+  </div>
+  <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
+</footer>
+<script src="/js/supa.js?v=96" defer></script>
+<script src="/js/laporan.js?v=96" defer></script>
+<script src="/js/kas-laporan.js?v=96" defer></script>
+</body>
+</html>
