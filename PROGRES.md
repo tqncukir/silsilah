@@ -333,7 +333,7 @@ Mulai: 2026-11-27 (Kang: "Mulai Tahap 8: modul 8 Ekonomi Jamaah").
 - **Dashboard Pengurus**: panel **Kondisi Ekonomi Jamaah** tanpa nama (admin pusat, ketua, bendahara, koordinator wilayahnya): Jamaah aktif, Sudah didata (+ persen), Kurang mampu; batang per kondisi; "Perlu perhatian": kurang mampu belum pernah dibantu, belum didata (tautan ke daftar hanya untuk ketua, bendahara, koordinator; admin angka saja), rata-rata tanggungan; ikut saringan wilayah sampai desa, tidak ikut periode. Panel **Usaha Jamaah** (semua peran Dashboard): usaha buka, pemilik, tutup, batang per jenis, tautan; ikut saringan wilayah sampai kecamatan.
 - Uji tiruan 360/768/1280 (Beranda ketua, admin, petugas, nadzir, anggota KTA lama; Dashboard ketua, admin, petugas): 64 lulus; uji Ekonomi 99 & Usaha 98 ulang lulus. Versi cache v107. Menunggu uji Kang.
 
-**Tahap 8 selesai dibangun (4 langkah).** Menunggu cek dan persetujuan Kang.
+**Tahap 8 selesai dan disetujui Kang 2026-11-27 ("Tahap 8 disetujui").** Tunggu Kang bilang "mulai" untuk tahap berikutnya. Modul tersisa: 7 Kesehatan (12 Dashboard & Laporan sebagian sudah ada).
 
 ## Perbaikan 2026-11-27: ikon aplikasi di taskbar hitam (laporan Kang)
 Ikon baru berlatar lingkaran putih seperti logo di kepala halaman: `icons/icon-192-v2.png`, `icon-512-v2.png`, `apple-touch-icon-v2.png` (kotak putih). Manifest, semua `<link rel=icon>`, apple-touch-icon, gambar panduan pasang, dan sw.js memakai file baru; versi v100. Ikon yang sudah terpasang berganti setelah Chrome memperbarui (bisa sampai 1 hari) atau setelah aplikasi dicopot lalu dipasang ulang.
