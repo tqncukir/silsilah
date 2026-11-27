@@ -31,7 +31,7 @@ function tampilLihat() {
   if (j.wafat) baris.push(['Tanggal wafat', tgl(j.tanggal_wafat)]);
   $('l-rincian').innerHTML = baris.map(([k, v]) => `<div><dt>${k}</dt><dd>${v ? hurufAman(v) : '–'}</dd></div>`).join('');
   $('ke-ahli').hidden = !j.wafat; $('ke-ahli').href = `/ahli-kubur-isi.html?kunci=j${j.id}`;
-  $('form').hidden = true; $('lihat').hidden = false;
+  $('form').hidden = true; $('lihat').hidden = false; document.querySelector('main').classList.remove('app-sempit'); // rincian penuh layar, formulir sempit (Kang 2026-11-27)
 }
 
 function aturWafat() { $('isian-wafat').hidden = document.querySelector('[name=status]:checked').value !== 'wafat'; }
@@ -58,7 +58,7 @@ function tampilForm() {
   aturWafat();
   aturUmur();
   pesanForm('');
-  $('lihat').hidden = true; $('form').hidden = false;
+  $('lihat').hidden = true; $('form').hidden = false; document.querySelector('main').classList.add('app-sempit');
   $('nama').focus();
 }
 

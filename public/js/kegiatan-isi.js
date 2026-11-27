@@ -45,7 +45,7 @@ function tampilLihat() {
   $('batalkan').textContent = k.dibatalkan ? 'Aktifkan lagi' : 'Batalkan kegiatan';
   $('ke-absen').href = `/absensi.html?kegiatan=${k.id}`;
   $('ke-absen').hidden = k.dibatalkan || !PERAN_ABSEN.includes(peran) || (kecBoleh && !(k.kecamatan_id && kecBoleh.has(k.kecamatan_id)));
-  $('form').hidden = true; $('lihat').hidden = false;
+  $('form').hidden = true; $('lihat').hidden = false; document.querySelector('main').classList.remove('app-sempit'); // rincian penuh layar, formulir sempit (Kang 2026-11-27)
   if (rekap) $('kehadiran').hidden = false;
 }
 
@@ -62,7 +62,7 @@ function tampilForm() {
   document.querySelector(`[name=publik][value=${!k || k.publik ? 'ya' : 'tidak'}]`).checked = true;
   $('keterangan').value = k?.keterangan || '';
   pesanForm('');
-  $('lihat').hidden = true; $('form').hidden = false; $('kehadiran').hidden = true;
+  $('lihat').hidden = true; $('form').hidden = false; $('kehadiran').hidden = true; document.querySelector('main').classList.add('app-sempit');
   $('jenis').focus();
 }
 
