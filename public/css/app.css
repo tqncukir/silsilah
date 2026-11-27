@@ -946,9 +946,9 @@ a.tautan{display:inline-flex;align-items:center}
 /* Temuan e: di kartu HP teks panjang (tanggal + jam) turun baris, tidak terpotong */
 @media (max-width:767px){.tabel .angka{white-space:normal}}
 
-/* ===== Menu bawah HP (temuan f1, 2026-11-27): hanya < 768px; tablet/laptop memakai menu atas ===== */
+/* ===== Menu bawah HP & tablet (temuan f1 2026-11-27; tablet disetujui Kang 2026-11-27): < 1024px; laptop/komputer memakai menu atas ===== */
 .menu-bawah,.menu-lain{display:none}
-@media (max-width:767px){
+@media (max-width:1023px){
   .ada-menu-bawah .app-nav{display:none}
   .ada-menu-bawah{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
   .sedang-ketik .menu-bawah{display:none}
@@ -977,7 +977,7 @@ a.tautan{display:inline-flex;align-items:center}
 .kaki-isi{max-width:1120px;margin:0 auto;padding:20px 16px 12px}
 .kaki-alamat{font-style:normal;text-align:center;line-height:1.6;color:#E6F2EA}
 .kaki-hak{margin:0;padding:10px 16px max(14px,env(safe-area-inset-bottom));text-align:center;border-top:1px solid rgba(255,255,255,.15);color:#CFE6D6}
-@media (max-width:767px){.ada-menu-bawah .kaki{display:none}}
+@media (max-width:1023px){.ada-menu-bawah .kaki{display:none}}
 @media print{.kaki{display:none}}
 /* Footer selalu di dasar layar walau isi halaman pendek */
 body:not(.hal-masuk):not(.hal-poster){min-height:100vh;display:flex;flex-direction:column}

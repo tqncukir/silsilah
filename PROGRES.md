@@ -1,9 +1,9 @@
 # PROGRES SILSILAH TQN Cukir
 
 ## POSISI TERAKHIR (baca ini dulu) — diperbarui 2026-11-27
-- **Semua 9 tahap selesai dan disetujui Kang**: 14 modul terbangun (Tahap 9 Kesehatan disetujui 2026-11-27). Versi cache terakhir **v111**. Migrasi terakhir yang sudah dijalankan Kang: `20261127110000_kecepatan_rls.sql` (Tahap 10). Advisors terakhir: 0 error, 49 peringatan, 11 info (semua jenis yang disengaja).
+- **Semua 9 tahap selesai dan disetujui Kang**: 14 modul terbangun (Tahap 9 Kesehatan disetujui 2026-11-27). Versi cache terakhir **v112**. Migrasi terakhir yang sudah dijalankan Kang: `20261127110000_kecepatan_rls.sql` (Tahap 10). Advisors terakhir: 0 error, 49 peringatan, 11 info (semua jenis yang disengaja).
 - **Serah terima 2026-11-27 (malam):** proyek diteruskan ke akun Claude **goindotea** (perintah Kang). Akun baru tidak membawa skill/memori akun lama: semua aturan ada di `CLAUDE.md` (termasuk "Cara kerja agen" dan "Cara uji") dan riwayat ada di file ini. Cara uji database lokal terbukti jalan (stub di CLAUDE.md; data wilayah contoh diisi langsung karena ekstensi `http` tidak ada).
-- **Langkah berikutnya: Tahap 10 Pemeriksaan menyeluruh** (dipilih Kang 2026-11-27). Langkah 1-4 selesai. Tunggu Kang: putuskan menu tablet (lihat Langkah 4) lalu "lanjut langkah 5".
+- **Langkah berikutnya: Tahap 10 Pemeriksaan menyeluruh** (dipilih Kang 2026-11-27). Langkah 1-4 selesai. Tunggu Kang: "lanjut langkah 5".
 
 ## Tahap 1: Data Jamaah, Pendaftaran, KTA, Portal Anggota, Hak Akses
 Mulai: 2026-11-25 (Kang Salman: "Bismillah").
@@ -461,6 +461,7 @@ Dipilih Kang 2026-11-27 (dari 4 pilihan: backup, notifikasi, berita, pemeriksaan
 - Uji ulang semua: 0 geser samping, 0 target sentuh kecil, 0 huruf kecil di luar pengecualian di bawah.
 - **Dibiarkan (sengaja):** label menu bawah, tanda "wajib", tanggal Haul & angka grafik 13 px (aturan 12: label 13-14 px); tulisan di gambar KTA (tiruan kartu cetak, mengecil sesuai lebar) dan gambar panduan pasang; tulisan kuning di atas hijau (warna resmi KTA, kontras 4,46:1, hampir 4,5).
 - **Catatan untuk Kang:**
-  (a) **Tablet (768 px):** menu atas untuk ketua 14 tautan jadi 4 baris, kepala setinggi 207 px (seperempat layar). Usul: menu bawah 4 tombol dipakai juga di tablet (sampai 1023 px), menu lengkap atas hanya di laptop. **Menunggu keputusan Kang.**
+  (a) **Tablet (768 px):** menu atas untuk ketua 14 tautan jadi 4 baris, kepala setinggi 207 px (seperempat layar). Usul: menu bawah 4 tombol dipakai juga di tablet (sampai 1023 px), menu lengkap atas hanya di laptop. **Kang setuju (2026-11-27): dikerjakan**, lihat di bawah.
   (b) Koordinator yang membuka rincian kegiatan kecamatan lain: rekap kehadiran tidak tampil (memang tidak berhak), hanya muncul catatan 403 di konsol, tidak mengganggu.
+- **Menu bawah di tablet** (Kang: "setuju menu bawah di tablet"), v112: menu bawah 4 tombol + "Lainnya" kini untuk layar < 1024 px (HP & tablet); menu lengkap atas hanya di laptop/komputer (≥ 1024 px). Kepala tablet untuk ketua 207 px → 63 px. Diuji 767/768/900/1023/1024 px (ketua & anggota) + semua halaman di 768 (ketua) & 900 (koordinator): tanpa geser samping, "Lainnya" terbuka dengan menu sesuai peran.
 
