@@ -174,6 +174,23 @@ Mulai: 2026-11-27 (Kang: "Mulai Tahap 4: modul 10 Ziarah & Umroh").
 ## Perbaikan 2026-11-27: "Pemeriksaan keamanan belum berhasil" di komputer lain (laporan Kang)
 Kotak centang tidak muncul sama sekali = Turnstile diblokir/gagal diam-diam. `masuk.js` kini: (1) skrip Turnstile tidak termuat → pesan langsung (dan otomatis setelah 8 dtk) "tidak bisa dimuat di perangkat ini… pemblokir iklan/antivirus/jaringan kantor… coba Incognito/hotspot HP"; (2) `error-callback`/`timeout-callback`/`unsupported-callback` → pesan sesuai kode (alamat tidak dikenali 1102xx, browser lama 1105xx, diblokir 2005xx, gagal 3xxxxx/6xxxxx: cek jam, VPN, pemblokir) + **kode ditulis** untuk dilaporkan, kotak dimunculkan ulang (appearance always), tombol Masuk tidak lagi menunggu 20 dtk. Uji tiruan 360/1280 (diblokir, galat 600010, berhasil): 20/20 + kiriman normal benar. Versi cache v85. Kang mencoba lagi di komputer itu: sudah bisa masuk (2026-11-27).
 
+## Tahap 5: Modul 9 Keuangan Yayasan
+Mulai: 2026-11-27 (Kang: "Mulai Tahap 5: modul 9 Keuangan Yayasan"). Catatan: Tahap 4 belum diucapkan "disetujui" secara resmi; Kang langsung memulai Tahap 5.
+
+**Keputusan konsep Kang (2026-11-27):**
+- Buku kas masuk-keluar: setiap pemasukan dan pengeluaran dicatat per tanggal dan kategori, saldo dihitung otomatis.
+- Infaq tidak dicatat per nama jamaah: hanya jumlah (mis. kotak infaq Khususiyah).
+- Laporan untuk jamaah: halaman publik tanpa login, ringkasan bulanan (masuk, keluar, saldo, per kategori), tanpa rincian per transaksi.
+- Pencatat: bendahara (kas pusat) + koordinator wilayah (kas kecamatannya sendiri).
+
+**Usulan Claude (berlaku kecuali Kang ubah):** ada beberapa kas: Kas Pusat + Kas Kecamatan (satu per kecamatan yang dipakai koordinator); admin pusat & ketua melihat semua kas, bendahara mencatat & melihat semua kas, koordinator hanya kas kecamatannya; kategori baku yang bisa ditambah (Masuk: Infaq kegiatan, Donasi, Sumbangan lain; Keluar: Konsumsi, Transport, Operasional, Bantuan sosial, Bisyaroh, Lain-lain); **bisyaroh** (aturan privasi: nominal hanya ketua & bendahara) dicatat dan dilihat rinciannya hanya oleh ketua & bendahara, peran lain dan laporan publik melihatnya tergabung dalam "Operasional"; transaksi tidak dihapus (salah catat = dibatalkan dengan alasan, tercatat di log); tanpa foto bukti dulu (nomor bukti/kuitansi boleh ditulis); jumlah dalam rupiah bulat.
+
+**Rencana langkah (satu per satu, tunggu persetujuan Kang):**
+1. Database: kas, kategori, transaksi, hak akses (RLS), saldo, laporan bulanan, laporan publik.
+2. Halaman Buku Kas (pengurus): pilih kas, daftar transaksi + saldo berjalan, cari & saring (bulan, kategori, masuk/keluar), tambah, ubah, batalkan.
+3. Laporan bulanan untuk pengurus (per kas & per kategori, unduh CSV) + halaman publik "Laporan Infaq" (tautan di halaman depan).
+4. Angka ringkas keuangan di Dashboard Pengurus (saldo per kas, masuk/keluar bulan ini).
+
 ## Catatan
 - Alamat resmi: https://silsilah.tqncukir.id (domain tqncukir.id dibeli Kang di Domosquare 2026-11-26, nameserver dipindah ke Cloudflare akun jtccukir2022: damon/kira.ns.cloudflare.com; CNAME `silsilah` → silsilah-tqn.pages.dev, custom domain Pages; hostname Turnstile ditambah; ASAL_BOLEH fungsi `kta` v4 & `login-anggota` v7 ditambah). Alamat lama tetap jalan: https://silsilah-tqn.pages.dev. `tqncukir.id` dan `www.tqncukir.id` sengaja dibiarkan kosong (keputusan Kang 2026-11-26), nanti untuk website profil jamaah (agenda, berita, dll).
 - GitHub App Claude dan Cloudflare Pages hanya diberi akses ke repo `silsilah`.
