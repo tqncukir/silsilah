@@ -7,7 +7,7 @@ const BULAN = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', '
 const TINGKAT = { kabupaten: 'kabupaten/kota', kecamatan: 'kecamatan', desa: 'desa' };
 
 let semuaKab = [], semuaKec = [], semuaDesa = [];
-let data = null, semuaSebaran = false, nomorMuat = 0, lihatHadir = false;
+let data = null, bolehUbah = false, semuaSebaran = false, nomorMuat = 0, lihatHadir = false;
 const f = { kab: q.get('kab') || '', kec: q.get('kec') || '', desa: q.get('desa') || '', periode: q.get('periode') || '', dari: q.get('dari') || '', sampai: q.get('sampai') || '' };
 
 const namaKab = (id) => semuaKab.find((k) => String(k.id) === String(id))?.nama || '';
@@ -255,8 +255,9 @@ function gambarJk() {
   $('g-jk').textContent = data.jk_tebakan ? 'Jenis kelamin · perkiraan' : 'Jenis kelamin';
   const ket = [];
   if (data.jk_tebakan) ket.push(`${angka(data.jk_tebakan)} di antaranya ditebak dari nama (data lama).`);
-  if (j.kosong) ket.push(`${angka(j.kosong)} belum diisi, perlu dicek di Data Jamaah.`);
+  if (j.kosong) ket.push(`${angka(j.kosong)} belum diisi.`);
   $('jk-ket').textContent = ket.join(' ');
+  $('jk-lengkapi').hidden = !(j.kosong && bolehUbah);
 }
 
 // ---------- Daftar anggota untuk satu catatan ----------
@@ -357,6 +358,7 @@ $('keluar').onclick = keluar;
   try {
     const p = await profilSaya();
     if (!p || !PERAN_LIHAT_JAMAAH.includes(p.peran)) { location.replace('/beranda.html'); return; }
+    bolehUbah = PERAN_UBAH_JAMAAH.includes(p.peran);
     lihatHadir = PERAN_ABSEN.includes(p.peran); // bendahara tidak melihat kehadiran
     [semuaKab, semuaKec, semuaDesa] = await Promise.all([
       dbGet('kabupaten?select=id,nama&order=nama'),

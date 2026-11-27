@@ -661,6 +661,29 @@ li:nth-child(-n+3)>.bt-baris .bt-no{background:var(--hijau-jamiyyah);color:#FFFF
 .jk-kotak.jk-k{background:repeating-linear-gradient(135deg,#9CA3AF 0 1.5px,#E5E7EB 1.5px 4px);box-shadow:inset 0 0 0 1px #9CA3AF}
 .dsb-jk .bt-nilai,.dsb-jk .bt-persen{color:var(--hitam)}
 
+.jk-lengkapi{margin-top:12px}
+.jk-lengkapi[hidden]{display:none}
+
+/* Lengkapi jenis kelamin */
+.jk-isi-ket{margin:0 0 12px}
+.jk-isi-daftar{list-style:none;margin:0 0 16px;padding:0;background:#FFFFFF;border:1px solid var(--garis);border-radius:16px;box-shadow:var(--bayang);overflow:hidden}
+.jk-isi{display:grid;gap:10px;padding:14px 16px}
+.jk-isi+.jk-isi{border-top:1px solid var(--garis-lembut)}
+.jk-isi-selesai{background:var(--latar-sorot)}
+.jk-isi-data{display:grid;gap:2px;min-width:0}
+.jk-isi-nama{font-weight:700;color:var(--hitam);text-decoration:none;overflow-wrap:anywhere}
+.jk-isi-nama:hover{text-decoration:underline}
+.jk-isi-ket2{font-size:var(--fs-kecil);color:var(--abu)}
+.jk-isi-aksi{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.jk-isi-aksi .btn{flex:1 1 120px;margin:0;width:auto}
+.jk-isi-aksi .btn-pas{flex:0 0 auto}
+.jk-isi-hasil{flex:1;font-weight:700;color:var(--hijau-jamiyyah)}
+@media (min-width:768px){
+  .jk-isi{grid-template-columns:minmax(0,1fr) auto;align-items:center}
+  .jk-isi-aksi{flex-wrap:nowrap}
+  .jk-isi-aksi .btn{flex:0 0 auto;min-width:130px}
+}
+
 /* Pemindai QR KTA */
 .btn-pindai{gap:10px;margin:0 0 16px}
 .pindai{width:min(480px,calc(100% - 24px));padding:0;border:0;border-radius:18px;background:#0E1A12;color:#FFFFFF;box-shadow:0 12px 40px rgba(0,0,0,.35)}
