@@ -102,6 +102,7 @@ async function profilSaya() {
   nav('nav-kegiatan', p && PERAN_LIHAT_KEGIATAN.includes(p.peran));
   nav('nav-ahli', p && PERAN_LIHAT_JAMAAH.includes(p.peran));
   nav('nav-perjalanan', p && PERAN_LIHAT_PERJALANAN.includes(p.peran));
+  nav('nav-kas', p && PERAN_LIHAT_KAS.includes(p.peran));
   if (p) pasangMenuBawah(p);
   return p || null;
 }
@@ -127,6 +128,7 @@ function pasangMenuBawah(p) {
     : [[ 'Dashboard Pengurus', '/dashboard.html', PERAN_LIHAT_JAMAAH ], ['Pendaftaran', '/pendaftaran.html', PERAN_UBAH_JAMAAH ],
       ['Absensi', '/absensi.html', PERAN_ABSEN], ['Ahli Kubur', '/ahli-kubur.html', PERAN_LIHAT_JAMAAH], ['Haul', '/haul.html', PERAN_LIHAT_JAMAAH],
       ['Ziarah & Umroh', '/perjalanan.html', PERAN_LIHAT_PERJALANAN],
+      ['Buku Kas', '/kas.html', PERAN_LIHAT_KAS],
       ['Atur PIN Pengurus', '/pengurus-pin.html', ['admin_pusat']], ['Agenda umum', '/agenda.html', null], ['Cara pasang di HP', '/pasang.html', null]]
       .filter(([, , boleh]) => !boleh || boleh.includes(p.peran));
   const aktif = (u) => jalur === u || (u === '/jamaah.html' && jalur.startsWith('/jamaah')) || (u === '/kegiatan.html' && /^\/(kegiatan|absensi)/.test(jalur));
@@ -228,6 +230,14 @@ function waktuPerjalanan(p) {
   const awal = x.t !== y.t ? `${x.d} ${x.b} ${x.t}` : x.b !== y.b ? `${x.d} ${x.b}` : x.d;
   return `${awal}${x.b === y.b && x.t === y.t ? '–' : ' – '}${y.d} ${y.b} ${y.t}${kumpul}`;
 }
+
+// ===== Keuangan Yayasan (modul 9) =====
+// Lihat: admin pusat, ketua, bendahara (semua kas), koordinator (kas kecamatannya). Catat: bendahara + koordinator.
+// Bisyaroh (kategori rahasia): rincian hanya ketua & bendahara (dijaga di database).
+const PERAN_LIHAT_KAS = ['admin_pusat', 'ketua', 'bendahara', 'koordinator_wilayah'];
+const PERAN_CATAT_KAS = ['bendahara', 'koordinator_wilayah'];
+const ARAH_KAS = { masuk: 'Masuk', keluar: 'Keluar' };
+const rupiah = (n) => 'Rp ' + Number(n || 0).toLocaleString('id-ID');
 
 const NAMA_PERAN = {
   admin_pusat: 'Admin Pusat', ketua: 'Ketua', bendahara: 'Bendahara', nadzir: 'Nadzir',

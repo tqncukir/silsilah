@@ -1032,3 +1032,25 @@ body:not(.hal-masuk):not(.hal-poster)>main{flex:1 0 auto;width:100%}
   main.agenda-hal{max-width:1120px}
   main.agenda-hal .agenda-daftar{grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
 }
+
+/* Buku Kas */
+.kas-pilih{display:flex;align-items:center;gap:10px;margin:0 0 4px;font-weight:600}
+.kas-pilih[hidden]{display:none}
+.kas-pilih select{min-height:44px;padding:8px 12px;border:1.5px solid var(--garis-isian);border-radius:10px;font:inherit;font-size:var(--fs-isian);background:#FFFFFF;color:var(--hitam);max-width:100%}
+.kas-angka{margin:8px 0 14px}
+.kas-angka li:first-child{grid-column:1 / -1}
+@media (min-width:640px){.kas-angka{grid-template-columns:repeat(3,minmax(0,1fr))}.kas-angka li:first-child{grid-column:auto}}
+.tabel .angka-kanan{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tabel .kas-masuk{color:var(--hijau-jamiyyah);font-weight:600}
+.tabel .kas-keluar{color:var(--hitam);font-weight:600}
+.tabel [hidden]{display:none!important}
+.kas-batal .tabel-nama,.kas-batal .kas-masuk,.kas-batal .kas-keluar{text-decoration:line-through;color:var(--abu)}
+.kas-rahasia{font-size:var(--fs-kecil);font-weight:600;color:var(--grup-amanah)}
+@media (max-width:767px){.kas-tabel td.kas-kosong,.kas-tabel td.kol-saldo{display:none}}
+.kas-jumlah-besar{margin:4px 0;font-size:1.5rem;font-weight:800;font-variant-numeric:tabular-nums}
+.kas-jumlah-besar.masuk{color:var(--hijau-jamiyyah)}
+.kas-batal-form{margin:18px 0 0;padding-top:14px;border-top:1px solid var(--garis-lembut)}
+.kas-batal-form[hidden]{display:none}
+.kas-batal-form .bagian-judul{margin:0 0 4px}
+.kas-rp{display:flex;align-items:center;gap:8px;font-weight:700}
+.kas-rp input{flex:1;min-width:0;font-variant-numeric:tabular-nums;font-weight:600}

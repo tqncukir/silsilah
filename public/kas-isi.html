@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Transaksi Kas · SILSILAH TQN Cukir</title>
+<meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=94">
+<link rel="stylesheet" href="/css/app.css?v=94">
+</head>
+<body class="hal-app">
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <a href="/beranda.html">Beranda</a>
+      <a href="/dashboard.html" id="nav-dasbor" hidden>Dashboard Pengurus</a>
+      <a href="/jamaah.html" id="nav-jamaah" hidden>Data Jamaah</a>
+      <a href="/pendaftaran.html" id="nav-daftar" hidden>Pendaftaran</a>
+      <a href="/kegiatan.html" id="nav-kegiatan" hidden>Kegiatan</a>
+      <a href="/ahli-kubur.html" id="nav-ahli" hidden>Ahli Kubur</a>
+      <a href="/perjalanan.html" id="nav-perjalanan" hidden>Ziarah &amp; Umroh</a>
+      <a href="/kas.html" id="nav-kas" aria-current="page">Buku Kas</a>
+    </nav>
+    <button class="app-keluar" id="keluar" type="button">Keluar</button>
+  </div>
+</header>
+
+<main class="app-isi">
+  <a href="/kas.html" class="kembali" id="kembali">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Buku Kas
+  </a>
+  <p id="pesan" class="pesan" role="alert"></p>
+
+  <section id="lihat" class="panel" hidden aria-labelledby="l-judul">
+    <div class="panel-kepala">
+      <div>
+        <p class="panel-label" id="l-arah"></p>
+        <h1 id="l-judul"></h1>
+        <p class="kas-jumlah-besar" id="l-jumlah"></p>
+        <span id="l-status" class="stat"></span>
+      </div>
+      <div class="kepala-aksi">
+        <button type="button" class="btn btn-kedua btn-pas" id="ubah" hidden>Ubah</button>
+      </div>
+    </div>
+    <dl class="rincian" id="l-rincian"></dl>
+    <form class="kas-batal-form" id="batal-form" hidden novalidate>
+      <h2 class="bagian-judul">Salah catat?</h2>
+      <p class="ket">Transaksi tidak dihapus. Batalkan dengan alasan, lalu catat ulang yang benar. Pembatalan tidak bisa diurungkan.</p>
+      <div class="absen-ketik-baris">
+        <label for="alasan" class="sr-only">Alasan dibatalkan</label>
+        <input id="alasan" maxlength="200" placeholder="Alasan, mis. jumlah salah ketik" autocomplete="off">
+        <button type="submit" class="btn btn-kedua btn-pas" id="batalkan">Batalkan transaksi</button>
+      </div>
+    </form>
+  </section>
+
+  <form id="form" class="panel form" hidden novalidate aria-labelledby="f-judul">
+    <h1 id="f-judul">Catat transaksi</h1>
+    <p class="judul-sub">Infaq dicatat jumlahnya saja, tanpa nama pemberi.</p>
+    <div class="form-kisi">
+      <fieldset class="isian lebar pilihan" id="arah-isian">
+        <legend>Masuk atau keluar <span class="wajib">wajib</span></legend>
+        <label class="pil"><input type="radio" name="arah" value="masuk"> Uang masuk</label>
+        <label class="pil"><input type="radio" name="arah" value="keluar"> Uang keluar</label>
+      </fieldset>
+      <div class="isian" id="kas-isian">
+        <label for="kas">Kas <span class="wajib">wajib</span></label>
+        <select id="kas"></select>
+      </div>
+      <div class="isian">
+        <label for="kategori">Kategori <span class="wajib">wajib</span></label>
+        <select id="kategori"><option value="">Pilih masuk/keluar dulu</option></select>
+      </div>
+      <div class="isian">
+        <label for="tanggal">Tanggal <span class="wajib">wajib</span></label>
+        <input id="tanggal" type="date" required>
+      </div>
+      <div class="isian">
+        <label for="jumlah">Jumlah <span class="wajib">wajib</span></label>
+        <div class="kas-rp"><span aria-hidden="true">Rp</span><input id="jumlah" inputmode="numeric" autocomplete="off" placeholder="0" aria-describedby="k-jumlah"></div>
+        <p class="ket" id="k-jumlah">Rupiah bulat, tanpa titik juga boleh.</p>
+      </div>
+      <div class="isian lebar">
+        <label for="keterangan">Keterangan</label>
+        <input id="keterangan" maxlength="300" placeholder="Mis. kotak infaq Khususiyah Malam Jumat Legi">
+      </div>
+      <div class="isian">
+        <label for="bukti">Nomor bukti / kuitansi</label>
+        <input id="bukti" maxlength="60" autocomplete="off">
+      </div>
+    </div>
+    <p id="pesan-form" class="pesan" role="alert"></p>
+    <div class="tombol-baris">
+      <button type="button" class="btn btn-kedua btn-pas" id="batal">Batal</button>
+      <button type="submit" class="btn btn-utama btn-pas btn-masuk" id="simpan"><span class="putar" aria-hidden="true"></span><span class="teks">Simpan</span></button>
+    </div>
+  </form>
+</main>
+<footer class="kaki">
+  <div class="kaki-isi">
+    <address class="kaki-alamat">TQN Pusat Cukir Jombang<br>Jl. Masjid No. 110 Cukir, Diwek, Jombang 61471</address>
+  </div>
+  <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
+</footer>
+<script src="/js/supa.js?v=94" defer></script>
+<script src="/js/kalender.js?v=94" defer></script>
+<script src="/js/kas-isi.js?v=94" defer></script>
+</body>
+</html>

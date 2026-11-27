@@ -78,6 +78,12 @@ function ketHaul(id) {
       $('menu').hidden = false; $('m-jamaah').hidden = false; $('nav-jamaah').hidden = false; $('m-amanah').hidden = false; $('m-amanah-judul').hidden = false;
       $('m-tambah').hidden = !PERAN_UBAH_JAMAAH.includes(p.peran);
       $('m-pin').hidden = p.peran !== 'admin_pusat';
+      if (PERAN_LIHAT_KAS.includes(p.peran)) {
+        $('m-kas').hidden = false;
+        dbKirim('POST', 'rpc/saldo_kas', {}).then((k) => {
+          if (k.length) $('m-kas-ket').textContent = k.length === 1 ? `Saldo ${k[0].nama}: ${rupiah(k[0].saldo)}` : `${k.length} kas · Saldo pusat ${rupiah(k.find((x) => x.kecamatan_id === null)?.saldo)}`;
+        }).catch(() => {});
+      }
       dbHalaman('jamaah?select=id', 0, 0).then(({ total }) => {
         $('m-jamaah-ket').textContent = `${total.toLocaleString('id-ID')} jamaah tercatat`;
       }).catch(() => {});
