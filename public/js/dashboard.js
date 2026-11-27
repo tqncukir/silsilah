@@ -308,6 +308,26 @@ async function muatHadir(ini, dari, sampai) {
   } catch { if (ini === nomorMuat) $('p-hadir').hidden = true; }
 }
 
+// Anggota per mursyid (fungsi dashboard_mursyid, migrasi 20261127010000). Panel tersembunyi bila gagal/belum ada.
+async function muatMursyid(ini, dari, sampai) {
+  try {
+    const m = await dbKirim('POST', 'rpc/dashboard_mursyid', { p_kab: f.kab || null, p_kec: f.kec || null, p_desa: f.desa || null, p_dari: dari, p_sampai: sampai });
+    if (ini !== nomorMuat) return;
+    const jumlah = m.reduce((a, x) => a + x.n, 0);
+    const urut = [...m.filter((x) => x.id !== null), ...m.filter((x) => x.id === null)];
+    const baris = urut.map((x) => ({ label: x.id === null ? 'Belum diisi' : x.nama, n: x.n, teks: `${angka(x.n)} (${persen(x.n, jumlah)})`, petunjuk: '. Ketuk untuk membuka daftarnya di Data Jamaah' }));
+    batang($('mursyid'), baris, Math.max(...m.map((x) => x.n), 0), { tombol: true });
+    if (!baris.length) $('mursyid').innerHTML = '<li class="dsb-ket">Belum ada data.</li>';
+    for (const b of $('mursyid').querySelectorAll('button')) b.onclick = () => {
+      const x = urut[b.dataset.i], p = new URLSearchParams();
+      if (f.kab) p.set('kabupaten', f.kab); if (f.kec) p.set('kecamatan', f.kec); if (f.desa) p.set('desa', f.desa);
+      p.set('mursyid', x.id === null ? 'kosong' : x.id);
+      location.assign(`/jamaah.html?${p}`);
+    };
+    $('p-mursyid').hidden = false;
+  } catch { if (ini === nomorMuat) $('p-mursyid').hidden = true; }
+}
+
 async function muat() {
   simpanUrl();
   const ini = ++nomorMuat;
@@ -315,6 +335,7 @@ async function muat() {
   try {
     const [dari, sampai] = rentang();
     muatHadir(ini, dari, sampai);
+    muatMursyid(ini, dari, sampai);
     const hasil = await dbKirim('POST', 'rpc/dashboard_pengurus', {
       p_kab: f.kab || null, p_kec: f.kec || null, p_desa: f.desa || null, p_dari: dari, p_sampai: sampai });
     if (ini !== nomorMuat) return;
