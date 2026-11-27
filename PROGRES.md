@@ -3,7 +3,7 @@
 ## POSISI TERAKHIR (baca ini dulu) — diperbarui 2026-11-27
 - **Semua 9 tahap selesai dan disetujui Kang**: 14 modul terbangun (Tahap 9 Kesehatan disetujui 2026-11-27). Versi cache terakhir **v110**. Migrasi terakhir yang sudah dijalankan Kang: `20261127090000_kesehatan.sql`. Advisors terakhir: 0 error, 49 peringatan, 11 info (semua jenis yang disengaja, lihat Tahap 9).
 - **Serah terima 2026-11-27:** proyek diteruskan dari akun Claude **celupherbal** (perintah Kang). Akun baru tidak membawa skill/memori akun lama: semua aturan ada di `CLAUDE.md` (termasuk bagian "Cara kerja agen" dan "Cara uji") dan riwayat ada di file ini.
-- **Langkah berikutnya: belum ditentukan Kang.** Pilihan yang sudah ditawarkan (tunggu Kang memilih satu, jangan mulai sendiri): (1) backup bulanan data ke luar Supabase (aturan 13), (2) notifikasi di HP (pengingat agenda/haul), (3) berita & profil di bagian publik, (4) pemeriksaan menyeluruh (keamanan, kecepatan, tampilan semua halaman) sebelum dipakai ribuan jamaah.
+- **Langkah berikutnya: Tahap 10 Pemeriksaan menyeluruh** (dipilih Kang 2026-11-27). Rencana di bagian Tahap 10 paling bawah; tunggu Kang: "lanjut langkah 1".
 
 ## Tahap 1: Data Jamaah, Pendaftaran, KTA, Portal Anggota, Hak Akses
 Mulai: 2026-11-25 (Kang Salman: "Bismillah").
@@ -405,3 +405,18 @@ Tautan di `index.html` dihapus; versi v101. Lalu **ditutup total** (Kang: "tutup
 - Migrasi 20261125010300 dijalankan Kang lewat SQL Editor (perintah DROP butuh persetujuan), lalu dicatat manual di schema_migrations.
 - Belum ada PIN di database: PIN anggota (disimpan sebagai hash, bukan angka asli) dibuat di Langkah 3/6.
 - Alat Supabase yang meminta izin (apply_migration, DELETE/DROP, secret) tidak muncul di aplikasi Kang. Pakai SQL Editor di Chrome Kang (Kang klik Run) dan dashboard.
+
+## Tahap 10: Pemeriksaan menyeluruh sebelum dipakai ribuan jamaah
+Dipilih Kang 2026-11-27 (dari 4 pilihan: backup, notifikasi, berita, pemeriksaan).
+
+**Usulan Claude (berlaku kecuali Kang ubah):**
+- Pemeriksaan tidak menulis ke Supabase asli; database diuji di Postgres lokal, tampilan dengan tiruan (lihat "Cara uji" di CLAUDE.md).
+- Temuan kecil (salah ketik, tampilan geser, galat konsol, celah kecil yang jelas) langsung dibetulkan dalam langkah yang sama. Temuan besar (ubah konsep, ubah hak akses peran, hapus data) dilaporkan dulu dan menunggu keputusan Kang.
+- Setiap langkah ditutup dengan daftar temuan: sudah dibetulkan / menunggu Kang.
+
+**Rencana langkah (satu per satu, tunggu persetujuan Kang):**
+1. Keamanan database: semua 30 migrasi dari nol, setiap tabel ber-RLS, setiap fungsi `security definer` memeriksa hak, uji tiap peran (admin pusat, ketua, bendahara, nadzir, koordinator A/B, petugas, dokter, khodim, anggota, sesi KTA lama, tamu) tidak bisa melihat/ubah yang bukan haknya; data rahasia (ekonomi, kesehatan, bantuan, bisyaroh, gol. darah) hanya untuk yang berhak.
+2. Keamanan website & Edge Functions: `_headers`/CSP, tidak ada `style=`/script inline, semua isi dari database lewat `hurufAman()`, Turnstile & batas percobaan PIN, fungsi `kta` & `login-anggota`, tidak ada rahasia di repo atau riwayat git.
+3. Kecepatan: ukuran file per halaman (huruf, ikon, JS), cache PWA & daftar INTI, indeks untuk pencarian & saringan dengan ±5.500 jamaah (EXPLAIN di data tiruan sebanyak itu), pagination.
+4. Tampilan semua 38 halaman per peran di 360/768/1280: tanpa geser samping, tanpa galat konsol, huruf ≥14px, target sentuh ≥44px, kontras, teks konsisten.
+5. Laporan akhir untuk Kang + daftar yang perlu Kang lakukan sendiri (mis. cek Advisors, uji di HP).
