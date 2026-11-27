@@ -112,6 +112,21 @@ function ketHaul(id) {
     if (p.peran !== 'anggota') {
       $('menu').hidden = false; $('m-peduli').hidden = false; $('m-peduli-judul').hidden = false; $('m-usaha').hidden = false;
       ketUsaha('m-usaha-ket');
+      $('m-sakit').hidden = !PERAN_KESEHATAN.includes(p.peran);
+      $('m-kebutuhan').hidden = !PERAN_KEBUTUHAN.includes(p.peran);
+      if (PERAN_KESEHATAN.includes(p.peran)) {
+        dbKirim('POST', 'rpc/ringkas_kesehatan', {}).then((r) => {
+          $('m-sakit-ket').textContent = Number(r.sakit)
+            ? `${Number(r.sakit).toLocaleString('id-ID')} sedang sakit${Number(r.belum_dijenguk) ? ` · ${Number(r.belum_dijenguk).toLocaleString('id-ID')} belum dijenguk` : ''}`
+            : 'Tidak ada yang tercatat sedang sakit';
+          if (Number(r.kebutuhan)) $('m-kebutuhan-ket').textContent = `${Number(r.kebutuhan).toLocaleString('id-ID')} jamaah perlu dibantu`;
+        }).catch(() => {});
+      }
+      // Dokter & khodim tidak punya menu Pondasi Jamaah; khodim/dokter membuka Ziarah & Umroh dari kelompok Ruhani.
+      if (!PERAN_LIHAT_JAMAAH.includes(p.peran)) { $('m-pondasi-judul').hidden = true; $('m-pondasi').hidden = true; }
+      if (!PERAN_LIHAT_KEGIATAN.includes(p.peran) && PERAN_LIHAT_PERJALANAN.includes(p.peran)) {
+        $('m-ruhani').hidden = false; $('m-ruhani-judul').hidden = false; $('m-kegiatan').hidden = true; $('m-perjalanan').hidden = false;
+      }
     }
     if (PERAN_LIHAT_ASET.includes(p.peran)) {
       $('menu').hidden = false; $('m-amanah').hidden = false; $('m-amanah-judul').hidden = false; $('m-aset').hidden = false;

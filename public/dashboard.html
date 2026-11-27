@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=109">
-<link rel="stylesheet" href="/css/app.css?v=109">
+<link rel="stylesheet" href="/css/tokens.css?v=110">
+<link rel="stylesheet" href="/css/app.css?v=110">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -186,6 +186,19 @@
         <h3 class="bagian-judul rekap-sub">Usaha buka per jenis</h3><ol class="dsb-batang" id="us-jenis"></ol>
         <p class="dsb-ket"><a href="/usaha.html" class="tautan">Buka Usaha Jamaah</a></p>
       </section>
+      <section class="panel dsb-panel dsb-hadir" id="p-kesehatan" hidden aria-labelledby="g-kesehatan">
+        <div class="dsb-kepala"><span class="dsb-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg></span><h2 id="g-kesehatan" class="dsb-judul">Kesehatan Jamaah</h2></div>
+        <p class="dsb-ket" id="ks-ket"></p>
+        <dl class="hadir-angka">
+          <div><dt>Sedang sakit</dt><dd id="ks-sakit">–</dd></div>
+          <div><dt>Rawat inap</dt><dd id="ks-inap">–</dd></div>
+          <div><dt>Kondisi berat</dt><dd id="ks-berat">–</dd></div>
+        </dl>
+        <div class="hadir-dua">
+          <div><h3 class="bagian-judul rekap-sub">Perlu perhatian</h3><ol class="hadir-teratas" id="ks-perhatian"></ol></div>
+          <div><h3 class="bagian-judul rekap-sub">Kebutuhan khusus</h3><ol class="dsb-batang" id="ks-kebutuhan"></ol></div>
+        </div>
+      </section>
       <section class="panel dsb-panel dsb-hadir" id="p-kas" hidden aria-labelledby="g-kas">
         <div class="dsb-kepala"><span class="dsb-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h14a2 2 0 012 2v9a2 2 0 01-2 2H5a1 1 0 01-1-1V7zM4 7l11-3v3M15 13.5h2"/></svg></span><h2 id="g-kas" class="dsb-judul">Keuangan</h2></div>
         <p class="dsb-ket" id="kas-ket"></p>
@@ -247,8 +260,8 @@
   <ul class="dsb-daftar" id="daftar-isi"></ul>
 </dialog>
 
-<script src="/js/supa.js?v=109" defer></script>
-<script src="/js/aturan-dashboard.js?v=109" defer></script>
-<script src="/js/dashboard.js?v=109" defer></script>
+<script src="/js/supa.js?v=110" defer></script>
+<script src="/js/aturan-dashboard.js?v=110" defer></script>
+<script src="/js/dashboard.js?v=110" defer></script>
 </body>
 </html>

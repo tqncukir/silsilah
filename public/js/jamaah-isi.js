@@ -41,9 +41,13 @@ function tampilLihat() {
 async function muatKesehatan() {
   if ($('kesehatan').hidden) return;
   try {
-    const [k] = await dbKirim('POST', 'rpc/daftar_kebutuhan', { p_jamaah_id: data.id, p_batas: 1 });
+    const [[k], [sk]] = await Promise.all([dbKirim('POST', 'rpc/daftar_kebutuhan', { p_jamaah_id: data.id, p_batas: 1 }),
+      dbKirim('POST', 'rpc/daftar_sakit', { p_jamaah_id: data.id, p_status: 'sakit', p_batas: 1 })]);
     const ada = k && k.kebutuhan?.length;
-    $('ks-isi').innerHTML = `<li><a href="/kebutuhan-isi.html?jamaah=${data.id}"><span>Kebutuhan khusus<small>${ada ? hurufAman(teksKebutuhan(k.kebutuhan) + (k.keterangan ? ` (${k.keterangan})` : '')) : 'Tidak ada yang dicatat'}</small></span><span class="ket">${ada ? 'Ubah' : 'Isi'}</span></a></li>`;
+    const sakit = sk
+      ? `<li><a href="/sakit-isi.html?id=${sk.id}"><span>Sedang sakit · ${KONDISI_SAKIT[sk.kondisi][0].toLowerCase()}<small>${sk.tempat === 'rawat_inap' ? `Rawat inap${sk.nama_rs ? ` di ${hurufAman(sk.nama_rs)}` : ''}` : 'Di rumah'} · sejak ${tglWib(sk.mulai + 'T12:00:00+07:00', { day: 'numeric', month: 'short', year: 'numeric' })} · dijenguk ${Number(sk.kunjungan)} kali</small></span><span class="ket">Lihat</span></a></li>`
+      : data.aktif ? `<li><a href="/sakit-isi.html?jamaah=${data.id}"><span>Tidak tercatat sedang sakit<small>Dapat kabar sakit? Catat agar dijenguk.</small></span><span class="ket">Catat sakit</span></a></li>` : '';
+    $('ks-isi').innerHTML = sakit + `<li><a href="/kebutuhan-isi.html?jamaah=${data.id}"><span>Kebutuhan khusus<small>${ada ? hurufAman(teksKebutuhan(k.kebutuhan) + (k.keterangan ? ` (${k.keterangan})` : '')) : 'Tidak ada yang dicatat'}</small></span><span class="ket">${ada ? 'Ubah' : 'Isi'}</span></a></li>`;
   } catch { $('kesehatan').hidden = true; }
 }
 

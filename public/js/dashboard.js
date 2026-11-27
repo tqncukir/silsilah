@@ -411,6 +411,28 @@ async function muatUsahaDsb(ini) {
   } catch { if (ini === nomorMuat) $('p-usaha').hidden = true; }
 }
 
+// Kesehatan (rpc ringkas_kesehatan, tanpa nama): admin pusat, ketua, koordinator wilayahnya. Wilayah sampai kecamatan;
+// tidak ikut periode (keadaan saat ini + 30 hari terakhir).
+async function muatKesehatanDsb(ini) {
+  if (!['admin_pusat', ...PERAN_KESEHATAN].includes(peranSaya)) return;
+  try {
+    const r = await dbKirim('POST', 'rpc/ringkas_kesehatan', { p_kab: f.kab ? Number(f.kab) : null, p_kec: f.kec ? Number(f.kec) : null });
+    if (ini !== nomorMuat) return;
+    $('ks-ket').textContent = `${teksWilayah()}${f.desa ? ' (dihitung sampai kecamatan)' : ''} · keadaan saat ini, tidak ikut periode. Tanpa nama.`;
+    $('ks-sakit').textContent = angka(r.sakit);
+    $('ks-inap').textContent = angka(r.rawat_inap);
+    $('ks-berat').textContent = angka(r.berat);
+    const ke = PERAN_KESEHATAN.includes(peranSaya);
+    const baris = (n, label, url) => `<li>${ke && url ? `<a href="${url}">` : '<div class="bs-baris">'}<span>${label}</span><strong>${angka(n)}</strong>${ke && url ? '</a>' : '</div>'}</li>`;
+    $('ks-perhatian').innerHTML = baris(r.belum_dijenguk, 'Sedang sakit, belum dijenguk', '/sakit.html')
+      + baris(r.kunjungan_30, 'Kunjungan 30 hari terakhir') + baris(r.sembuh_30, 'Sembuh 30 hari terakhir');
+    const k = Object.entries(r.per_kebutuhan || {}).map(([x, n]) => ({ label: KEBUTUHAN_KHUSUS[x] || x, n: Number(n) })).sort((a, b) => b.n - a.n);
+    batang($('ks-kebutuhan'), k.map((x) => ({ ...x, teks: angka(x.n) })), Math.max(...k.map((x) => x.n), 0));
+    if (!k.length) $('ks-kebutuhan').innerHTML = '<li class="dsb-ket">Belum ada kebutuhan khusus yang dicatat.</li>';
+    $('p-kesehatan').hidden = false;
+  } catch { if (ini === nomorMuat) $('p-kesehatan').hidden = true; }
+}
+
 async function muatKas() {
   if (!lihatKas) return;
   try {
@@ -467,6 +489,7 @@ async function muat() {
     muatBantuanDsb(ini, dari, sampai);
     muatEkonomiDsb(ini);
     muatUsahaDsb(ini);
+    muatKesehatanDsb(ini);
     const hasil = await dbKirim('POST', 'rpc/dashboard_pengurus', {
       p_kab: f.kab || null, p_kec: f.kec || null, p_desa: f.desa || null, p_dari: dari, p_sampai: sampai });
     if (ini !== nomorMuat) return;

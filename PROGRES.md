@@ -379,6 +379,14 @@ Mulai: 2026-11-27 (Kang: "Mulai Tahap 9: modul 7 Kesehatan").
 - Menu "Kebutuhan Khusus" di kepala (ketua, dokter, koordinator, khodim) + lembar Lainnya HP. `supa.js`: `PERAN_KEBUTUHAN`.
 - Uji tiruan 360/768/1280 (dokter, khodim, ketua, koordinator, bendahara, admin, anggota): 91 lulus; uji Jamaah Sakit ulang 102 lulus. Versi cache v109. Menunggu uji Kang.
 
+**Langkah 4, Beranda + Dashboard + Data Jamaah** (2026-11-27, Kang: "lanjut langkah 4"), tanpa perubahan database.
+- **Beranda**, kelompok Kepedulian & Kesejahteraan: ubin **Jamaah Sakit** (ketua, dokter, koordinator; "N sedang sakit · N belum dijenguk" atau "Tidak ada yang tercatat sedang sakit" dari `ringkas_kesehatan`) dan **Kebutuhan Khusus** (+ khodim; "N jamaah perlu dibantu"). Dokter & khodim: judul Pondasi Jamaah yang kosong disembunyikan; kelompok Ruhani hanya ubin Ziarah & Umroh.
+- **Dashboard Pengurus**: panel **Kesehatan Jamaah** tanpa nama (admin pusat, ketua, koordinator wilayahnya; bendahara & petugas tidak): Sedang sakit, Rawat inap, Kondisi berat; Perlu perhatian (belum dijenguk — tautan ke Jamaah Sakit hanya untuk ketua/koordinator; kunjungan & sembuh 30 hari terakhir); batang Kebutuhan khusus per jenis; ikut saringan wilayah sampai kecamatan, tidak ikut periode.
+- **Data Jamaah** (panel Kesehatan): baris catatan sakit — "Sedang sakit · berat, Rawat inap di …, sejak …, dijenguk N kali" (ke rincian) atau "Tidak tercatat sedang sakit — Catat sakit" (jamaah aktif) — di atas baris Kebutuhan khusus.
+- Uji tiruan 360/768/1280: Beranda & Dashboard 104 lulus (ketua, dokter, khodim, admin, bendahara, anggota, dll.), Kebutuhan + Data Jamaah 91 lulus. Versi cache v110. Menunggu uji Kang.
+
+**Tahap 9 selesai dibangun (4 langkah).** Menunggu cek dan persetujuan Kang.
+
 ## Perbaikan 2026-11-27: ikon aplikasi di taskbar hitam (laporan Kang)
 Ikon baru berlatar lingkaran putih seperti logo di kepala halaman: `icons/icon-192-v2.png`, `icon-512-v2.png`, `apple-touch-icon-v2.png` (kotak putih). Manifest, semua `<link rel=icon>`, apple-touch-icon, gambar panduan pasang, dan sw.js memakai file baru; versi v100. Ikon yang sudah terpasang berganti setelah Chrome memperbarui (bisa sampai 1 hari) atau setelah aplikasi dicopot lalu dipasang ulang.
 
