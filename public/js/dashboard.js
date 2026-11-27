@@ -7,7 +7,7 @@ const BULAN = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', '
 const TINGKAT = { kabupaten: 'kabupaten/kota', kecamatan: 'kecamatan', desa: 'desa' };
 
 let semuaKab = [], semuaKec = [], semuaDesa = [];
-let data = null, bolehUbah = false, semuaSebaran = false, nomorMuat = 0, lihatHadir = false, lihatZiarah = false;
+let data = null, bolehUbah = false, semuaSebaran = false, nomorMuat = 0, lihatHadir = false, lihatZiarah = false, lihatKas = false;
 const f = { kab: q.get('kab') || '', kec: q.get('kec') || '', desa: q.get('desa') || '', periode: q.get('periode') || '', dari: q.get('dari') || '', sampai: q.get('sampai') || '' };
 
 const namaKab = (id) => semuaKab.find((k) => String(k.id) === String(id))?.nama || '';
@@ -348,6 +348,32 @@ async function muatZiarah(ini, dari, sampai) {
   } catch { if (ini === nomorMuat) $('p-ziarah').hidden = true; }
 }
 
+// Keuangan (rpc saldo_kas + laporan_kas kas utama tahun ini). Tidak ikut saringan wilayah/periode: angka kas apa adanya.
+// Kas utama = Kas Pusat bila terlihat, selain itu kas pertama (koordinator: kas kecamatannya). Bisyaroh ikut aturan database.
+async function muatKas() {
+  if (!lihatKas) return;
+  try {
+    const kas = await dbKirim('POST', 'rpc/saldo_kas', {});
+    if (!kas.length) return;
+    const utama = kas.find((k) => k.kecamatan_id === null) || kas[0];
+    const kini = hariIniWib(), b = kini.slice(0, 7);
+    const lap = await dbKirim('POST', 'rpc/laporan_kas', { p_kas_id: utama.kas_id, p_tahun: Number(kini.slice(0, 4)) });
+    const bln = lap.bulan.find((x) => x.b === b) || { masuk: 0, keluar: 0 };
+    const namaB = new Date(kini + 'T12:00:00+07:00').toLocaleDateString('id-ID', { month: 'long', year: 'numeric', timeZone: ZONA });
+    $('kas-ket').textContent = `Angka kas saat ini, tidak ikut saringan di atas. Masuk/keluar: ${utama.nama}, ${namaB}. Transaksi dibatalkan tidak dihitung.`;
+    $('kas-saldo').textContent = rupiah(kas.reduce((a, k) => a + Number(k.saldo), 0));
+    $('kas-masuk').textContent = rupiah(bln.masuk);
+    $('kas-keluar').textContent = rupiah(bln.keluar);
+    $('kas-daftar').innerHTML = kas.slice().sort((x, y) => (x.kecamatan_id === null ? -1 : y.kecamatan_id === null ? 1 : Number(y.saldo) - Number(x.saldo))).slice(0, 8)
+      .map((k) => `<li><a href="/kas.html?kas=${k.kas_id}"><span>${hurufAman(k.nama)}<small>masuk ${rupiah(k.masuk)} · keluar ${rupiah(k.keluar)}</small></span><strong>${rupiah(k.saldo)}</strong></a></li>`).join('');
+    const kat = (lap.per_bulan_kategori || []).filter((x) => x.b === b && x.arah === 'keluar');
+    const maks = Math.max(...kat.map((x) => Number(x.jumlah)), 0);
+    batang($('kas-kat'), kat.map((x) => ({ label: x.nama, n: Number(x.jumlah), teks: rupiah(x.jumlah) })), maks);
+    if (!kat.length) $('kas-kat').innerHTML = '<li class="dsb-ket">Belum ada pengeluaran bulan ini.</li>';
+    $('p-kas').hidden = false;
+  } catch { $('p-kas').hidden = true; }
+}
+
 async function muat() {
   simpanUrl();
   const ini = ++nomorMuat;
@@ -403,6 +429,7 @@ $('keluar').onclick = keluar;
     bolehUbah = PERAN_UBAH_JAMAAH.includes(p.peran);
     lihatHadir = PERAN_ABSEN.includes(p.peran); // bendahara tidak melihat kehadiran
     lihatZiarah = PERAN_PESERTA.includes(p.peran); // petugas scan tidak melihat peserta perjalanan
+    lihatKas = PERAN_LIHAT_KAS.includes(p.peran);
     [semuaKab, semuaKec, semuaDesa] = await Promise.all([
       dbGet('kabupaten?select=id,nama&order=nama'),
       dbGet('kecamatan?select=id,nama,kabupaten_id&order=nama'),
@@ -411,6 +438,7 @@ $('keluar').onclick = keluar;
     if (f.periode === 'rentang' || /^\d{4}$|^12$/.test(f.periode)) $('f-periode').innerHTML += `<option value="${hurufAman(f.periode)}"></option>`;
     isiFilter();
     muat();
+    muatKas();
   } catch (e) {
     if (e.message === 'belum-masuk' || e.message === 'gagal-401') { location.replace('/masuk.html'); return; }
     keadaan('Data gagal dimuat.', 'Coba lagi', () => location.reload());
