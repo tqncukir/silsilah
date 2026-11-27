@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Perjalanan · SILSILAH TQN Cukir</title>
+<meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=86">
+<link rel="stylesheet" href="/css/app.css?v=86">
+</head>
+<body class="hal-app">
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <a href="/beranda.html">Beranda</a>
+      <a href="/dashboard.html" id="nav-dasbor" hidden>Dashboard Pengurus</a>
+      <a href="/jamaah.html" id="nav-jamaah" hidden>Data Jamaah</a>
+      <a href="/pendaftaran.html" id="nav-daftar" hidden>Pendaftaran</a>
+      <a href="/kegiatan.html" id="nav-kegiatan" hidden>Kegiatan</a>
+      <a href="/ahli-kubur.html" id="nav-ahli" hidden>Ahli Kubur</a>
+      <a href="/perjalanan.html" id="nav-perjalanan" aria-current="page">Ziarah &amp; Umroh</a>
+    </nav>
+    <button class="app-keluar" id="keluar" type="button">Keluar</button>
+  </div>
+</header>
+
+<main class="app-isi app-sempit">
+  <a href="/perjalanan.html" class="kembali" id="kembali">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Daftar Ziarah &amp; Umroh
+  </a>
+  <p id="pesan" class="pesan" role="alert"></p>
+
+  <section id="lihat" class="panel" hidden aria-labelledby="l-nama">
+    <div class="panel-kepala">
+      <div>
+        <p class="panel-label" id="l-jenis"></p>
+        <h1 id="l-nama"></h1>
+        <span id="l-status" class="stat"></span>
+      </div>
+      <div class="kepala-aksi">
+        <button type="button" class="btn btn-kedua btn-pas" id="ubah" hidden>Ubah</button>
+        <button type="button" class="btn btn-kedua btn-pas" id="batalkan" hidden>Batalkan perjalanan</button>
+      </div>
+    </div>
+    <dl class="rincian" id="l-rincian"></dl>
+  </section>
+
+  <form id="form" class="panel form" hidden novalidate aria-labelledby="f-judul">
+    <h1 id="f-judul">Tambah perjalanan</h1>
+    <p class="judul-sub">Jam kumpul memakai 24 jam WIB, misalnya 05.00 WIB pagi atau 20.00 WIB malam.</p>
+    <div class="form-kisi">
+      <h3 class="bagian-judul">Perjalanan</h3>
+      <fieldset class="isian lebar pilihan">
+        <legend>Jenis <span class="wajib">wajib</span></legend>
+        <label class="pil"><input type="radio" name="jenis" value="ziarah"> Ziarah</label>
+        <label class="pil"><input type="radio" name="jenis" value="umroh"> Umroh</label>
+      </fieldset>
+      <div class="isian lebar">
+        <label for="nama">Nama perjalanan <span class="wajib">wajib</span></label>
+        <input id="nama" maxlength="120" required autocapitalize="sentences" placeholder="Ziarah Walisongo Rombongan Diwek">
+      </div>
+      <div class="isian lebar">
+        <label for="tujuan">Tujuan</label>
+        <input id="tujuan" maxlength="300" autocapitalize="words" placeholder="Makam Walisongo, Jawa Timur dan Jawa Tengah">
+      </div>
+      <h3 class="bagian-judul">Waktu dan tempat kumpul</h3>
+      <div class="isian d2">
+        <label for="berangkat">Tanggal berangkat <span class="wajib">wajib</span></label>
+        <input id="berangkat" type="date" required>
+      </div>
+      <fieldset class="isian d2 jam-isian">
+        <legend>Jam kumpul <span class="wajib">wajib</span></legend>
+        <div class="jam-pilih">
+          <label for="jam" class="sr-only">Jam kumpul</label><select id="jam" required></select>
+          <span aria-hidden="true">.</span>
+          <label for="menit" class="sr-only">Menit kumpul</label><select id="menit"></select>
+          <span>WIB</span>
+        </div>
+      </fieldset>
+      <div class="isian d2">
+        <label for="pulang">Tanggal pulang</label>
+        <input id="pulang" type="date" aria-describedby="k-pulang">
+        <p class="ket" id="k-pulang">Kosongkan bila pulang di hari yang sama.</p>
+      </div>
+      <div class="isian lebar">
+        <label for="tempat">Tempat kumpul</label>
+        <input id="tempat" maxlength="160" autocapitalize="words" placeholder="Halaman Masjid Pondok Cukir">
+      </div>
+      <div class="isian">
+        <label for="wilayah">Wilayah <span class="wajib">wajib</span></label>
+        <select id="wilayah" required aria-describedby="k-wilayah"></select>
+        <p class="ket" id="k-wilayah">Pusat = perjalanan untuk seluruh jamaah.</p>
+      </div>
+      <div class="isian">
+        <label for="kuota">Kuota peserta</label>
+        <input id="kuota" inputmode="numeric" maxlength="4" aria-describedby="k-kuota" placeholder="Contoh: 50">
+        <p class="ket" id="k-kuota">Kosongkan bila tanpa batas.</p>
+      </div>
+      <h3 class="bagian-judul">Lainnya</h3>
+      <fieldset class="isian lebar pilihan" aria-describedby="k-publik">
+        <legend>Tampil untuk anggota</legend>
+        <label class="pil"><input type="radio" name="publik" value="ya" checked> Ya, tampil di Portal Anggota</label>
+        <label class="pil"><input type="radio" name="publik" value="tidak"> Tidak, untuk pengurus saja</label>
+      </fieldset>
+      <p class="ket bagian-ket" id="k-publik">Anggota yang masuk melihat nama, tanggal, tujuan, dan tempat kumpul. Daftar peserta tetap hanya untuk pengurus.</p>
+      <div class="isian lebar">
+        <label for="keterangan">Keterangan</label>
+        <input id="keterangan" maxlength="500" placeholder="Misalnya: membawa KTA, bekal obat pribadi">
+      </div>
+    </div>
+    <p id="pesan-form" class="pesan" role="alert"></p>
+    <div class="tombol-baris">
+      <button type="button" class="btn btn-kedua btn-pas" id="batal">Batal</button>
+      <button type="submit" class="btn btn-utama btn-pas btn-masuk" id="simpan"><span class="putar" aria-hidden="true"></span><span class="teks">Simpan</span></button>
+    </div>
+  </form>
+</main>
+<footer class="kaki">
+  <div class="kaki-isi">
+    <address class="kaki-alamat">TQN Pusat Cukir Jombang<br>Jl. Masjid No. 110 Cukir, Diwek, Jombang 61471</address>
+  </div>
+  <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
+</footer>
+<script src="/js/supa.js?v=86" defer></script>
+<script src="/js/kalender.js?v=86" defer></script>
+<script src="/js/perjalanan-isi.js?v=86" defer></script>
+</body>
+</html>

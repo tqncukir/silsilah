@@ -55,6 +55,13 @@ function ketHaul(id) {
       $('m-ahli').hidden = !PERAN_LIHAT_JAMAAH.includes(p.peran);
       $('m-haul').hidden = !PERAN_LIHAT_JAMAAH.includes(p.peran);
       ketHaul('m-haul-ket');
+      if (PERAN_LIHAT_PERJALANAN.includes(p.peran)) {
+        $('m-perjalanan').hidden = false;
+        const hari = hariIniWib();
+        dbHalaman(`perjalanan?select=id&dibatalkan=is.false&or=${encodeURIComponent(`(berangkat.gte.${isoWib(hari, '00:00')},pulang.gte.${hari})`)}`, 0, 0).then(({ total }) => {
+          if (total) $('m-perjalanan-ket').textContent = `${total.toLocaleString('id-ID')} perjalanan akan berangkat`;
+        }).catch(() => {});
+      }
       dbHalaman(`kegiatan?select=id&dibatalkan=is.false&mulai=gte.${encodeURIComponent(isoWib(hariIniWib(), '00:00'))}`, 0, 0).then(({ total }) => {
         $('m-kegiatan-ket').textContent = total ? `${total.toLocaleString('id-ID')} kegiatan akan datang` : 'Buat dan lihat jadwal kegiatan';
       }).catch(() => {});

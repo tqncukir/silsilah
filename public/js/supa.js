@@ -101,6 +101,7 @@ async function profilSaya() {
   nav('nav-dasbor', p && PERAN_LIHAT_JAMAAH.includes(p.peran));
   nav('nav-kegiatan', p && PERAN_LIHAT_KEGIATAN.includes(p.peran));
   nav('nav-ahli', p && PERAN_LIHAT_JAMAAH.includes(p.peran));
+  nav('nav-perjalanan', p && PERAN_LIHAT_PERJALANAN.includes(p.peran));
   if (p) pasangMenuBawah(p);
   return p || null;
 }
@@ -125,6 +126,7 @@ function pasangMenuBawah(p) {
     ? [['Haul', '/haul.html'], ['Ahli Kubur', '/ahli-kubur.html'], ['Cara pasang di HP', '/pasang.html']]
     : [[ 'Dashboard Pengurus', '/dashboard.html', PERAN_LIHAT_JAMAAH ], ['Pendaftaran', '/pendaftaran.html', PERAN_UBAH_JAMAAH ],
       ['Absensi', '/absensi.html', PERAN_ABSEN], ['Ahli Kubur', '/ahli-kubur.html', PERAN_LIHAT_JAMAAH], ['Haul', '/haul.html', PERAN_LIHAT_JAMAAH],
+      ['Ziarah & Umroh', '/perjalanan.html', PERAN_LIHAT_PERJALANAN],
       ['Atur PIN Pengurus', '/pengurus-pin.html', ['admin_pusat']], ['Agenda umum', '/agenda.html', null], ['Cara pasang di HP', '/pasang.html', null]]
       .filter(([, , boleh]) => !boleh || boleh.includes(p.peran));
   const aktif = (u) => jalur === u || (u === '/jamaah.html' && jalur.startsWith('/jamaah')) || (u === '/kegiatan.html' && /^\/(kegiatan|absensi)/.test(jalur));
@@ -195,6 +197,28 @@ function statusKegiatan(k) {
   const now = Date.now(), awal = new Date(k.mulai).getTime(), akhir = k.selesai ? new Date(k.selesai).getTime() : awal + 3 * 3600e3;
   if (now > akhir) return ['Selesai', ''];
   return now >= awal ? ['Berlangsung', 'stat-aktif'] : ['Akan datang', 'stat-biasa'];
+}
+
+// ===== Ziarah & Umroh (modul 10) =====
+// Lihat perjalanan: pengurus (petugas scan tanpa peserta). Buat/ubah: sama dengan kegiatan (koordinator: kecamatannya, RLS).
+// Peserta & tanda Lunas: admin pusat, ketua, bendahara, koordinator (dibatasi di database).
+const PERAN_LIHAT_PERJALANAN = ['admin_pusat', 'ketua', 'bendahara', 'petugas_scan', 'koordinator_wilayah'];
+const PERAN_KELOLA_PERJALANAN = ['admin_pusat', 'ketua', 'koordinator_wilayah'];
+const PERAN_PESERTA = ['admin_pusat', 'ketua', 'bendahara', 'koordinator_wilayah'];
+const JENIS_PERJALANAN = { ziarah: 'Ziarah', umroh: 'Umroh' };
+// Tanggal pulang (YYYY-MM-DD) dianggap selesai di akhir hari itu (WIB); kosong = hari berangkat.
+const akhirPerjalanan = (p) => new Date(`${p.pulang || new Date(p.berangkat).toLocaleDateString('sv-SE', { timeZone: ZONA })}T23:59:59+07:00`).getTime();
+function statusPerjalanan(p) {
+  if (p.dibatalkan) return ['Dibatalkan', 'stat-wafat'];
+  const now = Date.now();
+  if (now > akhirPerjalanan(p)) return ['Selesai', ''];
+  return now >= new Date(p.berangkat).getTime() ? ['Berlangsung', 'stat-aktif'] : ['Akan berangkat', 'stat-biasa'];
+}
+// "Sab, 20 Des 2026 · 20.00 WIB sampai Rab, 23 Des 2026" (opsi tanggal bisa diganti)
+function waktuPerjalanan(p, opsi = { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) {
+  const pulang = p.pulang && p.pulang !== new Date(p.berangkat).toLocaleDateString('sv-SE', { timeZone: ZONA })
+    ? ` sampai ${new Date(p.pulang + 'T12:00:00+07:00').toLocaleDateString('id-ID', { timeZone: ZONA, ...opsi })}` : '';
+  return `${tglWib(p.berangkat, opsi)} · ${jamWib(p.berangkat)} WIB${pulang}`;
 }
 
 const NAMA_PERAN = {

@@ -121,7 +121,7 @@ footer{text-align:center;padding:20px 16px 32px;color:var(--abu);font-size:var(-
   color:#FFFFFF;font:inherit;font-size:var(--fs-kecil);font-weight:600;cursor:pointer}
 .app-nav a:focus-visible,.app-keluar:focus-visible,.app-merek:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:2px}
 @media (min-width:768px){
-  .app-nav{order:0;flex-basis:auto;margin:0 0 0 16px}
+  .app-nav{order:0;flex:1 1 0;min-width:0;flex-wrap:wrap;overflow:visible;margin:0 0 0 16px}
 }
 .app-isi{max-width:1120px;margin:0 auto;padding:20px 16px 48px}
 .app-sempit{max-width:760px}
