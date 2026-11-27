@@ -201,6 +201,22 @@ Mulai: 2026-11-27 (Kang: "Mulai Tahap 5: modul 9 Keuangan Yayasan"). Tahap 4 kem
 
 **Tahap 5 selesai dan disetujui Kang 2026-11-27 ("Tahap 4 dan 5 disetujui").** Tunggu Kang bilang "mulai" untuk tahap berikutnya. Modul tersisa: 6 Bantuan Sosial, 7 Kesehatan, 8 Ekonomi Jamaah, 14 Aset & Wakaf (12 Dashboard & Laporan sebagian sudah ada).
 
+## Tahap 6: Modul 6 Bantuan Sosial
+Mulai: 2026-11-27 (Kang: "Mulai Tahap 6: modul 6 Bantuan Sosial").
+
+**Keputusan konsep Kang (2026-11-27):**
+- Dicatat: bantuan **uang dan barang** (barang: nama barang + perkiraan nilai).
+- Alur: **pengajuan → disetujui (ketua) → disalurkan**.
+- Santunan uang yang disalurkan **otomatis masuk Buku Kas** sebagai pengeluaran "Bantuan sosial" di kas yang dipilih, tanpa nama penerima di Buku Kas.
+- Nama penerima (data ekonomi = rahasia) hanya dilihat **ketua, bendahara, dan koordinator untuk wilayahnya**. Admin pusat dan peran lain hanya melihat jumlah; anggota tidak melihat apa pun.
+
+**Usulan Claude (berlaku kecuali Kang ubah):** penerima = jamaah terdaftar (pindai KTA / ketik Nomor Anggota); santunan duka boleh untuk jamaah yang wafat (diterima ahli waris), selain itu jamaah harus aktif; jenis bantuan baku: Santunan duka, Sakit, Sembako, Pendidikan, Bencana, Lainnya; yang mengajukan: koordinator (jamaah wilayahnya), bendahara, ketua; yang menyetujui/menolak (dengan alasan): ketua; yang menandai disalurkan: bendahara (kas mana saja) atau koordinator (kas kecamatannya) — tanggal + kas untuk bantuan uang; pengajuan bisa dibatalkan sebelum disalurkan; tidak ada yang dihapus, semua perubahan masuk log; keterangan kondisi singkat tanpa rincian medis (data kesehatan rahasia); barang tidak otomatis ke Buku Kas (bila dibeli dari kas, bendahara mencatat pembeliannya).
+
+**Rencana langkah (satu per satu, tunggu persetujuan Kang):**
+1. Database: bantuan, status & alur, hak akses, pencatatan otomatis ke Buku Kas, ringkasan jumlah.
+2. Halaman Bantuan Sosial: daftar + saring (status, jenis, wilayah, bulan), Ajukan (pindai/ketik Nomor Anggota), rincian + Setujui/Tolak (ketua), Salurkan (pilih kas, tanggal), Batalkan.
+3. Riwayat bantuan di rincian Data Jamaah (untuk yang berhak) + panel ringkas di Dashboard Pengurus (jumlah penerima & nilai, tanpa nama untuk admin).
+
 ## Catatan
 - Alamat resmi: https://silsilah.tqncukir.id (domain tqncukir.id dibeli Kang di Domosquare 2026-11-26, nameserver dipindah ke Cloudflare akun jtccukir2022: damon/kira.ns.cloudflare.com; CNAME `silsilah` → silsilah-tqn.pages.dev, custom domain Pages; hostname Turnstile ditambah; ASAL_BOLEH fungsi `kta` v4 & `login-anggota` v7 ditambah). Alamat lama tetap jalan: https://silsilah-tqn.pages.dev. `tqncukir.id` dan `www.tqncukir.id` sengaja dibiarkan kosong (keputusan Kang 2026-11-26), nanti untuk website profil jamaah (agenda, berita, dll).
 - GitHub App Claude dan Cloudflare Pages hanya diberi akses ke repo `silsilah`.
