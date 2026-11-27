@@ -17,6 +17,29 @@ const KELOMPOK_PEKERJAAN = {
   'Pelajar/Mahasiswa': ['pelajar', 'mahasiswa', 'pelajar/mahasiswa', 'santri', 'siswa'],
 };
 
+// Sektor pekerjaan (11 sektor, keputusan Kang 2026-11-27): urutan aturan penting, yang pertama cocok dipakai.
+// Diperiksa terhadap isian asli dan nama kelompok di atas (huruf kecil, spasi rapi). Tidak cocok = "Tidak dikenali".
+const SEKTOR_PEKERJAAN = [
+  ['Pensiunan', /pensiun|purnawirawan|purna tugas/],
+  ['Belum/tidak bekerja', /(belum|tidak|blm|tdk) ?(\/ ?tidak )?(bekerja|kerja)|pengangguran/],
+  ['Pelajar/santri/mahasiswa', /pelajar|siswa|santri|mahasiswa|sekolah|mahasiswi/],
+  ['Buruh, tukang & jasa', /pembantu rumah tangga|\bart\b|buruh(?! tani)(?! nelayan)(?! peternakan)|tukang|sopir|supir|driver|ojek|ojol|kernet|kenek|mekanik|bengkel|montir|jahit|penjahit|\blas\b|perancang|pandai besi|kuli|satpam|security|keamanan|cleaning|cukur|rias|penata|juru masak|koki|masak|parkir|kurir|transportasi|konstruksi|industri|serabutan|jasa|paraji|tabib|seniman|promotor|cucian|laundry/],
+  ['Pertanian, peternakan, perikanan', /tani|kebun|ternak|nelayan|\\bikan|perikanan|tambak|sawah|kebon/],
+  ['Mengurus rumah tangga', /rumah tangga|\birt\b|\bmrt\b|\burt\b|ibu rt|\bib rt\b/],
+  ['Pegawai pemerintah', /\bpns\b|\basn\b|p n s|negeri sipil|pegawai negeri|tentara|\btni\b|polri|polisi|kepolisian|perangkat desa|kepala desa|\bkades\b|sekdes|carik|lurah|kamituwo|kasun|kepala dusun|camat|bupati|walikota|gubernur|presiden|dprd|\bdpr\b|\bdpd\b|\bbpk\b|kabinet|kementerian|duta besar|mahkamah|\bpppk\b/],
+  ['Pendidikan & keagamaan', /guru|dosen|ustad|ustadz|ustazah|ustadzah|mubaligh|kyai|kiai|imam|modin|takmir|pengasuh|pondok|pendeta|pastor|biarawati|tpq|tpa|madrasah|pengajar|pendidik/],
+  ['Kesehatan & profesi', /dokter|bidan|perawat|apoteker|psikolog|psikiater|kesehatan|mantri|pengacara|advokat|notaris|akuntan|arsitek|konsultan|wartawan|penyiar|pilot|pelaut|peneliti|penterjemah|penerjemah|pialang|insinyur|programmer|paranormal/],
+  ['Karyawan swasta', /karyawan|(?<!wira ?)swasta|pegawai|honorer|bumn|bumd|pabrik|staf|staff|perusahaan|bank|kantor/],
+  ['Dagang & usaha sendiri', /dagang|jual|warung|toko|wiraswasta|wirausaha|wira swasta|usaha|pengusaha|perdagangan|grosir|pasar|bisnis|kontraktor|juragan|catering|katering/],
+];
+function sektorPekerjaan(p) {
+  const k = kelompokPekerjaan(p);
+  if (k === null) return null;
+  const t = rapikanTeks(p), kk = rapikanTeks(k);
+  for (const [nama, pola] of SEKTOR_PEKERJAAN) if (pola.test(t) || pola.test(kk)) return nama;
+  return 'Tidak dikenali';
+}
+
 // Catatan pengecekan: catatan asli → label pendek. Catatan berisi koreksi + masalah tersisa punya label gabungan,
 // jadi satu anggota tetap dihitung satu kali.
 const LABEL_CATATAN = {

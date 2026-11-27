@@ -193,6 +193,28 @@ function gambarCatatan() {
   for (const b of $('catatan').querySelectorAll('button')) b.onclick = () => bukaDaftar(c[b.dataset.i]);
 }
 
+// Sektor pekerjaan (11 sektor, aturan di aturan-dashboard.js). Ketuk sektor -> jenis pekerjaan di dalamnya.
+function gambarSektor() {
+  const sek = new Map(); let kosong = 0;
+  for (const { p, n } of data.pekerjaan) {
+    const s = sektorPekerjaan(p); if (s === null) { kosong += n; continue; }
+    if (!sek.has(s)) sek.set(s, { n: 0, jenis: new Map(), isian: new Map() });
+    const x = sek.get(s), k = kelompokPekerjaan(p), t = String(p).trim();
+    x.n += n; x.jenis.set(k, (x.jenis.get(k) || 0) + n);
+    if (!x.isian.has(k)) x.isian.set(k, new Map());
+    x.isian.get(k).set(t, (x.isian.get(k).get(t) || 0) + n);
+  }
+  const urut = [...sek].sort((a, b) => (a[0] === 'Tidak dikenali') - (b[0] === 'Tidak dikenali') || b[1].n - a[1].n);
+  const baris = urut.map(([label, x]) => ({ label, n: x.n, petunjuk: '. Ketuk untuk melihat jenis pekerjaannya' }));
+  if (kosong) baris.push({ label: 'Belum diisi', n: kosong, aksi: false });
+  for (const b of baris) b.teks = `${angka(b.n)} (${persen(b.n, data.total)})`;
+  batang($('sektor'), baris, Math.max(...baris.map((b) => b.n), 0), { tombol: true });
+  for (const b of $('sektor').querySelectorAll('button')) b.onclick = () => {
+    const [nama, x] = urut[b.dataset.i];
+    bukaRincianPekerjaan(nama, [...x.jenis].sort((a, c) => c[1] - a[1]), x.n, x.isian);
+  };
+}
+
 function gambarPekerjaan() {
   const kel = new Map(), isian = new Map(); let kosong = 0;
   for (const { p, n } of data.pekerjaan) {
@@ -208,13 +230,13 @@ function gambarPekerjaan() {
   if (kosong) baris.push({ label: 'Belum diisi', n: kosong, aksi: false });
   for (const b of baris) b.teks = `${angka(b.n)} (${persen(b.n, data.total)})`;
   batang($('pekerjaan'), baris, Math.max(...baris.map((b) => b.n)), { tombol: true });
-  for (const b of $('pekerjaan').querySelectorAll('button')) b.onclick = () => bukaLainnya(sisa, lainnya, isian);
+  for (const b of $('pekerjaan').querySelectorAll('button')) b.onclick = () => bukaRincianPekerjaan('Pekerjaan lainnya', sisa, lainnya, isian);
 }
 
-// Rincian "Lainnya" pekerjaan: semua kelompok di luar 5 terbanyak (dari data yang sudah dimuat, tanpa permintaan baru)
-function bukaLainnya(sisa, jumlah, isian) {
-  $('daftar-judul').textContent = 'Pekerjaan lainnya';
-  $('daftar-ket').textContent = `${angka(sisa.length)} kelompok · ${angka(jumlah)} jamaah · ${teksWilayah()} · ${teksPeriode()}`;
+// Rincian pekerjaan ("Lainnya" atau satu sektor): jenis pekerjaan + jumlah (dari data yang sudah dimuat, tanpa permintaan baru)
+function bukaRincianPekerjaan(judul, sisa, jumlah, isian) {
+  $('daftar-judul').textContent = judul;
+  $('daftar-ket').textContent = `${angka(sisa.length)} jenis pekerjaan · ${angka(jumlah)} jamaah · ${teksWilayah()} · ${teksPeriode()}`;
   $('daftar-isi').innerHTML = sisa.map(([k, n]) => {
     const v = [...(isian.get(k) || [])].filter(([t]) => rapikanTeks(t) !== rapikanTeks(k));
     return `<li class="dd-baris"><span class="dd-nama">${hurufAman(k)}</span><span class="bt-nilai">${angka(n)} <span class="bt-persen">(${persen(n, data.total)})</span></span>${
@@ -305,7 +327,7 @@ async function muat() {
     $('k-total-sub').textContent = `${teksWilayah()} · ${teksPeriode()}`;
     $('k-kab-sub').textContent = data.tingkat === 'kabupaten' ? 'Dari alamat jamaah' : `${angka(data.sebaran.length)} ${TINGKAT[data.tingkat]} di pilihan ini`;
     $('k-catatan-sub').textContent = `${persen(data.catatan_total, data.total)} dari jamaah terdaftar`;
-    gambarSebaran(); gambarUsia(); gambarJk(); gambarBulan(); gambarCatatan(); gambarPekerjaan();
+    gambarSebaran(); gambarUsia(); gambarJk(); gambarBulan(); gambarCatatan(); gambarSektor(); gambarPekerjaan();
   } catch (e) {
     if (ini !== nomorMuat) return;
     if (e.message === 'belum-masuk' || e.message === 'gagal-401') { location.replace('/masuk.html'); return; }
