@@ -255,6 +255,13 @@ Mulai: 2026-11-27 (Kang: "Mulai Tahap 7: modul 14 Aset & Wakaf").
 2. Halaman Aset & Wakaf: dua tab (Tanah wakaf, Barang), daftar + saring + cari, formulir tambah/ubah, rincian, Lepas aset (alasan).
 3. Ubin di Beranda (kelompok Amanah & Tata Kelola) + panel ringkas di Dashboard Pengurus (jumlah tanah, total luas, status sertifikat, jumlah barang per kondisi).
 
+**Langkah 1, Database** (2026-11-27, Kang: "lanjut langkah 1"): migrasi `20261127070000_aset_wakaf.sql` (**perlu dijalankan Kang**).
+- Tabel `tanah_wakaf`: nama, desa (lokasi diketik lewat fungsi baru `desa_id_aset`, boleh untuk nadzir), alamat, luas m², wakif, nadzir, tanggal ikrar, nomor AIW, nomor sertifikat (wajib bila Bersertifikat), status sertifikat, peruntukan, kondisi, letak arsip, keterangan (tanpa angka ≥8 digit), status Aktif/Dilepas (Dilepas wajib tanggal + alasan).
+- Tabel `barang_inventaris`: nama, kategori, jumlah, tahun & cara perolehan, perkiraan nilai, lokasi simpan, pemegang, kondisi, keterangan, status Aktif/Dilepas.
+- RLS: lihat = admin pusat, ketua, bendahara, nadzir; tambah/ubah = admin pusat, ketua, nadzir; tanpa hapus; sesi KTA lama dan peran lain tidak melihat; anon tertutup. Pembuat & waktu dibuat terkunci; semua perubahan masuk `log_perubahan`.
+- `ringkas_aset()`: jumlah & luas tanah aktif, belum bersertifikat, perlu perhatian, per status sertifikat & peruntukan; barang (jenis, unit, nilai, per kondisi & kategori, dilepas).
+- Diuji Postgres lokal: semua migrasi + uji lama + 31 skenario aset (nadzir, ketua, admin, bendahara, koordinator, petugas, anggota, sesi terbatas, tamu) lulus.
+
 ## Perbaikan 2026-11-27: ikon aplikasi di taskbar hitam (laporan Kang)
 Ikon baru berlatar lingkaran putih seperti logo di kepala halaman: `icons/icon-192-v2.png`, `icon-512-v2.png`, `apple-touch-icon-v2.png` (kotak putih). Manifest, semua `<link rel=icon>`, apple-touch-icon, gambar panduan pasang, dan sw.js memakai file baru; versi v100. Ikon yang sudah terpasang berganti setelah Chrome memperbarui (bisa sampai 1 hari) atau setelah aplikasi dicopot lalu dipasang ulang.
 
