@@ -137,6 +137,23 @@ Satu footer bersama `.kaki` (hijau, garis kuning di atas): logo + "SILSILAH" + k
 
 8. **Nama di footer** (perintah Kang 2026-11-27): "Jam'iyyah Ahlith Thoriqoh Al Mu'tabaroh An Nahdliyyah" diganti "TQN Pusat Cukir Jombang" di footer 17 halaman. Versi cache v84.
 
+## Tahap 4: Modul 10 Ziarah & Umroh
+Mulai: 2026-11-27 (Kang: "Mulai Tahap 4: modul 10 Ziarah & Umroh").
+
+**Keputusan konsep Kang (2026-11-27):**
+- Ziarah dan Umroh dicatat bersama sebagai **perjalanan** (jenis: Ziarah wali/makam masyayikh, Umroh), masing-masing punya daftar peserta.
+- Peserta: jamaah terdaftar (pindai KTA / ketik Nomor Anggota) + keluarga non-jamaah (nama saja + jamaah penghubung + hubungan, tanpa nomor HP).
+- Uang: hanya tanda **Lunas / Belum lunas** per peserta, tanpa angka rupiah.
+- Pendaftaran lewat pengurus; anggota melihat perjalanan dan status dirinya di Portal Anggota.
+
+**Usulan Claude (berlaku kecuali Kang ubah):** perjalanan boleh lebih dari sehari (tanggal berangkat & pulang); pembuat perjalanan sama dengan Kegiatan (admin pusat & ketua semua, koordinator kecamatannya); tanda Lunas diubah admin pusat, ketua, bendahara, koordinator (perjalanan kecamatannya); nomor paspor/KTP tidak disimpan (aturan privasi); perjalanan dan peserta tidak dihapus (batal = status), semua perubahan masuk `log_perubahan`.
+
+**Rencana langkah (satu per satu, tunggu persetujuan Kang):**
+1. Database perjalanan & peserta (tabel, RLS, fungsi tambah/batal peserta dan tanda lunas).
+2. Halaman Perjalanan (pengurus): daftar, cari, saring jenis/waktu/wilayah, tambah, ubah, batalkan.
+3. Peserta: tambah lewat pindai KTA / ketik Nomor Anggota, tambah keluarga, tandai Lunas, batal ikut, jumlah peserta & lunas, unduh CSV (daftar rombongan).
+4. Portal Anggota: "Perjalanan saya" (status terdaftar + lunas) dan perjalanan yang dibuka; angka ringkas di Dashboard Pengurus.
+
 ## Catatan
 - Alamat resmi: https://silsilah.tqncukir.id (domain tqncukir.id dibeli Kang di Domosquare 2026-11-26, nameserver dipindah ke Cloudflare akun jtccukir2022: damon/kira.ns.cloudflare.com; CNAME `silsilah` → silsilah-tqn.pages.dev, custom domain Pages; hostname Turnstile ditambah; ASAL_BOLEH fungsi `kta` v4 & `login-anggota` v7 ditambah). Alamat lama tetap jalan: https://silsilah-tqn.pages.dev. `tqncukir.id` dan `www.tqncukir.id` sengaja dibiarkan kosong (keputusan Kang 2026-11-26), nanti untuk website profil jamaah (agenda, berita, dll).
 - GitHub App Claude dan Cloudflare Pages hanya diberi akses ke repo `silsilah`.
