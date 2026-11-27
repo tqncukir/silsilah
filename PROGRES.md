@@ -3,7 +3,7 @@
 ## POSISI TERAKHIR (baca ini dulu) — diperbarui 2026-11-27
 - **Semua 9 tahap selesai dan disetujui Kang**: 14 modul terbangun (Tahap 9 Kesehatan disetujui 2026-11-27). Versi cache terakhir **v110**. Migrasi terakhir yang sudah dijalankan Kang: `20261127090000_kesehatan.sql`. Advisors terakhir: 0 error, 49 peringatan, 11 info (semua jenis yang disengaja, lihat Tahap 9).
 - **Serah terima 2026-11-27:** proyek diteruskan dari akun Claude **celupherbal** (perintah Kang). Akun baru tidak membawa skill/memori akun lama: semua aturan ada di `CLAUDE.md` (termasuk bagian "Cara kerja agen" dan "Cara uji") dan riwayat ada di file ini.
-- **Langkah berikutnya: Tahap 10 Pemeriksaan menyeluruh** (dipilih Kang 2026-11-27). Langkah 1 selesai, migrasi `20261127100000_pemeriksaan_keamanan.sql` sudah dijalankan Kang. Tunggu Kang: "lanjut langkah 2".
+- **Langkah berikutnya: Tahap 10 Pemeriksaan menyeluruh** (dipilih Kang 2026-11-27). Langkah 1 & 2 selesai. Tunggu Kang: "lanjut langkah 3".
 
 ## Tahap 1: Data Jamaah, Pendaftaran, KTA, Portal Anggota, Hak Akses
 Mulai: 2026-11-25 (Kang Salman: "Bismillah").
@@ -431,3 +431,10 @@ Dipilih Kang 2026-11-27 (dari 4 pilihan: backup, notifikasi, berita, pemeriksaan
 - **Catatan, tidak diubah (untuk Kang):** admin pusat secara teknis bisa menonaktifkan akunnya sendiri lewat API langsung (halaman Atur PIN sudah mencegah); risiko kecil karena hanya admin sendiri.
 - Uji ulang setelah perbaikan (31 migrasi dari nol): matriks sama kecuali log admin; nomor ditolak, ubah alamat & ganti KTA tetap bisa; upsert gol. darah tetap bisa.
 - Migrasi sudah dijalankan Kang (2026-11-27). Advisors (Rerun linter, dicek Claude lewat Chrome Kang): 0 error, 49 peringatan, 11 info — tidak ada temuan baru (fungsi baru di skema `private`). Aman.
+
+**Langkah 2, Keamanan website & Edge Functions** (2026-11-27, Kang: "lanjut langkah 2"), tanpa perubahan database.
+- **Halaman:** 38 HTML tanpa `style=`, `<script>` inline, atau `onclick=`; CSP tanpa `unsafe-inline`. Pemindai otomatis atas semua template HTML di 48 file JS: setiap teks dari database (nama, alamat, keterangan, RS, makam, dll.) lewat `hurufAman()`; parameter alamat (URL) hanya masuk ke `.value`, angka, atau pilihan tetap. Tidak ada `eval`/`document.write`. Service worker tidak menyimpan data API; Keluar mencabut sesi di server.
+- **Header ditambah** (`public/_headers`): `Strict-Transport-Security` (1 tahun, tanpa preload), `Cross-Origin-Opener-Policy: same-origin`, CSP `object-src 'none'` + `form-action 'self'`. Uji 38 halaman di bawah header baru (server lokal yang meniru `_headers`): 0 pelanggaran CSP.
+- **Edge Functions** `login-anggota` & `kta`: rahasia hanya dari env server; Turnstile wajib sebelum cek PIN/KTA lama; batas salah PIN 5×/nomor & 20×/IP per 15 menit, cek KTA 20×/IP; tanda tangan QR HMAC 96 bit dibanding waktu-tetap; QR lama hanya sesi terbatas & akun anggota; QR + PIN Pengurus wajib 8 angka; `kta_info`/`cek_login` tidak bisa dipanggil dari luar server.
+- **Rahasia:** seluruh riwayat git (171 commit) bersih — hanya kunci publik Supabase & Turnstile (memang publik); tidak ada NIK, data asli, atau file data.
+- **Catatan untuk Kang (tidak diubah, keputusan konsep):** (a) QR KTA baru = kunci masuk anggota tanpa PIN (keputusan 2026-11-26): siapa pun yang memotret KTA bisa membuka Portal Anggota orang itu (isinya hanya data dirinya, tanpa ekonomi/kesehatan); pengurus yang bisa membuka halaman KTA (termasuk bendahara & petugas scan) juga bisa memperoleh QR itu. (b) PIN anggota 6 angka: dengan batas sekarang, menebak PIN satu orang butuh bertahun-tahun, tetapi penyerang bermodal besar yang mencoba ribuan nomor sekaligus secara teori bisa berhasil sesekali; pengaman utamanya Turnstile + harus tahu nama desa. Bila Kang mau, bisa ditambah batas keseluruhan (mis. login dikunci sementara bila ada ratusan PIN salah dalam 15 menit). (c) Akun anggota yang dinonaktifkan masih bisa "masuk" lewat PIN tetapi tidak melihat apa pun (hak dicek database).
