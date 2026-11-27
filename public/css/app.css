@@ -113,11 +113,11 @@ footer{text-align:center;padding:20px 16px 32px;color:var(--abu);font-size:var(-
   font-size:var(--fs-sub);min-height:44px}
 .app-merek img{border-radius:50%;background:#FFFFFF}
 .app-nav{order:3;flex-basis:100%;display:flex;gap:4px;overflow-x:auto;margin:0 -8px}
-.app-nav a{flex:none;display:flex;align-items:center;min-height:40px;padding:0 12px;border-radius:10px;color:#FFFFFF;text-decoration:none;
+.app-nav a{flex:none;display:flex;align-items:center;min-height:44px;padding:0 12px;border-radius:10px;color:#FFFFFF;text-decoration:none;
   font-size:var(--fs-kecil);font-weight:500}
 .app-nav a[aria-current="page"]{background:rgba(255,255,255,.14);color:var(--kuning-rosyid);font-weight:600}
 .app-nav a:hover{background:rgba(255,255,255,.1)}
-.app-keluar{margin-left:auto;min-height:40px;padding:0 14px;border:1.5px solid rgba(255,255,255,.5);border-radius:10px;background:transparent;
+.app-keluar{margin-left:auto;min-height:44px;padding:0 14px;border:1.5px solid rgba(255,255,255,.5);border-radius:10px;background:transparent;
   color:#FFFFFF;font:inherit;font-size:var(--fs-kecil);font-weight:600;cursor:pointer}
 .app-nav a:focus-visible,.app-keluar:focus-visible,.app-merek:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:2px}
 @media (min-width:768px){
@@ -242,7 +242,7 @@ footer{text-align:center;padding:20px 16px 32px;color:var(--abu);font-size:var(-
 
 /* Beranda */
 .sambut{margin:4px 0 20px}
-.sambut-salam{margin:0;color:var(--hijau-daun);font-weight:600;font-size:var(--fs-kecil)}
+.sambut-salam{margin:0;color:var(--hijau-jamiyyah);font-weight:600;font-size:var(--fs-kecil)}
 .sambut h1{margin:2px 0 0}
 .bagian-judul{font-size:var(--fs-kecil);font-weight:600;color:var(--abu);margin:0 0 8px}
 .menu-kisi{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
@@ -491,6 +491,7 @@ body.terkunci{overflow:hidden}
 .bt-tombol:focus-visible{outline:3px solid var(--hijau-jamiyyah);outline-offset:1px}
 .bt-nama{font-weight:600;overflow-wrap:anywhere}
 .bt-nilai{font-size:var(--fs-kecil);font-weight:600;color:var(--abu);font-variant-numeric:tabular-nums;white-space:nowrap}
+.bt-nilai small{font-size:inherit;font-weight:500;color:var(--abu)}
 .bt-jalur{grid-column:1 / -1;grid-row:2;height:10px;border-radius:999px;background:var(--garis-lembut);overflow:hidden}
 .bt-isi{display:block;height:100%;border-radius:999px;background:var(--hijau-jamiyyah)}
 .bt-isi-catatan{background:#A87400}
@@ -937,7 +938,8 @@ li:nth-child(-n+3)>.bt-baris .bt-no{background:var(--hijau-jamiyyah);color:#FFFF
 .app-sub{display:none;color:#FFFFFF;font-size:var(--fs-kecil);font-weight:500}
 @media (min-width:480px){.app-sub{display:block}}
 a.app-keluar{display:inline-flex;align-items:center;text-decoration:none}
-.masuk-kembali{width:auto!important;padding:0 12px 0 6px;gap:4px;display:flex!important;align-items:center;font-size:var(--fs-kecil);font-weight:600}
+a.tautan{display:inline-flex;align-items:center}
+.masuk-kembali{width:auto!important;min-width:44px;padding:0 12px 0 6px;gap:4px;display:flex!important;align-items:center;font-size:var(--fs-kecil);font-weight:600}
 .masuk-kembali span{display:none}
 @media (min-width:768px){.masuk-kembali span{display:inline}}
 

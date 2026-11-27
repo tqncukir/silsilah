@@ -154,12 +154,21 @@ function gambarBulan() {
     const n = ada.get(b) || 0;
     baris.push({ b, n, label: BULAN[m - 1].slice(0, 3), label2: m === 1 || !baris.length ? String(y) : '', judul: `${BULAN[m - 1]} ${y}: ${angka(n)} pendaftaran` });
   }
+  // Lebih dari 3 tahun: dijadikan per tahun agar batang tidak terlalu tipis dan layar HP tidak bergeser
+  const perTahun = baris.length > 36;
+  if (perTahun) {
+    const thn = new Map();
+    for (const b of baris) { const y = b.b.slice(0, 4); thn.set(y, (thn.get(y) || 0) + b.n); }
+    baris.length = 0;
+    for (const [y, n] of thn) baris.push({ b: y, n, label: y, label2: '', judul: `Tahun ${y}: ${angka(n)} pendaftaran` });
+  }
+  $('g-bulan').textContent = perTahun ? 'Pendaftaran jamaah per tahun' : 'Pendaftaran jamaah per bulan';
   const puncak = Math.max(...baris.map((b) => b.n));
   for (const b of baris) b.sorot = b.n === puncak && puncak > 0;
   const lebar = $('bulan').clientWidth || 300;
   const perKolom = lebar / baris.length;
   const labelSetiap = perKolom >= 30 ? 1 : perKolom >= 14 ? 3 : 6;
-  if (labelSetiap > 1) { // label jarang: tahun hanya pada label pertama yang tampil dan saat tahun berganti
+  if (labelSetiap > 1 && !perTahun) { // label jarang: tahun hanya pada label pertama yang tampil dan saat tahun berganti
     let thnTerakhir = '';
     baris.forEach((b, i) => {
       const thn = b.b.slice(0, 4);
@@ -174,7 +183,7 @@ function gambarBulan() {
     const tampil = () => {
       const b = baris[t.dataset.i];
       const [y, m] = b.b.split('-');
-      $('tip').innerHTML = `<strong>${BULAN[m - 1]} ${y}</strong><br>${angka(b.n)} pendaftaran`;
+      $('tip').innerHTML = `<strong>${m ? BULAN[m - 1] + ' ' : 'Tahun '}${y}</strong><br>${angka(b.n)} pendaftaran`;
       $('tip').hidden = false;
       const r = t.getBoundingClientRect(), w = $('bulan').parentElement.getBoundingClientRect();
       const kiri = Math.min(Math.max(r.left - w.left + r.width / 2 - 70, 0), w.width - 140);

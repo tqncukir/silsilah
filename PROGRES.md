@@ -1,9 +1,9 @@
 # PROGRES SILSILAH TQN Cukir
 
 ## POSISI TERAKHIR (baca ini dulu) — diperbarui 2026-11-27
-- **Semua 9 tahap selesai dan disetujui Kang**: 14 modul terbangun (Tahap 9 Kesehatan disetujui 2026-11-27). Versi cache terakhir **v110**. Migrasi terakhir yang sudah dijalankan Kang: `20261127110000_kecepatan_rls.sql` (Tahap 10). Advisors terakhir: 0 error, 49 peringatan, 11 info (semua jenis yang disengaja).
+- **Semua 9 tahap selesai dan disetujui Kang**: 14 modul terbangun (Tahap 9 Kesehatan disetujui 2026-11-27). Versi cache terakhir **v111**. Migrasi terakhir yang sudah dijalankan Kang: `20261127110000_kecepatan_rls.sql` (Tahap 10). Advisors terakhir: 0 error, 49 peringatan, 11 info (semua jenis yang disengaja).
 - **Serah terima 2026-11-27 (malam):** proyek diteruskan ke akun Claude **goindotea** (perintah Kang). Akun baru tidak membawa skill/memori akun lama: semua aturan ada di `CLAUDE.md` (termasuk "Cara kerja agen" dan "Cara uji") dan riwayat ada di file ini. Cara uji database lokal terbukti jalan (stub di CLAUDE.md; data wilayah contoh diisi langsung karena ekstensi `http` tidak ada).
-- **Langkah berikutnya: Tahap 10 Pemeriksaan menyeluruh** (dipilih Kang 2026-11-27). Langkah 1, 2, 3 selesai. Tunggu Kang: "lanjut langkah 4".
+- **Langkah berikutnya: Tahap 10 Pemeriksaan menyeluruh** (dipilih Kang 2026-11-27). Langkah 1-4 selesai. Tunggu Kang: putuskan menu tablet (lihat Langkah 4) lalu "lanjut langkah 5".
 
 ## Tahap 1: Data Jamaah, Pendaftaran, KTA, Portal Anggota, Hak Akses
 Mulai: 2026-11-25 (Kang Salman: "Bismillah").
@@ -450,4 +450,17 @@ Dipilih Kang 2026-11-27 (dari 4 pilihan: backup, notifikasi, berita, pemeriksaan
   - Lainnya cepat (<0,05 detik): cari nama/nomor, saring kab/kec/desa/mursyid/status, halaman ke-200, kegiatan + jumlah hadir, semua fungsi daftar/ringkas (sudah lewat server). Pencarian nama memakai pindai penuh; dengan 5.500 baris ±10 ms, indeks khusus belum perlu (baru perlu bila >50 ribu).
   - Indeks: semua kunci relasi berindeks kecuali `bantuan.kas_id`/`transaksi_kas_id` (tabel kecil, tidak dipakai untuk pencarian) — tidak perlu.
 - Advisors sesudah migrasi (Rerun linter, lewat Chrome Kang): **Keamanan** 0 error, 49 peringatan, 11 info — sama seperti sebelumnya, tidak ada temuan baru. **Kecepatan** 0 error, 1 peringatan: `perjalanan` punya 2 aturan baca (umum + peserta sendiri) — tabel kecil (puluhan perjalanan per tahun), dibiarkan.
+
+**Langkah 4, Tampilan semua halaman** (2026-11-27, Kang: "lanjut langkah 4"), tanpa perubahan database. Versi cache v111.
+- Cara uji: 38 halaman (43 alamat termasuk rincian & formulir) × 9 peran (admin, ketua, bendahara, nadzir, koordinator, petugas, khodim, dokter, anggota) di 360 px, ditambah ketua di 768 & 1280 px = 473 kali buka halaman. Data dari PostgREST lokal + data tiruan semua modul (RLS sungguhan). Diperiksa otomatis: geser samping, galat konsol, huruf <14 px, target sentuh <44 px, kontras; tangkapan layar dilihat sendiri. Menu tiap peran sesuai hak.
+- **Dibetulkan:**
+  1. **Dashboard di HP bergeser ke samping** (80 px) bila tanggal daftar mencakup bertahun-tahun (data asli sejak lama): grafik "Pendaftaran per bulan" jadi ratusan batang setipis 0-2 px. Sekarang bila lebih dari 36 bulan otomatis **per tahun** (judul ikut berubah, sentuh batang = jumlah tahun itu).
+  2. Tombol **Keluar/Masuk** dan menu atas 40 px → 44 px; tautan "Cara pasang" & "Cek keaslian KTA" di halaman depan (tinggi 21 px) → 44 px; tombol kembali di Cek KTA 40 → 44 px lebar.
+  3. Salam "Assalamu'alaikum" di Beranda kontras kurang (hijau daun di latar terang, 3,3:1) → Hijau Jam'iyyah.
+  4. Persen di Laporan Kas (11,7 px) → 14 px.
+- Uji ulang semua: 0 geser samping, 0 target sentuh kecil, 0 huruf kecil di luar pengecualian di bawah.
+- **Dibiarkan (sengaja):** label menu bawah, tanda "wajib", tanggal Haul & angka grafik 13 px (aturan 12: label 13-14 px); tulisan di gambar KTA (tiruan kartu cetak, mengecil sesuai lebar) dan gambar panduan pasang; tulisan kuning di atas hijau (warna resmi KTA, kontras 4,46:1, hampir 4,5).
+- **Catatan untuk Kang:**
+  (a) **Tablet (768 px):** menu atas untuk ketua 14 tautan jadi 4 baris, kepala setinggi 207 px (seperempat layar). Usul: menu bawah 4 tombol dipakai juga di tablet (sampai 1023 px), menu lengkap atas hanya di laptop. **Menunggu keputusan Kang.**
+  (b) Koordinator yang membuka rincian kegiatan kecamatan lain: rekap kehadiran tidak tampil (memang tidak berhak), hanya muncul catatan 403 di konsol, tidak mengganggu.
 
