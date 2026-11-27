@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Rincian Usaha · SILSILAH TQN Cukir</title>
+<meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=106">
+<link rel="stylesheet" href="/css/app.css?v=106">
+</head>
+<body class="hal-app">
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <a href="/beranda.html">Beranda</a>
+      <a href="/dashboard.html" id="nav-dasbor" hidden>Dashboard Pengurus</a>
+      <a href="/jamaah.html" id="nav-jamaah" hidden>Data Jamaah</a>
+      <a href="/pendaftaran.html" id="nav-daftar" hidden>Pendaftaran</a>
+      <a href="/kegiatan.html" id="nav-kegiatan" hidden>Kegiatan</a>
+      <a href="/ahli-kubur.html" id="nav-ahli" hidden>Ahli Kubur</a>
+      <a href="/perjalanan.html" id="nav-perjalanan" hidden>Ziarah &amp; Umroh</a>
+      <a href="/bantuan.html" id="nav-bantuan" hidden>Bantuan Sosial</a>
+      <a href="/ekonomi.html" id="nav-ekonomi" hidden>Ekonomi Jamaah</a>
+      <a href="/usaha.html" id="nav-usaha" aria-current="page">Usaha Jamaah</a>
+      <a href="/kas.html" id="nav-kas" hidden>Buku Kas</a>
+      <a href="/aset.html" id="nav-aset" hidden>Aset &amp; Wakaf</a>
+    </nav>
+    <button class="app-keluar" id="keluar" type="button">Keluar</button>
+  </div>
+</header>
+
+<main class="app-isi">
+  <a href="/usaha.html" class="kembali" id="kembali">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Usaha Jamaah
+  </a>
+  <p id="pesan" class="pesan" role="alert"></p>
+
+  <section id="lihat" class="panel" hidden aria-labelledby="l-nama">
+    <div class="panel-kepala">
+      <div>
+        <p class="panel-label" id="l-jenis"></p>
+        <h1 id="l-nama"></h1>
+        <span id="l-status" class="stat"></span>
+      </div>
+      <div class="kepala-aksi" id="aksi" hidden>
+        <button type="button" class="btn btn-utama btn-pas" id="ubah">Ubah</button>
+        <button type="button" class="btn btn-kedua btn-pas" id="tutup">Tandai tutup</button>
+      </div>
+    </div>
+    <dl class="rincian" id="l-rincian"></dl>
+    <p class="ket usaha-catatan">Nomor HP tidak dicantumkan. Datangi alamatnya atau tanyakan ke pengurus.</p>
+  </section>
+
+  <form id="form" class="panel form" hidden novalidate aria-labelledby="f-judul">
+    <h1 id="f-judul">Tambah usaha</h1>
+    <p class="judul-sub">Usaha milik jamaah aktif, dicatat atas permintaan pemiliknya. Tanpa nomor HP dan tanpa foto.</p>
+    <div class="form-kisi">
+      <h3 class="bagian-judul">Pemilik</h3>
+      <div class="isian lebar" id="pemilik-isian">
+        <label for="nomor">Nomor Anggota pemilik <span class="wajib">wajib</span></label>
+        <div class="absen-ketik-baris">
+          <input id="nomor" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="10 angka" aria-describedby="pemilik">
+          <button type="button" class="btn btn-kedua btn-pas" id="pindai">Pindai KTA</button>
+        </div>
+        <p class="bs-penerima" id="pemilik" aria-live="polite"></p>
+      </div>
+      <p class="lebar bs-penerima" id="pemilik-tetap" hidden></p>
+      <h3 class="bagian-judul">Usaha</h3>
+      <div class="isian lebar">
+        <label for="nama">Nama usaha <span class="wajib">wajib</span></label>
+        <input id="nama" maxlength="80" autocomplete="off" placeholder="Mis. Warung Bu Siti, Kerupuk Ikan Pak Ahmad">
+      </div>
+      <fieldset class="isian lebar pilihan eko-penuh" id="jenis-isian">
+        <legend>Jenis usaha <span class="wajib">wajib</span></legend>
+      </fieldset>
+      <div class="isian lebar">
+        <label for="produk">Barang atau jasa yang dijual</label>
+        <input id="produk" maxlength="300" autocomplete="off" placeholder="Mis. nasi pecel, kopi, gorengan">
+      </div>
+      <div class="isian lebar">
+        <label for="jam">Hari dan jam buka</label>
+        <input id="jam" maxlength="80" autocomplete="off" placeholder="Mis. Setiap hari 07.00–17.00 WIB">
+      </div>
+      <h3 class="bagian-judul">Lokasi usaha</h3>
+      <div class="isian d2">
+        <label for="kabupaten">Kab/Kota <span class="wajib">wajib</span></label>
+        <input id="kabupaten" maxlength="60" autocomplete="off" aria-describedby="k-prov">
+        <p class="ket" id="k-prov"></p>
+      </div>
+      <div class="isian k3 d2">
+        <label for="kecamatan">Kecamatan <span class="wajib">wajib</span></label>
+        <input id="kecamatan" maxlength="60" autocomplete="off">
+      </div>
+      <div class="isian k3 d2">
+        <label for="desa">Kel/Desa <span class="wajib">wajib</span></label>
+        <input id="desa" maxlength="60" autocomplete="off">
+      </div>
+      <div class="isian lebar">
+        <label for="alamat">Dusun/Jalan</label>
+        <input id="alamat" maxlength="150" autocomplete="off" aria-describedby="a-ket" placeholder="Mis. Dusun Krajan, depan masjid">
+        <p class="ket" id="a-ket">Lokasi terisi otomatis dari alamat pemilik; ubah bila usahanya di tempat lain. Jangan menulis nomor HP.</p>
+      </div>
+    </div>
+    <p id="pesan-form" class="pesan" role="alert"></p>
+    <div class="tombol-baris">
+      <button type="button" class="btn btn-kedua btn-pas" id="batal">Batal</button>
+      <button type="submit" class="btn btn-utama btn-pas btn-masuk" id="simpan"><span class="putar" aria-hidden="true"></span><span class="teks">Simpan</span></button>
+    </div>
+  </form>
+</main>
+<footer class="kaki">
+  <div class="kaki-isi">
+    <address class="kaki-alamat">TQN Pusat Cukir Jombang<br>Jl. Masjid No. 110 Cukir, Diwek, Jombang 61471</address>
+  </div>
+  <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
+</footer>
+<script src="/js/supa.js?v=106" defer></script>
+<script src="/js/wilayah.js?v=106" defer></script>
+<script src="/js/pindai.js?v=106" defer></script>
+<script src="/js/usaha-isi.js?v=106" defer></script>
+</body>
+</html>

@@ -105,6 +105,7 @@ async function profilSaya() {
   nav('nav-kas', p && PERAN_LIHAT_KAS.includes(p.peran));
   nav('nav-bantuan', p && PERAN_BANTUAN.includes(p.peran));
   nav('nav-ekonomi', p && PERAN_EKONOMI.includes(p.peran));
+  nav('nav-usaha', !!p);
   nav('nav-aset', p && PERAN_LIHAT_ASET.includes(p.peran));
   if (p) pasangMenuBawah(p);
   return p || null;
@@ -127,12 +128,13 @@ function pasangMenuBawah(p) {
       ...(PERAN_LIHAT_JAMAAH.includes(p.peran) ? [['jamaah', 'Jamaah', '/jamaah.html']] : []),
       ...(PERAN_LIHAT_KEGIATAN.includes(p.peran) ? [['kegiatan', 'Kegiatan', '/kegiatan.html']] : [])];
   const lain = anggota
-    ? [['Haul', '/haul.html'], ['Ahli Kubur', '/ahli-kubur.html'], ['Cara pasang di HP', '/pasang.html']]
+    ? [['Haul', '/haul.html'], ['Ahli Kubur', '/ahli-kubur.html'], ['Usaha Jamaah', '/usaha.html'], ['Cara pasang di HP', '/pasang.html']]
     : [[ 'Dashboard Pengurus', '/dashboard.html', PERAN_LIHAT_JAMAAH ], ['Pendaftaran', '/pendaftaran.html', PERAN_UBAH_JAMAAH ],
       ['Absensi', '/absensi.html', PERAN_ABSEN], ['Ahli Kubur', '/ahli-kubur.html', PERAN_LIHAT_JAMAAH], ['Haul', '/haul.html', PERAN_LIHAT_JAMAAH],
       ['Ziarah & Umroh', '/perjalanan.html', PERAN_LIHAT_PERJALANAN],
       ['Bantuan Sosial', '/bantuan.html', PERAN_BANTUAN],
       ['Ekonomi Jamaah', '/ekonomi.html', PERAN_EKONOMI],
+      ['Usaha Jamaah', '/usaha.html', null],
       ['Buku Kas', '/kas.html', PERAN_LIHAT_KAS],
       ['Aset & Wakaf', '/aset.html', PERAN_LIHAT_ASET],
       ['Atur PIN Pengurus', '/pengurus-pin.html', ['admin_pusat']], ['Agenda umum', '/agenda.html', null], ['Cara pasang di HP', '/pasang.html', null]]
@@ -259,6 +261,11 @@ const teksBantuan = (b) => b.bentuk === 'uang' ? rupiah(b.nilai) : `${b.barang}$
 const PERAN_EKONOMI = PERAN_BANTUAN;
 const TINGKAT_EKONOMI = { mampu: ['Mampu', 'stat-biasa'], cukup: ['Cukup', 'stat-biasa'],
   kurang: ['Kurang mampu', 'stat-tidak'], sangat_kurang: ['Sangat kurang mampu', 'stat-wafat'] };
+
+// Direktori usaha jamaah: dilihat semua yang login (anggota hanya yang Buka); dicatat admin pusat, ketua, koordinator (pemilik di wilayahnya).
+const PERAN_CATAT_USAHA = ['admin_pusat', 'ketua', 'koordinator_wilayah'];
+const JENIS_USAHA = { makanan: 'Makanan & minuman', pertanian: 'Pertanian & peternakan', toko: 'Toko/kelontong', kerajinan: 'Kerajinan',
+  pakaian: 'Pakaian', herbal: 'Herbal & kesehatan', jasa: 'Jasa', lainnya: 'Lainnya' };
 
 // ===== Aset & Wakaf (modul 14) =====
 // Lihat: admin pusat, ketua, bendahara, nadzir. Catat: admin pusat, ketua, nadzir. Dijaga RLS. Tidak ada yang publik.

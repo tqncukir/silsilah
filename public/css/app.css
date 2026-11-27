@@ -1117,3 +1117,6 @@ body:not(.hal-masuk):not(.hal-poster)>main{flex:1 0 auto;width:100%}
 .form-kisi .eko-ket{margin:-6px 0 4px}
 .stat-biasa.eko-belum{color:var(--abu);font-weight:500}
 @media (max-width:767px){.eko-panjang{display:none}}
+.usaha-catatan{margin:14px 0 0}
+.stat-biasa.usaha-jenis{color:var(--abu);font-weight:500;white-space:normal}
+@media (max-width:767px){.stat-biasa.usaha-jenis{text-align:right}}
