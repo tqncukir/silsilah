@@ -3,7 +3,7 @@
 ## POSISI TERAKHIR (baca ini dulu) — diperbarui 2026-11-27
 - **Semua 9 tahap selesai dan disetujui Kang**: 14 modul terbangun (Tahap 9 Kesehatan disetujui 2026-11-27). Versi cache terakhir **v110**. Migrasi terakhir yang sudah dijalankan Kang: `20261127100000_pemeriksaan_keamanan.sql` (Tahap 10). Advisors terakhir: 0 error, 49 peringatan, 11 info (semua jenis yang disengaja).
 - **Serah terima 2026-11-27 (malam):** proyek diteruskan ke akun Claude **goindotea** (perintah Kang). Akun baru tidak membawa skill/memori akun lama: semua aturan ada di `CLAUDE.md` (termasuk "Cara kerja agen" dan "Cara uji") dan riwayat ada di file ini. Cara uji database lokal terbukti jalan (stub di CLAUDE.md; data wilayah contoh diisi langsung karena ekstensi `http` tidak ada).
-- **Langkah berikutnya: Tahap 10 Pemeriksaan menyeluruh** (dipilih Kang 2026-11-27). Langkah 1 & 2 selesai. Tunggu Kang: "lanjut langkah 3".
+- **Langkah berikutnya: Tahap 10 Pemeriksaan menyeluruh** (dipilih Kang 2026-11-27). Langkah 1, 2, 3 selesai. **Menunggu Kang: jalankan migrasi `20261127110000_kecepatan_rls.sql`** (lalu Claude cek Advisors), kemudian "lanjut langkah 4".
 
 ## Tahap 1: Data Jamaah, Pendaftaran, KTA, Portal Anggota, Hak Akses
 Mulai: 2026-11-25 (Kang Salman: "Bismillah").
@@ -438,3 +438,15 @@ Dipilih Kang 2026-11-27 (dari 4 pilihan: backup, notifikasi, berita, pemeriksaan
 - **Edge Functions** `login-anggota` & `kta`: rahasia hanya dari env server; Turnstile wajib sebelum cek PIN/KTA lama; batas salah PIN 5×/nomor & 20×/IP per 15 menit, cek KTA 20×/IP; tanda tangan QR HMAC 96 bit dibanding waktu-tetap; QR lama hanya sesi terbatas & akun anggota; QR + PIN Pengurus wajib 8 angka; `kta_info`/`cek_login` tidak bisa dipanggil dari luar server.
 - **Rahasia:** seluruh riwayat git (171 commit) bersih — hanya kunci publik Supabase & Turnstile (memang publik); tidak ada NIK, data asli, atau file data.
 - **Catatan untuk Kang (tidak diubah, keputusan konsep):** (a) QR KTA baru = kunci masuk anggota tanpa PIN (keputusan 2026-11-26): siapa pun yang memotret KTA bisa membuka Portal Anggota orang itu (isinya hanya data dirinya, tanpa ekonomi/kesehatan); pengurus yang bisa membuka halaman KTA (termasuk bendahara & petugas scan) juga bisa memperoleh QR itu. (b) PIN anggota 6 angka: dengan batas sekarang, menebak PIN satu orang butuh bertahun-tahun, tetapi penyerang bermodal besar yang mencoba ribuan nomor sekaligus secara teori bisa berhasil sesekali; pengaman utamanya Turnstile + harus tahu nama desa. Bila Kang mau, bisa ditambah batas keseluruhan (mis. login dikunci sementara bila ada ratusan PIN salah dalam 15 menit). (c) Akun anggota yang dinonaktifkan masih bisa "masuk" lewat PIN tetapi tidak melihat apa pun (hak dicek database).
+
+**Langkah 3, Kecepatan** (2026-11-27, Kang: "lanjut langkah 3"): migrasi `20261127110000_kecepatan_rls.sql` (**menunggu dijalankan Kang**).
+- **Ukuran file:** kunjungan pertama ±70 KB terkirim (CSS 16 KB + supa.js 9 KB + huruf 27 KB + logo, sudah dipadatkan Cloudflare); kunjungan berikutnya dari simpanan PWA. Pustaka berat (OCR ±5 MB, jsQR, qrcode) hanya dimuat di halaman yang memakainya (Pendaftaran, Absensi, KTA). 3 ikon lama yang tidak dipakai lagi dihapus (`icon-512.png`, `icon-192.png`, `apple-touch-icon.png`, ±240 KB).
+- **Cache PWA:** semua file `INTI` ada. Dibetulkan: simpanan halaman disalin sebelum dibaca dan hanya halaman yang berhasil (bukan galat 404/500) yang disimpan. `_headers`: huruf & OCR disimpan browser 30 hari. Diuji: halaman Masuk tetap terbuka saat sinyal putus. Versi cache tetap v110 (CSS/JS tidak berubah).
+- **Pagination:** semua daftar memakai `dbHalaman` atau fungsi dengan `p_batas`; tidak ada yang menarik semua baris.
+- **Database** (Postgres lokal + PostgREST sungguhan, data tiruan 5.528 jamaah, 529 desa, 1.000 kegiatan, 151 ribu kehadiran):
+  - Temuan 1: **Dashboard kehadiran admin/ketua 10,7 detik** — aturan baca `kehadiran` memanggil fungsi hak akses untuk setiap baris. Sesudah perbaikan: 0,3 detik.
+  - Temuan 2: **Daftar Jamaah & Dashboard untuk koordinator 0,4-0,6 detik** — sama, aturan baca `jamaah` per baris. Sesudah: ±0,01 detik.
+  - Perbaikan: fungsi `private.desa_kelola_saya`, `private.boleh_absen_semua`, `private.kegiatan_kelola_saya` dihitung sekali per permintaan. **Hak akses tidak berubah**: jumlah & isi baris yang terlihat sama persis sebelum/sesudah untuk admin, ketua, koordinator (biasa & sesi KTA lama), anggota (biasa & sesi KTA lama), bendahara, petugas scan (biasa & sesi KTA lama), khodim.
+  - Lainnya cepat (<0,05 detik): cari nama/nomor, saring kab/kec/desa/mursyid/status, halaman ke-200, kegiatan + jumlah hadir, semua fungsi daftar/ringkas (sudah lewat server). Pencarian nama memakai pindai penuh; dengan 5.500 baris ±10 ms, indeks khusus belum perlu (baru perlu bila >50 ribu).
+  - Indeks: semua kunci relasi berindeks kecuali `bantuan.kas_id`/`transaksi_kas_id` (tabel kecil, tidak dipakai untuk pencarian) — tidak perlu.
+

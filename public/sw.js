@@ -12,7 +12,10 @@ self.addEventListener('fetch', (e) => {
   const r = e.request;
   if (r.method !== 'GET' || new URL(r.url).origin !== location.origin) return; // data API tidak di-cache
   if (r.mode === 'navigate') { // halaman: coba jaringan dulu, kalau putus pakai simpanan
-    e.respondWith(fetch(r).then((res) => { caches.open(VERSI).then((c) => c.put(r, res.clone())); return res; })
+    e.respondWith(fetch(r).then((res) => {
+      if (res.ok) { const salin = res.clone(); caches.open(VERSI).then((c) => c.put(r, salin)); } // salin sebelum isi dibaca
+      return res;
+    })
       .catch(() => caches.match(r).then((m) => m || caches.match('/'))));
     return;
   }
