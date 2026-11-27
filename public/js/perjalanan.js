@@ -18,7 +18,7 @@ function simpanUrl() {
   history.replaceState(null, '', p.toString() ? `?${p}` : location.pathname);
 }
 
-// Akan berangkat & berlangsung = berangkat hari ini atau sesudahnya, ATAU tanggal pulang belum lewat.
+// Akan datang = berangkat hari ini atau sesudahnya, ATAU tanggal pulang belum lewat.
 function jalurData() {
   const hari = hariIniWib(), awal = isoWib(hari, '00:00'), w = $('waktu').value;
   const syarat = [];
@@ -47,7 +47,7 @@ async function muat() {
     if (halaman > jmlHal) { halaman = jmlHal; return muat(); }
     const disaring = SARING.some((k) => $(k).value.trim());
     $('saring-ulang').hidden = !disaring;
-    const w = { '': 'akan berangkat & berlangsung', lewat: 'sudah lewat', semua: 'tercatat' }[$('waktu').value];
+    const w = { '': 'akan datang', lewat: 'sudah lewat', semua: 'tercatat' }[$('waktu').value];
     $('ringkas').textContent = `${total.toLocaleString('id-ID')} perjalanan ${w}`;
     $('info-tampil').textContent = total
       ? `Menampilkan nomor ${(dari + 1).toLocaleString('id-ID')}–${(dari + baris.length).toLocaleString('id-ID')} dari ${total.toLocaleString('id-ID')} perjalanan · ${PER_HALAMAN} per halaman`
@@ -58,13 +58,13 @@ async function muat() {
       return `<tr data-id="${k.id}" tabindex="0">
         <td data-l="No" class="angka kol-no">${(dari + i + 1).toLocaleString('id-ID')}</td>
         <td data-l="Nomor" class="angka">${waktuPerjalanan(k)}${n ? ` · <strong>${n.toLocaleString('id-ID')} peserta</strong>` : ''}</td>
-        <td data-l="Nama" class="tabel-nama">${hurufAman(k.nama)}<span class="hp-saja"> · ${hurufAman(JENIS_PERJALANAN[k.jenis] || k.jenis)}</span></td>
-        <td data-l="Desa">${hurufAman(k.tujuan || '–')}<span class="hp-saja"> · ${hurufAman(wilayahTeks(k))}</span></td>
+        <td data-l="Nama" class="tabel-nama">${hurufAman(k.nama)}</td>
+        <td data-l="Desa"><span class="hp-saja">${hurufAman(JENIS_PERJALANAN[k.jenis] || k.jenis)} · </span>${hurufAman(k.tujuan || '–')}<span class="hp-saja"> · ${hurufAman(wilayahTeks(k))}</span></td>
         <td data-l="Kecamatan">${hurufAman(wilayahTeks(k))}</td>
         <td class="kol-luas">${hurufAman(JENIS_PERJALANAN[k.jenis] || k.jenis)}</td>
         <td data-l="Status"><span class="stat ${kelas}">${teks}</span></td>
       </tr>`;
-    }).join('') : `<tr><td colspan="7" class="tabel-kosong">${disaring ? 'Tidak ada perjalanan yang cocok. <button type="button" class="tautan" id="hapus-saring">Hapus saringan</button>' : 'Belum ada perjalanan yang akan berangkat.'}</td></tr>`;
+    }).join('') : `<tr><td colspan="7" class="tabel-kosong">${disaring ? 'Tidak ada perjalanan yang cocok. <button type="button" class="tautan" id="hapus-saring">Hapus saringan</button>' : 'Belum ada perjalanan yang akan datang.'}</td></tr>`;
     $('hapus-saring')?.addEventListener('click', hapusSaring);
     $('halaman').hidden = !total;
     $('posisi').innerHTML = `<strong>${halaman}</strong> / ${jmlHal}<span class="sr-only"> halaman</span>`;

@@ -228,7 +228,7 @@ footer{text-align:center;padding:20px 16px 32px;color:var(--abu);font-size:var(-
 .bagian-ket:last-child{margin:0 0 8px}
 .umur-info{margin:-4px 0 14px;padding:8px 12px;border-radius:10px;background:var(--hijau-pupus);color:var(--hitam,#1A1A1A)}
 @media (max-width:639px){.form-kisi{align-items:end}}
-@media (min-width:640px){.form-kisi{gap:0 16px}.form-kisi>*{grid-column:span 3}.form-kisi>.lebar,.form-kisi>.bagian-judul,.form-kisi>.bagian-ket{grid-column:span 6}.form-kisi>.d2{grid-column:span 2}.form-kisi>.d4{grid-column:span 4}}
+@media (min-width:640px){.form-kisi{gap:0 16px}.form-kisi>*{grid-column:span 3}.form-kisi>.lebar,.form-kisi>.bagian-judul,.form-kisi>.bagian-ket{grid-column:span 6}.form-kisi>.d2{grid-column:span 2}.form-kisi>.d4{grid-column:span 4}.form-kisi>.sepertiga{grid-column:span 2}}
 .wajib{font-weight:400;color:var(--abu);font-size:.8125rem}
 .form select:disabled{background:#F3F3F1;color:var(--abu)}
 .pilihan{border:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
@@ -333,6 +333,7 @@ footer{text-align:center;padding:20px 16px 32px;color:var(--abu);font-size:var(-
   .form-kisi>.lebar{grid-column:span 6}
   .form-kisi>.d4{grid-column:span 4}
   .form-kisi>.d2{grid-column:span 2}
+  .form-kisi>.sepertiga{grid-column:span 4}
   .form-kisi>.bagian-judul,.form-kisi>.bagian-ket{grid-column:span 12}
 }
 
@@ -977,3 +978,11 @@ a.app-keluar{display:inline-flex;align-items:center;text-decoration:none}
 /* Footer selalu di dasar layar walau isi halaman pendek */
 body:not(.hal-masuk):not(.hal-poster){min-height:100vh;display:flex;flex-direction:column}
 body:not(.hal-masuk):not(.hal-poster)>main{flex:1 0 auto;width:100%}
+
+/* Angka ringkas di rincian (Ziarah & Umroh): peserta, lunas, belum lunas, sisa kuota */
+.angka-baris{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:16px 0 0;padding:0;list-style:none}
+.angka-baris[hidden]{display:none}
+.angka-baris li{padding:10px 12px;border-radius:12px;background:var(--latar-sorot)}
+.angka-baris strong{display:block;font-size:1.5rem;line-height:1.2;color:var(--hijau-jamiyyah);font-variant-numeric:tabular-nums}
+.angka-baris span{display:block;font-size:var(--fs-kecil);color:var(--abu)}
+@media (min-width:640px){.angka-baris{grid-template-columns:repeat(4,minmax(0,1fr))}}

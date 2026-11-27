@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=86">
-<link rel="stylesheet" href="/css/app.css?v=86">
+<link rel="stylesheet" href="/css/tokens.css?v=87">
+<link rel="stylesheet" href="/css/app.css?v=87">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -49,6 +49,7 @@
         <button type="button" class="btn btn-kedua btn-pas" id="batalkan" hidden>Batalkan perjalanan</button>
       </div>
     </div>
+    <ul class="angka-baris" id="l-angka" hidden aria-label="Ringkasan peserta"></ul>
     <dl class="rincian" id="l-rincian"></dl>
   </section>
 
@@ -71,11 +72,11 @@
         <input id="tujuan" maxlength="300" autocapitalize="words" placeholder="Makam Walisongo, Jawa Timur dan Jawa Tengah">
       </div>
       <h3 class="bagian-judul">Waktu dan tempat kumpul</h3>
-      <div class="isian d2">
+      <div class="isian sepertiga">
         <label for="berangkat">Tanggal berangkat <span class="wajib">wajib</span></label>
         <input id="berangkat" type="date" required>
       </div>
-      <fieldset class="isian d2 jam-isian">
+      <fieldset class="isian sepertiga jam-isian">
         <legend>Jam kumpul <span class="wajib">wajib</span></legend>
         <div class="jam-pilih">
           <label for="jam" class="sr-only">Jam kumpul</label><select id="jam" required></select>
@@ -84,7 +85,7 @@
           <span>WIB</span>
         </div>
       </fieldset>
-      <div class="isian d2">
+      <div class="isian sepertiga">
         <label for="pulang">Tanggal pulang</label>
         <input id="pulang" type="date" aria-describedby="k-pulang">
         <p class="ket" id="k-pulang">Kosongkan bila pulang di hari yang sama.</p>
@@ -128,8 +129,8 @@
   </div>
   <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
 </footer>
-<script src="/js/supa.js?v=86" defer></script>
-<script src="/js/kalender.js?v=86" defer></script>
-<script src="/js/perjalanan-isi.js?v=86" defer></script>
+<script src="/js/supa.js?v=87" defer></script>
+<script src="/js/kalender.js?v=87" defer></script>
+<script src="/js/perjalanan-isi.js?v=87" defer></script>
 </body>
 </html>

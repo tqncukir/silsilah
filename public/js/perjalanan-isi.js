@@ -29,7 +29,15 @@ function tampilLihat() {
   $('l-nama').textContent = k.nama;
   $('l-status').textContent = teks;
   $('l-status').className = `stat ${kelas}`;
-  const r = ringkas;
+  // Angka ringkas peserta (hanya peran yang berhak melihat peserta). Koordinator di perjalanan pusat hanya melihat kecamatannya.
+  const r = ringkas, sebagian = kecBoleh && !k.kecamatan_id;
+  $('l-angka').hidden = !r;
+  if (r) {
+    const kotak = (n, label, sub) => `<li><strong>${n}</strong><span>${label}</span>${sub ? `<span>${sub}</span>` : ''}</li>`;
+    $('l-angka').innerHTML = kotak(angka(r.peserta), sebagian ? 'Peserta dari kecamatan Anda' : 'Peserta', r.peserta ? `${angka(r.jamaah)} jamaah · ${angka(r.keluarga)} keluarga` : '')
+      + kotak(angka(r.lunas), 'Lunas') + kotak(angka(r.peserta - r.lunas), 'Belum lunas')
+      + (sebagian ? '' : k.kuota ? kotak(angka(Math.max(k.kuota - r.peserta, 0)), 'Sisa kuota', `dari ${angka(k.kuota)} orang`) : kotak('–', 'Sisa kuota', 'Kuota tanpa batas'));
+  }
   $('l-rincian').innerHTML = [
     ['Berangkat', `${tglWib(k.berangkat)}, kumpul ${jamWib(k.berangkat)} WIB`],
     ['Pulang', k.pulang && k.pulang !== tglIsian(k.berangkat) ? tglPanjang(k.pulang) : 'Hari yang sama'],
@@ -37,10 +45,9 @@ function tampilLihat() {
     ['Tempat kumpul', k.tempat_kumpul],
     ['Wilayah', k.kecamatan ? `Kec. ${k.kecamatan.nama}, ${k.kecamatan.kabupaten?.nama || ''}` : 'Pusat Cukir'],
     ['Kuota', k.kuota ? `${angka(k.kuota)} orang` : 'Tanpa batas'],
-    ...(r ? [['Peserta', r.peserta ? `${angka(r.peserta)} orang (${angka(r.jamaah)} jamaah, ${angka(r.keluarga)} keluarga) · ${angka(r.lunas)} lunas, ${angka(r.peserta - r.lunas)} belum lunas${kecBoleh && !k.kecamatan_id ? ' · dari kecamatan Anda' : ''}` : 'Belum ada peserta']] : []),
-    ['Tampil untuk anggota', k.publik ? 'Ya, tampil di Portal Anggota' : 'Tidak (pengurus saja)'],
+    ['Tampil untuk anggota', k.publik ? 'Ya' : 'Pengurus saja'],
     ['Keterangan', k.keterangan],
-  ].map(([a, v]) => `<div><dt>${a}</dt><dd>${v ? hurufAman(v) : '–'}</dd></div>`).join('');
+  ].filter(([, v]) => v).map(([a, v]) => `<div><dt>${a}</dt><dd>${hurufAman(v)}</dd></div>`).join('');
   const boleh = bolehUbah(k);
   $('ubah').hidden = !boleh || k.dibatalkan;
   $('batalkan').hidden = !boleh;

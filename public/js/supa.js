@@ -214,11 +214,16 @@ function statusPerjalanan(p) {
   if (now > akhirPerjalanan(p)) return ['Selesai', ''];
   return now >= new Date(p.berangkat).getTime() ? ['Berlangsung', 'stat-aktif'] : ['Akan berangkat', 'stat-biasa'];
 }
-// "Sab, 20 Des 2026 · 20.00 WIB sampai Rab, 23 Des 2026" (opsi tanggal bisa diganti)
-function waktuPerjalanan(p, opsi = { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) {
-  const pulang = p.pulang && p.pulang !== new Date(p.berangkat).toLocaleDateString('sv-SE', { timeZone: ZONA })
-    ? ` sampai ${new Date(p.pulang + 'T12:00:00+07:00').toLocaleDateString('id-ID', { timeZone: ZONA, ...opsi })}` : '';
-  return `${tglWib(p.berangkat, opsi)} · ${jamWib(p.berangkat)} WIB${pulang}`;
+// Ringkas: "Min, 20 Des 2026 · kumpul 20.00 WIB" (sehari) atau "20–23 Des 2026 · kumpul 20.00 WIB",
+// "30 Des – 2 Jan 2027", "30 Des 2026 – 2 Jan 2027". Tanggal & jam selalu WIB.
+function waktuPerjalanan(p) {
+  const pergi = new Date(p.berangkat).toLocaleDateString('sv-SE', { timeZone: ZONA });
+  const kumpul = ` · kumpul ${jamWib(p.berangkat)} WIB`;
+  if (!p.pulang || p.pulang === pergi) return tglWib(p.berangkat, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) + kumpul;
+  const bag = (ymd) => { const d = new Date(ymd + 'T12:00:00+07:00'); return { d: d.toLocaleDateString('id-ID', { timeZone: ZONA, day: 'numeric' }), b: d.toLocaleDateString('id-ID', { timeZone: ZONA, month: 'short' }), t: ymd.slice(0, 4) }; };
+  const x = bag(pergi), y = bag(p.pulang);
+  const awal = x.t !== y.t ? `${x.d} ${x.b} ${x.t}` : x.b !== y.b ? `${x.d} ${x.b}` : x.d;
+  return `${awal}${x.b === y.b && x.t === y.t ? '–' : ' – '}${y.d} ${y.b} ${y.t}${kumpul}`;
 }
 
 const NAMA_PERAN = {
