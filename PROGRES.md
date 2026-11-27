@@ -467,7 +467,7 @@ Dipilih Kang 2026-11-27 (dari 4 pilihan: backup, notifikasi, berita, pemeriksaan
 
 **Langkah 5, Laporan akhir Tahap 10** (2026-11-27, Kang: "lanjut langkah 5"). **Menunggu persetujuan Kang.**
 - **Hasil:** 3 celah database (log rahasia terbaca admin, Nomor Anggota bisa diganti, hak tabel berlebih) + header website diperketat (L1-L2); dashboard kehadiran 10,7 → 0,3 detik dan daftar jamaah koordinator 0,4 → 0,01 detik tanpa mengubah hak (L3); grafik dashboard tidak lagi bergeser di HP, semua target sentuh ≥44 px, menu bawah juga di tablet (L4). Advisors keamanan: 0 error, tidak ada temuan baru. 2 migrasi Tahap 10 sudah dijalankan Kang (`20261127100000`, `20261127110000`).
-- **Keputusan yang masih terbuka untuk Kang** (tidak mendesak, sistem aman tanpa ini):
+- **Keputusan Kang (2026-11-27), semua dibiarkan seperti sekarang:** (1) QR KTA baru tetap masuk tanpa PIN; (2) tidak perlu batas salah PIN keseluruhan; (3) admin pusat tetap bisa menonaktifkan akunnya sendiri ("akun Admin Pusat yang menjaga sistem"). Rincian pertanyaan semula:
   1. QR KTA baru = masuk Portal Anggota tanpa PIN (keputusan 2026-11-26). Tetap, atau QR + PIN?
   2. Batas salah PIN keseluruhan (kunci sementara bila ada ratusan PIN salah dalam 15 menit) — perlu atau tidak.
   3. Admin pusat secara teknis bisa menonaktifkan akunnya sendiri lewat API — risiko kecil, dibiarkan kecuali Kang ingin dikunci.
