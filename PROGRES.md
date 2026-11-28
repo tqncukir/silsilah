@@ -3,7 +3,7 @@
 ## POSISI TERAKHIR (baca ini dulu) — diperbarui 2026-11-27
 - **Semua 10 tahap selesai dan disetujui Kang** (Tahap 10 Pemeriksaan disetujui 2026-11-27): 14 modul terbangun (Tahap 9 Kesehatan disetujui 2026-11-27). Versi cache terakhir **v112**. Migrasi terakhir yang sudah dijalankan Kang: `20261127110000_kecepatan_rls.sql` (Tahap 10). Advisors terakhir: 0 error, 49 peringatan, 11 info (semua jenis yang disengaja).
 - **Serah terima 2026-11-27 (malam):** proyek diteruskan ke akun Claude **goindotea** (perintah Kang). Akun baru tidak membawa skill/memori akun lama: semua aturan ada di `CLAUDE.md` (termasuk "Cara kerja agen" dan "Cara uji") dan riwayat ada di file ini. Cara uji database lokal terbukti jalan (stub di CLAUDE.md; data wilayah contoh diisi langsung karena ekstensi `http` tidak ada).
-- **Tahap 11 Backup harian ke Google Drive: dimulai 2026-11-28** (akun goindotea). File sudah di repo dan diuji; **menunggu Kang memasang** (5 langkah di Tahap 11) lalu cek & setujui.
+- **Tahap 11 Backup harian ke Google Drive: dimulai 2026-11-28** (akun goindotea). **Terpasang & backup pertama berhasil 2026-11-28 07.12 WIB**; menunggu Kang cek & setujui.
 
 ## Tahap 1: Data Jamaah, Pendaftaran, KTA, Portal Anggota, Hak Akses
 Mulai: 2026-11-25 (Kang Salman: "Bismillah").
@@ -500,3 +500,10 @@ Mulai: 2026-11-28 (Kang: "mulai").
 5. Uji: GitHub → Actions → **Backup harian** → Run workflow. Hijau = cek folder "Backup SILSILAH" di Drive jtccukir2022.
 
 **Cara memulihkan (bila suatu saat perlu, dikerjakan Claude bersama Kang):** unduh `.7z` dari Drive → buka dengan 7-Zip/ZArchiver + `BACKUP_SANDI` → `silsilah.dump` (`pg_restore --no-owner -d <db>`) lalu `auth.dump` (`pg_restore --data-only`) → jalankan ulang baris `create trigger pengguna_baru` dari `20261125020000_login.sql` → pasang lagi rahasia Edge Functions (`KTA_KUNCI`, `TURNSTILE_SECRET`) dan fungsi dari `supabase/functions/`.
+
+**Pemasangan 2026-11-28 (dikerjakan Claude lewat Chrome Kang; izin Google & semua kata sandi/token diisi Kang sendiri):**
+- Apps Script "Backup SILSILAH" di akun jtccukir2022 (Chrome: akun ke-3, `/u/2/`), `pasang()` dijalankan (token, folder, cek 07.00), Web app versi 1 (Jalankan sebagai: Saya, Akses: Siapa saja).
+- Rahasia GitHub: `DRIVE_URL`, `DRIVE_TOKEN`, `SUPABASE_DB_SANDI`, `BACKUP_SANDI`. Rahasia lama `SUPABASE_DB_URL` tidak dipakai lagi (isinya keliru; boleh dihapus).
+- Perubahan: rahasia database cukup kata sandinya (`SUPABASE_DB_SANDI`); alamat Session pooler `aws-0-ap-southeast-1.pooler.supabase.com:5432` user `postgres.tuthgclhrzvvlcnpjxiv` ditulis di workflow, kata sandi di-encode otomatis.
+- Uji manual (Run workflow): 34 tabel tersalin, `silsilah-2026-11-28.7z` ±1 MB tersimpan di Drive folder "Backup SILSILAH". Jadwal otomatis pertama: 29 Nov 01.15 WIB.
+- Catatan: tadi sempat terbuat 1 proyek Apps Script kosong tanpa judul di akun celupherbal (bukan akun organisasi), tidak dipakai.
