@@ -1517,7 +1517,7 @@ main.depan{max-width:none;padding:0 0 32px}
 @media (min-width:1024px){
   #k-ruhani .dsb-hadir,#k-kepedulian .dsb-hadir,#k-amanah .dsb-hadir{grid-column:span 5}
   #k-ruhani .hadir-dua,#k-kepedulian .hadir-dua,#k-amanah .hadir-dua{grid-template-columns:minmax(0,1fr)}
-  #p-daftar-ulang{grid-column:1 / -1}
+  #p-daftar-ulang{grid-column:span 5}
 }
 /* c. Ikon warna kelompok (kelas .grup-* dipakai bersama menu) */
 .dsb-ikon.grup-pondasi{background:var(--mint);color:var(--hijau-jamiyyah)}
@@ -1550,3 +1550,16 @@ main.depan{max-width:none;padding:0 0 32px}
 .dsb-kepala{margin-bottom:8px}
 /* g. Batang "Belum diisi" abu-abu */
 .bt-isi.bt-isi-kosong{background:#B9C3BC}
+
+/* Tata ulang kelompok Jamaah (Kang 2026-11-28): laptop = kolom kiri (Sebaran, Mursyid, Sektor) + kolom kanan (Usia, Jenis kelamin,
+   Catatan, Daftar ulang) tanpa celah kosong, lalu Pendaftaran per bulan selebar penuh. HP/tablet: urutan seperti semula. */
+.dsb-kiri,.dsb-kanan{display:contents}
+#k-jamaah .dsb-sebaran{order:1}#k-jamaah .dsb-usia{order:2}#k-jamaah .dsb-jk{order:3}#k-jamaah .dsb-bulan{order:4}
+#k-jamaah .dsb-mursyid{order:5}#k-jamaah .dsb-catatan{order:6}#k-jamaah .dsb-sektor{order:7}#k-jamaah #p-daftar-ulang{order:8}
+@media (min-width:1024px){
+  #k-jamaah{grid-template-columns:minmax(0,3fr) minmax(0,2fr)}
+  #k-jamaah .dsb-kiri,#k-jamaah .dsb-kanan{display:flex;flex-direction:column;gap:16px;min-width:0}
+  #k-jamaah .dsb-kiri>*,#k-jamaah .dsb-kanan>*{order:0}
+  #k-jamaah .dsb-bulan{grid-column:1 / -1;order:0}
+}
+@media (min-width:768px) and (max-width:1023px){#k-jamaah .dsb-sektor{grid-column:1 / -1}}

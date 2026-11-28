@@ -533,7 +533,7 @@ async function muat() {
     $('k-total-sub').textContent = `${teksWilayah()} · ${teksPeriode()}`;
     $('k-kab-sub').textContent = data.tingkat === 'kabupaten' ? 'Dari alamat jamaah' : `${angka(data.sebaran.length)} ${TINGKAT[data.tingkat]} di pilihan ini`;
     $('k-catatan-sub').textContent = `${persen(data.catatan_total, data.total)} dari jamaah terdaftar`;
-    gambarSebaran(); gambarUsia(); gambarJk(); gambarBulan(); gambarCatatan(); gambarSektor(); gambarPekerjaan();
+    gambarSebaran(); gambarUsia(); gambarJk(); gambarBulan(); gambarCatatan(); gambarSektor(); // panel Komposisi pekerjaan dihapus dari tampilan (Kang 2026-11-28)
   } catch (e) {
     if (ini !== nomorMuat) return;
     if (e.message === 'belum-masuk' || e.message === 'gagal-401') { location.replace('/masuk.html'); return; }
