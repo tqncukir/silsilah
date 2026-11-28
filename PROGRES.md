@@ -742,7 +742,7 @@ Temuan & perbaikan (tampilan saja): **Masuk** — (a) "Masuk dengan PIN (penguru
 - **v138 (Kang):** kaki halaman `.kaki` (semua halaman yang punya footer) juga memakai motif bintang yang sama. Uji halaman depan 26 lulus.
 
 ## Tahap 17: Daftar ulang KTA lama
-Mulai: 2026-11-28 (Kang: "mulai tahap daftar ulang"). **Menunggu Kang "lanjut langkah 1".**
+Mulai: 2026-11-28 (Kang: "mulai tahap daftar ulang").
 **Temuan Kang (2026-11-28):** jamaah pemegang **KTA lama tanpa QR tidak ada di data 5.528** (impor Excel). Nomornya berformat sama (10 angka 1165…), sebagian **di atas 1165105644**; tidak ada daftar/berkas datanya; jumlahnya **lebih dari 1.000**. Belum ada pendaftaran jamaah baru sejak impor (nomor 1165105645 ke atas belum terpakai).
 **Keputusan Kang:** nomor jamaah baru **tetap 1165105645 dst** (tidak pindah blok), walau sudah dijelaskan risiko nomor kembar dengan kartu lama yang belum didaftarkan.
 **Usulan Claude:** (1) nomor otomatis melompati nomor yang sudah terpakai; (2) Pendaftaran menerima "Nomor di KTA lama (bila ada)" khusus admin pusat/ketua/koordinator, tolak bila sudah dipakai + tampilkan pemiliknya; (3) utamakan daftar ulang pemegang KTA lama per desa sebelum menerima anggota baru; (4) setelah tersimpan langsung Buat PIN → jamaah masuk sendiri & simpan/cetak KTA baru ber-QR ("PIN sekali, lalu cetak sendiri"). Anggota **tidak** boleh menerbitkan KTA baru sendiri tanpa dikenali pengurus (QR lama & nomor mudah ditiru).
@@ -753,3 +753,10 @@ Mulai: 2026-11-28 (Kang: "mulai tahap daftar ulang"). **Menunggu Kang "lanjut la
 3. Data Jamaah (saringan "Daftar ulang KTA lama") + Dashboard (jumlah daftar ulang per kecamatan/desa).
 4. Uji menyeluruh (360/768/1280, semua peran) + laporan.
 Sesudah tahap ini: "Bagikan PIN per desa" (slip PIN massal).
+
+**Langkah 1, Database** (2026-11-28, Kang: "lanjut langkah 1"): migrasi `20261128060000_daftar_ulang.sql` (**perlu dijalankan Kang**).
+- Enum `asal_jamaah` (impor, baru, daftar_ulang) + kolom `jamaah.asal`: baris yang sudah ada otomatis **impor** (kolom ditambah dengan nilai tetap, tanpa memicu log), bawaan berikutnya **baru**; indeks sebagian untuk daftar ulang per desa.
+- `nomor_anggota` tidak lagi memakai nilai bawaan; trigger `nomor_otomatis` (hak **pemanggil**, agar tahu peran aplikasi): tanpa nomor → `private.nomor_bebas_berikut()` (nextval yang **melompati nomor terpakai**, hak pemilik agar melihat semua wilayah) & asal baru; dengan nomor dari aplikasi → wajib 1165000000–1165999999, tolak bila `private.nomor_terpakai()`, asal **daftar_ulang** (asal kiriman aplikasi selalu ditimpa). Hak menambah tetap RLS lama (admin pusat, ketua, koordinator di wilayahnya). Admin database (postgres) tetap bisa impor dengan nomor & asal sendiri.
+- `kunci_jamaah` diperbarui: Nomor, tanggal dibuat, **dan asal** tidak bisa diubah lewat aplikasi.
+- `public.cek_nomor_kta_lama(nomor)` (admin pusat, ketua, koordinator; sesi KTA lama & tamu ditolak): tidak_valid / bebas / dipakai (+ id, nama, desa, kecamatan bila jamaah itu di wilayahnya) / dipakai_luar (koordinator: hanya nama kecamatan).
+- Uji Postgres lokal (data contoh dimuat **sebelum** migrasi, meniru data asli; `TUNDA=daftar_ulang /tmp/uji/siapdb.sh`): **24 lulus** (data lama = impor tanpa log, tanpa nilai bawaan, nomor KTA lama tersimpan apa adanya, asal tidak bisa dipalsukan, nomor otomatis melompati nomor terpakai — juga untuk koordinator yang tidak bisa melihat wilayah lain, tolak kembar/bukan 1165…/1166…, asal & nomor terkunci, koordinator hanya wilayahnya, cek nomor per peran, bendahara/anggota/sesi KTA lama/tamu ditolak, log tercatat, impor postgres tetap bisa). Uji notifikasi 29, jadwal 14, tindak lanjut 12 tetap lulus. Halaman yang ada tidak mengirim nomor sendiri (Pendaftaran & Ubah Data aman).
