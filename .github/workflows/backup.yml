@@ -33,6 +33,12 @@ jobs:
             [ -n "${!v}" ] || { echo "::error::Rahasia $v belum diisi"; exit 1; }
           done
           [ ${#SANDI} -ge 12 ] || { echo "::error::BACKUP_SANDI minimal 12 huruf"; exit 1; }
+          # Alamat database: buang spasi/baris baru; cek bentuknya tanpa menampilkan kata sandi
+          DB=$(printf '%s' "$DB" | tr -d '[:space:]')
+          echo "DB=$DB" >> "$GITHUB_ENV"
+          case "$DB" in postgresql://*|postgres://*) ;; *) echo "::error::SUPABASE_DB_URL harus diawali postgresql://"; exit 1;; esac
+          echo "$DB" | grep -q '^postgres[a-z]*://postgres\.tuthgclhrzvvlcnpjxiv:[^@]\+@aws-0-ap-southeast-1\.pooler\.supabase\.com:5432/postgres$' \
+            || { echo "::error::SUPABASE_DB_URL bentuknya keliru. Pola: postgresql://postgres.tuthgclhrzvvlcnpjxiv:SANDI@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres (jumlah tanda @: $(echo "$DB" | tr -cd @ | wc -c))"; exit 1; }
 
       - name: Pasang pg_dump 17 dan 7-Zip
         run: |
@@ -44,8 +50,8 @@ jobs:
           umask 077
           export PATH=/usr/lib/postgresql/17/bin:$PATH PGCONNECT_TIMEOUT=30
           mkdir -p out
-          pg_dump "$DB" -Fc --no-owner --no-privileges -n public -n private -f out/silsilah.dump
-          pg_dump "$DB" -Fc --data-only -t auth.users -t auth.identities -f out/auth.dump
+          pg_dump --dbname="$DB" -Fc --no-owner --no-privileges -n public -n private -f out/silsilah.dump
+          pg_dump --dbname="$DB" -Fc --data-only -t auth.users -t auth.identities -f out/auth.dump
           n=$(pg_restore -l out/silsilah.dump | grep -c 'TABLE DATA')
           echo "Isi tabel tersalin: $n"
           [ "$n" -ge 20 ] || { echo "::error::Backup terlalu sedikit isinya ($n tabel)"; exit 1; }
