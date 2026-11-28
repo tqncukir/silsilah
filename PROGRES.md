@@ -503,7 +503,7 @@ Mulai: 2026-11-28 (Kang: "mulai").
 
 **Pemasangan 2026-11-28 (dikerjakan Claude lewat Chrome Kang; izin Google & semua kata sandi/token diisi Kang sendiri):**
 - Apps Script "Backup SILSILAH" di akun jtccukir2022 (Chrome: akun ke-3, `/u/2/`), `pasang()` dijalankan (token, folder, cek 07.00), Web app versi 1 (Jalankan sebagai: Saya, Akses: Siapa saja).
-- Rahasia GitHub: `DRIVE_URL`, `DRIVE_TOKEN`, `SUPABASE_DB_SANDI`, `BACKUP_SANDI`. Rahasia lama `SUPABASE_DB_URL` tidak dipakai lagi (isinya keliru; boleh dihapus).
+- Rahasia GitHub: `DRIVE_URL`, `DRIVE_TOKEN`, `SUPABASE_DB_SANDI`, `BACKUP_SANDI`. Rahasia lama `SUPABASE_DB_URL` sudah dihapus (2026-11-28).
 - Perubahan: rahasia database cukup kata sandinya (`SUPABASE_DB_SANDI`); alamat Session pooler `aws-0-ap-southeast-1.pooler.supabase.com:5432` user `postgres.tuthgclhrzvvlcnpjxiv` ditulis di workflow, kata sandi di-encode otomatis.
 - Uji manual (Run workflow): 34 tabel tersalin, `silsilah-2026-11-28.7z` ±1 MB tersimpan di Drive folder "Backup SILSILAH". Jadwal otomatis pertama: 29 Nov 01.15 WIB.
-- Catatan: tadi sempat terbuat 1 proyek Apps Script kosong tanpa judul di akun celupherbal (bukan akun organisasi), tidak dipakai.
+- Proyek Apps Script kosong yang sempat terbuat di akun celupherbal sudah dipindah ke sampah (2026-11-28).
