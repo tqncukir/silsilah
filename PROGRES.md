@@ -6,7 +6,7 @@
 - **Tahap 11 Backup harian ke Google Drive: selesai & disetujui Kang 2026-11-28.** Backup otomatis tiap 01.15 WIB ke Drive jtccukir2022 folder "Backup SILSILAH".
 - **Tahap 12 Dashboard Pantau Backup (khusus Admin Pusat): selesai & disetujui Kang 2026-11-28.** `backup.html` + ubin Beranda; GitHub mencatat setiap backup ke `private.catatan_backup`.
 - **Tahap 13 Menu ringkas (Alternatif B): selesai & disetujui Kang 2026-11-28.** HP/tablet: lembar Lainnya berubin per kelompok; laptop: menu atas + daftar per kelompok + tombol Admin. Perbaikan "aplikasi lambat" (v119) dicek Kang: sudah cepat. **Versi cache terakhir v119.**
-- **Langkah berikutnya: tunggu Kang memilih tahap baru.** Sisa kecil Tahap 1 (Turnstile di Cek KTA lama, kecamatan Koordinator di Atur PIN) sudah selesai 2026-11-26. Yang tersisa adalah tugas Kang sendiri (lihat Tahap 10 Langkah 5: uji akun asli, lengkapi data, cek Advisors bulanan) dan rencana website profil di tqncukir.id.
+- **Sedang dikerjakan: Tahap 14 Berita** (mulai 2026-11-28, lihat bagian Tahap 14). Tahap berikutnya yang diminta Kang: Notifikasi ke HP jamaah & pengurus. Sisa kecil Tahap 1 (Turnstile di Cek KTA lama, kecamatan Koordinator di Atur PIN) sudah selesai 2026-11-26. Yang tersisa adalah tugas Kang sendiri (lihat Tahap 10 Langkah 5: uji akun asli, lengkapi data, cek Advisors bulanan) dan rencana website profil di tqncukir.id.
 
 ## Tahap 1: Data Jamaah, Pendaftaran, KTA, Portal Anggota, Hak Akses
 Mulai: 2026-11-25 (Kang Salman: "Bismillah").
@@ -562,3 +562,25 @@ Mulai: 2026-11-28 (Kang: "mulai B"). **Disetujui Kang 2026-11-28 ("Tahap 13 dise
 - `profilSaya()`: profil terakhir (nama, peran, jamaah_id; per akun) disimpan di `localStorage['silsilah.profil']`; halaman & menu langsung tampil dari simpanan, lalu dicek ke server di belakang layar; bila berubah → muat ulang; 401 → ke Masuk. Simpanan dihapus saat keluar (`sesi.hapus`). Hak akses tetap RLS.
 - Uji: profil simpanan → menu & nama tampil sebelum server menjawab; peran diubah → dimuat ulang dengan menu baru; server tidak menjawab → halaman tampil 2,1 dtk dari simpanan; menu HP/laptop 4 peran tetap lolos.
 - Dicek Kang di HP 2026-11-28: "sudah cepat".
+
+## Tahap 14: Berita di halaman publik
+Mulai: 2026-11-28 (Kang: "mulai tahap 14: berita"). Setelah ini Kang ingin Tahap Notifikasi ke HP.
+
+**Keputusan Kang (2026-11-28):**
+1. Penulis: admin pusat & ketua menerbitkan langsung; **koordinator boleh menulis, tampil setelah disetujui ketua**.
+2. Foto: **satu foto sampul** per berita (foto kegiatan, bukan KTP/perorangan).
+3. Pembaca: **dipilih per berita**: Publik (siapa saja) atau Khusus anggota (harus login).
+4. Tampil di: **halaman depan (3 terbaru), halaman Berita (semua), Beranda setelah login**.
+
+**Usulan Claude (berlaku kecuali Kang ubah):**
+- Status berita: Draf → Diajukan (koordinator) → Terbit / Ditolak (dengan alasan); berita terbit bisa **Ditarik** (disembunyikan) dan diterbitkan lagi. Tidak ada yang dihapus; setiap perubahan masuk `log_perubahan`.
+- Yang menyetujui berita koordinator: ketua (admin pusat juga boleh, supaya tidak macet saat ketua berhalangan). Koordinator hanya mengubah beritanya sendiri yang belum terbit.
+- Foto dikecilkan di HP sebelum dikirim (lebar maks 1200 px, WebP ±150 KB), disimpan di Supabase Storage (gratis 1 GB) dengan nama acak. Satu berita satu foto; ganti foto = foto lama dihapus.
+- Isi berita teks biasa dengan paragraf (tanpa HTML), judul maks 120 huruf, isi maks 10.000 huruf; tolak angka ≥10 digit (nomor HP/NIK) sesuai aturan privasi.
+- Menu "Berita" masuk kelompok Ruhani & Kegiatan; tautan "Berita" di halaman depan.
+
+**Rencana langkah:**
+1. Database: tabel `berita` + tempat foto (Storage) + fungsi simpan/ajukan/setujui/tolak/tarik + baca publik & khusus anggota. Uji per peran di database lokal. Kang menjalankan migrasi.
+2. Halaman pengurus: daftar berita (saring status), tulis/ubah + foto, ajukan/terbitkan, setujui/tolak, tarik.
+3. Tampilan baca: halaman depan (3 terbaru), halaman Berita + halaman baca per berita, Beranda setelah login.
+4. Uji menyeluruh (360/768/1280, semua peran, tamu) + laporan.
