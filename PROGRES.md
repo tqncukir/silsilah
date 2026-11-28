@@ -533,3 +533,5 @@ Mulai: 2026-11-28 (Kang: "mulai").
 - Beranda admin pusat: ubin "Pantau Backup" di Amanah & Tata Kelola dengan status singkat; bila gagal/telat muncul peringatan merah di atas + tautan. Menu "Lainnya" (HP/tablet): "Pantau Backup" khusus admin pusat.
 - `supa.js`: `nilaiBackup()` + `ukuranTeks()` dipakai bersama Beranda & halaman.
 - Uji: 4 keadaan (berhasil, gagal, telat, kosong) × 360/768/1024/1280 px: tanpa geser samping, tanpa galat konsol, target sentuh ≥44 px, tangkapan layar dilihat. 8 peran lain: tidak ada ubin, tidak ada menu, fungsi tidak dipanggil, halaman dialihkan.
+
+**Langkah 4, Uji sungguhan** (2026-11-28 07.44 WIB): Run workflow manual (run 46089456345) berhasil: 35 tabel, `silsilah-2026-11-28.7z` ±1,0 MB ke Drive, langkah "Catat hasil" → "Tercatat: berhasil=true". Halaman sudah tayang (tanpa login dialihkan ke Masuk). Pengecekan di HP dengan akun Admin Pusat oleh Kang (login hanya oleh Kang). **Menunggu Kang cek & setujui Tahap 12.**
