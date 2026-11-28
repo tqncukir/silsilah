@@ -160,7 +160,7 @@ if ((globalThis as any).Deno?.serve) (globalThis as any).Deno.serve(async (req: 
         if (h.ok) haul = kalimatHaul(await h.json());
       }
       r = await rpc("notif_susun", { p_slot: isi.aksi, p_haul: haul });
-    } else if (isi.aksi === "tugas" && (isi.jenis === "berita_diajukan" || isi.jenis === "bantuan_diajukan")) {
+    } else if (isi.aksi === "tugas" && (isi.jenis === "berita_diajukan" || isi.jenis === "bantuan_diajukan" || isi.jenis === "sistem")) {
       r = await rpc("notif_tugas", { p_jenis: isi.jenis });
     } else return jawab({ pesan: "Aksi tidak dikenal." }, 400, asal);
     if (!r.ok) return jawab({ pesan: "Penyusun notifikasi gagal." }, 500, asal);

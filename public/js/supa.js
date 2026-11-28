@@ -539,6 +539,10 @@ function nilaiKesehatan(k) {
     if (!j.aktif) h.push(['penting', `Jadwal notifikasi ${w} tidak aktif`, '/sistem.html#k-notif']);
     else if (j.status && j.status !== 'succeeded') h.push(['penting', `Kiriman notifikasi ${w} terakhir gagal`, '/sistem.html#k-notif']);
   }
+  // Pemeriksaan otomatis 06.30/16.30 (Tahap 18 Langkah 4): kiriman ke server notifikasi yang gagal (tidak terbaca dari tempat lain)
+  const ck = k.cek;
+  if (ck && Date.now() - new Date(ck.waktu).getTime() < 24 * 36e5)
+    for (const m of ck.masalah || []) if (/kiriman ke server notifikasi/.test(m)) h.push(['penting', m, '/sistem.html#k-notif']);
   const kp = k.kapasitas;
   if (kp && n(kp.db_byte) / n(kp.db_batas) >= BATAS_PENUH) h.push(['penting', 'Database hampir penuh (paket gratis)', '/sistem.html#k-kapasitas']);
   if (kp && n(kp.foto_byte) / n(kp.foto_batas) >= BATAS_PENUH) h.push(['penting', 'Tempat foto hampir penuh (paket gratis)', '/sistem.html#k-kapasitas']);

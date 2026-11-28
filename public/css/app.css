@@ -1754,3 +1754,4 @@ a.dsb-kartu-tautan:focus-visible{outline:3px solid var(--kuning-rosyid);outline-
   .ks-menu{grid-column:2}
 }
 .ks-akun-pilih select{width:100%;min-height:44px;padding:8px 12px;border:1.5px solid var(--garis-isian);border-radius:10px;font:inherit;font-size:var(--fs-isian);font-weight:400;background:#FFFFFF;color:var(--hitam);cursor:pointer}
+.ks-cek-masalah{color:#8C1D18}

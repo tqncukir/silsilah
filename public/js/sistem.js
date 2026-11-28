@@ -77,8 +77,11 @@ function tampil(k) {
     + `<ul class="ks-daftar">${jadwal('notif-pagi', 'pagi', 'Kiriman pagi (06.00)')}${jadwal('notif-sore', 'sore', 'Kiriman sore (16.00)')}
       ${baris('hp', `HP menerima notifikasi<small>${a(nf.hp_pengurus)} milik pengurus</small>`, a(nf.hp))}
       ${baris('jam', 'Terkirim 24 jam terakhir', `${a(nf.terkirim_24j)} kali`)}
-      ${baris('silang', 'HP tidak aktif lebih dari 30 hari', a(nf.hp_lama), { ok: !n(nf.hp_lama) })}</ul>
-    <p class="ket ks-catatan">HP tidak aktif dibersihkan otomatis saat kiriman berikutnya ditolak.</p>`;
+      ${baris('silang', 'HP tidak aktif lebih dari 30 hari', a(nf.hp_lama), { ok: !n(nf.hp_lama) })}
+      ${baris('aman', `Pemeriksaan otomatis (06.30 & 16.30)<small>${k.cek ? `terakhir ${waktuRelatif(k.cek.waktu)}` : 'belum pernah jalan'}</small>`,
+        k.cek ? (k.cek.masalah?.length ? `${a(k.cek.masalah.length)} masalah` : '') : '', { ok: k.cek ? !k.cek.masalah?.length : null })}</ul>
+    ${k.cek?.masalah?.length ? `<p class="ket ks-catatan ks-cek-masalah">${k.cek.masalah.map(hurufAman).join(' · ')}</p>` : ''}
+    <p class="ket ks-catatan">Bila ada masalah, Admin Pusat mendapat notifikasi "Sistem perlu dicek". HP tidak aktif dibersihkan otomatis saat kiriman berikutnya ditolak.</p>`;
 
   // 3. Kerapian data jamaah
   const d = k.data || {};
