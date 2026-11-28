@@ -5,7 +5,8 @@
 - **Serah terima 2026-11-27 (malam):** proyek diteruskan ke akun Claude **goindotea** (perintah Kang). Akun baru tidak membawa skill/memori akun lama: semua aturan ada di `CLAUDE.md` (termasuk "Cara kerja agen" dan "Cara uji") dan riwayat ada di file ini. Cara uji database lokal terbukti jalan (stub di CLAUDE.md; data wilayah contoh diisi langsung karena ekstensi `http` tidak ada).
 - **Tahap 11 Backup harian ke Google Drive: selesai & disetujui Kang 2026-11-28.** Backup otomatis tiap 01.15 WIB ke Drive jtccukir2022 folder "Backup SILSILAH".
 - **Tahap 12 Dashboard Pantau Backup (khusus Admin Pusat): selesai & disetujui Kang 2026-11-28.** `backup.html` + ubin Beranda; GitHub mencatat setiap backup ke `private.catatan_backup`.
-- **Langkah berikutnya: tunggu Kang memilih tahap baru.**
+- **Tahap 13 Menu ringkas (Alternatif B): selesai & disetujui Kang 2026-11-28.** HP/tablet: lembar Lainnya berubin per kelompok; laptop: menu atas + daftar per kelompok + tombol Admin. Perbaikan "aplikasi lambat" (v119) dicek Kang: sudah cepat. **Versi cache terakhir v119.**
+- **Langkah berikutnya: tunggu Kang memilih tahap baru.** Sisa kecil Tahap 1 (Turnstile di Cek KTA lama, kecamatan Koordinator di Atur PIN) sudah selesai 2026-11-26. Yang tersisa adalah tugas Kang sendiri (lihat Tahap 10 Langkah 5: uji akun asli, lengkapi data, cek Advisors bulanan) dan rencana website profil di tqncukir.id.
 
 ## Tahap 1: Data Jamaah, Pendaftaran, KTA, Portal Anggota, Hak Akses
 Mulai: 2026-11-25 (Kang Salman: "Bismillah").
