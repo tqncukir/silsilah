@@ -9,7 +9,7 @@
 - **Tahap 14 Berita: selesai & disetujui Kang 2026-11-28.** Versi cache **v127** (v123 & v124 = perbaikan simpan berita; v125 = jendela konfirmasi serasi; v126 = foto hilang tidak tampil kotak kosong; v127 = status Ditarik merah, lihat akhir Tahap 14). Tahap berikutnya yang diminta Kang: Notifikasi ke HP jamaah & pengurus. Sisa kecil Tahap 1 (Turnstile di Cek KTA lama, kecamatan Koordinator di Atur PIN) sudah selesai 2026-11-26. Yang tersisa adalah tugas Kang sendiri (lihat Tahap 10 Langkah 5: uji akun asli, lengkapi data, cek Advisors bulanan) dan rencana website profil di tqncukir.id.
 - **Tahap 15 Beranda baru: selesai & disetujui Kang 2026-11-28.** Versi cache **v134** (v130-131 = Simpan KTA PNG; v132 = Kunci Notifikasi; v133-134 = tombol, pengaturan & uji notifikasi). Migrasi terakhir yang sudah dijalankan Kang: `20261128050000_notif_jadwal.sql`. Advisors: 0 error, 62 peringatan, 16 info (semua jenis yang disengaja). Tahap berikutnya yang diminta Kang: Notifikasi ke HP.
 - **Tahap 16 Notifikasi: selesai & disetujui Kang 2026-11-28.** Uji kirim ke HP Kang berhasil; kiriman jadwal pertama sore 28 Nov 16.00 (dicek otomatis 16.10) & pagi 29 Nov 06.00. Versi cache v134.
-- **Halaman depan baru "Gerbang Hijau Berkah" (Arah A, Kang 2026-11-28): selesai, menunggu dicek Kang.** Versi cache **v137** (v136 = poles Masuk & Notifikasi; v137 = motif bintang di kepala semua halaman).
+- **Halaman depan baru "Gerbang Hijau Berkah" (Arah A, Kang 2026-11-28): selesai, menunggu dicek Kang.** Versi cache **v137** (v136 = poles Masuk & Notifikasi; v137 = motif bintang di kepala semua halaman; v138 = motif di kaki halaman).
 
 ## Tahap 1: Data Jamaah, Pendaftaran, KTA, Portal Anggota, Hak Akses
 Mulai: 2026-11-25 (Kang Salman: "Bismillah").
@@ -739,3 +739,4 @@ Temuan & perbaikan (tampilan saja): **Masuk** — (a) "Masuk dengan PIN (penguru
 
 ## 2026-11-28: motif bintang di kepala hijau semua halaman setelah masuk (pertanyaan Kang, v137)
 `.app-atas` (kepala bersama semua halaman aplikasi) memakai latar `var(--hijau-jamiyyah) url(/img/motif.svg)`, senada dengan halaman depan & Masuk; `/img/motif.svg` masuk daftar `INTI` sw.js (tampil saat offline). Uji Beranda 8 peran: 72 lulus; menu atas/bawah & Keluar tetap jelas.
+- **v138 (Kang):** kaki halaman `.kaki` (semua halaman yang punya footer) juga memakai motif bintang yang sama. Uji halaman depan 26 lulus.
