@@ -619,7 +619,7 @@ Mulai: 2026-11-28 (Kang: "mulai tahap 14: berita"). **Disetujui Kang 2026-11-28.
 - **Status Ditarik merah (Kang 2026-11-28, v127):** `STATUS_BERITA.ditarik` di `supa.js` memakai pil merah `stat-wafat` (sama dengan Ditolak; dulu teks abu). Dicek 360/1280 di Kelola Berita.
 
 ## Tahap 15: Beranda baru (ringkas, hidup, tanpa menu dobel)
-Diusulkan 2026-11-28 (Kang: "beranda bagusnya apa saja, agar tidak tumpuk/dobel dengan menu"). **Belum dimulai: menunggu Kang bilang "mulai"** (Tahap 14 sudah disetujui).
+Diusulkan 2026-11-28 (Kang: "beranda bagusnya apa saja, agar tidak tumpuk/dobel dengan menu"). Mulai: 2026-11-28 (Kang: "mulai tahap 15").
 
 **Keputusan Kang (2026-11-28):**
 1. Tanggal Hijriah di salam: **pakai**.
@@ -638,3 +638,7 @@ Diusulkan 2026-11-28 (Kang: "beranda bagusnya apa saja, agar tidak tumpuk/dobel 
 2. Beranda anggota (salam Hijriah, kegiatan terdekat, haul, berita, KTA mini + hadir bulan ini, ziarah buka).
 3. Beranda pengurus (perlu ditindaklanjuti, kegiatan + Buka Absensi, haul, berita, 4 pintasan); hapus ubin menu lengkap, pastikan semua menu tetap terjangkau dari menu bawah/atas.
 4. Uji menyeluruh (360/768/1280, semua peran, sesi KTA lama) + laporan.
+
+**Langkah 1, Database** (2026-11-28, Kang: "mulai tahap 15"): migrasi `20261128030000_tindak_lanjut.sql` (**perlu dijalankan Kang**).
+- Fungsi `public.tindak_lanjut()` → jsonb jumlah saja (tanpa nama), tiap jenis mengikuti hak yang sudah ada: `berita_menunggu` (admin pusat & ketua), `berita_ditolak` (koordinator, tulisannya sendiri), `bantuan_putus` (ketua: diajukan), `bantuan_salur` (bendahara & koordinator wilayahnya: disetujui belum disalurkan), `peserta_belum_lunas` (yang boleh menandai lunas: peserta aktif perjalanan yang belum berangkat & tidak dibatalkan), `sakit_belum_dijenguk` (ketua, dokter, koordinator wilayahnya: sedang sakit ≥7 hari & tanpa kunjungan 7 hari terakhir). Anggota, peran lain tanpa hak, akun tanpa peran, sesi KTA lama → `{}`. `security definer`, `search_path = ''`, revoke public/anon, grant authenticated. Tanpa tabel baru.
+- Uji Postgres lokal (semua migrasi dari kosong + stub Storage): **12 pemeriksaan lulus** — admin pusat, ketua, bendahara, koordinator KecA & KecB (hanya wilayahnya), dokter, anggota `{}`, petugas scan, ketua sesi KTA lama `{}`, akun tanpa peran `{}`, tamu ditolak (42501), anon tanpa hak execute; fungsi security definer + search_path kosong.
