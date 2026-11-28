@@ -508,3 +508,15 @@ Mulai: 2026-11-28 (Kang: "mulai"). **Disetujui Kang 2026-11-28.**
 - Perubahan: rahasia database cukup kata sandinya (`SUPABASE_DB_SANDI`); alamat Session pooler `aws-0-ap-southeast-1.pooler.supabase.com:5432` user `postgres.tuthgclhrzvvlcnpjxiv` ditulis di workflow, kata sandi di-encode otomatis.
 - Uji manual (Run workflow): 34 tabel tersalin, `silsilah-2026-11-28.7z` ±1 MB tersimpan di Drive folder "Backup SILSILAH". Jadwal otomatis pertama: 29 Nov 01.15 WIB.
 - Proyek Apps Script kosong yang sempat terbuat di akun celupherbal sudah dipindah ke sampah (2026-11-28).
+
+## Tahap 12: Dashboard Pantau Backup (khusus Admin Pusat)
+Diminta Kang 2026-11-28. **Menunggu "mulai".**
+
+**Keputusan Kang (2026-11-28):** kartu status backup di Beranda Admin Pusat + halaman riwayat; riwayat 90 hari. Hanya Admin Pusat yang bisa melihat (peran lain tidak melihat menu dan ditolak database).
+**Usulan Claude:** setiap kali backup jalan (berhasil atau gagal), GitHub menulis satu baris ke tabel tertutup `private.catatan_backup` (waktu, berhasil/gagal, langkah yang gagal, jumlah tabel, ukuran file, file lama dirapikan, link ke catatan GitHub) memakai kata sandi database yang sudah ada — tanpa rahasia baru, gratis. Dibaca lewat fungsi `status_backup()` yang menolak selain admin pusat. Bila tidak ada catatan >30 jam (mis. Supabase dijeda / kata sandi salah) dashboard menampilkan peringatan merah. Baris >90 hari dihapus otomatis saat backup.
+
+**Rencana langkah:**
+1. Migrasi `catatan_backup` + fungsi `status_backup()` (diuji per peran di database lokal). Kang menjalankan migrasi di SQL Editor.
+2. Workflow `backup.yml`: langkah akhir "Catat hasil" (`if: always()`).
+3. Halaman `backup.html` (status besar + riwayat 90 hari + link GitHub Actions & Drive) + kartu di Beranda admin pusat + menu Lainnya. Uji 360/768/1280, semua peran.
+4. Uji sungguhan: Run workflow sekali, cek dashboard di HP.
