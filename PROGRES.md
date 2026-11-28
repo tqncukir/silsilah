@@ -8,7 +8,7 @@
 - **Tahap 13 Menu ringkas (Alternatif B): selesai & disetujui Kang 2026-11-28.** HP/tablet: lembar Lainnya berubin per kelompok; laptop: menu atas + daftar per kelompok + tombol Admin. Perbaikan "aplikasi lambat" (v119) dicek Kang: sudah cepat. **Versi cache terakhir v119.**
 - **Tahap 14 Berita: selesai & disetujui Kang 2026-11-28.** Versi cache **v127** (v123 & v124 = perbaikan simpan berita; v125 = jendela konfirmasi serasi; v126 = foto hilang tidak tampil kotak kosong; v127 = status Ditarik merah, lihat akhir Tahap 14). Tahap berikutnya yang diminta Kang: Notifikasi ke HP jamaah & pengurus. Sisa kecil Tahap 1 (Turnstile di Cek KTA lama, kecamatan Koordinator di Atur PIN) sudah selesai 2026-11-26. Yang tersisa adalah tugas Kang sendiri (lihat Tahap 10 Langkah 5: uji akun asli, lengkapi data, cek Advisors bulanan) dan rencana website profil di tqncukir.id.
 - **Tahap 15 Beranda baru: selesai & disetujui Kang 2026-11-28.** Versi cache **v134** (v130-131 = Simpan KTA PNG; v132 = Kunci Notifikasi; v133-134 = tombol, pengaturan & uji notifikasi). Migrasi terakhir yang sudah dijalankan Kang: `20261128050000_notif_jadwal.sql`. Advisors: 0 error, 62 peringatan, 16 info (semua jenis yang disengaja). Tahap berikutnya yang diminta Kang: Notifikasi ke HP.
-- **Tahap 16 Notifikasi: 4 langkah selesai 2026-11-28, uji kirim ke HP Kang berhasil; menunggu kiriman jadwal pertama (sore 28 Nov 16.00, pagi 29 Nov 06.00) dan persetujuan Kang.** Versi cache v134.
+- **Tahap 16 Notifikasi: selesai & disetujui Kang 2026-11-28.** Uji kirim ke HP Kang berhasil; kiriman jadwal pertama sore 28 Nov 16.00 (dicek otomatis 16.10) & pagi 29 Nov 06.00. Versi cache v134.
 
 ## Tahap 1: Data Jamaah, Pendaftaran, KTA, Portal Anggota, Hak Akses
 Mulai: 2026-11-25 (Kang Salman: "Bismillah").
@@ -673,7 +673,7 @@ Diusulkan 2026-11-28 (Kang: "beranda bagusnya apa saja, agar tidak tumpuk/dobel 
 - **Perbaikan (laporan Kang "tidak bisa langsung masuk ke galeri", v131):** halaman web memang tidak boleh menulis langsung ke Galeri/Foto (aturan semua browser); yang boleh hanya unduh atau menu Bagikan. Menu Bagikan Android sering tanpa pilihan simpan → kini **Android: unduh langsung** ke folder Download (tampil di Galeri, album Download); **iPhone/iPad: menu Bagikan** dengan petunjuk "pilih “Simpan Gambar”" (masuk ke Foto); laptop: unduh. Keterangan & pesan di jendela menyesuaikan HP. Uji tiruan Android/iPhone/laptop **6 lulus** + uji PNG **18 lulus**. **Dicek Kang di HP 2026-11-28 11.28: "sudah bisa".**
 
 ## Tahap 16: Notifikasi ke HP (Web Push)
-Mulai: 2026-11-28 (Kang: "mulai tahap notifikasi").
+Mulai: 2026-11-28 (Kang: "mulai tahap notifikasi"). **Disetujui Kang 2026-11-28.**
 
 **Keputusan Kang (2026-11-28):**
 1. Anggota menerima: **pengingat kegiatan, berita baru, haul pekan ini, ziarah/umroh dibuka**.
@@ -724,4 +724,4 @@ Mulai: 2026-11-28 (Kang: "mulai tahap notifikasi").
 - Situs asli (Chrome Kang, tanpa mengubah data): Edge Function `notif` — catatan 12.49 WIB: OPTIONS 200 + **POST 200** (uji Kang), boot 18 ms, tanpa galat; **Verify JWT mati**; kode terpasang sama dengan repo (170 baris, cek HOST_PUSH/kalimatHaul/samaAman/aes128gcm/notif_uji/paralel 20). Cron `notif-pagi` & `notif-sore` aktif. Advisors 0 error / 62 / 16. Halaman `notif.html` untuk tamu mengalihkan ke Masuk (benar).
 - Belum diuji di perangkat asli: **iPhone** (iOS 16.4+, harus dipasang di layar utama) — diuji tiruan saja.
 - Pengecekan otomatis hasil kiriman sore pertama dijadwalkan 28 Nov 16.10 WIB.
-- **Menunggu Kang:** pastikan notifikasi sore 16.00 / pagi 06.00 masuk; coba aktifkan dari akun anggota; bila sesuai, setujui Tahap 16.
+- **Disetujui Kang 2026-11-28** ("Tahap 16 disetujui"). Tetap dipantau: kiriman sore 16.00 & pagi 06.00 pertama.
