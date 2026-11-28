@@ -1,41 +1,8 @@
-// Beranda setelah masuk. Anggota (Tahap 15): salam + Hijriah, kegiatan terdekat, haul pekan ini, berita, kartu saya, ziarah dibuka.
-// Pengurus: menu sesuai peran (diganti Tahap 15 Langkah 3).
+// Beranda setelah masuk (Tahap 15). Tanpa ubin menu (semua menu ada di menu bawah/atas).
+// Anggota: salam + Hijriah, kegiatan terdekat, haul pekan ini, berita, kartu saya, ziarah dibuka.
+// Pengurus: salam + Hijriah, perlu ditindaklanjuti, 4 pintasan, kegiatan terdekat, haul pekan ini, berita.
 const $ = (id) => document.getElementById(id);
 $('keluar').onclick = keluar;
-
-// Jumlah usaha jamaah yang buka (rpc ringkas_usaha; semua yang login).
-function ketUsaha(id) {
-  dbKirim('POST', 'rpc/ringkas_usaha', {}).then((r) => {
-    if (Number(r.buka)) document.getElementById(id).textContent = `${Number(r.buka).toLocaleString('id-ID')} usaha dari ${Number(r.pemilik).toLocaleString('id-ID')} jamaah · mari saling belanja`;
-  }).catch(() => {});
-}
-
-// Status backup harian (khusus admin pusat): keterangan ubin + peringatan di atas bila bermasalah.
-function ketBackup() {
-  $('m-backup').hidden = false;
-  dbKirim('POST', 'rpc/status_backup', {}).then((baris) => {
-    const n = nilaiBackup(baris), t = n.terakhir;
-    $('m-backup-ket').textContent = n.jenis === 'ok'
-      ? `Berhasil · ${tglWib(t.waktu, { weekday: 'short', day: 'numeric', month: 'short' })} ${jamWib(t.waktu)} WIB · ${ukuranTeks(t.ukuran_byte)}`
-      : n.jenis === 'kosong' ? 'Belum ada catatan backup' : `Perlu dicek: ${n.judul.toLowerCase()}`;
-    if (n.jenis === 'gagal' || n.jenis === 'telat') {
-      $('pesan-backup').innerHTML = `<strong>${hurufAman(n.judul)}.</strong> <a href="/backup.html">Buka Pantau Backup</a>`;
-    }
-  }).catch(() => { $('m-backup-ket').textContent = 'Status backup belum bisa dimuat'; });
-}
-
-// Haul terdekat (Hijriah) untuk keterangan ubin Haul. Ringkas: tanggal Hijriah hari ini sampai akhir bulan depan.
-function ketHaul(id) {
-  dbKirim('POST', 'rpc/tanggal_ahli_kubur', {}).then((rows) => {
-    const kini = hijriah(hariIniWib()), depan = kini.m === 12 ? { m: 1, y: kini.y + 1 } : { m: kini.m + 1, y: kini.y };
-    const urut = (h) => (h.m === kini.m ? 0 : 100) + h.d;
-    const calon = rows.map((a) => ({ a, h: hijriah(a.tanggal_wafat) }))
-      .filter(({ h }) => (h.m === kini.m && h.d >= kini.d && kini.y - h.y >= 1) || (h.m === depan.m && depan.y - h.y >= 1))
-      .sort((x, y) => urut(x.h) - urut(y.h));
-    const el = document.getElementById(id); if (!el) return;
-    el.textContent = calon.length ? `Terdekat: ${calon[0].a.nama}, ${calon[0].h.d} ${BULAN_HIJRIAH[calon[0].h.m - 1]}${calon.length > 1 ? ` · ${calon.length} haul sampai bulan depan` : ''}` : 'Tidak ada haul sampai bulan depan';
-  }).catch(() => {});
-}
 
 // ===== Beranda baru (Tahap 15) =====
 // Tanggal hari ini: Masehi · Hijriah (perkiraan Ummul Qura).
@@ -45,10 +12,15 @@ function tanggalSalam() {
 }
 const selisihHari = (iso) => Math.round((Date.parse(new Date(iso).toLocaleDateString('sv-SE', { timeZone: ZONA })) - Date.parse(hariIniWib())) / 864e5);
 
-// Kegiatan terdekat (agenda umum): kartu utama + hitung mundur; hari ini → tombol aksi sesuai pemakai.
-async function muatKegiatanDekat(aksi) {
+// Kegiatan terdekat: kartu utama + hitung mundur; hari ini → tombol aksi (fungsi k → [teks, alamat] atau null).
+// Pengurus yang boleh melihat Kegiatan: tabel kegiatan (RLS, termasuk yang tidak publik); lainnya: agenda umum.
+async function ambilKegiatanPengurus() {
+  const baris = await dbGet(`kegiatan?select=id,nama,jenis,mulai,selesai,tempat,kecamatan(nama)&dibatalkan=is.false&mulai=gte.${encodeURIComponent(isoWib(hariIniWib(), '00:00'))}&order=mulai.asc&limit=10`);
+  return baris.map((k) => ({ ...k, wilayah: k.kecamatan ? `Kec. ${k.kecamatan.nama}` : 'Pusat Cukir' }));
+}
+async function muatKegiatanDekat(aksi, sumber = () => ambilAgenda(10), semua = ['/agenda.html', 'Semua agenda']) {
   try {
-    const daftar = await ambilAgenda(10);
+    const daftar = await sumber();
     if (!daftar.length) return;
     const k = daftar[0], n = selisihHari(k.mulai), kini = Date.now();
     const berlangsung = n <= 0 && kini >= Date.parse(k.mulai) && (!k.selesai || kini <= Date.parse(k.selesai));
@@ -60,9 +32,11 @@ async function muatKegiatanDekat(aksi) {
     $('dekat-nama').textContent = k.nama;
     $('dekat-waktu').textContent = `${tglWib(k.mulai)} · ${rentangJam(k.mulai, k.selesai)}`;
     $('dekat-tempat').textContent = [k.tempat, k.wilayah].filter(Boolean).join(' · ');
-    if (n <= 0 && aksi) { $('dekat-aksi').textContent = aksi[0]; $('dekat-aksi').href = aksi[1]; $('dekat-aksi').hidden = false; }
+    const tombol = n <= 0 && aksi ? aksi(k) : null;
+    if (tombol) { $('dekat-aksi').textContent = tombol[0]; $('dekat-aksi').href = tombol[1]; $('dekat-aksi').hidden = false; }
     const lain = daftar.slice(1).filter((x) => selisihHari(x.mulai) <= 6).length;
-    $('dekat-lain').textContent = lain ? `${lain} kegiatan lain pekan ini` : 'Semua agenda';
+    $('dekat-lain').href = semua[0];
+    $('dekat-lain').textContent = lain ? `${lain} kegiatan lain pekan ini` : semua[1];
     $('dekat').hidden = false;
   } catch { /* agenda gagal dimuat: bagian tetap tersembunyi */ }
 }
@@ -118,12 +92,49 @@ async function muatZiarahAjak() {
   } catch { /* gagal: tersembunyi */ }
 }
 
-// Berita terbaru (3; yang sudah masuk juga melihat Khusus anggota) + pemberitahuan berita menunggu persetujuan untuk pimpinan.
-function muatBeritaBeranda(p) {
+// Berita terbaru (3; yang sudah masuk juga melihat Khusus anggota).
+function muatBeritaBeranda() {
   gambarBerita($('berita-beranda-isi'), 3).then((n) => { $('berita-beranda').hidden = n <= 0; });
-  if (PERAN_PIMPINAN_BERITA.includes(p.peran)) dbKirim('POST', 'rpc/berita_menunggu', {}).then((n) => {
-    if (Number(n) > 0) { $('berita-menunggu').innerHTML = `<a href="/berita-kelola.html?status=diajukan"><strong>${Number(n)} berita</strong> dari koordinator menunggu persetujuan</a>`; $('berita-menunggu').hidden = false; }
-  }).catch(() => {});
+}
+
+// Pengurus: Perlu ditindaklanjuti (rpc tindak_lanjut: jumlah sesuai hak, tanpa nama) + backup bermasalah (admin pusat).
+const TINDAK = {
+  berita_menunggu: (n) => [`${n} berita koordinator menunggu persetujuan`, '/berita-kelola.html?status=diajukan'],
+  berita_ditolak: (n) => [`${n} berita Anda ditolak, perlu diperbaiki`, '/berita-kelola.html?status=ditolak'],
+  bantuan_putus: (n) => [`${n} pengajuan bantuan belum diputuskan`, '/bantuan.html?status=diajukan'],
+  bantuan_salur: (n) => [`${n} bantuan disetujui, belum disalurkan`, '/bantuan.html?status=disetujui'],
+  peserta_belum_lunas: (n) => [`${n} peserta ziarah/umroh belum lunas`, '/perjalanan.html'],
+  sakit_belum_dijenguk: (n) => [`${n} jamaah sakit belum dijenguk 7 hari terakhir`, '/sakit.html'],
+};
+async function muatTindakLanjut(p) {
+  const [tl, backup] = await Promise.all([
+    dbKirim('POST', 'rpc/tindak_lanjut', {}).catch(() => null),
+    p.peran === 'admin_pusat' ? dbKirim('POST', 'rpc/status_backup', {}).then(nilaiBackup).catch(() => null) : null,
+  ]);
+  if (tl === null) return; // gagal dimuat: bagian tetap tersembunyi
+  const item = Object.entries(TINDAK).filter(([k]) => Number(tl[k]) > 0).map(([k, f]) => f(Number(tl[k]).toLocaleString('id-ID')));
+  if (backup && (backup.jenis === 'gagal' || backup.jenis === 'telat')) item.unshift([`Backup harian: ${backup.judul.toLowerCase()}`, '/backup.html']);
+  $('tindak-isi').innerHTML = item.map(([t, u]) => `<li><a href="${u}">${hurufAman(t).replace(/^([\d.]+)/, '<strong>$1</strong>')}</a></li>`).join('');
+  $('tindak-kosong').hidden = item.length > 0;
+  $('tindak').hidden = false;
+}
+
+// Pengurus: 4 pintasan menurut peran, hanya dari menu yang memang boleh dibuka (daftarMenu).
+const PINTAS = {
+  admin_pusat: ['jamaah', 'daftar', 'absensi', 'tulis'], ketua: ['jamaah', 'daftar', 'absensi', 'tulis'],
+  koordinator_wilayah: ['jamaah', 'daftar', 'absensi', 'tulis'], bendahara: ['kas', 'laporan', 'kegiatan', 'dasbor'],
+  petugas_scan: ['absensi', 'kegiatan', 'jamaah', 'agenda'], nadzir: ['aset', 'agenda', 'haul', 'usaha'],
+  khodim: ['ziarah', 'kebutuhan', 'agenda', 'usaha'], dokter: ['sakit', 'kebutuhan', 'ziarah', 'agenda'],
+};
+function pasangPintasan(p) {
+  const { utama, grup } = daftarMenu(p), ada = new Map([...utama, ...grup.flatMap((g) => g[2])].map((m) => [m[0], m]));
+  if (ada.has('berita')) ada.set('tulis', ['berita', 'Tulis Berita', '/berita-isi.html']);
+  if (ada.has('kas')) ada.set('laporan', ['kas', 'Laporan Kas', '/kas-laporan.html']);
+  const LABEL = { jamaah: 'Cari Jamaah', agenda: 'Agenda' };
+  const isi = (PINTAS[p.peran] || []).filter((k) => ada.has(k)).slice(0, 4).map((k) => { const [i, t, u] = ada.get(k); return [i, LABEL[k] || t, u]; });
+  if (!isi.length) return;
+  $('pintas-isi').innerHTML = isi.map(([i, t, u]) => `<li><a href="${u}"><span class="pintas-ikon">${ikonMenu(i, 22)}</span><span>${t}</span></a></li>`).join('');
+  $('pintas').hidden = false;
 }
 
 (async () => {
@@ -139,86 +150,19 @@ function muatBeritaBeranda(p) {
     $('salam').textContent = p.nama;
     tanggalSalam();
     $('peran').textContent = NAMA_PERAN[p.peran] || p.peran;
-    muatBeritaBeranda(p);
-    if (PERAN_LIHAT_JAMAAH.includes(p.peran)) {
-      $('menu').hidden = false; $('m-jamaah').hidden = false; $('nav-jamaah').hidden = false; $('m-amanah').hidden = false; $('m-amanah-judul').hidden = false;
-      $('m-tambah').hidden = !PERAN_UBAH_JAMAAH.includes(p.peran);
-      $('m-pin').hidden = p.peran !== 'admin_pusat';
-      if (p.peran === 'admin_pusat') ketBackup();
-      if (PERAN_EKONOMI.includes(p.peran)) {
-        $('m-ekonomi').hidden = false;
-        dbKirim('POST', 'rpc/ringkas_ekonomi', {}).then((r) => {
-          const kurang = Number(r.kurang) + Number(r.sangat_kurang);
-          $('m-ekonomi-ket').textContent = `${kurang.toLocaleString('id-ID')} kurang mampu · ${Number(r.belum).toLocaleString('id-ID')} belum didata`;
-        }).catch(() => {});
-      }
-      if (PERAN_BANTUAN.includes(p.peran)) {
-        $('m-bantuan').hidden = false;
-        dbKirim('POST', 'rpc/ringkas_bantuan', {}).then((r) => {
-          const tunggu = p.peran === 'ketua' ? r.diajukan : p.peran === 'bendahara' || p.peran === 'koordinator_wilayah' ? r.disetujui : 0;
-          if (tunggu) $('m-bantuan-ket').textContent = p.peran === 'ketua' ? `${tunggu} pengajuan menunggu persetujuan` : `${tunggu} bantuan siap disalurkan`;
-        }).catch(() => {});
-      }
-      if (PERAN_LIHAT_KAS.includes(p.peran)) {
-        $('m-kas').hidden = false;
-        dbKirim('POST', 'rpc/saldo_kas', {}).then((k) => {
-          if (k.length) $('m-kas-ket').textContent = k.length === 1 ? `Saldo ${k[0].nama}: ${rupiah(k[0].saldo)}` : `${k.length} kas · Saldo pusat ${rupiah(k.find((x) => x.kecamatan_id === null)?.saldo)}`;
-        }).catch(() => {});
-      }
-      dbHalaman('jamaah?select=id', 0, 0).then(({ total }) => {
-        $('m-jamaah-ket').textContent = `${total.toLocaleString('id-ID')} jamaah tercatat`;
-      }).catch(() => {});
-    }
+    muatBeritaBeranda();
     if (p.peran !== 'anggota') {
-      $('menu').hidden = false; $('m-peduli').hidden = false; $('m-peduli-judul').hidden = false; $('m-usaha').hidden = false;
-      ketUsaha('m-usaha-ket');
-      $('m-sakit').hidden = !PERAN_KESEHATAN.includes(p.peran);
-      $('m-kebutuhan').hidden = !PERAN_KEBUTUHAN.includes(p.peran);
-      if (PERAN_KESEHATAN.includes(p.peran)) {
-        dbKirim('POST', 'rpc/ringkas_kesehatan', {}).then((r) => {
-          $('m-sakit-ket').textContent = Number(r.sakit)
-            ? `${Number(r.sakit).toLocaleString('id-ID')} sedang sakit${Number(r.belum_dijenguk) ? ` · ${Number(r.belum_dijenguk).toLocaleString('id-ID')} belum dijenguk` : ''}`
-            : 'Tidak ada yang tercatat sedang sakit';
-          if (Number(r.kebutuhan)) $('m-kebutuhan-ket').textContent = `${Number(r.kebutuhan).toLocaleString('id-ID')} jamaah perlu dibantu`;
-        }).catch(() => {});
-      }
-      // Dokter & khodim tidak punya menu Pondasi Jamaah; khodim/dokter membuka Ziarah & Umroh dari kelompok Ruhani.
-      if (!PERAN_LIHAT_JAMAAH.includes(p.peran)) { $('m-pondasi-judul').hidden = true; $('m-pondasi').hidden = true; }
-      if (!PERAN_LIHAT_KEGIATAN.includes(p.peran) && PERAN_LIHAT_PERJALANAN.includes(p.peran)) {
-        $('m-ruhani').hidden = false; $('m-ruhani-judul').hidden = false; $('m-kegiatan').hidden = true; $('m-perjalanan').hidden = false;
-      }
-    }
-    if (PERAN_LIHAT_ASET.includes(p.peran)) {
-      $('menu').hidden = false; $('m-amanah').hidden = false; $('m-amanah-judul').hidden = false; $('m-aset').hidden = false;
-      $('m-dasbor').hidden = !PERAN_LIHAT_JAMAAH.includes(p.peran);
-      // Nadzir tidak punya menu Pondasi Jamaah: sembunyikan judul kelompok yang kosong.
-      if (!PERAN_LIHAT_JAMAAH.includes(p.peran)) { $('m-pondasi-judul').hidden = true; $('m-pondasi').hidden = true; }
-      dbKirim('POST', 'rpc/ringkas_aset', {}).then((r) => {
-        const t = r.tanah, b = r.barang;
-        if (t.jumlah || b.jenis) $('m-aset-ket').textContent = `${t.jumlah.toLocaleString('id-ID')} tanah wakaf (${luasTeks(t.luas_m2)}) · ${b.jenis.toLocaleString('id-ID')} jenis barang`;
-      }).catch(() => {});
-    }
-    if (PERAN_LIHAT_KEGIATAN.includes(p.peran)) {
-      $('menu').hidden = false; $('m-ruhani').hidden = false; $('m-ruhani-judul').hidden = false;
-      $('m-absen').hidden = !PERAN_ABSEN.includes(p.peran);
-      $('m-ahli').hidden = !PERAN_LIHAT_JAMAAH.includes(p.peran);
-      $('m-haul').hidden = !PERAN_LIHAT_JAMAAH.includes(p.peran);
-      ketHaul('m-haul-ket');
-      if (PERAN_LIHAT_PERJALANAN.includes(p.peran)) {
-        $('m-perjalanan').hidden = false;
-        const hari = hariIniWib();
-        dbHalaman(`perjalanan?select=id&dibatalkan=is.false&or=${encodeURIComponent(`(berangkat.gte.${isoWib(hari, '00:00')},pulang.gte.${hari})`)}`, 0, 0).then(({ total }) => {
-          if (total) $('m-perjalanan-ket').textContent = `${total.toLocaleString('id-ID')} perjalanan akan berangkat`;
-        }).catch(() => {});
-      }
-      dbHalaman(`kegiatan?select=id&dibatalkan=is.false&mulai=gte.${encodeURIComponent(isoWib(hariIniWib(), '00:00'))}`, 0, 0).then(({ total }) => {
-        $('m-kegiatan-ket').textContent = total ? `${total.toLocaleString('id-ID')} kegiatan akan datang` : 'Buat dan lihat jadwal kegiatan';
-      }).catch(() => {});
+      document.body.classList.add('beranda-baru');
+      muatTindakLanjut(p); pasangPintasan(p); muatHaulPekan();
+      if (PERAN_LIHAT_KEGIATAN.includes(p.peran)) {
+        muatKegiatanDekat((k) => (PERAN_ABSEN.includes(p.peran) ? ['Buka Absensi', `/absensi.html?kegiatan=${k.id}`] : ['Lihat kegiatan', `/kegiatan-isi.html?id=${k.id}`]),
+          ambilKegiatanPengurus, ['/kegiatan.html', 'Semua kegiatan']);
+      } else muatKegiatanDekat(null);
     }
     if (p.peran === 'anggota') {
       const k = p.jamaah_id ? ((await kartuAwal?.janji) ?? await dbKirim('POST', 'rpc/kartu_saya', {}).catch(() => null)) : null;
       document.body.classList.add('beranda-baru');
-      muatKegiatanDekat(['Tunjukkan KTA', '/kta.html']); muatHaulPekan(); muatKartuSaya(k, !!k?.terbatas); muatZiarahAjak();
+      muatKegiatanDekat(() => ['Tunjukkan KTA', '/kta.html']); muatHaulPekan(); muatKartuSaya(k, !!k?.terbatas); muatZiarahAjak();
     }
   } catch (e) { tanganiGalat(e, (t) => { $('pesan').textContent = t; }); }
 })();

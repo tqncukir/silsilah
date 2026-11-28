@@ -1307,3 +1307,22 @@ body:not(.hal-masuk):not(.hal-poster)>main{flex:1 0 auto;width:100%}
   .beranda-baru .berita-sorot .berita-kecil{width:100%;height:auto;aspect-ratio:16/9}
 }
 .dekat-jenis{margin:0 0 2px;font-size:var(--fs-kecil);font-weight:600;color:var(--abu)}
+.tindak-daftar{list-style:none;margin:0;padding:0 14px;border-radius:14px;background:#FFF6CC;border:1px solid #E3C443}
+.tindak-daftar li+li{border-top:1px solid #E3C443}
+.tindak-daftar a{display:flex;align-items:center;gap:10px;min-height:48px;padding:10px 28px 10px 0;position:relative;
+  color:#5A4300;text-decoration:none;line-height:1.4}
+.tindak-daftar a::after{content:"›";position:absolute;right:4px;top:50%;transform:translateY(-50%);font-size:1.375rem;line-height:1}
+.tindak-daftar a:hover{text-decoration:underline}
+.tindak-daftar a:focus-visible,.pintas-daftar a:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:2px}
+.tindak-kosong{margin:0;padding:12px 14px;border-radius:12px;background:#FFFFFF;border:1px solid var(--garis);color:var(--abu)}
+.tindak-kosong[hidden]{display:none}
+.pintas-daftar{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.pintas-daftar a{display:flex;align-items:center;gap:10px;min-height:56px;padding:10px 12px;background:#FFFFFF;border:1px solid var(--garis);
+  border-radius:14px;box-shadow:var(--bayang);color:var(--hitam);font-weight:600;text-decoration:none;line-height:1.3}
+.pintas-daftar a:hover{border-color:var(--garis-kuat)}
+.pintas-ikon{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:var(--mint);color:var(--hijau-jamiyyah)}
+@media (max-width:767px){.pintas-daftar a{flex-direction:column;align-items:flex-start;gap:8px;padding:12px}}
+@media (min-width:768px){.pintas-daftar{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (min-width:1024px){.tindak-daftar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px}
+  .tindak-daftar li+li{border-top:0}.tindak-daftar li:nth-child(n+3){border-top:1px solid #E3C443}}
+@media (min-width:1024px){.beranda-baru .app-isi>.bagian-penuh{grid-column:1/-1}}

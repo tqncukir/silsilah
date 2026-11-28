@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=128">
-<link rel="stylesheet" href="/css/app.css?v=128">
+<link rel="stylesheet" href="/css/tokens.css?v=129">
+<link rel="stylesheet" href="/css/app.css?v=129">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -45,8 +45,15 @@
     <p class="sambut-tgl" id="tanggal"></p>
   </section>
   <p id="pesan" class="pesan" role="alert"></p>
-  <p id="pesan-backup" class="pesan" role="status"></p>
-  <p id="berita-menunggu" class="berita-menunggu" hidden></p>
+  <section id="tindak" class="bagian-beranda bagian-penuh" hidden aria-labelledby="tindak-judul">
+    <h2 class="bagian-judul" id="tindak-judul">Perlu ditindaklanjuti</h2>
+    <ul class="tindak-daftar" id="tindak-isi"></ul>
+    <p class="tindak-kosong" id="tindak-kosong" hidden>Alhamdulillah, tidak ada yang perlu ditindaklanjuti.</p>
+  </section>
+  <section id="pintas" class="bagian-beranda bagian-penuh" hidden aria-labelledby="pintas-judul">
+    <h2 class="bagian-judul" id="pintas-judul">Pintasan</h2>
+    <ul class="pintas-daftar" id="pintas-isi"></ul>
+  </section>
   <section id="dekat" class="bagian-beranda" hidden aria-labelledby="dekat-judul">
     <div class="berita-kepala"><h2 class="bagian-judul" id="dekat-judul">Kegiatan terdekat</h2><a href="/agenda.html" class="tautan" id="dekat-lain">Semua agenda</a></div>
     <div class="dekat-kartu">
@@ -71,89 +78,6 @@
   <section id="berita-beranda" class="berita-bagian" hidden aria-labelledby="bb-judul">
     <div class="berita-kepala"><h2 class="bagian-judul" id="bb-judul">Berita terbaru</h2><a href="/berita.html" class="tautan">Semua berita</a></div>
     <ol class="berita-daftar berita-sorot" id="berita-beranda-isi"></ol>
-  </section>
-
-  <section id="menu" hidden aria-label="Menu">
-    <h2 class="bagian-judul" id="m-pondasi-judul">Pondasi Jamaah</h2>
-    <div class="menu-kisi" id="m-pondasi">
-      <a class="menu-ubin" href="/jamaah.html" id="m-jamaah" hidden>
-        <span class="menu-ikon grup-pondasi" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><circle cx="9" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2.5 20c.6-3.6 3.3-6 6.5-6s5.9 2.4 6.5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16 5.2a3.3 3.3 0 010 6.3M18 14.4c1.9.8 3.2 2.8 3.5 5.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
-        <span><strong>Data Jamaah</strong><span class="menu-ket" id="m-jamaah-ket">Cari, lihat, dan ubah data jamaah</span></span>
-      </a>
-      <a class="menu-ubin" href="/pendaftaran.html" id="m-tambah" hidden>
-        <span class="menu-ikon grup-pondasi" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><circle cx="10" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 20c.6-3.6 3.3-6 6.5-6 1.4 0 2.6.4 3.6 1.2M19 14v6M16 17h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
-        <span><strong>Pendaftaran</strong><span class="menu-ket">Daftarkan jamaah baru dengan foto KTP</span></span>
-      </a>
-      <a class="menu-ubin" href="/pengurus-pin.html" id="m-pin" hidden>
-        <span class="menu-ikon grup-pondasi" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><rect x="4" y="10.5" width="16" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 10.5V7.5a4 4 0 018 0v3M12 14.5v2.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
-        <span><strong>Atur PIN Pengurus</strong><span class="menu-ket">Pasang, ganti, atau matikan PIN pengurus</span></span>
-      </a>
-    </div>
-    <h2 class="bagian-judul" id="m-ruhani-judul" hidden>Ruhani &amp; Kegiatan</h2>
-    <div class="menu-kisi" id="m-ruhani" hidden>
-      <a class="menu-ubin" href="/kegiatan.html" id="m-kegiatan">
-        <span class="menu-ikon grup-ruhani" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h3M8 17h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
-        <span><strong>Kegiatan</strong><span class="menu-ket" id="m-kegiatan-ket">Jadwal khususiyah, manaqiban, haul, pengajian</span></span>
-      </a>
-      <a class="menu-ubin" href="/absensi.html" id="m-absen" hidden>
-        <span class="menu-ikon grup-ruhani" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8V5a1 1 0 011-1h3M16 4h3a1 1 0 011 1v3M20 16v3a1 1 0 01-1 1h-3M8 20H5a1 1 0 01-1-1v-3M8.5 12l2.5 2.5 4.5-5"/></svg></span>
-        <span><strong>Absensi</strong><span class="menu-ket">Pindai KTA jamaah di kegiatan hari ini</span></span>
-      </a>
-      <a class="menu-ubin" href="/ahli-kubur.html" id="m-ahli" hidden>
-        <span class="menu-ikon grup-ruhani" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20V10a5 5 0 0110 0v10M4 20h16M12 9v5M10 11h4"/></svg></span>
-        <span><strong>Ahli Kubur</strong><span class="menu-ket" id="m-ahli-ket">Jamaah wafat, keluarga titipan doa, masyayikh</span></span>
-      </a>
-      <a class="menu-ubin" href="/haul.html" id="m-haul" hidden>
-        <span class="menu-ikon grup-ruhani" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/></svg></span>
-        <span><strong>Haul</strong><span class="menu-ket" id="m-haul-ket">Haul bulan ini dan bulan depan (Hijriah)</span></span>
-      </a>
-      <a class="menu-ubin" href="/perjalanan.html" id="m-perjalanan" hidden>
-        <span class="menu-ikon grup-ruhani" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V9l7-5 7 5v11M3 20h18M10 20v-5h4v5M12 4V2"/></svg></span>
-        <span><strong>Ziarah &amp; Umroh</strong><span class="menu-ket" id="m-perjalanan-ket">Rombongan ziarah dan umroh, peserta, lunas</span></span>
-      </a>
-    </div>
-    <h2 class="bagian-judul" id="m-peduli-judul" hidden>Kepedulian &amp; Kesejahteraan</h2>
-    <div class="menu-kisi" id="m-peduli" hidden>
-      <a class="menu-ubin" href="/bantuan.html" id="m-bantuan" hidden>
-        <span class="menu-ikon grup-kepedulian" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.6-7 10-7 10z"/></svg></span>
-        <span><strong>Bantuan Sosial</strong><span class="menu-ket" id="m-bantuan-ket">Santunan uang dan barang untuk jamaah</span></span>
-      </a>
-      <a class="menu-ubin" href="/ekonomi.html" id="m-ekonomi" hidden>
-        <span class="menu-ikon grup-kepedulian" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V12M10 20V8M16 20v-5M3 20h18M14 6l3-3 3 3M17 3v6"/></svg></span>
-        <span><strong>Ekonomi Jamaah</strong><span class="menu-ket" id="m-ekonomi-ket">Kondisi ekonomi jamaah (rahasia)</span></span>
-      </a>
-      <a class="menu-ubin" href="/sakit.html" id="m-sakit" hidden>
-        <span class="menu-ikon grup-kepedulian" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg></span>
-        <span><strong>Jamaah Sakit</strong><span class="menu-ket" id="m-sakit-ket">Jamaah yang sedang sakit dan kunjungan</span></span>
-      </a>
-      <a class="menu-ubin" href="/kebutuhan.html" id="m-kebutuhan" hidden>
-        <span class="menu-ikon grup-kepedulian" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="4.5" r="1.8"/><path d="M11 8v6h5l2 5M11 11h4M8.5 11a5 5 0 105.6 7"/></svg></span>
-        <span><strong>Kebutuhan Khusus</strong><span class="menu-ket" id="m-kebutuhan-ket">Jamaah yang perlu dibantu saat kegiatan dan ziarah</span></span>
-      </a>
-      <a class="menu-ubin" href="/usaha.html" id="m-usaha" hidden>
-        <span class="menu-ikon grup-kepedulian" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l1.5-4.5h13L20 9M4 9h16v1.5a2.5 2.5 0 01-5 0 2.5 2.5 0 01-5 0 2.5 2.5 0 01-5 0zM5 13v7h14v-7M10 20v-4h4v4"/></svg></span>
-        <span><strong>Usaha Jamaah</strong><span class="menu-ket" id="m-usaha-ket">Usaha milik jamaah, mari saling belanja</span></span>
-      </a>
-    </div>
-    <h2 class="bagian-judul" id="m-amanah-judul" hidden>Amanah &amp; Tata Kelola</h2>
-    <div class="menu-kisi" id="m-amanah" hidden>
-      <a class="menu-ubin" href="/dashboard.html" id="m-dasbor">
-        <span class="menu-ikon grup-amanah" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
-        <span><strong>Dashboard Pengurus</strong><span class="menu-ket">Sebaran, usia, dan pendaftaran jamaah</span></span>
-      </a>
-      <a class="menu-ubin" href="/kas.html" id="m-kas" hidden>
-        <span class="menu-ikon grup-amanah" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h14a2 2 0 012 2v9a2 2 0 01-2 2H5a1 1 0 01-1-1V7zM4 7l11-3v3M15 13.5h2"/></svg></span>
-        <span><strong>Buku Kas</strong><span class="menu-ket" id="m-kas-ket">Infaq masuk, pengeluaran, dan saldo</span></span>
-      </a>
-      <a class="menu-ubin" href="/aset.html" id="m-aset" hidden>
-        <span class="menu-ikon grup-amanah" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M5 20V11l7-6 7 6v9M9.5 20v-5h5v5"/></svg></span>
-        <span><strong>Aset &amp; Wakaf</strong><span class="menu-ket" id="m-aset-ket">Tanah wakaf dan barang inventaris</span></span>
-      </a>
-      <a class="menu-ubin" href="/backup.html" id="m-backup" hidden>
-        <span class="menu-ikon grup-amanah" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="7.5" ry="2.5"/><path d="M4.5 5.5v6c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5v-6M4.5 11.5v6c0 1.4 3.4 2.5 7.5 2.5M15 18l2 2 4-4"/></svg></span>
-        <span><strong>Pantau Backup</strong><span class="menu-ket" id="m-backup-ket">Backup database harian ke Google Drive</span></span>
-      </a>
-    </div>
   </section>
 
   <section id="anggota" class="bagian-beranda" hidden aria-labelledby="saya-judul">
@@ -181,9 +105,9 @@
   </div>
   <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
 </footer>
-<script src="/js/supa.js?v=128" defer></script>
-<script src="/js/agenda.js?v=128" defer></script>
-<script src="/js/berita.js?v=128" defer></script>
-<script src="/js/beranda.js?v=128" defer></script>
+<script src="/js/supa.js?v=129" defer></script>
+<script src="/js/agenda.js?v=129" defer></script>
+<script src="/js/berita.js?v=129" defer></script>
+<script src="/js/beranda.js?v=129" defer></script>
 </body>
 </html>
