@@ -141,7 +141,7 @@ function pasangMenuBawah(p) {
       ['Kebutuhan Khusus', '/kebutuhan.html', PERAN_KEBUTUHAN],
       ['Buku Kas', '/kas.html', PERAN_LIHAT_KAS],
       ['Aset & Wakaf', '/aset.html', PERAN_LIHAT_ASET],
-      ['Atur PIN Pengurus', '/pengurus-pin.html', ['admin_pusat']], ['Agenda umum', '/agenda.html', null], ['Cara pasang di HP', '/pasang.html', null]]
+      ['Atur PIN Pengurus', '/pengurus-pin.html', ['admin_pusat']], ['Pantau Backup', '/backup.html', ['admin_pusat']], ['Agenda umum', '/agenda.html', null], ['Cara pasang di HP', '/pasang.html', null]]
       .filter(([, , boleh]) => !boleh || boleh.includes(p.peran));
   const aktif = (u) => jalur === u || (u === '/jamaah.html' && jalur.startsWith('/jamaah')) || (u === '/kegiatan.html' && /^\/(kegiatan|absensi)/.test(jalur));
   const diLain = !utama.some(([, , u]) => aktif(u));
@@ -356,3 +356,21 @@ async function simpanGoldar(jamaahId, nilai, adaSebelumnya) {
 
 // 89 jenis pekerjaan baku Dukcapil (isian Pekerjaan di KTP / SIAK). Dipakai untuk saran dan pembetulan hasil baca KTP.
 const PEKERJAAN_BAKU = ["Belum/Tidak Bekerja", "Mengurus Rumah Tangga", "Pelajar/Mahasiswa", "Pensiunan", "Pegawai Negeri Sipil", "Tentara Nasional Indonesia", "Kepolisian RI", "Perdagangan", "Petani/Pekebun", "Peternak", "Nelayan/Perikanan", "Industri", "Konstruksi", "Transportasi", "Karyawan Swasta", "Karyawan BUMN", "Karyawan BUMD", "Karyawan Honorer", "Buruh Harian Lepas", "Buruh Tani/Perkebunan", "Buruh Nelayan/Perikanan", "Buruh Peternakan", "Pembantu Rumah Tangga", "Tukang Cukur", "Tukang Listrik", "Tukang Batu", "Tukang Kayu", "Tukang Sol Sepatu", "Tukang Las/Pandai Besi", "Tukang Jahit", "Tukang Gigi", "Penata Rias", "Penata Busana", "Penata Rambut", "Mekanik", "Seniman", "Tabib", "Paraji", "Perancang Busana", "Penterjemah", "Imam Masjid", "Pendeta", "Pastor", "Wartawan", "Ustadz/Mubaligh", "Juru Masak", "Promotor Acara", "Anggota DPR-RI", "Anggota DPD", "Anggota BPK", "Presiden", "Wakil Presiden", "Anggota Mahkamah Konstitusi", "Anggota Kabinet/Kementerian", "Duta Besar", "Gubernur", "Wakil Gubernur", "Bupati", "Wakil Bupati", "Walikota", "Wakil Walikota", "Anggota DPRD Provinsi", "Anggota DPRD Kabupaten/Kota", "Dosen", "Guru", "Pilot", "Pengacara", "Notaris", "Arsitek", "Akuntan", "Konsultan", "Dokter", "Bidan", "Perawat", "Apoteker", "Psikiater/Psikolog", "Penyiar Televisi", "Penyiar Radio", "Pelaut", "Peneliti", "Sopir", "Pialang", "Paranormal", "Pedagang", "Perangkat Desa", "Kepala Desa", "Biarawati", "Wiraswasta", "Lainnya"];
+
+// ===== Pantau Backup (Tahap 12, khusus admin pusat; database menolak peran lain) =====
+const BATAS_BACKUP_JAM = 30; // sama dengan pemeriksaan Apps Script (cekHarian)
+const ukuranTeks = (b) => b == null ? '–' : b >= 1048576 ? `${(b / 1048576).toLocaleString('id-ID', { maximumFractionDigits: 1 })} MB`
+  : `${Math.max(1, Math.round(b / 1024)).toLocaleString('id-ID')} KB`;
+// Baris dari rpc/status_backup (terbaru dulu) -> { jenis: ok|gagal|telat|kosong, judul, ket, terakhir }
+function nilaiBackup(baris) {
+  const t = baris[0];
+  if (!t) return { jenis: 'kosong', judul: 'Belum ada catatan backup', ket: 'Catatan pertama masuk setelah backup harian jam 01.15 WIB berikutnya.' };
+  const jam = (Date.now() - new Date(t.waktu).getTime()) / 3600000;
+  const kapan = `${tglWib(t.waktu, { weekday: 'long', day: 'numeric', month: 'long' })}, jam ${jamWib(t.waktu)} WIB`;
+  if (jam > BATAS_BACKUP_JAM) return { jenis: 'telat', terakhir: t, judul: `Tidak ada backup baru lebih dari ${BATAS_BACKUP_JAM} jam`,
+    ket: `Catatan terakhir: ${kapan}. Bisa karena Supabase dijeda atau jadwal GitHub berhenti. Minta Claude memeriksanya.` };
+  if (!t.berhasil) return { jenis: 'gagal', terakhir: t, judul: 'Backup terakhir gagal',
+    ket: `${kapan}${t.gagal_di ? `, di langkah "${t.gagal_di}"` : ''}. Buka catatan GitHub untuk melihat sebabnya, atau minta Claude memeriksanya.` };
+  return { jenis: 'ok', terakhir: t, judul: 'Backup terakhir berhasil',
+    ket: `${kapan} · ${ukuranTeks(t.ukuran_byte)}${t.jumlah_tabel != null ? ` · ${t.jumlah_tabel} tabel` : ''}` };
+}

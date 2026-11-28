@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pantau Backup · SILSILAH TQN Cukir</title>
+<meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=113">
+<link rel="stylesheet" href="/css/app.css?v=113">
+</head>
+<body class="hal-app">
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <a href="/beranda.html">Beranda</a>
+      <a href="/dashboard.html" id="nav-dasbor" hidden>Dashboard Pengurus</a>
+      <a href="/jamaah.html" id="nav-jamaah" hidden>Data Jamaah</a>
+      <a href="/pendaftaran.html" id="nav-daftar" hidden>Pendaftaran</a>
+      <a href="/kegiatan.html" id="nav-kegiatan" hidden>Kegiatan</a>
+      <a href="/ahli-kubur.html" id="nav-ahli" hidden>Ahli Kubur</a>
+      <a href="/perjalanan.html" id="nav-perjalanan" hidden>Ziarah &amp; Umroh</a>
+      <a href="/bantuan.html" id="nav-bantuan" hidden>Bantuan Sosial</a>
+      <a href="/ekonomi.html" id="nav-ekonomi" hidden>Ekonomi Jamaah</a>
+      <a href="/usaha.html" id="nav-usaha" hidden>Usaha Jamaah</a>
+      <a href="/sakit.html" id="nav-sakit" hidden>Jamaah Sakit</a>
+      <a href="/kebutuhan.html" id="nav-kebutuhan" hidden>Kebutuhan Khusus</a>
+      <a href="/kas.html" id="nav-kas" hidden>Buku Kas</a>
+      <a href="/aset.html" id="nav-aset" hidden>Aset &amp; Wakaf</a>
+    </nav>
+    <button class="app-keluar" id="keluar" type="button">Keluar</button>
+  </div>
+</header>
+
+<main class="app-isi">
+  <div class="judul-baris">
+    <div>
+      <h1>Pantau Backup</h1>
+      <p class="judul-sub">Backup database setiap hari jam 01.15 WIB ke Google Drive jtccukir2022. Hanya Admin Pusat yang melihat halaman ini.</p>
+    </div>
+  </div>
+  <p id="pesan" class="pesan" role="alert"></p>
+
+  <div id="isi" hidden>
+    <section class="panel bk-status" id="status" aria-live="polite">
+      <h2 class="bk-judul" id="st-judul">Memuat...</h2>
+      <p class="ket" id="st-ket"></p>
+    </section>
+
+    <ul class="angka-baris" id="angka" aria-label="Ringkasan 30 hari terakhir"></ul>
+
+    <div class="bk-tautan">
+      <a class="btn btn-kedua" href="https://github.com/tqncukir/silsilah/actions/workflows/backup.yml" target="_blank" rel="noopener">Buka catatan GitHub</a>
+      <a class="btn btn-kedua" href="https://drive.google.com/drive/search?q=Backup%20SILSILAH" target="_blank" rel="noopener">Buka folder Google Drive</a>
+    </div>
+    <p class="ket">Google Drive: pilih akun jtccukir2022@gmail.com. File backup terkunci kata sandi BACKUP_SANDI.</p>
+
+    <h2 class="bagian-judul">Riwayat 90 hari</h2>
+    <div class="tabel-bungkus">
+      <table class="tabel">
+        <thead><tr><th scope="col">Tanggal</th><th scope="col">Jam</th><th scope="col">Hasil</th><th scope="col">Ukuran</th><th scope="col" class="kol-luas">Tabel</th><th scope="col" class="kol-luas">File lama dirapikan</th><th scope="col">Catatan</th></tr></thead>
+        <tbody id="isi-tabel"><tr><td colspan="7" class="tabel-kosong">Memuat...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</main>
+<footer class="kaki">
+  <div class="kaki-isi">
+    <address class="kaki-alamat">TQN Pusat Cukir Jombang<br>Jl. Masjid No. 110 Cukir, Diwek, Jombang 61471</address>
+  </div>
+  <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
+</footer>
+<script src="/js/supa.js?v=113" defer></script>
+<script src="/js/backup.js?v=113" defer></script>
+</body>
+</html>

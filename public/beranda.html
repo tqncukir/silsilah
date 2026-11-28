@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=112">
-<link rel="stylesheet" href="/css/app.css?v=112">
+<link rel="stylesheet" href="/css/tokens.css?v=113">
+<link rel="stylesheet" href="/css/app.css?v=113">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -44,6 +44,7 @@
     <p class="judul-sub" id="peran"></p>
   </section>
   <p id="pesan" class="pesan" role="alert"></p>
+  <p id="pesan-backup" class="pesan" role="status"></p>
 
   <section id="menu" hidden aria-label="Menu">
     <h2 class="bagian-judul" id="m-pondasi-judul">Pondasi Jamaah</h2>
@@ -121,6 +122,10 @@
         <span class="menu-ikon grup-amanah" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M5 20V11l7-6 7 6v9M9.5 20v-5h5v5"/></svg></span>
         <span><strong>Aset &amp; Wakaf</strong><span class="menu-ket" id="m-aset-ket">Tanah wakaf dan barang inventaris</span></span>
       </a>
+      <a class="menu-ubin" href="/backup.html" id="m-backup" hidden>
+        <span class="menu-ikon grup-amanah" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="7.5" ry="2.5"/><path d="M4.5 5.5v6c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5v-6M4.5 11.5v6c0 1.4 3.4 2.5 7.5 2.5M15 18l2 2 4-4"/></svg></span>
+        <span><strong>Pantau Backup</strong><span class="menu-ket" id="m-backup-ket">Backup database harian ke Google Drive</span></span>
+      </a>
     </div>
   </section>
 
@@ -179,8 +184,8 @@
   </div>
   <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
 </footer>
-<script src="/js/supa.js?v=112" defer></script>
-<script src="/js/agenda.js?v=112" defer></script>
-<script src="/js/beranda.js?v=112" defer></script>
+<script src="/js/supa.js?v=113" defer></script>
+<script src="/js/agenda.js?v=113" defer></script>
+<script src="/js/beranda.js?v=113" defer></script>
 </body>
 </html>

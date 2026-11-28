@@ -1125,3 +1125,29 @@ body:not(.hal-masuk):not(.hal-poster)>main{flex:1 0 auto;width:100%}
 .bs-baris small{display:block;color:var(--abu);font-size:var(--fs-kecil)}
 .ps-kel.keb-teks{color:var(--hijau-jamiyyah)}
 .keb-pilihan .pil input[type=checkbox]{width:20px;height:20px;accent-color:var(--hijau-jamiyyah)}
+
+/* Pantau Backup (Tahap 12, khusus admin pusat) */
+.bk-status{border-left:6px solid var(--hijau-daun)}
+.bk-status[data-jenis=gagal],.bk-status[data-jenis=telat]{border-left-color:#B3261E;background:#FCECEA}
+.bk-status[data-jenis=kosong]{border-left-color:#E3C443;background:#FFF6CC}
+.bk-judul{margin:0 0 4px;font-size:var(--fs-judul);color:var(--hijau-jamiyyah)}
+.bk-status[data-jenis=gagal] .bk-judul,.bk-status[data-jenis=telat] .bk-judul{color:#8C1D18}
+.bk-status[data-jenis=kosong] .bk-judul{color:#6E5200}
+.bk-status .ket{margin:0;color:var(--hitam)}
+.bk-tautan{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 4px}
+#isi>.ket{margin:0 0 20px}
+.bk-lihat{display:inline-flex;align-items:center;min-height:44px;color:var(--hijau-jamiyyah);font-weight:600}
+@media (max-width:767px){
+  .bk-tautan .btn{flex:1 1 100%}
+  .tabel tr.bk-baris{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:12px 16px;border-bottom:1px solid var(--garis-lembut)}
+  .tabel tr.bk-baris td{padding:0;border:0}
+  .tabel tr.bk-baris td[data-l="Tanggal"]{grid-column:1;grid-row:1;font-weight:600}
+  .tabel tr.bk-baris td[data-l="Hasil"]{grid-column:2;grid-row:1;text-align:right}
+  .tabel tr.bk-baris td[data-l="Jam"]{grid-column:1;grid-row:2;font-size:var(--fs-kecil);color:var(--abu)}
+  .tabel tr.bk-baris td[data-l="Ukuran"]{grid-column:2;grid-row:2;text-align:right;font-size:var(--fs-kecil);color:var(--abu)}
+  .tabel tr.bk-baris td[data-l="Catatan"]{grid-column:1 / -1;grid-row:3}
+  .tabel tr.bk-baris .bk-langkah{display:none}
+}
+#pesan-backup a{display:inline-flex;align-items:center;min-height:44px;color:inherit;font-weight:600}
+@media (max-width:767px){.bk-gagal-di{display:block}}
+@media (min-width:768px){.bk-tautan .btn{flex:0 0 auto}.tabel tr.bk-baris td{white-space:nowrap}.tabel tr.bk-baris td[data-l="Hasil"]{white-space:normal}}

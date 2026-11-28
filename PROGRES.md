@@ -527,3 +527,9 @@ Mulai: 2026-11-28 (Kang: "mulai").
 
 **Langkah 2, Workflow** (2026-11-28): `backup.yml` langkah baru "Catat hasil untuk dashboard" (`if: always()`) sebelum "Jaga jadwal": memanggil `private.catat_backup` dengan berhasil/gagal, nama langkah yang gagal (Cek rahasia / Pasang alat / Salin database / Kunci file / Kirim ke Google Drive / Dibatalkan), jumlah tabel, ukuran & file dirapikan (dari jawaban Drive), nama file, link catatan GitHub. Nilai dikirim lewat variabel psql (aman dari karakter aneh). Gagal mencatat hanya peringatan, backup tetap dianggap berhasil. Bila rahasia database tidak ada, tidak dicatat (dashboard nanti memberi peringatan >30 jam).
 - Uji lokal: berhasil, gagal di Drive, gagal di salin, teks berbahaya (tersimpan apa adanya), tanpa alamat database — semua sesuai.
+
+**Langkah 3, Tampilan** (2026-11-28), versi cache v113:
+- `backup.html` + `js/backup.js` "Pantau Backup": kotak status besar (hijau berhasil / merah gagal atau >30 jam tanpa catatan / kuning belum ada catatan), angka 30 hari (berhasil, gagal, ukuran terakhir, jumlah catatan), tombol ke GitHub Actions & folder Drive, tabel riwayat 90 hari (di HP jadi kartu; kolom Tabel & File dirapikan hanya di laptop). Selain admin pusat dialihkan ke Beranda.
+- Beranda admin pusat: ubin "Pantau Backup" di Amanah & Tata Kelola dengan status singkat; bila gagal/telat muncul peringatan merah di atas + tautan. Menu "Lainnya" (HP/tablet): "Pantau Backup" khusus admin pusat.
+- `supa.js`: `nilaiBackup()` + `ukuranTeks()` dipakai bersama Beranda & halaman.
+- Uji: 4 keadaan (berhasil, gagal, telat, kosong) × 360/768/1024/1280 px: tanpa geser samping, tanpa galat konsol, target sentuh ≥44 px, tangkapan layar dilihat. 8 peran lain: tidak ada ubin, tidak ada menu, fungsi tidak dipanggil, halaman dialihkan.

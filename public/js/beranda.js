@@ -52,6 +52,20 @@ function ketUsaha(id) {
   }).catch(() => {});
 }
 
+// Status backup harian (khusus admin pusat): keterangan ubin + peringatan di atas bila bermasalah.
+function ketBackup() {
+  $('m-backup').hidden = false;
+  dbKirim('POST', 'rpc/status_backup', {}).then((baris) => {
+    const n = nilaiBackup(baris), t = n.terakhir;
+    $('m-backup-ket').textContent = n.jenis === 'ok'
+      ? `Berhasil · ${tglWib(t.waktu, { weekday: 'short', day: 'numeric', month: 'short' })} ${jamWib(t.waktu)} WIB · ${ukuranTeks(t.ukuran_byte)}`
+      : n.jenis === 'kosong' ? 'Belum ada catatan backup' : `Perlu dicek: ${n.judul.toLowerCase()}`;
+    if (n.jenis === 'gagal' || n.jenis === 'telat') {
+      $('pesan-backup').innerHTML = `<strong>${hurufAman(n.judul)}.</strong> <a href="/backup.html">Buka Pantau Backup</a>`;
+    }
+  }).catch(() => { $('m-backup-ket').textContent = 'Status backup belum bisa dimuat'; });
+}
+
 function ketAgenda() {
   ambilAgenda(1).then((d) => { if (d[0]) $('m-agenda-ket').textContent = `Terdekat: ${d[0].nama}, ${tglWib(d[0].mulai, { day: 'numeric', month: 'short' })}`; }).catch(() => {});
 }
@@ -85,6 +99,7 @@ function ketHaul(id) {
       $('menu').hidden = false; $('m-jamaah').hidden = false; $('nav-jamaah').hidden = false; $('m-amanah').hidden = false; $('m-amanah-judul').hidden = false;
       $('m-tambah').hidden = !PERAN_UBAH_JAMAAH.includes(p.peran);
       $('m-pin').hidden = p.peran !== 'admin_pusat';
+      if (p.peran === 'admin_pusat') ketBackup();
       if (PERAN_EKONOMI.includes(p.peran)) {
         $('m-ekonomi').hidden = false;
         dbKirim('POST', 'rpc/ringkas_ekonomi', {}).then((r) => {
