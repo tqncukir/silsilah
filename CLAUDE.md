@@ -40,6 +40,7 @@ Nomor Anggota: 1165100001 dst. KTA lama (QR teks biasa) tetap berlaku; KTA baru 
 13. Ringan, aman, awet: tabel ternormalisasi + indeks; pagination; PWA cache; arsip data lama per tahun; file dikompres; backup bulanan ke luar Supabase; semua perubahan database lewat migrasi di repo; cek Supabase advisors rutin.
 14. Kalau perintah kurang jelas atau berisi banyak tugas sekaligus, ingatkan: "Beri perintah yang jelas per tugas, Kang" + contoh.
 15. Responsif: SILSILAH dan website harus nyaman di HP, tablet, laptop, dan komputer (uji 360px, 768px, 1280px ke atas).
+16. **Panduan ikut berubah (permintaan Kang 2026-11-28):** setiap fitur baru atau perubahan cara pakai, ingatkan Kang di laporan dan perbarui juga (a) menu Panduan Peran di aplikasi (`public/js/panduan-isi.js`: `BAGIAN` + `BAGIAN_PERAN`, gambar di `public/img/panduan/`) dan (b) dokumen "Panduan SILSILAH TQN Cukir" (Claude Docs, https://claude.ai/artifact/LDRhVmBuy6pZcRRRWpE5yR). Tahap belum dianggap selesai sebelum panduannya diperbarui.
 
 ## Warna resmi (`public/css/tokens.css`, satu sumber untuk semua halaman)
 | Nama | Kode | Untuk |
