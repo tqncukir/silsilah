@@ -192,3 +192,5 @@ $('tarik').onclick = async () => {
     }
   } catch (e) { tanganiGalat(e, pesan); }
 })();
+// Foto sampul tersimpan tapi filenya hilang: beri tahu pengurus cara memperbaikinya.
+$('l-foto').addEventListener('error', () => { if (data?.boleh_ubah) pesan('Foto sampul berita ini tidak ditemukan. Tekan Ubah, lalu pilih foto lagi.'); });

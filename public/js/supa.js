@@ -526,3 +526,11 @@ function yakin(teks, ya = 'Ya, lanjutkan') {
     d.querySelector('[value="1"]').focus();
   });
 }
+
+// Foto berita hilang/gagal dimuat: sembunyikan, jangan tampil kotak kosong (pratinjau unggahan tidak termasuk).
+document.addEventListener('error', (e) => {
+  const g = e.target;
+  if (!(g instanceof HTMLImageElement) || g.id === 'foto-pratinjau' || !g.matches('.berita-kecil, .berita-foto')) return;
+  const kartu = g.closest('.berita-kartu');
+  if (kartu) { kartu.classList.add('tanpa-foto'); g.remove(); } else g.hidden = true;
+}, true);
