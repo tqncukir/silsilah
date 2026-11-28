@@ -1331,3 +1331,14 @@ body:not(.hal-masuk):not(.hal-poster)>main{flex:1 0 auto;width:100%}
 .kta-simpan-gambar{display:block;width:100%;height:auto;margin:14px 0 10px;border-radius:10px;border:1px solid var(--garis);box-shadow:var(--bayang)}
 .kta-simpan .pesan:not(:empty){margin:0}
 @media (max-width:1023px){.hanya-laptop{display:none!important}}
+/* Kunci Notifikasi (notif-kunci.html) */
+.kunci-langkah{margin:0 0 14px;padding-left:22px;line-height:1.6}
+.kunci-langkah li{margin:0 0 6px}
+#isi .pesan.ingat{margin:0 0 16px}
+#hasil{margin-top:18px;display:grid;gap:14px}
+#hasil[hidden]{display:none}
+.kunci-baris{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;align-items:center;padding:12px;border:1px solid var(--garis);border-radius:12px}
+.kunci-nama{grid-column:1 / -1;margin:0;font-weight:700}
+.kunci-nama .ket{display:block;font-weight:400}
+.kunci-rahasia{color:#A4161A}
+.kunci-isi{display:block;min-width:0;padding:8px 10px;border-radius:8px;background:var(--latar-sorot);font-size:var(--fs-kecil);overflow-wrap:anywhere;user-select:all}

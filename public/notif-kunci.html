@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Kunci Notifikasi · SILSILAH TQN Cukir</title>
+<meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=132">
+<link rel="stylesheet" href="/css/app.css?v=132">
+</head>
+<body class="hal-app">
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <a href="/beranda.html">Beranda</a>
+      <a href="/dashboard.html" id="nav-dasbor" hidden>Dashboard Pengurus</a>
+      <a href="/jamaah.html" id="nav-jamaah" hidden>Data Jamaah</a>
+      <a href="/pendaftaran.html" id="nav-daftar" hidden>Pendaftaran</a>
+      <a href="/kegiatan.html" id="nav-kegiatan" hidden>Kegiatan</a>
+      <a href="/ahli-kubur.html" id="nav-ahli" hidden>Ahli Kubur</a>
+      <a href="/perjalanan.html" id="nav-perjalanan" hidden>Ziarah &amp; Umroh</a>
+      <a href="/bantuan.html" id="nav-bantuan" hidden>Bantuan Sosial</a>
+      <a href="/ekonomi.html" id="nav-ekonomi" hidden>Ekonomi Jamaah</a>
+      <a href="/usaha.html" id="nav-usaha" hidden>Usaha Jamaah</a>
+      <a href="/sakit.html" id="nav-sakit" hidden>Jamaah Sakit</a>
+      <a href="/kebutuhan.html" id="nav-kebutuhan" hidden>Kebutuhan Khusus</a>
+      <a href="/kas.html" id="nav-kas" hidden>Buku Kas</a>
+      <a href="/aset.html" id="nav-aset" hidden>Aset &amp; Wakaf</a>
+    </nav>
+    <button class="app-keluar" id="keluar" type="button">Keluar</button>
+  </div>
+</header>
+
+<main class="app-isi">
+  <a href="/beranda.html" class="kembali">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Beranda
+  </a>
+  <div class="judul-baris"><div><h1>Kunci Notifikasi</h1><p class="judul-sub">Khusus Admin Pusat. Dibuat sekali saja, sebelum notifikasi ke HP dinyalakan.</p></div></div>
+  <p id="pesan" class="pesan" role="alert"></p>
+  <section class="panel" id="isi" hidden aria-labelledby="langkah-judul">
+    <h2 class="form-judul" id="langkah-judul">Cara memasang</h2>
+    <ol class="kunci-langkah">
+      <li>Tekan <strong>Buat kunci</strong>. Kunci dibuat di perangkat ini dan <strong>tidak dikirim ke mana pun</strong>.</li>
+      <li>Buka <a class="tautan" href="https://supabase.com/dashboard/project/tuthgclhrzvvlcnpjxiv/functions/secrets" target="_blank" rel="noopener">Supabase → Edge Functions → Secrets</a>, lalu tambahkan tiga rahasia di bawah (salin satu per satu).</li>
+      <li>Kirim <strong>kunci publik</strong> saja ke Claude (aman). <strong>Kunci rahasia jangan dikirim ke siapa pun</strong>, termasuk Claude.</li>
+    </ol>
+    <p class="pesan ingat">Kunci cukup dibuat sekali. Bila nanti diganti, semua jamaah harus menekan "Aktifkan pemberitahuan" lagi.</p>
+    <button type="button" class="btn btn-utama btn-pas" id="buat">Buat kunci</button>
+    <div id="hasil" hidden>
+      <div class="kunci-baris"><p class="kunci-nama">VAPID_PUBLIC <span class="ket">kunci publik, boleh dikirim ke Claude</span></p>
+        <code class="kunci-isi" id="k-publik"></code><button type="button" class="btn btn-kedua btn-pas salin" data-salin="k-publik">Salin</button></div>
+      <div class="kunci-baris"><p class="kunci-nama">VAPID_PRIVATE <span class="ket kunci-rahasia">kunci rahasia, JANGAN dikirim ke siapa pun</span></p>
+        <code class="kunci-isi" id="k-rahasia"></code><button type="button" class="btn btn-kedua btn-pas salin" data-salin="k-rahasia">Salin</button></div>
+      <div class="kunci-baris"><p class="kunci-nama">VAPID_SUBJECT <span class="ket">alamat kontak pengirim</span></p>
+        <code class="kunci-isi" id="k-subjek">mailto:jtccukir2022@gmail.com</code><button type="button" class="btn btn-kedua btn-pas salin" data-salin="k-subjek">Salin</button></div>
+      <p id="pesan-salin" class="pesan ok" role="status"></p>
+    </div>
+  </section>
+</main>
+<footer class="kaki">
+  <div class="kaki-isi">
+    <address class="kaki-alamat">TQN Pusat Cukir Jombang<br>Jl. Masjid No. 110 Cukir, Diwek, Jombang 61471</address>
+  </div>
+  <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
+</footer>
+<script src="/js/supa.js?v=132" defer></script>
+<script src="/js/notif-kunci.js?v=132" defer></script>
+</body>
+</html>
