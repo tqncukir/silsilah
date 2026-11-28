@@ -113,50 +113,87 @@ async function profilSaya() {
   return p || null;
 }
 
-// ===== Menu bawah di HP (temuan f1, Kang 2026-11-27): 4 tombol besar, sisanya di "Lainnya" =====
+// ===== Menu (Alternatif B "Emas di atas Hijau", Kang 2026-11-28) =====
+// HP & tablet (<1024px): menu bawah 4 tombol + "Lainnya" berisi ubin ikon per kelompok warna.
+// Laptop & komputer (>=1024px): menu samping kiri dengan kelompok yang sama. Satu daftar untuk keduanya.
 const IKON_MENU = {
-  beranda: '<path d="M3 11l9-7 9 7M5 10v10h5v-6h4v6h5V10"/>',
-  jamaah: '<circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M16 5.5a3 3 0 010 5.6M17.5 14.3c1.7.6 2.7 2.2 3 4.7"/>',
-  kegiatan: '<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
-  kta: '<rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="8.5" cy="11" r="2"/><path d="M5.5 16c.6-1.5 1.6-2.2 3-2.2s2.4.7 3 2.2M14 10h4M14 13.5h4"/>',
-  lainnya: '<circle cx="5.5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18.5" cy="12" r="1.6"/>',
+  beranda: 'M3 11l9-7 9 7M5 10v10h5v-6h4v6h5V10',
+  jamaah: 'M9 11.2a3.2 3.2 0 100-6.4 3.2 3.2 0 000 6.4zM3.5 19c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M16 5.5a3 3 0 010 5.6M17.5 14.3c1.7.6 2.7 2.2 3 4.7',
+  kegiatan: 'M6 5h12a2.5 2.5 0 012.5 2.5V18a2.5 2.5 0 01-2.5 2.5H6A2.5 2.5 0 013.5 18V7.5A2.5 2.5 0 016 5zM3.5 10h17M8 3v4M16 3v4',
+  kta: 'M5.5 5h13A2.5 2.5 0 0121 7.5v9a2.5 2.5 0 01-2.5 2.5h-13A2.5 2.5 0 013 16.5v-9A2.5 2.5 0 015.5 5zM8.5 13a2 2 0 100-4 2 2 0 000 4zM5.5 16c.6-1.5 1.6-2.2 3-2.2s2.4.7 3 2.2M14 10h4M14 13.5h4',
+  lainnya: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z',
+  dasbor: 'M4 4h7v7H4zM13 4h7v4h-7zM13 10h7v10h-7zM4 13h7v7H4z',
+  daftar: 'M9 11a3.5 3.5 0 100-7 3.5 3.5 0 000 7zM2.5 20c.7-3.6 3.3-5.5 6.5-5.5s5.8 1.9 6.5 5.5M18 8v6M15 11h6',
+  pin: 'M6 11h12v9H6zM8.5 11V8a3.5 3.5 0 017 0v3M12 15v2',
+  absensi: 'M4 4h16v16H4zM8 12l3 3 5-6',
+  ahli: 'M7 21V9a5 5 0 0110 0v12M4 21h16M10 12h4',
+  haul: 'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4M14.5 16.5a2.5 2.5 0 11-2-4 2 2 0 002 4z',
+  ziarah: 'M3 13l18-8-6 15-3-6-9-1zM12 14l3-3',
+  agenda: 'M5 4h14v16H5zM9 9h6M9 13h6M9 17h3',
+  bantuan: 'M12 20s-7-4.4-7-9.5A4 4 0 0112 8a4 4 0 017 2.5C19 15.6 12 20 12 20z',
+  ekonomi: 'M4 20h16M6 16l4-4 3 3 5-6M15 9h3v3',
+  usaha: 'M4 9l1.5-5h13L20 9M4 9v11h16V9M4 9h16M9 20v-6h6v6',
+  sakit: 'M9 4h6v5h5v6h-5v5H9v-5H4V9h5z',
+  kebutuhan: 'M12 6a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM9 8h6M12 8v6l4 5M12 14H9M8.5 12a5 5 0 105.5 7.5',
+  kas: 'M4 7h15a1 1 0 011 1v11H4zM4 7l12-3v3M16 13h2',
+  aset: 'M3 20h18M5 20V10l7-5 7 5v10M10 20v-5h4v5',
+  backup: 'M7 18a4 4 0 01-.5-8 5.5 5.5 0 0110.6-1.5A4 4 0 0117 18M12 12v7M9 14l3-3 3 3',
+  pasang: 'M7 3h10v18H7zM11 18h2',
+  keluar: 'M10 4H5v16h5M14 8l4 4-4 4M18 12H9',
+  tutup: 'M6 6l12 12M18 6L6 18',
 };
+const GRUP_MENU = [['pondasi', 'Pondasi Jamaah'], ['ruhani', 'Ruhani & Kegiatan'], ['kepedulian', 'Kepedulian'], ['amanah', 'Amanah & Tata Kelola']];
+const ikonMenu = (k, u = 20) => `<svg viewBox="0 0 24 24" width="${u}" height="${u}" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${IKON_MENU[k]}"/></svg>`;
+function daftarMenu(p) {
+  const anggota = p.peran === 'anggota', boleh = (r) => !r || r.includes(p.peran);
+  // [ikon, label, alamat, kelompok]; kelompok '' = menu utama (menu bawah HP / atas menu samping)
+  const semua = anggota
+    ? [['beranda', 'Beranda', '/beranda.html', ''], ['kta', 'KTA', '/kta.html', ''], ['kegiatan', 'Agenda', '/agenda.html', ''],
+      ['ahli', 'Ahli Kubur', '/ahli-kubur.html', 'ruhani'], ['haul', 'Haul', '/haul.html', 'ruhani'], ['usaha', 'Usaha Jamaah', '/usaha.html', 'kepedulian']]
+    : [['beranda', 'Beranda', '/beranda.html', '', null], ['jamaah', 'Jamaah', '/jamaah.html', '', PERAN_LIHAT_JAMAAH],
+      ['kegiatan', 'Kegiatan', '/kegiatan.html', '', PERAN_LIHAT_KEGIATAN],
+      ['dasbor', 'Dashboard', '/dashboard.html', 'pondasi', PERAN_LIHAT_JAMAAH], ['daftar', 'Pendaftaran', '/pendaftaran.html', 'pondasi', PERAN_UBAH_JAMAAH],
+      ['pin', 'Atur PIN', '/pengurus-pin.html', 'pondasi', ['admin_pusat']],
+      ['absensi', 'Absensi', '/absensi.html', 'ruhani', PERAN_ABSEN], ['ahli', 'Ahli Kubur', '/ahli-kubur.html', 'ruhani', PERAN_LIHAT_JAMAAH],
+      ['haul', 'Haul', '/haul.html', 'ruhani', PERAN_LIHAT_JAMAAH], ['ziarah', 'Ziarah & Umroh', '/perjalanan.html', 'ruhani', PERAN_LIHAT_PERJALANAN],
+      ['agenda', 'Agenda umum', '/agenda.html', 'ruhani', null],
+      ['bantuan', 'Bantuan Sosial', '/bantuan.html', 'kepedulian', PERAN_BANTUAN], ['ekonomi', 'Ekonomi Jamaah', '/ekonomi.html', 'kepedulian', PERAN_EKONOMI],
+      ['usaha', 'Usaha Jamaah', '/usaha.html', 'kepedulian', null], ['sakit', 'Jamaah Sakit', '/sakit.html', 'kepedulian', PERAN_KESEHATAN],
+      ['kebutuhan', 'Kebutuhan Khusus', '/kebutuhan.html', 'kepedulian', PERAN_KEBUTUHAN],
+      ['kas', 'Buku Kas', '/kas.html', 'amanah', PERAN_LIHAT_KAS], ['aset', 'Aset & Wakaf', '/aset.html', 'amanah', PERAN_LIHAT_ASET],
+      ['backup', 'Pantau Backup', '/backup.html', 'amanah', ['admin_pusat']]].filter((m) => boleh(m[4]));
+  return { utama: semua.filter((m) => !m[3]), grup: GRUP_MENU.map(([k, n]) => [k, n, semua.filter((m) => m[3] === k)]).filter((g) => g[2].length) };
+}
 function pasangMenuBawah(p) {
   if (!document.body.classList.contains('hal-app') || document.getElementById('menu-bawah')) return;
-  const anggota = p.peran === 'anggota', jalur = location.pathname;
-  const utama = anggota
-    ? [['beranda', 'Beranda', '/beranda.html'], ['kta', 'KTA', '/kta.html'], ['kegiatan', 'Agenda', '/agenda.html']]
-    : [['beranda', 'Beranda', '/beranda.html'],
-      ...(PERAN_LIHAT_JAMAAH.includes(p.peran) ? [['jamaah', 'Jamaah', '/jamaah.html']] : []),
-      ...(PERAN_LIHAT_KEGIATAN.includes(p.peran) ? [['kegiatan', 'Kegiatan', '/kegiatan.html']] : [])];
-  const lain = anggota
-    ? [['Haul', '/haul.html'], ['Ahli Kubur', '/ahli-kubur.html'], ['Usaha Jamaah', '/usaha.html'], ['Cara pasang di HP', '/pasang.html']]
-    : [[ 'Dashboard Pengurus', '/dashboard.html', PERAN_LIHAT_JAMAAH ], ['Pendaftaran', '/pendaftaran.html', PERAN_UBAH_JAMAAH ],
-      ['Absensi', '/absensi.html', PERAN_ABSEN], ['Ahli Kubur', '/ahli-kubur.html', PERAN_LIHAT_JAMAAH], ['Haul', '/haul.html', PERAN_LIHAT_JAMAAH],
-      ['Ziarah & Umroh', '/perjalanan.html', PERAN_LIHAT_PERJALANAN],
-      ['Bantuan Sosial', '/bantuan.html', PERAN_BANTUAN],
-      ['Ekonomi Jamaah', '/ekonomi.html', PERAN_EKONOMI],
-      ['Usaha Jamaah', '/usaha.html', null],
-      ['Jamaah Sakit', '/sakit.html', PERAN_KESEHATAN],
-      ['Kebutuhan Khusus', '/kebutuhan.html', PERAN_KEBUTUHAN],
-      ['Buku Kas', '/kas.html', PERAN_LIHAT_KAS],
-      ['Aset & Wakaf', '/aset.html', PERAN_LIHAT_ASET],
-      ['Atur PIN Pengurus', '/pengurus-pin.html', ['admin_pusat']], ['Pantau Backup', '/backup.html', ['admin_pusat']], ['Agenda umum', '/agenda.html', null], ['Cara pasang di HP', '/pasang.html', null]]
-      .filter(([, , boleh]) => !boleh || boleh.includes(p.peran));
-  const aktif = (u) => jalur === u || (u === '/jamaah.html' && jalur.startsWith('/jamaah')) || (u === '/kegiatan.html' && /^\/(kegiatan|absensi)/.test(jalur));
+  const { utama, grup } = daftarMenu(p), jalur = location.pathname;
+  const aktif = (u) => jalur === u || (u === '/jamaah.html' && jalur.startsWith('/jamaah')) || (u === '/kegiatan.html' && /^\/(kegiatan|absensi)/.test(jalur))
+    || (u !== '/beranda.html' && u.endsWith('.html') && jalur === u.replace('.html', '-isi.html'));
+  const cur = (u) => (aktif(u) ? ' aria-current="page"' : '');
   const diLain = !utama.some(([, , u]) => aktif(u));
-  const ikon = (k) => `<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${IKON_MENU[k]}</svg>`;
+  // Menu bawah (HP & tablet)
   const nav = document.createElement('nav');
   nav.id = 'menu-bawah'; nav.className = 'menu-bawah'; nav.setAttribute('aria-label', 'Menu');
-  nav.innerHTML = utama.map(([k, t, u]) => `<a href="${u}"${aktif(u) ? ' aria-current="page"' : ''}>${ikon(k)}<span>${t}</span></a>`).join('')
-    + `<button type="button" id="menu-lain-buka" aria-haspopup="dialog"${diLain ? ' aria-current="page"' : ''}>${ikon('lainnya')}<span>Lainnya</span></button>`;
+  nav.innerHTML = utama.map(([k, t, u]) => `<a href="${u}"${cur(u)}>${ikonMenu(k, 24)}<span>${t}</span></a>`).join('')
+    + `<button type="button" id="menu-lain-buka" aria-haspopup="dialog"${diLain ? ' aria-current="page"' : ''}>${ikonMenu('lainnya', 24)}<span>Lainnya</span></button>`;
+  // Lembar "Lainnya": ubin ikon per kelompok
   const d = document.createElement('dialog');
-  d.className = 'menu-lain'; d.setAttribute('aria-label', 'Menu lainnya');
-  d.innerHTML = `<div class="menu-lain-kepala"><p>Menu lainnya</p><button type="button" class="btn btn-kedua btn-pas" id="menu-lain-tutup">Tutup</button></div>
-    <ul>${lain.map(([t, u]) => `<li><a href="${u}"${jalur === u ? ' aria-current="page"' : ''}>${t}</a></li>`).join('')}
-    <li><button type="button" id="menu-lain-keluar">Keluar</button></li></ul>`;
-  document.body.append(nav, d);
-  document.body.classList.add('ada-menu-bawah');
+  d.className = 'menu-lain'; d.setAttribute('aria-labelledby', 'menu-lain-judul');
+  d.innerHTML = `<div class="menu-lain-kepala"><h2 id="menu-lain-judul">Menu lainnya</h2>
+      <button type="button" class="menu-lain-tutup" id="menu-lain-tutup" aria-label="Tutup menu">${ikonMenu('tutup')}</button></div>
+    ${grup.map(([k, n, isi]) => `<section class="menu-grup" aria-label="${n}"><h3><span class="titik-${k}" aria-hidden="true"></span>${n}</h3>
+      <ul class="ml-ubin">${isi.map(([i, t, u]) => `<li><a href="${u}"${cur(u)}><span class="ml-ikon">${ikonMenu(i)}</span><span>${t}</span></a></li>`).join('')}</ul></section>`).join('')}
+    <div class="menu-lain-kaki"><a href="/pasang.html" class="menu-pasang">${ikonMenu('pasang')}Cara pasang di HP</a>
+      <button type="button" class="menu-keluar" id="menu-lain-keluar">${ikonMenu('keluar')}Keluar</button></div>`;
+  // Menu samping (laptop & komputer)
+  const s = document.createElement('nav');
+  s.id = 'menu-samping'; s.className = 'menu-samping'; s.setAttribute('aria-label', 'Menu utama');
+  const baris = ([i, t, u]) => `<li><a href="${u}"${cur(u)}><span class="ml-ikon">${ikonMenu(i, 17)}</span><span>${t}</span></a></li>`;
+  s.innerHTML = `<ul>${utama.map(baris).join('')}</ul>`
+    + grup.map(([k, n, isi]) => `<h3><span class="titik-${k}" aria-hidden="true"></span>${n}</h3><ul>${isi.map(baris).join('')}</ul>`).join('')
+    + `<ul class="menu-samping-kaki">${baris(['pasang', 'Cara pasang di HP', '/pasang.html'])}</ul>`;
+  document.body.append(nav, d, s);
+  document.body.classList.add('ada-menu-bawah', 'ada-menu-samping');
   // Saat mengetik, keyboard HP bisa mengangkat menu bawah sehingga menutup isian/tombol Simpan: sembunyikan sementara.
   const ketik = (el) => el && (el.tagName === 'TEXTAREA' || el.tagName === 'SELECT'
     || (el.tagName === 'INPUT' && !/^(radio|checkbox|button|submit|reset|range|color|file)$/.test(el.type)));
@@ -165,10 +202,12 @@ function pasangMenuBawah(p) {
   const tetap = (el) => ketik(el) || (document.body.classList.contains('sedang-ketik') && !!el?.closest?.('form'));
   document.addEventListener('focusin', (e) => document.body.classList.toggle('sedang-ketik', tetap(e.target)));
   document.addEventListener('focusout', () => setTimeout(() => document.body.classList.toggle('sedang-ketik', tetap(document.activeElement)), 0));
-  document.getElementById('menu-lain-buka').onclick = () => d.showModal();
+  const buka = document.getElementById('menu-lain-buka');
+  buka.onclick = () => d.showModal();
   document.getElementById('menu-lain-tutup').onclick = () => d.close();
   document.getElementById('menu-lain-keluar').onclick = () => keluar();
   d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
+  d.addEventListener('close', () => buka.focus());
 }
 
 // ===== Ahli Kubur (modul 5) =====

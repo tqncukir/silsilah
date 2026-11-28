@@ -536,3 +536,16 @@ Mulai: 2026-11-28 (Kang: "mulai"). **Disetujui Kang 2026-11-28.**
 - Uji: 4 keadaan (berhasil, gagal, telat, kosong) × 360/768/1024/1280 px: tanpa geser samping, tanpa galat konsol, target sentuh ≥44 px, tangkapan layar dilihat. 8 peran lain: tidak ada ubin, tidak ada menu, fungsi tidak dipanggil, halaman dialihkan.
 
 **Langkah 4, Uji sungguhan** (2026-11-28 07.44 WIB): Run workflow manual (run 46089456345) berhasil: 35 tabel, `silsilah-2026-11-28.7z` ±1,0 MB ke Drive, langkah "Catat hasil" → "Tercatat: berhasil=true". Halaman sudah tayang (tanpa login dialihkan ke Masuk). Pengecekan di HP dengan akun Admin Pusat oleh Kang (login hanya oleh Kang). **Disetujui Kang 2026-11-28 ("Tahap 12 disetujui").**
+
+## Tahap 13: Menu ringkas "Alternatif B: Emas di atas Hijau"
+Mulai: 2026-11-28 (Kang: "mulai B"). Menunggu dicek Kang.
+
+**Keputusan Kang (2026-11-28):** menu dibuat ringkas & rapi; dari 3 alternatif warna (contoh di Claude Design "Contoh Menu Ringkas SILSILAH") Kang memilih **B: Emas di atas Hijau**, untuk HP dan laptop/komputer.
+**Usulan Claude (dicek dengan skill ui-ux-pro-max):** satu daftar menu di `daftarMenu(p)` (`supa.js`) dipakai HP dan laptop, dikelompokkan 4 kelompok modul (Pondasi, Ruhani & Kegiatan, Kepedulian, Amanah & Tata Kelola), tetap menyaring per peran seperti sebelumnya.
+
+**Yang dikerjakan (versi cache v114):**
+- HP & tablet (<1024px): menu bawah 4 tombol tetap; lembar "Lainnya" kini latar hijau Jam'iyyah, ubin ikon 4 kolom per kelompok (ikon emas dalam lingkaran, label putih 13px), halaman yang dibuka ditandai bingkai emas, tombol tutup ikon (44px, `aria-label`), "Cara pasang di HP" & "Keluar" terpisah di bawah. Tinggi maks 92dvh; di tablet lebar maks 600px di tengah.
+- Laptop & komputer (≥1024px): menu atas yang berjajar diganti menu samping kiri hijau (256px) dengan kelompok yang sama; header tetap penuh di atas; item 44px; halaman aktif bingkai emas.
+- Kontras: teks kecil putih di hijau (6,6:1); emas hanya untuk ikon, titik kelompok, dan judul besar (emas di hijau 4,46:1, tidak cukup untuk teks kecil).
+- `app.css`: blok menu lama diganti; kelas baru `ml-ubin`/`ml-ikon` (tidak bentrok dengan `menu-ubin` Beranda). Link `nav-*` di HTML tetap ada (dipakai bila menu belum terpasang), disembunyikan saat menu samping aktif.
+- Uji: admin pusat, ketua, anggota × 360/768/1280 px: tanpa geser samping, tanpa galat konsol, semua target ≥44px, tangkapan layar dilihat.
