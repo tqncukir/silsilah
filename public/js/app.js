@@ -20,3 +20,6 @@ function kabar(t) { const s = document.getElementById('status'); s.textContent =
 // Agenda terdekat di halaman depan (publik, tanpa login)
 const agenda = document.getElementById('agenda');
 if (agenda && typeof gambarAgenda === 'function') gambarAgenda(agenda, 3, 'Belum ada agenda kegiatan yang akan datang.');
+// Berita terbaru di halaman depan (publik); bagian disembunyikan bila belum ada berita.
+const beritaDepan = document.getElementById('berita');
+if (beritaDepan && typeof gambarBerita === 'function') gambarBerita(beritaDepan, 3).then((n) => { document.getElementById('berita-depan').hidden = n <= 0; });

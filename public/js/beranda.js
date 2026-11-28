@@ -83,6 +83,14 @@ function ketHaul(id) {
   }).catch(() => {});
 }
 
+// Berita terbaru (3; yang sudah masuk juga melihat Khusus anggota) + pemberitahuan berita menunggu persetujuan untuk pimpinan.
+function muatBeritaBeranda(p) {
+  gambarBerita($('berita-beranda-isi'), 3).then((n) => { $('berita-beranda').hidden = n <= 0; });
+  if (PERAN_PIMPINAN_BERITA.includes(p.peran)) dbKirim('POST', 'rpc/berita_menunggu', {}).then((n) => {
+    if (Number(n) > 0) { $('berita-menunggu').innerHTML = `<a href="/berita-kelola.html?status=diajukan"><strong>${Number(n)} berita</strong> dari koordinator menunggu persetujuan</a>`; $('berita-menunggu').hidden = false; }
+  }).catch(() => {});
+}
+
 (async () => {
   sesiDariTautan();
   try {
@@ -95,6 +103,7 @@ function ketHaul(id) {
     }
     $('salam').textContent = p.nama;
     $('peran').textContent = NAMA_PERAN[p.peran] || p.peran;
+    muatBeritaBeranda(p);
     if (PERAN_LIHAT_JAMAAH.includes(p.peran)) {
       $('menu').hidden = false; $('m-jamaah').hidden = false; $('nav-jamaah').hidden = false; $('m-amanah').hidden = false; $('m-amanah-judul').hidden = false;
       $('m-tambah').hidden = !PERAN_UBAH_JAMAAH.includes(p.peran);
