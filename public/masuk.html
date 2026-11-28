@@ -9,8 +9,8 @@
 <link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=135">
-<link rel="stylesheet" href="/css/app.css?v=135">
+<link rel="stylesheet" href="/css/tokens.css?v=136">
+<link rel="stylesheet" href="/css/app.css?v=136">
 </head>
 <body class="hal-masuk">
 <header class="masuk-atas">
@@ -35,7 +35,7 @@
 
 <main class="masuk-isi">
   <section class="masuk-kartu" aria-labelledby="judul-masuk">
-    <h1 id="judul-masuk">Assalamu'alaikum</h1>
+    <h1 id="judul-masuk">Assalamu’alaikum <span class="masuk-salam2">warahmatullahi wabarakatuh</span></h1>
     <p class="masuk-ajak">Masuk cukup dengan memindai QR di Kartu Anggota (KTA).</p>
 
     <button type="button" class="btn btn-utama btn-pindai" id="pindai">
@@ -46,7 +46,8 @@
     <p id="pesan" class="pesan" role="alert" aria-live="assertive"></p>
 
     <details class="masuk-pin" id="masuk-pin">
-      <summary>Masuk dengan PIN (pengurus atau KTA ber-PIN)</summary>
+      <summary><span class="mp-teks"><span class="mp-judul">Masuk dengan PIN</span><span class="mp-ket">Untuk pengurus atau KTA ber-PIN</span></span>
+        <svg class="mp-panah" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
     <form id="form-anggota" class="form" autocomplete="off" novalidate>
       <button type="button" class="btn btn-kedua btn-pindai" id="pindai-pengurus">
         <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8V5a1 1 0 011-1h3M16 4h3a1 1 0 011 1v3M20 16v3a1 1 0 01-1 1h-3M8 20H5a1 1 0 01-1-1v-3M7 12h10"/></svg>
@@ -82,13 +83,14 @@
   </section>
 
   <aside class="masuk-bantuan">
+    <svg class="mb-ikon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.5v.5"/></svg>
     <p><strong>Cukup sekali.</strong> Setelah masuk, HP ini diingat. Kartu hilang? Hubungi pengurus atau koordinator wilayah agar kartu diblokir.</p>
   </aside>
 
 </main>
-<script src="/js/supa.js?v=135" defer></script>
-<script src="/js/pindai.js?v=135" defer></script>
-<script src="/js/masuk.js?v=135" defer></script>
+<script src="/js/supa.js?v=136" defer></script>
+<script src="/js/pindai.js?v=136" defer></script>
+<script src="/js/masuk.js?v=136" defer></script>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=tsSiap&render=explicit" defer></script>
 </body>
 </html>

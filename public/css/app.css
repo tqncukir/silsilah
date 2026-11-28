@@ -49,18 +49,19 @@ footer{text-align:center;padding:20px 16px 32px;color:var(--abu);font-size:var(-
 
 /* ===== Halaman Masuk ===== */
 .hal-masuk{background:var(--latar);min-height:100vh;display:flex;flex-direction:column}
-.masuk-atas{position:relative;text-align:center;color:#FFFFFF;background:var(--hijau-jamiyyah);
+.masuk-atas{position:relative;text-align:center;color:#FFFFFF;background:var(--hijau-jamiyyah) url(/img/motif.svg);
   padding:max(14px,env(safe-area-inset-top)) 16px 52px;border-bottom:4px solid var(--kuning-rosyid)}
 .masuk-kembali{position:absolute;left:6px;top:max(6px,env(safe-area-inset-top));width:44px;height:44px;display:grid;place-items:center;
   color:#FFFFFF;border-radius:12px}
 .masuk-kembali:focus-visible{outline:3px solid var(--kuning-rosyid)}
-.masuk-logo{display:block;width:60px;height:60px;margin:4px auto 6px;border-radius:50%;background:#FFFFFF;padding:4px;
-  box-shadow:0 0 0 3px var(--kuning-rosyid)}
+.masuk-logo{display:block;width:64px;height:64px;margin:4px auto 6px;border-radius:50%;background:#FFFFFF;padding:3px;
+  border:3px solid var(--kuning-rosyid)}
 .masuk-nama{margin:0;font-size:1.125rem;font-weight:800;letter-spacing:.14em;color:var(--kuning-rosyid);line-height:1.2}
 .masuk-lembaga{margin:2px 0 0;font-size:var(--fs-kecil);color:#FFFFFF}
 .masuk-isi{position:relative;z-index:1;width:100%;max-width:420px;margin:-36px auto 0;padding:0 16px 24px;flex:1}
 .masuk-kartu{background:#FFFFFF;border-radius:16px;padding:20px 18px 6px;box-shadow:0 8px 24px rgba(11,72,34,.10),0 1px 3px rgba(11,72,34,.08)}
-.masuk-kartu h1{margin:0 0 2px}
+.masuk-kartu h1{margin:0 0 6px;line-height:1.25}
+.masuk-salam2{display:block;margin-top:2px;font-size:var(--fs-sub);font-weight:600;color:var(--hijau-daun)}
 .masuk-ajak{margin:0 0 14px;color:var(--abu)}
 .pin-baris{display:flex;gap:8px}
 .pin-baris input{flex:1;min-width:0;letter-spacing:.3em}
@@ -72,8 +73,9 @@ footer{text-align:center;padding:20px 16px 32px;color:var(--abu);font-size:var(-
 .btn-masuk.sibuk .putar{display:block}
 @media (prefers-reduced-motion:no-preference){.btn-masuk .putar{animation:putar .8s linear infinite}}
 @keyframes putar{to{transform:rotate(360deg)}}
-.masuk-bantuan{margin:12px 0 0;padding:10px 14px;border-radius:14px;background:#FFFFFF;border-left:6px solid var(--hijau-daun)}
-.masuk-bantuan p{margin:0;font-size:var(--fs-kecil)}
+.masuk-bantuan{display:flex;gap:10px;align-items:flex-start;margin:16px 0 0;padding:0 6px;color:var(--abu)}
+.masuk-bantuan p{margin:0;font-size:var(--fs-kecil);line-height:1.5}
+.mb-ikon{flex:none;margin-top:1px;color:var(--hijau-daun)}
 .masuk-bantuan strong{font-weight:600}
 .masuk-admin{margin:12px 0 0;text-align:center}
 .masuk-admin a{min-height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;
@@ -700,8 +702,16 @@ li:nth-child(-n+3)>.bt-baris .bt-no{background:var(--hijau-jamiyyah);color:#FFFF
 .pindai-bingkai{position:absolute;inset:18%;border:3px solid var(--kuning-rosyid);border-radius:18px;box-shadow:0 0 0 999px rgba(0,0,0,.35)}
 .pindai-ket{margin:0;padding:14px 16px 18px;font-size:var(--fs-kecil);text-align:center;color:#E6F0E3}
 .pindai-galat{color:#FFD7D2;font-weight:600}
-.masuk-pin{margin:16px 0 8px;border-top:1px solid var(--garis-lembut);padding-top:8px}
-.masuk-pin summary{min-height:44px;display:flex;align-items:center;cursor:pointer;color:var(--hijau-jamiyyah);font-weight:600;font-size:var(--fs-kecil)}
+.masuk-pin{margin:16px 0 14px;border-top:1px solid var(--garis-lembut);padding-top:16px}
+.masuk-pin summary{min-height:44px;display:flex;align-items:center;gap:10px;cursor:pointer;list-style:none;padding:10px 12px 10px 14px;
+  border:1.5px solid var(--hijau-daun);border-radius:12px;color:var(--hijau-jamiyyah)}
+.masuk-pin summary::-webkit-details-marker{display:none}
+.mp-teks{flex:1;min-width:0;display:grid;gap:1px}
+.mp-judul{font-weight:700}
+.mp-ket{font-size:var(--fs-kecil);color:var(--abu)}
+.mp-panah{flex:none;transition:transform .15s}
+.masuk-pin[open] .mp-panah{transform:rotate(180deg)}
+@media (prefers-reduced-motion:reduce){.mp-panah{transition:none}}
 .masuk-pin summary:focus-visible{outline:3px solid var(--hijau-jamiyyah);outline-offset:2px;border-radius:8px}
 .masuk-pin[open] summary{margin-bottom:8px}
 .kta-terbaca{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 12px;margin:0 0 16px;padding:8px 14px;
@@ -1412,3 +1422,10 @@ main.depan{max-width:none;padding:0 0 32px}
   .depan-pintas ul{padding:0 32px}
   .depan-isi{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 32px;align-items:start;padding:24px 32px 0}
 }
+/* Notifikasi: tombol perangkat bertumpuk selebar kartu (huruf besar di HP tetap rapi) */
+.notif-perangkat .notif-status{margin:0 0 6px}
+.notif-perangkat #st-ket{margin:0 0 14px}
+.tombol-tumpuk{display:flex;flex-direction:column;gap:10px;max-width:440px}
+.tombol-tumpuk .btn{margin:0;width:100%}
+.tombol-tumpuk [hidden]{display:none}
+.notif-perangkat .pesan:not(:empty){margin:12px 0 0}
