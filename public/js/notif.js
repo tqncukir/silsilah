@@ -13,7 +13,7 @@ async function tampilStatus() {
   const st = await statusNotif().catch(() => 'tidak-didukung');
   $('st-teks').innerHTML = `<span class="stat ${st === 'aktif' ? 'stat-aktif' : st === 'belum' ? 'stat-biasa' : 'stat-tidak'}">${STATUS[st][0]}</span>`;
   $('st-ket').textContent = STATUS[st][1] + (perangkat ? ` Akun ini aktif di ${perangkat} perangkat.` : '');
-  $('st-aktifkan').hidden = st !== 'belum'; $('st-matikan').hidden = st !== 'aktif'; $('st-pasang').hidden = st !== 'pasang-dulu';
+  $('st-aktifkan').hidden = st !== 'belum'; $('st-matikan').hidden = st !== 'aktif'; $('st-uji').hidden = st !== 'aktif'; $('st-pasang').hidden = st !== 'pasang-dulu';
   return st;
 }
 const hitungPerangkat = async () => { perangkat = Number((await dbKirim('POST', 'rpc/notif_saya', {})).perangkat) || 0; };
@@ -27,6 +27,20 @@ $('st-matikan').onclick = async () => {
   if (!await yakin('Matikan pemberitahuan di perangkat ini?\n\nPerangkat ini tidak menerima kabar lagi. Bisa diaktifkan kembali kapan saja.', 'Matikan')) return;
   try { await matikanNotif(); await hitungPerangkat(); await tampilStatus(); $('st-pesan').className = 'pesan ok'; $('st-pesan').textContent = 'Pemberitahuan dimatikan di perangkat ini.'; }
   catch { $('st-pesan').className = 'pesan'; $('st-pesan').textContent = 'Belum bisa dimatikan. Coba lagi.'; }
+};
+// Kirim pemberitahuan uji ke perangkat akun ini sendiri (Edge Function notif, maks 1 per menit).
+$('st-uji').onclick = async () => {
+  const b = $('st-uji'); b.disabled = true; $('st-pesan').className = 'pesan';
+  try {
+    const t = await tokenAktif();
+    const r = await fetch(`${SB_URL}/functions/v1/notif`, { method: 'POST', body: JSON.stringify({ aksi: 'uji' }),
+      headers: { 'Content-Type': 'application/json', apikey: SB_KEY, Authorization: `Bearer ${t}` } });
+    const d = await r.json().catch(() => ({}));
+    if (r.ok && d.terkirim > 0) { $('st-pesan').className = 'pesan ok'; $('st-pesan').textContent = 'Terkirim. Pemberitahuan akan muncul dalam beberapa detik.'; }
+    else if (r.ok) $('st-pesan').textContent = 'Belum terkirim. Matikan lalu aktifkan lagi di perangkat ini, kemudian coba lagi.';
+    else $('st-pesan').textContent = d.pesan || 'Pemberitahuan uji belum bisa dikirim. Coba lagi.';
+  } catch { $('st-pesan').textContent = 'Sinyal terputus. Coba lagi.'; }
+  finally { b.disabled = false; }
 };
 $('p-jenis').addEventListener('submit', async (e) => {
   e.preventDefault();

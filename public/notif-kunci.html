@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=133">
-<link rel="stylesheet" href="/css/app.css?v=133">
+<link rel="stylesheet" href="/css/tokens.css?v=134">
+<link rel="stylesheet" href="/css/app.css?v=134">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -63,6 +63,23 @@
       <p id="pesan-salin" class="pesan ok" role="status"></p>
     </div>
   </section>
+  <section class="panel" id="isi-panggil" hidden aria-labelledby="panggil-judul">
+    <h2 class="form-judul" id="panggil-judul">Kunci panggil (pengirim otomatis)</h2>
+    <p class="judul-sub">Supaya jadwal pagi/sore dan tugas langsung di database boleh memanggil pengirim notifikasi. Dibuat sekali, rahasia.</p>
+    <ol class="kunci-langkah">
+      <li>Tekan <strong>Buat kunci panggil</strong>.</li>
+      <li>Tambahkan rahasia <strong>NOTIF_PANGGIL</strong> di <a class="tautan" href="https://supabase.com/dashboard/project/tuthgclhrzvvlcnpjxiv/functions/secrets" target="_blank" rel="noopener">Edge Functions → Secrets</a>.</li>
+      <li>Salin <strong>perintah SQL</strong>, tempel di <a class="tautan" href="https://supabase.com/dashboard/project/tuthgclhrzvvlcnpjxiv/sql/new" target="_blank" rel="noopener">SQL Editor</a>, lalu Run (menyimpan kunci yang sama di Vault).</li>
+    </ol>
+    <button type="button" class="btn btn-utama btn-pas" id="buat-panggil">Buat kunci panggil</button>
+    <div id="hasil-panggil" hidden>
+      <div class="kunci-baris"><p class="kunci-nama">NOTIF_PANGGIL <span class="ket kunci-rahasia">rahasia, JANGAN dikirim ke siapa pun</span></p>
+        <code class="kunci-isi" id="k-panggil"></code><button type="button" class="btn btn-kedua btn-pas salin" data-salin="k-panggil">Salin</button></div>
+      <div class="kunci-baris"><p class="kunci-nama">Perintah SQL <span class="ket">untuk SQL Editor (berisi kunci yang sama)</span></p>
+        <code class="kunci-isi" id="k-sql"></code><button type="button" class="btn btn-kedua btn-pas salin" data-salin="k-sql">Salin</button></div>
+      <p id="pesan-panggil" class="pesan ok" role="status"></p>
+    </div>
+  </section>
 </main>
 <footer class="kaki">
   <div class="kaki-isi">
@@ -70,7 +87,7 @@
   </div>
   <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
 </footer>
-<script src="/js/supa.js?v=133" defer></script>
-<script src="/js/notif-kunci.js?v=133" defer></script>
+<script src="/js/supa.js?v=134" defer></script>
+<script src="/js/notif-kunci.js?v=134" defer></script>
 </body>
 </html>
