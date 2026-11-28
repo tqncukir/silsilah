@@ -1200,3 +1200,21 @@ body:not(.hal-masuk):not(.hal-poster)>main{flex:1 0 auto;width:100%}
 #pesan-backup a{display:inline-flex;align-items:center;min-height:44px;color:inherit;font-weight:600}
 @media (max-width:767px){.bk-gagal-di{display:block}}
 @media (min-width:768px){.bk-tautan .btn{flex:0 0 auto}.tabel tr.bk-baris td{white-space:nowrap}.tabel tr.bk-baris td[data-l="Hasil"]{white-space:normal}}
+
+/* ===== Berita (Tahap 14) ===== */
+.form textarea{width:100%;min-height:200px;padding:10px 12px;border:1.5px solid var(--garis-isian);border-radius:12px;font:inherit;
+  font-size:var(--fs-isian);line-height:1.6;background:#FFFFFF;color:var(--hitam);resize:vertical;box-sizing:border-box}
+.form textarea:focus{outline:none;border-color:var(--hijau-jamiyyah);box-shadow:0 0 0 4px rgba(11,107,46,.18)}
+.form textarea[aria-invalid="true"]{border-color:#B3261E}
+.label-isian{display:block;font-weight:600;font-size:var(--fs-kecil);margin:0 0 4px}
+.foto-pilih{display:flex;flex-direction:column;gap:8px}
+.foto-tombol{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.foto-tombol label.btn{margin:0;cursor:pointer}
+.foto-tombol label.btn:focus-within{outline:3px solid var(--kuning-rosyid);outline-offset:2px}
+.berita-foto{display:block;width:100%;max-width:720px;aspect-ratio:16/9;object-fit:cover;border-radius:14px;background:var(--latar-sorot)}
+.berita-foto[hidden]{display:none}
+.berita-pratinjau{margin:20px 0 0;padding:20px 0 0;border-top:1px solid var(--garis-lembut)}
+.berita-isi{max-width:68ch;margin:16px 0 0;line-height:1.7}
+.berita-isi p{margin:0 0 14px}
+.form input.sr-only{width:1px;min-height:0;padding:0;border:0}
+@media (max-width:479px){.tombol-baris.tiga{flex-wrap:wrap}.tombol-baris.tiga .btn-utama{flex-basis:100%;order:-1}}

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Kelola Berita · SILSILAH TQN Cukir</title>
+<meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=120">
+<link rel="stylesheet" href="/css/app.css?v=120">
+</head>
+<body class="hal-app">
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <a href="/beranda.html">Beranda</a>
+      <a href="/dashboard.html" id="nav-dasbor" hidden>Dashboard Pengurus</a>
+      <a href="/jamaah.html" id="nav-jamaah" hidden>Data Jamaah</a>
+      <a href="/pendaftaran.html" id="nav-daftar" hidden>Pendaftaran</a>
+      <a href="/kegiatan.html" id="nav-kegiatan" hidden>Kegiatan</a>
+      <a href="/ahli-kubur.html" id="nav-ahli" hidden>Ahli Kubur</a>
+      <a href="/perjalanan.html" id="nav-perjalanan" hidden>Ziarah &amp; Umroh</a>
+      <a href="/bantuan.html" id="nav-bantuan" hidden>Bantuan Sosial</a>
+      <a href="/ekonomi.html" id="nav-ekonomi" hidden>Ekonomi Jamaah</a>
+      <a href="/usaha.html" id="nav-usaha" hidden>Usaha Jamaah</a>
+      <a href="/sakit.html" id="nav-sakit" hidden>Jamaah Sakit</a>
+      <a href="/kebutuhan.html" id="nav-kebutuhan" hidden>Kebutuhan Khusus</a>
+      <a href="/kas.html" id="nav-kas" hidden>Buku Kas</a>
+      <a href="/aset.html" id="nav-aset" hidden>Aset &amp; Wakaf</a>
+    </nav>
+    <button class="app-keluar" id="keluar" type="button">Keluar</button>
+  </div>
+</header>
+
+<main class="app-isi">
+  <div class="judul-baris">
+    <div>
+      <h1>Kelola Berita</h1>
+      <p class="judul-sub" id="ringkas" aria-live="polite">Memuat...</p>
+    </div>
+    <a href="/berita-isi.html" class="btn btn-utama btn-pas" id="tambah">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+      Tulis berita
+    </a>
+  </div>
+
+  <form class="saring" id="saring" role="search">
+    <div class="saring-cari">
+      <label for="cari" class="sr-only">Cari judul berita</label>
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="cari" type="search" placeholder="Cari judul berita" autocomplete="off" enterkeyhint="search">
+    </div>
+    <div class="saring-pilih">
+      <label><span>Status</span>
+        <select id="status">
+          <option value="">Semua</option>
+          <option value="diajukan">Menunggu persetujuan</option>
+          <option value="terbit">Terbit</option>
+          <option value="draf">Draf</option>
+          <option value="ditolak">Ditolak</option>
+          <option value="ditarik">Ditarik</option>
+        </select>
+      </label>
+    </div>
+    <button type="button" class="tautan saring-ulang" id="saring-ulang" hidden>Hapus semua saringan</button>
+  </form>
+
+  <p id="pesan" class="pesan" role="alert"></p>
+
+  <p class="info-tampil" id="info-tampil" aria-live="polite"></p>
+  <div class="tabel-bungkus">
+    <table class="tabel" id="tabel">
+      <thead><tr><th scope="col" class="kol-no">No</th><th scope="col">Judul</th><th scope="col">Wilayah</th><th scope="col" class="kol-luas">Pembaca</th><th scope="col">Tanggal</th><th scope="col">Status</th></tr></thead>
+      <tbody id="isi-tabel"><tr><td colspan="6" class="tabel-kosong">Memuat...</td></tr></tbody>
+    </table>
+  </div>
+
+  <nav class="halaman" id="halaman" aria-label="Pindah halaman" hidden>
+    <button type="button" class="hal-panah" id="sebelum" aria-label="Halaman sebelumnya"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <span id="posisi" class="hal-posisi" aria-live="polite"></span>
+    <button type="button" class="hal-panah" id="sesudah" aria-label="Halaman berikutnya"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </nav>
+</main>
+<footer class="kaki">
+  <div class="kaki-isi">
+    <address class="kaki-alamat">TQN Pusat Cukir Jombang<br>Jl. Masjid No. 110 Cukir, Diwek, Jombang 61471</address>
+  </div>
+  <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
+</footer>
+<script src="/js/supa.js?v=120" defer></script>
+<script src="/js/berita-kelola.js?v=120" defer></script>
+</body>
+</html>

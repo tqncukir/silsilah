@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Berita · SILSILAH TQN Cukir</title>
+<meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=120">
+<link rel="stylesheet" href="/css/app.css?v=120">
+</head>
+<body class="hal-app">
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <a href="/beranda.html">Beranda</a>
+      <a href="/dashboard.html" id="nav-dasbor" hidden>Dashboard Pengurus</a>
+      <a href="/jamaah.html" id="nav-jamaah" hidden>Data Jamaah</a>
+      <a href="/pendaftaran.html" id="nav-daftar" hidden>Pendaftaran</a>
+      <a href="/kegiatan.html" id="nav-kegiatan" hidden>Kegiatan</a>
+      <a href="/ahli-kubur.html" id="nav-ahli" hidden>Ahli Kubur</a>
+      <a href="/perjalanan.html" id="nav-perjalanan" hidden>Ziarah &amp; Umroh</a>
+      <a href="/bantuan.html" id="nav-bantuan" hidden>Bantuan Sosial</a>
+      <a href="/ekonomi.html" id="nav-ekonomi" hidden>Ekonomi Jamaah</a>
+      <a href="/usaha.html" id="nav-usaha" hidden>Usaha Jamaah</a>
+      <a href="/sakit.html" id="nav-sakit" hidden>Jamaah Sakit</a>
+      <a href="/kebutuhan.html" id="nav-kebutuhan" hidden>Kebutuhan Khusus</a>
+      <a href="/kas.html" id="nav-kas" hidden>Buku Kas</a>
+      <a href="/aset.html" id="nav-aset" hidden>Aset &amp; Wakaf</a>
+    </nav>
+    <button class="app-keluar" id="keluar" type="button">Keluar</button>
+  </div>
+</header>
+
+<main class="app-isi">
+  <a href="/berita-kelola.html" class="kembali" id="kembali">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Kelola Berita
+  </a>
+  <p id="pesan" class="pesan" role="alert"></p>
+
+  <section id="lihat" class="panel" hidden aria-labelledby="l-judul">
+    <div class="panel-kepala">
+      <div>
+        <p class="panel-label" id="l-label"></p>
+        <h1 id="l-judul"></h1>
+        <span id="l-status"></span>
+      </div>
+      <div class="kepala-aksi">
+        <button type="button" class="btn btn-kedua btn-pas" id="ubah" hidden>Ubah</button>
+        <button type="button" class="btn btn-kedua btn-pas" id="tarik" hidden>Tarik berita</button>
+      </div>
+    </div>
+    <dl class="rincian" id="l-rincian"></dl>
+
+    <form class="bs-aksi form" id="putus" hidden novalidate aria-labelledby="pt-j">
+      <h2 class="bagian-judul" id="pt-j">Persetujuan</h2>
+      <p class="ket">Berita dari koordinator tampil setelah disetujui. Bila ditolak, koordinator bisa memperbaiki lalu mengajukan lagi.</p>
+      <div class="isian">
+        <label for="pt-alasan">Alasan (wajib bila ditolak)</label>
+        <input id="pt-alasan" maxlength="200" autocomplete="off" placeholder="Misalnya: foto kurang jelas">
+      </div>
+      <div class="tombol-baris">
+        <button type="button" class="btn btn-kedua btn-pas" id="pt-tolak">Tolak</button>
+        <button type="submit" class="btn btn-utama btn-pas" id="pt-setuju">Setujui &amp; terbitkan</button>
+      </div>
+    </form>
+
+    <article class="berita-pratinjau" aria-label="Pratinjau berita">
+      <img id="l-foto" class="berita-foto" alt="" hidden>
+      <div class="berita-isi" id="l-isi"></div>
+    </article>
+  </section>
+
+  <form id="form" class="panel form" hidden novalidate aria-labelledby="f-judul">
+    <h1 id="f-judul">Tulis berita</h1>
+    <p class="judul-sub" id="f-sub"></p>
+    <div class="form-kisi">
+      <div class="isian lebar">
+        <label for="judul">Judul <span class="wajib">wajib</span></label>
+        <input id="judul" maxlength="120" required autocapitalize="sentences" placeholder="Pengajian Akbar Malam Jumat Legi">
+      </div>
+      <div class="isian lebar">
+        <label for="isi">Isi berita <span class="wajib">wajib</span></label>
+        <textarea id="isi" rows="10" maxlength="10000" required autocapitalize="sentences" aria-describedby="k-isi"></textarea>
+        <p class="ket" id="k-isi">Pisahkan paragraf dengan baris kosong. Jangan menulis nomor HP atau NIK. <span id="isi-hitung"></span></p>
+      </div>
+      <div class="isian lebar">
+        <span class="label-isian" id="foto-label">Foto sampul</span>
+        <div class="foto-pilih" aria-labelledby="foto-label">
+          <img id="foto-pratinjau" class="berita-foto" alt="Foto sampul terpilih" hidden>
+          <div class="foto-tombol">
+            <label class="btn btn-kedua btn-pas" for="foto">Pilih foto</label>
+            <input id="foto" type="file" accept="image/*" class="sr-only">
+            <button type="button" class="tautan" id="foto-hapus" hidden>Hapus foto</button>
+          </div>
+          <p class="ket">Satu foto kegiatan (bukan foto KTP atau data pribadi). Otomatis dikecilkan.</p>
+        </div>
+      </div>
+      <fieldset class="isian lebar pilihan" aria-describedby="k-pembaca">
+        <legend>Pembaca</legend>
+        <label class="pil"><input type="radio" name="pembaca" value="publik" checked> Publik (siapa saja)</label>
+        <label class="pil"><input type="radio" name="pembaca" value="anggota"> Khusus anggota (harus masuk)</label>
+      </fieldset>
+      <p class="ket bagian-ket" id="k-pembaca">Berita publik tampil di halaman depan SILSILAH tanpa masuk.</p>
+      <div class="isian">
+        <label for="wilayah">Wilayah <span class="wajib">wajib</span></label>
+        <select id="wilayah" required></select>
+      </div>
+    </div>
+    <p id="pesan-form" class="pesan" role="alert"></p>
+    <div class="tombol-baris tiga">
+      <button type="button" class="btn btn-kedua btn-pas" id="batal">Batal</button>
+      <button type="button" class="btn btn-kedua btn-pas" id="simpan-draf">Simpan draf</button>
+      <button type="submit" class="btn btn-utama btn-pas btn-masuk" id="kirim"><span class="putar" aria-hidden="true"></span><span class="teks">Terbitkan</span></button>
+    </div>
+  </form>
+</main>
+<footer class="kaki">
+  <div class="kaki-isi">
+    <address class="kaki-alamat">TQN Pusat Cukir Jombang<br>Jl. Masjid No. 110 Cukir, Diwek, Jombang 61471</address>
+  </div>
+  <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
+</footer>
+<script src="/js/supa.js?v=120" defer></script>
+<script src="/js/berita-isi.js?v=120" defer></script>
+</body>
+</html>

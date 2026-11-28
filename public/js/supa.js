@@ -157,6 +157,7 @@ const IKON_MENU = {
   pasang: 'M7 3h10v18H7zM11 18h2',
   keluar: 'M10 4H5v16h5M14 8l4 4-4 4M18 12H9',
   tutup: 'M6 6l12 12M18 6L6 18',
+  berita: 'M5 4h11a2 2 0 012 2v13a1 1 0 001 1H6a2 2 0 01-2-2V5a1 1 0 011-1zM18 8h2v10a2 2 0 01-2 2M8 8h6M8 12h6M8 16h3',
 };
 const GRUP_MENU = [['pondasi', 'Pondasi Jamaah'], ['ruhani', 'Ruhani & Kegiatan'], ['kepedulian', 'Kepedulian'], ['amanah', 'Amanah & Tata Kelola']];
 const ikonMenu = (k, u = 20) => `<svg viewBox="0 0 24 24" width="${u}" height="${u}" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${IKON_MENU[k]}"/></svg>`;
@@ -173,6 +174,7 @@ function daftarMenu(p) {
       ['absensi', 'Absensi', '/absensi.html', 'ruhani', PERAN_ABSEN], ['ahli', 'Ahli Kubur', '/ahli-kubur.html', 'ruhani', PERAN_LIHAT_JAMAAH],
       ['haul', 'Haul', '/haul.html', 'ruhani', PERAN_LIHAT_JAMAAH], ['ziarah', 'Ziarah & Umroh', '/perjalanan.html', 'ruhani', PERAN_LIHAT_PERJALANAN],
       ['agenda', 'Agenda umum', '/agenda.html', 'ruhani', null],
+      ['berita', 'Kelola Berita', '/berita-kelola.html', 'ruhani', PERAN_BERITA],
       ['bantuan', 'Bantuan Sosial', '/bantuan.html', 'kepedulian', PERAN_BANTUAN], ['ekonomi', 'Ekonomi Jamaah', '/ekonomi.html', 'kepedulian', PERAN_EKONOMI],
       ['usaha', 'Usaha Jamaah', '/usaha.html', 'kepedulian', null], ['sakit', 'Jamaah Sakit', '/sakit.html', 'kepedulian', PERAN_KESEHATAN],
       ['kebutuhan', 'Kebutuhan Khusus', '/kebutuhan.html', 'kepedulian', PERAN_KEBUTUHAN],
@@ -184,7 +186,8 @@ function pasangMenuBawah(p) {
   if (!document.body.classList.contains('hal-app') || document.getElementById('menu-bawah')) return;
   const { utama, grup } = daftarMenu(p), jalur = location.pathname;
   const aktif = (u) => jalur === u || (u === '/jamaah.html' && jalur.startsWith('/jamaah')) || (u === '/kegiatan.html' && /^\/(kegiatan|absensi)/.test(jalur))
-    || (u !== '/beranda.html' && u.endsWith('.html') && jalur === u.replace('.html', '-isi.html'));
+    || (u !== '/beranda.html' && u.endsWith('.html') && jalur === u.replace('.html', '-isi.html'))
+    || (u === '/berita-kelola.html' && jalur === '/berita-isi.html');
   const cur = (u) => (aktif(u) ? ' aria-current="page"' : '');
   const diLain = !utama.some(([, , u]) => aktif(u));
   // Menu bawah (HP & tablet)
@@ -253,6 +256,46 @@ function pasangMenuBawah(p) {
   document.getElementById('menu-lain-keluar').onclick = () => keluar();
   d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
   d.addEventListener('close', () => buka.focus());
+}
+
+// ===== Berita (Tahap 14) =====
+// Pimpinan (admin pusat, ketua) menerbitkan langsung; koordinator mengajukan (disetujui pimpinan). Hak dicek di database.
+const PERAN_BERITA = ['admin_pusat', 'ketua', 'koordinator_wilayah'];
+const PERAN_PIMPINAN_BERITA = ['admin_pusat', 'ketua'];
+const STATUS_BERITA = { draf: ['Draf', 'stat-biasa eko-belum'], diajukan: ['Menunggu persetujuan', 'stat-tidak'], terbit: ['Terbit', 'stat-aktif'],
+  ditolak: ['Ditolak', 'stat-wafat'], ditarik: ['Ditarik', 'stat-biasa eko-belum'] };
+const statusBeritaHtml = (s) => { const [t, k] = STATUS_BERITA[s] || [s, 'stat-biasa']; return `<span class="stat ${k}">${t}</span>`; };
+const fotoBerita = (nama) => (nama ? `${SB_URL}/storage/v1/object/public/berita/${encodeURIComponent(nama)}` : '');
+// Isi berita (teks biasa) -> paragraf aman
+const paragrafBerita = (isi) => String(isi || '').split(/\n{2,}/).map((p) => `<p>${hurufAman(p.trim()).replace(/\n/g, '<br>')}</p>`).join('');
+// Kecilkan foto di perangkat: lebar maks 1200 px, WebP (JPEG bila WebP tidak didukung), maks ±400 KB.
+async function kecilkanFoto(file) {
+  const gambar = await createImageBitmap(file, { imageOrientation: 'from-image' }).catch(() => null);
+  if (!gambar) throw new Error('bukan-gambar');
+  const skala = Math.min(1, 1200 / gambar.width);
+  const c = document.createElement('canvas');
+  c.width = Math.round(gambar.width * skala); c.height = Math.round(gambar.height * skala);
+  c.getContext('2d').drawImage(gambar, 0, 0, c.width, c.height);
+  const jadi = (jenis, mutu) => new Promise((ok) => c.toBlob(ok, jenis, mutu));
+  let jenis = 'image/webp', blob = await jadi(jenis, 0.8);
+  if (!blob || blob.type !== 'image/webp') { jenis = 'image/jpeg'; blob = await jadi(jenis, 0.82); }
+  for (let mutu = 0.7; blob && blob.size > 390000 && mutu >= 0.4; mutu -= 0.1) blob = await jadi(jenis, mutu);
+  if (!blob || blob.size > 400000) throw new Error('foto-besar');
+  return blob;
+}
+async function unggahFotoBerita(blob) {
+  const t = await tokenAktif();
+  if (!t) throw new Error('belum-masuk');
+  const nama = `${crypto.randomUUID()}.${blob.type === 'image/webp' ? 'webp' : 'jpg'}`;
+  const r = await fetch(`${SB_URL}/storage/v1/object/berita/${nama}`, {
+    method: 'POST', headers: { apikey: SB_KEY, Authorization: `Bearer ${t}`, 'Content-Type': blob.type, 'x-upsert': 'false', 'cache-control': '31536000' }, body: blob });
+  if (!r.ok) throw new Error('gagal-unggah-' + r.status);
+  return nama;
+}
+async function hapusFotoBerita(nama) {
+  const t = await tokenAktif();
+  if (!t || !nama) return;
+  await fetch(`${SB_URL}/storage/v1/object/berita/${encodeURIComponent(nama)}`, { method: 'DELETE', headers: { apikey: SB_KEY, Authorization: `Bearer ${t}` } }).catch(() => {});
 }
 
 // ===== Ahli Kubur (modul 5) =====
