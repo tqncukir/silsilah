@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=138">
-<link rel="stylesheet" href="/css/app.css?v=138">
+<link rel="stylesheet" href="/css/tokens.css?v=139">
+<link rel="stylesheet" href="/css/app.css?v=139">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -84,7 +84,7 @@
 
   <form id="form" class="panel form" hidden novalidate aria-labelledby="f-judul">
     <h2 id="f-judul" class="form-judul">Data jamaah baru</h2>
-    <p class="judul-sub" id="f-sub">Nomor Anggota dibuat otomatis setelah disimpan.</p>
+    <p class="judul-sub" id="f-sub">Nomor Anggota dibuat otomatis setelah disimpan. Untuk pemegang KTA lama, ketik nomor dari kartunya.</p>
     <p class="hasil-baca" id="hasil-baca" hidden>Isian bertanda hijau dibaca dari KTP. Periksa lagi, hasil baca bisa keliru.</p>
     <div class="form-kisi">
       <h3 class="bagian-judul" id="b-daftar">Pendaftaran</h3>
@@ -95,6 +95,11 @@
       <div class="isian">
         <label for="tanggal">Tanggal daftar</label>
         <input id="tanggal" type="date">
+      </div>
+      <div class="isian">
+        <label for="nomor-lama">Nomor di KTA lama (bila ada)</label>
+        <input id="nomor-lama" inputmode="numeric" autocomplete="off" placeholder="1165xxxxxx" aria-describedby="k-nomor-lama">
+        <p class="ket" id="k-nomor-lama" aria-live="polite">Isi hanya untuk pemegang KTA lama. Kosongkan untuk jamaah baru.</p>
       </div>
       <h3 class="bagian-judul" id="b-diri">Data diri</h3>
       <div class="isian lebar">
@@ -185,9 +190,11 @@
     <div class="selesai-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="32" height="32"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <h2>Alhamdulillah, sudah terdaftar</h2>
     <p id="selesai-teks"></p>
-    <div class="tombol-baris tengah">
+    <p class="ket" id="selesai-pin">Langkah berikutnya: buat PIN, lalu berikan kepada jamaah. Dengan PIN itu jamaah bisa masuk sendiri dan menyimpan atau mencetak KTA baru ber-QR.</p>
+    <div class="tombol-baris tengah tiga">
       <a class="btn btn-kedua btn-pas" id="lihat-data" href="/jamaah.html">Lihat data</a>
-      <button type="button" class="btn btn-utama btn-pas" id="lagi">Daftarkan jamaah lain</button>
+      <button type="button" class="btn btn-kedua btn-pas" id="lagi">Daftarkan jamaah lain</button>
+      <a class="btn btn-utama btn-pas" id="buat-pin" href="/kta.html">Buat PIN &amp; lihat KTA</a>
     </div>
   </section>
 </main>
@@ -197,11 +204,11 @@
   </div>
   <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
 </footer>
-<script src="/js/supa.js?v=138" defer></script>
-<script src="/js/kalender.js?v=138" defer></script>
-<script src="/js/wilayah.js?v=138" defer></script>
+<script src="/js/supa.js?v=139" defer></script>
+<script src="/js/kalender.js?v=139" defer></script>
+<script src="/js/wilayah.js?v=139" defer></script>
 <script src="/ocr/tesseract.min.js" defer></script>
-<script src="/js/ktp.js?v=138" defer></script>
-<script src="/js/pendaftaran.js?v=138" defer></script>
+<script src="/js/ktp.js?v=139" defer></script>
+<script src="/js/pendaftaran.js?v=139" defer></script>
 </body>
 </html>

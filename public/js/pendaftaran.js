@@ -19,6 +19,7 @@ function kosongkan() {
   perbaruiSaran();
   aturUmur();
   $('hasil-baca').hidden = true; $('dobel').hidden = true; dobelDiperiksa = ''; pesanForm('');
+  $('nomor-lama').value = ''; tampilNomorLama(null);
 }
 
 async function terapkan(h) {
@@ -158,6 +159,38 @@ function salah(idEl, t) { $(idEl).setAttribute('aria-invalid', 'true'); $(idEl).
 
 let siapKirim = null; // data yang sudah diperiksa, menunggu "Ya, simpan"
 
+// ===== Nomor di KTA lama (Tahap 17): dicek langsung ke server (rpc cek_nomor_kta_lama) =====
+const KET_NOMOR = 'Isi hanya untuk pemegang KTA lama. Kosongkan untuk jamaah baru.';
+let cekNomor = { nilai: '', hasil: null }, tundaNomor;
+function tampilNomorLama(h) {
+  const k = $('k-nomor-lama'); k.className = 'ket'; $('nomor-lama').removeAttribute('aria-invalid');
+  if (!h) { k.textContent = KET_NOMOR; return; }
+  if (h.status === 'bebas') { k.className = 'ket ket-ok'; k.textContent = 'Nomor ini belum dipakai. Akan menjadi Nomor Anggota jamaah ini.'; return; }
+  k.className = 'ket ket-salah'; $('nomor-lama').setAttribute('aria-invalid', 'true');
+  if (h.status === 'tidak_valid') k.textContent = 'Nomor KTA lama harus 10 angka dan diawali 1165.';
+  else if (h.status === 'dipakai') k.innerHTML = `Nomor ini sudah dipakai <strong>${hurufAman(h.nama)}</strong> (Desa ${hurufAman(h.desa)}, Kec. ${hurufAman(h.kecamatan)}). `
+    + `<a href="/jamaah-isi.html?id=${Number(h.id)}" target="_blank" rel="noopener">Lihat data</a>. Bila orangnya sama, tidak perlu didaftarkan lagi.`;
+  else k.textContent = `Nomor ini sudah dipakai jamaah di Kec. ${h.kecamatan} (di luar wilayah Anda). Hubungi admin pusat untuk memeriksanya.`;
+}
+async function periksaNomorLama() {
+  const v = $('nomor-lama').value;
+  if (!v) { cekNomor = { nilai: '', hasil: null }; tampilNomorLama(null); return null; }
+  if (!/^1165\d{6}$/.test(v)) { const h = { status: 'tidak_valid' }; cekNomor = { nilai: v, hasil: h }; tampilNomorLama(h); return h; }
+  if (cekNomor.nilai === v && cekNomor.hasil) return cekNomor.hasil;
+  const h = await dbKirim('POST', 'rpc/cek_nomor_kta_lama', { p_nomor: Number(v) });
+  cekNomor = { nilai: v, hasil: h };
+  if ($('nomor-lama').value === v) tampilNomorLama(h);
+  return h;
+}
+$('nomor-lama').addEventListener('input', () => {
+  const el = $('nomor-lama'), bersih = el.value.replace(/\D/g, '').slice(0, 10);
+  if (el.value !== bersih) el.value = bersih;
+  clearTimeout(tundaNomor);
+  if (bersih.length === 10 || !bersih) tundaNomor = setTimeout(() => periksaNomorLama().catch(() => {}), 300);
+  else tampilNomorLama(null);
+});
+$('nomor-lama').addEventListener('blur', () => { if ($('nomor-lama').value) periksaNomorLama().catch(() => {}); });
+
 // Desa yang sudah ada di daftar (untuk cek dobel tanpa membuat wilayah baru dulu)
 function desaIdLokal() {
   const s = (i) => $(i).value.trim().toLowerCase().replace(/\s+/g, ' ');
@@ -179,6 +212,8 @@ $('form').addEventListener('submit', async (e) => {
   const btn = $('simpan'); btn.disabled = true; btn.classList.add('sibuk'); btn.querySelector('.teks').textContent = 'Memeriksa...';
   pesanForm('');
   try {
+    const hNomor = await periksaNomorLama();
+    if (hNomor && hNomor.status !== 'bebas') { $('nomor-lama').focus(); pesanForm('Nomor di KTA lama belum bisa dipakai. Lihat keterangan di bawah isian nomor.'); return; }
     const idLama = desaIdLokal();
     if (idLama && await cekDobel(nama, idLama)) return;
     const ktp = bacaIsianKtp();
@@ -187,9 +222,11 @@ $('form').addEventListener('submit', async (e) => {
       tempat_lahir: $('tempat-lahir').value.trim() ? KTP.judul($('tempat-lahir').value) : null, tanggal_lahir: $('tgl-lahir').value || null, ...ktp,
       pekerjaan: $('pekerjaan').value.trim() ? KTP.judul($('pekerjaan').value) : null,
       mursyid_id: $('mursyid').value ? Number($('mursyid').value) : null, tanggal_daftar: $('tanggal').value || undefined,
+      ...($('nomor-lama').value ? { nomor_anggota: Number($('nomor-lama').value) } : {}),
     };
     const lahir = [siapKirim.tempat_lahir, tglPanjang(siapKirim.tanggal_lahir)].filter(Boolean).join(', ');
     const baris = [
+      ['Nomor Anggota', siapKirim.nomor_anggota ? `${siapKirim.nomor_anggota} (dari KTA lama)` : 'Dibuat otomatis'],
       ['Mursyid', teksPilihan('mursyid')], ['Tanggal daftar', tglPanjang($('tanggal').value)],
       ['Nama lengkap', nama], ['Tempat, tanggal lahir', lahir], ['Umur saat daftar', umur !== null ? `${umur} tahun` : ''],
       ['Jenis kelamin', { L: 'Laki-laki', P: 'Perempuan' }[ktp.jenis_kelamin] || ''],
@@ -217,15 +254,20 @@ $('simpan-yakin').onclick = async () => {
   $('pesan-konfirmasi').textContent = '';
   try {
     const desaId = await desaIdWilayah();
-    const [j] = await dbKirim('POST', 'jamaah?select=id,nomor_anggota,nama,desa(nama)', { ...siapKirim, desa_id: desaId });
+    const [j] = await dbKirim('POST', 'jamaah?select=id,nomor_anggota,nama,asal,desa(nama)', { ...siapKirim, desa_id: desaId });
     if (PERAN_GOLDAR.includes(peranSaya) && $('gol-darah').value) await simpanGoldar(j.id, $('gol-darah').value, false).catch(() => {});
     siapKirim = null;
-    $('selesai-teks').innerHTML = `<strong>${hurufAman(j.nama)}</strong> dari Desa ${hurufAman(j.desa.nama)}<br>Nomor Anggota <strong class="angka">${j.nomor_anggota}</strong>`;
+    $('selesai-teks').innerHTML = `<strong>${hurufAman(j.nama)}</strong> dari Desa ${hurufAman(j.desa.nama)}<br>Nomor Anggota <strong class="angka">${j.nomor_anggota}</strong>`
+      + (j.asal === 'daftar_ulang' ? '<br><span class="stat stat-aktif">Daftar ulang KTA lama</span>' : '');
     $('lihat-data').href = `/jamaah-isi.html?id=${j.id}`;
+    $('buat-pin').href = `/kta.html?id=${j.id}`;
+    cekNomor = { nilai: '', hasil: null };
     tampil('selesai');
   } catch (err) {
     if (err.message === 'belum-masuk' || err.message === 'gagal-401') return location.replace('/masuk.html');
-    $('pesan-konfirmasi').textContent = err.detail?.message === 'di luar wilayah tugas' ? 'Wilayah ini di luar wilayah tugas akun ini. Tekan Ubah lalu periksa ejaan desa dan kecamatan.'
+    $('pesan-konfirmasi').textContent = err.detail?.code === '23505' ? 'Nomor Anggota ini sudah dipakai jamaah lain. Tekan Ubah lalu periksa Nomor di KTA lama.'
+      : err.detail?.code === '22023' ? 'Nomor KTA lama harus 10 angka dan diawali 1165. Tekan Ubah lalu perbaiki.'
+      : err.detail?.message === 'di luar wilayah tugas' ? 'Wilayah ini di luar wilayah tugas akun ini. Tekan Ubah lalu periksa ejaan desa dan kecamatan.'
       : err.message === 'gagal-403' || err.detail?.code === '42501' ? 'Akun ini tidak punya izin mendaftarkan jamaah di desa ini.'
       : err.message === 'Failed to fetch' ? 'Sinyal terputus. Data belum tersimpan, coba lagi.' : 'Data belum tersimpan. Tekan Ubah, periksa isian, lalu coba lagi.';
   } finally { btn.disabled = false; btn.classList.remove('sibuk'); btn.querySelector('.teks').textContent = 'Ya, simpan'; }

@@ -1429,3 +1429,9 @@ main.depan{max-width:none;padding:0 0 32px}
 .tombol-tumpuk .btn{margin:0;width:100%}
 .tombol-tumpuk [hidden]{display:none}
 .notif-perangkat .pesan:not(:empty){margin:12px 0 0}
+/* Pendaftaran: hasil cek Nomor di KTA lama (Tahap 17) */
+.ket.ket-ok{color:var(--hijau-jamiyyah);font-weight:600}
+.ket.ket-salah{color:#A4161A;font-weight:500}
+.ket.ket-salah a{color:#A4161A;font-weight:700}
+#selesai-pin{max-width:52ch;margin:12px auto 0;text-align:center}
+.selesai .stat{margin-top:6px}
