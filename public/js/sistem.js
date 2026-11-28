@@ -43,14 +43,41 @@ const tglPendek = (iso) => tglWib(iso, { day: 'numeric', month: 'short', year: '
 const batang = (nilai, batas) => { const p = Math.min(100, batas ? (nilai / batas) * 100 : 0);
   return `<span class="ks-batang${p >= 80 ? ' ks-batang-penuh' : ''}" aria-hidden="true"><span data-p="${p.toFixed(1)}"></span></span>`; };
 
+// Jadwal cek-sistem 06.30 & 16.30 WIB
+function cekBerikutnya() {
+  const w = new Date(Date.now() + 7 * 3600e3), m = w.getUTCHours() * 60 + w.getUTCMinutes();
+  return m < 390 ? 'hari ini 06.30 WIB' : m < 990 ? 'hari ini 16.30 WIB' : 'besok 06.30 WIB';
+}
+// a. HP: kartu sehat dilipat (hanya kepala), bisa diketuk; kartu bermasalah tetap terbuka.
+const HP = matchMedia('(max-width:767px)');
+function pasangLipat() {
+  for (const kt of document.querySelectorAll('.ks-kartu')) {
+    const kp = kt.querySelector('.ks-kepala'), sehat = !!kt.querySelector('.ks-kepala .ks-pil-baik');
+    if (!kp || kt.id === 'k-aktivitas') continue;
+    const lipat = HP.matches && sehat;
+    kt.classList.toggle('ks-terlipat', lipat);
+    if (HP.matches) { kp.setAttribute('role', 'button'); kp.tabIndex = 0; kp.setAttribute('aria-expanded', String(!lipat)); }
+    else { kp.removeAttribute('role'); kp.removeAttribute('tabindex'); kp.removeAttribute('aria-expanded'); }
+  }
+}
+document.addEventListener('click', (e) => bukaTutup(e.target.closest('.ks-kepala[role="button"]')));
+document.addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches?.('.ks-kepala[role="button"]')) { e.preventDefault(); bukaTutup(e.target); } });
+function bukaTutup(kp) {
+  if (!kp) return;
+  const kt = kp.closest('.ks-kartu'), tutup = !kt.classList.contains('ks-terlipat');
+  kt.classList.toggle('ks-terlipat', tutup); kp.setAttribute('aria-expanded', String(!tutup));
+}
+HP.addEventListener?.('change', pasangLipat);
+
 function tampil(k) {
   const masalah = nilaiKesehatan(k), penting = masalah.filter((m) => m[0] === 'penting');
-  $('waktu-periksa').textContent = `Diperiksa ${waktuRelatif(k.waktu)}. Hanya Admin Pusat yang melihat halaman ini.`;
+  $('waktu-periksa').textContent = `Diperiksa ${waktuRelatif(k.waktu)}.`;
   // Ringkasan atas
   $('ringkas').className = `ks-ringkas ${penting.length ? 'ks-bahaya' : masalah.length ? 'ks-perhatian' : 'ks-baik'}`;
   $('ringkas').innerHTML = `<span class="ks-ringkas-ikon" aria-hidden="true">${ikon(masalah.length ? 'silang' : 'cek', 22)}</span><div>
     <p class="ks-ringkas-judul">${penting.length ? `${a(penting.length)} hal penting perlu ditangani${masalah.length > penting.length ? ` · ${a(masalah.length - penting.length)} hal kecil` : ''}` : masalah.length ? `Sistem sehat · ${a(masalah.length)} hal kecil perlu dicek` : 'Alhamdulillah, sistem sehat'}</p>
-    ${masalah.length ? `<ul>${masalah.map(([, t, u]) => `<li><a href="${u}">${hurufAman(t)}</a></li>`).join('')}</ul>` : '<p class="ket">Backup, notifikasi, data, akun, kapasitas, dan keamanan semuanya baik.</p>'}</div>`;
+    ${masalah.length ? `<ul>${masalah.map(([, t, u]) => `<li><a href="${u}">${hurufAman(t)}</a></li>`).join('')}</ul>` : '<p class="ket">Backup, notifikasi, data, akun, kapasitas, dan keamanan semuanya baik.</p>'}
+    <p class="ket ks-berikut">Pemeriksaan otomatis berikutnya: ${cekBerikutnya()}.</p></div>`;
 
   // 1. Cadangan harian
   const bk = k.backup || {}, t = bk.terakhir;
@@ -134,10 +161,16 @@ function tampil(k) {
   const BERKALA = { sekali: 'Sekali', bulanan: 'Tiap bulan', tahunan: 'Tiap tahun' };
   $('k-tugas').innerHTML = kepala('tugas', 'tugas', 'Tugas keamanan', belum ? 'perhatian' : 'baik', belum ? `${a(belum)} belum dikerjakan` : 'Semua beres')
     + `<p class="ket">Aplikasi tidak bisa memeriksa ini sendiri. Kang menandai setelah mengerjakannya, dan tanggalnya tercatat.</p>
-    <ul class="ks-tugas">${tugas.map((x) => `<li${x.perlu ? ' class="ks-tugas-perlu"' : ''}><div><p>${hurufAman(x.judul)}</p>
-      <p class="ket">${BERKALA[x.berkala] || ''} · ${x.selesai_pada ? `${x.perlu ? 'jatuh tempo, terakhir' : 'selesai'} ${tglPendek(x.selesai_pada)}` : '<strong>Belum pernah</strong>'}</p></div>
-      ${x.perlu || x.berkala !== 'sekali' ? `<button type="button" class="pin-tombol ks-tandai" data-kode="${hurufAman(x.kode)}">${ikon('cek', 16)}Tandai selesai</button>` : `<span class="ks-ok">${ikon('cek', 16)}</span>`}</li>`).join('')}</ul>`;
+    <ul class="ks-tugas">${tugas.map((x) => { const jarak = { bulanan: 30, tahunan: 365 }[x.berkala];
+      const berikut = x.selesai_pada && jarak ? tglPendek(new Date(new Date(x.selesai_pada).getTime() + jarak * 864e5).toISOString()) : '';
+      const status = !x.selesai_pada ? '<strong>Belum pernah</strong>' : x.perlu ? `<strong>Jatuh tempo</strong> · terakhir ${tglPendek(x.selesai_pada)}`
+        : `Selesai ${tglPendek(x.selesai_pada)}${berikut ? ` · berikutnya ${berikut}` : ''}`;
+      const aksi = x.perlu ? `<button type="button" class="pin-tombol ks-tandai" data-kode="${hurufAman(x.kode)}">${ikon('cek', 16)}Tandai selesai</button>`
+        : x.berkala !== 'sekali' ? `<button type="button" class="tautan ks-tandai-lagi" data-kode="${hurufAman(x.kode)}">Tandai lagi</button>` : '';
+      return `<li${x.perlu ? ' class="ks-tugas-perlu"' : ''}><span class="ks-tugas-tanda${x.perlu ? '' : ' ks-tugas-ok'}" aria-hidden="true">${ikon(x.perlu ? 'jam' : 'cek', 16)}</span>
+        <div><p>${hurufAman(x.judul)}</p><p class="ket">${BERKALA[x.berkala] || ''} · ${status}</p></div>${aksi}</li>`; }).join('')}</ul>`;
 
+  pasangLipat();
   for (const el of document.querySelectorAll('.ks-batang span[data-p]')) el.style.width = `${Math.max(el.dataset.p, n(el.dataset.p) ? 1.5 : 0)}%`;
 }
 

@@ -1755,3 +1755,38 @@ a.dsb-kartu-tautan:focus-visible{outline:3px solid var(--kuning-rosyid);outline-
 }
 .ks-akun-pilih select{width:100%;min-height:44px;padding:8px 12px;border:1.5px solid var(--garis-isian);border-radius:10px;font:inherit;font-size:var(--fs-isian);font-weight:400;background:#FFFFFF;color:var(--hitam);cursor:pointer}
 .ks-cek-masalah{color:#8C1D18}
+/* ===== Poles Kesehatan Sistem (Kang 2026-11-28: "kerjakan semua", temuan a–f) ===== */
+/* a. HP: kartu sehat dilipat */
+@media (max-width:767px){
+  .ks-kepala[role="button"]{cursor:pointer;min-height:44px;border-radius:12px;position:relative;padding-right:28px}
+  .ks-kepala[role="button"]::after{content:"";position:absolute;right:6px;top:50%;width:9px;height:9px;border-right:2px solid var(--abu);border-bottom:2px solid var(--abu);transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+  .ks-kepala[aria-expanded="true"]::after{transform:translateY(-30%) rotate(-135deg)}
+  .ks-kepala[role="button"]:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:4px}
+  .ks-kartu.ks-terlipat{gap:0;padding-top:14px;padding-bottom:14px}
+  .ks-kartu.ks-terlipat>:not(.ks-kepala){display:none}
+  .ks-kisi{gap:10px}
+}
+/* b. Laptop/tablet: kartu sebaris sama tinggi, tautan di dasar kartu */
+@media (min-width:768px){
+  .ks-kisi{align-items:stretch}
+  .ks-kartu>.ks-tautan:last-child,.ks-kartu>.ks-kotak:last-child,.ks-kartu>.ks-catatan:last-child{margin-top:auto}
+}
+/* c. Tugas keamanan */
+.ks-tugas-tanda{flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:8px;background:#FFF6CC;color:#6E5200}
+.ks-tugas-tanda.ks-tugas-ok{background:var(--mint);color:var(--hijau-jamiyyah)}
+.ks-tugas-perlu .ket strong{color:#A4161A}
+.ks-tandai-lagi{flex:none;min-height:44px;font-size:var(--fs-kecil);color:var(--abu)}
+@media (max-width:599px){.ks-tandai-lagi{margin-left:auto}}
+/* d. Periksa ulang kecil di samping keterangan */
+.ks-sub{display:flex;flex-wrap:wrap;align-items:center;gap:0 10px}
+.ks-segarkan{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 4px;border:0;background:none;color:var(--hijau-jamiyyah);font:inherit;font-weight:600;cursor:pointer}
+.ks-segarkan:hover .teks{text-decoration:underline}
+.ks-segarkan:disabled{opacity:.6;cursor:default}
+.ks-segarkan:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:2px;border-radius:6px}
+/* e. Aktivitas: periode & akun sebaris di layar lebar */
+.ks-saring{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 16px}
+.ks-saring .ks-akun-pilih{flex:1 1 240px}
+/* f. Ringkasan sehat lebih menonjol */
+.ks-ringkas.ks-baik{background:var(--latar-sorot);border-color:var(--garis-kuat)}
+.ks-ringkas.ks-baik .ks-ringkas-ikon{background:var(--hijau-jamiyyah);color:#FFFFFF}
+.ks-ringkas .ks-berikut{margin:6px 0 0;font-size:13px;color:var(--abu)}

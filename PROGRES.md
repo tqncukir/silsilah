@@ -840,5 +840,6 @@ Mulai: 2026-11-28 (Kang: "mulai tahap kesehatan sistem"), terinspirasi halaman k
 - Situs asli (Chrome Kang, tanpa menyimpan data): Edge Function `notif` memuat jenis `sistem` & Verify JWT mati; 4 jadwal cron aktif; Advisors 0 error.
 - Tidak ada rahasia di repo.
 - **Disetujui Kang 2026-11-28** ("Tahap 18 disetujui"). Tetap dipantau: pemeriksaan otomatis pertama 29 Nov 06.30 WIB.
+- **Poles Kesehatan Sistem (Kang 2026-11-28: "kerjakan semua", temuan a–f, v157):** (a) HP: kartu **sehat dilipat** (kepala + pil, ketuk/Enter membuka, `aria-expanded`), kartu bermasalah tetap terbuka — HP 5.086 → 2.220 px; (b) tablet/laptop: kartu sebaris sama tinggi, tautan/kotak/catatan di dasar kartu; (c) Tugas keamanan: tanda kiri (✓/jam), "Selesai … · berikutnya …" atau "**Jatuh tempo**", tombol besar hanya untuk yang perlu, yang belum jatuh tempo cukup tautan "Tandai lagi"; (d) "Periksa ulang" jadi tombol kecil berikon di samping "Diperiksa …"; (e) Aktivitas: periode & akun sebaris di layar lebar, keterangan dipendekkan; (f) ringkasan sehat berlatar hijau muda + "Pemeriksaan otomatis berikutnya: …". Tampilan saja. Uji tiruan **45 lulus**.
 - **Usulan tahap berikutnya (belum dimulai):** "Bagikan PIN per desa" (slip PIN massal untuk anggota per desa).
 
