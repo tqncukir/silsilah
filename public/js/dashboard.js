@@ -82,7 +82,7 @@ $('filter-buka').onclick = () => {
 function batang(ol, baris, maks, { warna = '', tombol = false, nomor = false } = {}) {
   ol.innerHTML = baris.map((b, i) => {
     const isi = `<span class="bt-nama">${nomor ? `<span class="bt-no" aria-hidden="true">${i + 1}</span>` : ''}${hurufAman(b.label)}</span>
-      <span class="bt-jalur" aria-hidden="true"><span class="bt-isi${warna}" data-i="${i}"></span></span>
+      <span class="bt-jalur" aria-hidden="true"><span class="bt-isi${b.label === 'Belum diisi' ? ' bt-isi-kosong' : warna}" data-i="${i}"></span></span>
       <span class="bt-nilai">${b.teks.replace(/ \((.+)\)$/, ' <span class="bt-persen">($1)</span>')}</span>`;
     return `<li>${tombol && b.aksi !== false ? `<button type="button" class="bt-baris bt-tombol" data-i="${i}" aria-label="${hurufAman(b.label)}: ${b.teks}${b.petunjuk || ''}">${isi}</button>` : `<div class="bt-baris">${isi}</div>`}</li>`;
   }).join('');
@@ -372,7 +372,7 @@ async function muatDaftarUlang(ini) {
     const q = new URLSearchParams({ asal: 'daftar_ulang' });
     if (f.kab) q.set('kabupaten', f.kab); if (f.kec) q.set('kecamatan', f.kec); if (f.desa) q.set('desa', f.desa);
     $('du-daftar').href = `/jamaah.html?${q}`;
-    $('du-daftar').parentElement.hidden = !d.daftar_ulang;
+    $('du-daftar').hidden = !d.daftar_ulang;
     $('p-daftar-ulang').hidden = false;
   } catch { if (ini === nomorMuat) $('p-daftar-ulang').hidden = true; }
 }

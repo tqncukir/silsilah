@@ -1493,3 +1493,60 @@ main.depan{max-width:none;padding:0 0 32px}
 #selesai-pin{max-width:52ch;margin:12px auto 0;text-align:center}
 .selesai .stat{margin-top:6px}
 .du-tautan{display:inline-flex;align-items:center}
+
+/* ===== Poles Dashboard (Kang 2026-11-28: "kerjakan semua", temuan a–g) ===== */
+/* a. Lompat ke + kelompok */
+.dsb-lompat{display:flex;align-items:center;gap:8px;overflow-x:auto;margin:0 0 16px;padding:2px 0 4px;scrollbar-width:none}
+.dsb-lompat::-webkit-scrollbar{display:none}
+.dsb-lompat-l{flex:none;font-size:var(--fs-kecil);font-weight:600;color:var(--abu)}
+.dsb-lompat a{flex:none;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:999px;background:#FFFFFF;border:1px solid var(--garis);
+  color:var(--hitam);font-size:var(--fs-kecil);font-weight:600;text-decoration:none;white-space:nowrap}
+.dsb-lompat a:hover{border-color:var(--garis-kuat)}
+.dsb-lompat a:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:2px}
+.dsb-titik{flex:none;width:10px;height:10px;border-radius:50%;padding:0}
+.dsb-titik.grup-pondasi{background:var(--grup-pondasi)}.dsb-titik.grup-ruhani{background:var(--grup-ruhani)}
+.dsb-titik.grup-kepedulian{background:var(--grup-kepedulian)}.dsb-titik.grup-amanah{background:var(--grup-amanah)}
+.dsb-grup{margin:0 0 24px;scroll-margin-top:84px}
+.dsb-kelompok{grid-column:1 / -1;display:flex;align-items:center;gap:10px;margin:8px 0 -4px;font-size:1.125rem;color:var(--hijau-jamiyyah)}
+.dsb-grup:not(:has(.dsb-panel:not([hidden]))){display:none}
+.dsb-isi:not(:has(#k-ruhani .dsb-panel:not([hidden]))) .dsb-lompat a[href="#k-ruhani"],
+.dsb-isi:not(:has(#k-kepedulian .dsb-panel:not([hidden]))) .dsb-lompat a[href="#k-kepedulian"],
+.dsb-isi:not(:has(#k-amanah .dsb-panel:not([hidden]))) .dsb-lompat a[href="#k-amanah"]{display:none}
+@media (prefers-reduced-motion:no-preference){html:has(.dsb-lompat){scroll-behavior:smooth}}
+/* b. Laptop: panel kecil berpasangan */
+@media (min-width:1024px){
+  #k-ruhani .dsb-hadir,#k-kepedulian .dsb-hadir,#k-amanah .dsb-hadir{grid-column:span 5}
+  #k-ruhani .hadir-dua,#k-kepedulian .hadir-dua,#k-amanah .hadir-dua{grid-template-columns:minmax(0,1fr)}
+  #p-daftar-ulang{grid-column:1 / -1}
+}
+/* c. Ikon warna kelompok (kelas .grup-* dipakai bersama menu) */
+.dsb-ikon.grup-pondasi{background:var(--mint);color:var(--hijau-jamiyyah)}
+.dsb-ikon.grup-ruhani{background:#E4EEF8;color:var(--grup-ruhani)}
+.dsb-ikon.grup-kepedulian{background:#FFF6CC;color:#8A6A00}
+.dsb-ikon.grup-amanah{background:#FBE9E7;color:var(--grup-amanah)}
+/* d. Angka panel tanpa kotak di dalam kotak (kelas .hadir-angka juga dipakai Beranda) */
+.dsb-panel dl.hadir-angka{min-width:0;padding:10px 0;margin:10px 0 8px;border-radius:0;background:none;border-top:1px solid var(--garis-lembut);border-bottom:1px solid var(--garis-lembut);
+  font-size:inherit;text-align:left;line-height:inherit;gap:0}
+.dsb-panel dl.hadir-angka div{padding:4px 12px;border-radius:0;background:none;border-left:1px solid var(--garis-lembut)}
+.dsb-panel dl.hadir-angka div:first-child{border-left:0;padding-left:0}
+.dsb-panel dl.hadir-angka dd{font-size:1.375rem;line-height:1.2}
+@media (max-width:599px){
+  .dsb-panel dl.hadir-angka{grid-template-columns:minmax(0,1fr);padding:2px 0}
+  .dsb-panel dl.hadir-angka div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:8px 0;border-left:0;border-top:1px solid var(--garis-lembut)}
+  .dsb-panel dl.hadir-angka div:first-child{border-top:0}
+  .dsb-panel dl.hadir-angka dd{margin:0;font-size:1.25rem;text-align:right;white-space:nowrap}
+}
+/* e. Tautan seragam di kepala panel */
+.dsb-kepala{flex-wrap:wrap}
+.dsb-kepala .dsb-judul{flex:1 1 auto;min-width:0}
+.dsb-lihat{display:inline-flex;align-items:center;gap:2px;min-height:44px;margin:-6px -6px -6px auto;padding:0 8px;border-radius:10px;color:var(--hijau-jamiyyah);
+  font-size:var(--fs-kecil);font-weight:600;text-decoration:none;white-space:nowrap}
+.dsb-lihat:hover{background:var(--latar-sorot)}
+.dsb-lihat:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:2px}
+.dsb-lihat[hidden]{display:none}
+.dsb-bawah:has(.tautan[hidden]:only-child){display:none}
+/* f. Keterangan rata kiri sejajar isi */
+.dsb-kepala+.dsb-ket,.dsb-kepala+.dsb-jejak,.dsb-sebaran .dsb-jejak+.dsb-ket{margin-left:0}
+.dsb-kepala{margin-bottom:8px}
+/* g. Batang "Belum diisi" abu-abu */
+.bt-isi.bt-isi-kosong{background:#B9C3BC}
