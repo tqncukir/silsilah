@@ -1794,7 +1794,8 @@ a.dsb-kartu-tautan:focus-visible{outline:3px solid var(--kuning-rosyid);outline-
 /* ===== Panduan Peran (Tahap 19) ===== */
 .pd-daftar ol{margin:0;padding:0 0 0 22px;display:grid;gap:2px}
 .pd-daftar li::marker{color:var(--abu);font-weight:600}
-.pd-daftar a{display:inline-flex;align-items:center;gap:8px;min-height:44px;color:var(--hijau-jamiyyah);font-weight:600;text-decoration:none}
+.pd-daftar a,.pd-dialog a{display:inline-flex;align-items:center;flex-wrap:wrap;gap:4px 8px;min-height:44px;padding:4px 0;color:var(--hijau-jamiyyah);font-weight:600;text-decoration:none}
+.pd-daftar a[aria-current] .pd-dj,.pd-dialog a[aria-current] .pd-dj{color:var(--hitam);font-weight:800;text-decoration:underline;text-decoration-color:var(--kuning-rosyid);text-decoration-thickness:3px;text-underline-offset:4px}
 .pd-daftar a:hover{text-decoration:underline}
 .pd-anda{padding:2px 8px;border-radius:999px;background:var(--mint);color:var(--hijau-jamiyyah);font-size:var(--fs-kecil);font-weight:700}
 .pd-bagian-daftar{display:grid;gap:12px;margin-top:var(--gap)}
@@ -1828,4 +1829,24 @@ a.dsb-kartu-tautan:focus-visible{outline:3px solid var(--kuning-rosyid);outline-
 .pd-tabel th,.pd-tabel td{padding:10px;border-bottom:1px solid var(--garis-lembut);text-align:left;vertical-align:top}
 .pd-tabel th{background:var(--latar-sorot);color:var(--hijau-jamiyyah)}
 .pd-catatan{margin-top:var(--gap)}
-@media (min-width:1024px){.pd-daftar ol{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px}.pd-teks{padding:4px 28px 24px;max-width:900px}}
+.pd-buka-daftar{position:fixed;z-index:15;right:16px;bottom:calc(84px + env(safe-area-inset-bottom));display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 18px;
+  border:0;border-radius:999px;background:var(--hijau-jamiyyah);color:#FFFFFF;font:inherit;font-weight:700;box-shadow:0 4px 14px rgba(11,72,34,.28);cursor:pointer}
+.pd-buka-daftar[hidden]{display:none}
+.pd-buka-daftar:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:2px}
+.pd-dialog{width:min(520px,calc(100% - 24px));max-height:min(80vh,640px);margin:auto auto 12px;padding:0;border:0;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+.pd-dialog::backdrop{background:rgba(10,40,20,.45)}
+.pd-dialog-kepala{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;padding:12px 12px 8px 20px;background:#FFFFFF;border-bottom:1px solid var(--garis-lembut)}
+.pd-dialog-tutup{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:0;border-radius:50%;background:var(--mint);color:var(--hijau-jamiyyah);cursor:pointer}
+.pd-dialog-tutup:focus-visible{outline:3px solid var(--hijau-jamiyyah);outline-offset:2px}
+.pd-dialog-kepala h2{margin:0;font-size:var(--fs-sub);color:var(--hijau-jamiyyah)}
+.pd-dialog ol{margin:0;padding:8px 20px 16px 44px}
+.pd-dialog li::marker{color:var(--abu);font-weight:600}
+@media (max-width:1023px){.pd-daftar{display:none}}
+@media (min-width:1024px){
+  .pd-buka-daftar{display:none}
+  .pd-tata{display:grid;grid-template-columns:290px minmax(0,1fr);gap:24px;align-items:start;margin-top:var(--gap)}
+  .pd-daftar{position:sticky;top:84px;max-height:calc(100vh - 104px);overflow-y:auto;margin:0}
+  .pd-daftar ol{gap:0}
+  .pd-daftar a{min-height:40px}
+  .pd-bagian-daftar{margin-top:0}
+  .pd-teks{padding:4px 28px 24px;max-width:900px}}

@@ -14,7 +14,8 @@ function bukaBagian(id, gulir = true) {
 function gambar(peran) {
   const daftar = (BAGIAN_PERAN[peran] || ['pasang', 'kendala']).filter((k) => BAGIAN[k]);
   $('pd-sub').textContent = `Untuk akun ${NAMA_PERAN[peran] || peran}. Ketuk judul untuk membuka atau menutup.`;
-  $('pd-daftar-isi').innerHTML = daftar.map((k, i) => `<li><a href="#pd-${k}" data-ke="${k}">${BAGIAN[k].judul}${i === 0 ? ' <span class="pd-anda">Peran Anda</span>' : ''}</a></li>`).join('');
+  const isiDaftar = daftar.map((k, i) => `<li><a href="#pd-${k}" data-ke="${k}"><span class="pd-dj">${BAGIAN[k].judul}</span>${i === 0 ? ' <span class="pd-anda">Peran Anda</span>' : ''}</a></li>`).join('');
+  $('pd-daftar-isi').innerHTML = isiDaftar; $('pd-dialog-isi').innerHTML = isiDaftar;
   $('pd-bagian').innerHTML = daftar.map((k, i) => `<details class="panel pd-bagian${i === 0 ? ' pd-utama' : ''}" id="pd-${k}"${i === 0 ? ' open' : ''}>
       <summary><span class="pd-no" aria-hidden="true">${i + 1}</span><span class="pd-judul"><strong>${BAGIAN[k].judul}</strong><span>${BAGIAN[k].sub}</span></span></summary>
       <div class="pd-teks">${BAGIAN[k].isi}</div></details>`).join('');
@@ -23,15 +24,37 @@ function gambar(peran) {
     if (!daftar.includes(a.dataset.ke)) { const s = document.createElement('span'); s.textContent = a.textContent; a.replaceWith(s); }
     else a.href = `#pd-${a.dataset.ke}`;
   });
-  $('pd-daftar').hidden = false; $('pd-catatan').hidden = false;
+  $('pd-daftar').hidden = false; $('pd-catatan').hidden = false; $('pd-buka-daftar').hidden = false;
+  tandaiAktif(daftar);
   const awal = location.hash.replace(/^#pd-/, '');
   if (awal && daftar.includes(awal)) bukaBagian(awal);
 }
+
+// Bagian yang sedang dibaca ditandai di daftar isi (sidebar laptop & daftar HP).
+function tandaiAktif(daftar) {
+  if (!('IntersectionObserver' in window)) return;
+  const tampak = new Map();
+  const io = new IntersectionObserver((es) => {
+    es.forEach((e) => tampak.set(e.target.id, e.isIntersecting));
+    const aktif = daftar.find((k) => tampak.get(`pd-${k}`));
+    if (!aktif) return;
+    document.querySelectorAll('a[data-ke]').forEach((a) => {
+      if (!a.closest('.pd-daftar, .pd-dialog')) return;
+      if (a.dataset.ke === aktif) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+    });
+  }, { rootMargin: '-90px 0px -55% 0px' });
+  daftar.forEach((k) => io.observe($(`pd-${k}`)));
+}
+
+$('pd-buka-daftar').onclick = () => $('pd-dialog').showModal();
+$('pd-dialog-tutup').onclick = () => $('pd-dialog').close();
+$('pd-dialog').addEventListener('click', (e) => { if (e.target === $('pd-dialog')) $('pd-dialog').close(); });
 
 document.addEventListener('click', (e) => {
   const a = e.target.closest('a[data-ke]');
   if (!a || !$(`pd-${a.dataset.ke}`)) return;
   e.preventDefault();
+  if ($('pd-dialog').open) $('pd-dialog').close();
   history.replaceState(null, '', `#pd-${a.dataset.ke}`);
   bukaBagian(a.dataset.ke);
 });

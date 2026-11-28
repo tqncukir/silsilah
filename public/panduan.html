@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=158">
-<link rel="stylesheet" href="/css/app.css?v=158">
+<link rel="stylesheet" href="/css/tokens.css?v=159">
+<link rel="stylesheet" href="/css/app.css?v=159">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -44,11 +44,21 @@
   </a>
   <div class="judul-baris"><div><h1>Panduan Peran</h1><p class="judul-sub" id="pd-sub">Memuat...</p></div></div>
   <p id="pesan" class="pesan" role="alert"></p>
-  <nav class="panel pd-daftar" id="pd-daftar" hidden aria-labelledby="pd-daftar-judul">
-    <h2 class="form-judul" id="pd-daftar-judul">Daftar isi</h2>
-    <ol id="pd-daftar-isi"></ol>
-  </nav>
-  <div id="pd-bagian" class="pd-bagian-daftar"></div>
+  <div class="pd-tata">
+    <nav class="panel pd-daftar" id="pd-daftar" hidden aria-labelledby="pd-daftar-judul">
+      <h2 class="form-judul" id="pd-daftar-judul">Daftar isi</h2>
+      <ol id="pd-daftar-isi"></ol>
+    </nav>
+    <div id="pd-bagian" class="pd-bagian-daftar"></div>
+  </div>
+  <button type="button" class="pd-buka-daftar" id="pd-buka-daftar" hidden aria-haspopup="dialog">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>Daftar isi
+  </button>
+  <dialog class="pd-dialog" id="pd-dialog" aria-labelledby="pd-dialog-judul">
+    <div class="pd-dialog-kepala"><h2 id="pd-dialog-judul">Daftar isi</h2>
+      <button type="button" class="pd-dialog-tutup" id="pd-dialog-tutup" aria-label="Tutup daftar isi"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <ol id="pd-dialog-isi"></ol>
+  </dialog>
   <p class="ket pd-catatan" id="pd-catatan" hidden>Gambar layar memakai data contoh, bukan data jamaah sebenarnya. Tampilan di HP Anda sama, hanya isinya berbeda.</p>
 </main>
 <footer class="kaki">
@@ -57,8 +67,8 @@
   </div>
   <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
 </footer>
-<script src="/js/supa.js?v=158" defer></script>
-<script src="/js/panduan-isi.js?v=158" defer></script>
-<script src="/js/panduan.js?v=158" defer></script>
+<script src="/js/supa.js?v=159" defer></script>
+<script src="/js/panduan-isi.js?v=159" defer></script>
+<script src="/js/panduan.js?v=159" defer></script>
 </body>
 </html>
