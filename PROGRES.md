@@ -538,7 +538,7 @@ Mulai: 2026-11-28 (Kang: "mulai"). **Disetujui Kang 2026-11-28.**
 **Langkah 4, Uji sungguhan** (2026-11-28 07.44 WIB): Run workflow manual (run 46089456345) berhasil: 35 tabel, `silsilah-2026-11-28.7z` ±1,0 MB ke Drive, langkah "Catat hasil" → "Tercatat: berhasil=true". Halaman sudah tayang (tanpa login dialihkan ke Masuk). Pengecekan di HP dengan akun Admin Pusat oleh Kang (login hanya oleh Kang). **Disetujui Kang 2026-11-28 ("Tahap 12 disetujui").**
 
 ## Tahap 13: Menu ringkas "Alternatif B: Emas di atas Hijau"
-Mulai: 2026-11-28 (Kang: "mulai B"). Menunggu dicek Kang.
+Mulai: 2026-11-28 (Kang: "mulai B"). **Disetujui Kang 2026-11-28 ("Tahap 13 disetujui").**
 
 **Keputusan Kang (2026-11-28):** menu dibuat ringkas & rapi; dari 3 alternatif warna (contoh di Claude Design "Contoh Menu Ringkas SILSILAH") Kang memilih **B: Emas di atas Hijau**, untuk HP dan laptop/komputer.
 **Usulan Claude (dicek dengan skill ui-ux-pro-max):** satu daftar menu di `daftarMenu(p)` (`supa.js`) dipakai HP dan laptop, dikelompokkan 4 kelompok modul (Pondasi, Ruhani & Kegiatan, Kepedulian, Amanah & Tata Kelola), tetap menyaring per peran seperti sebelumnya.
