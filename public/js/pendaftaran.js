@@ -63,6 +63,7 @@ async function bukaKamera() {
   nyalakanLampu();
   document.body.style.overflow = 'hidden';
   $('jepret').focus();
+  mulaiPantau();
 }
 // Lampu flash menyala otomatis agar tulisan KTP terang (HP Android/Chrome; iPhone belum mengizinkan dari website).
 async function aturLampu(nyala) {
@@ -82,7 +83,67 @@ async function nyalakanLampu() {
   if (!(await aturLampu(true))) $('lampu').hidden = true;
 }
 $('lampu').onclick = () => aturLampu($('lampu').getAttribute('aria-pressed') !== 'true');
+// ===== Pindai otomatis (Kang 2026-11-28): foto diambil sendiri bila KTP di bingkai terlihat tajam & diam ±1 detik.
+// Gambar kecil isi bingkai diperiksa di HP saja (tidak dikirim/disimpan). Tombol foto manual tetap ada.
+const PANTAU = { jeda: 200, perlu: 5, mulaiMs: 900, tepi: 22, padat: 0.07, goyang: 7 };
+let pantau = null;
+function kotakBingkai(v) {
+  const b = $('bingkai').getBoundingClientRect(), l = v.getBoundingClientRect();
+  const skala = Math.max(l.width / v.videoWidth, l.height / v.videoHeight);
+  const geserX = (v.videoWidth * skala - l.width) / 2, geserY = (v.videoHeight * skala - l.height) / 2;
+  return { sx: (b.left - l.left + geserX) / skala, sy: (b.top - l.top + geserY) / skala, sw: b.width / skala, sh: b.height / skala };
+}
+// Nilai satu cuplikan: kepadatan garis tulisan (tajam & ada kartu), gerak dibanding cuplikan sebelumnya, terang rata-rata.
+function nilaiCuplikan(v, k, ctx, lalu) {
+  const { sx, sy, sw, sh } = kotakBingkai(v);
+  ctx.drawImage(v, sx, sy, sw, sh, 0, 0, k.width, k.height);
+  const d = ctx.getImageData(0, 0, k.width, k.height).data, W = k.width, H = k.height;
+  const abu = new Float32Array(W * H);
+  let terang = 0;
+  for (let i = 0; i < W * H; i++) { abu[i] = d[i * 4] * 0.299 + d[i * 4 + 1] * 0.587 + d[i * 4 + 2] * 0.114; terang += abu[i]; }
+  let tepi = 0, gerak = 0, n = 0;
+  for (let y = 4; y < H - 4; y++) for (let x = 4; x < Math.floor(W * 0.7); x++) { // kiri 70%: bagian tulisan KTP
+    const i = y * W + x;
+    if (Math.abs(abu[i + 1] - abu[i - 1]) + Math.abs(abu[i + W] - abu[i - W]) > PANTAU.tepi) tepi++;
+    n++;
+  }
+  if (lalu) { for (let i = 0; i < W * H; i += 3) gerak += Math.abs(abu[i] - lalu[i]); gerak /= W * H / 3; }
+  return { padat: tepi / n, gerak, terang: terang / (W * H), abu };
+}
+function petunjuk(teks, sub, siap = false) {
+  $('kamera-judul').innerHTML = `${teks}<br><span>${sub}</span>`;
+  $('bingkai').classList.toggle('siap', siap);
+}
+function mulaiPantau() {
+  hentiPantau();
+  const v = $('video'), k = document.createElement('canvas'); k.width = 160; k.height = 101;
+  const ctx = k.getContext('2d', { willReadFrequently: true });
+  const mulai = Date.now(); let lalu = null, baik = 0, akhir = '';
+  petunjuk('Masukkan KTP ke dalam kotak.', 'Foto diambil otomatis saat tulisan jelas dan HP diam.');
+  pantau = setInterval(() => {
+    if (!v.videoWidth || Date.now() - mulai < PANTAU.mulaiMs) return;
+    let h;
+    try { h = nilaiCuplikan(v, k, ctx, lalu); } catch { hentiPantau(); return; }
+    const pertama = !lalu; lalu = h.abu;
+    if (pertama) return; // cuplikan pertama belum bisa dibandingkan
+    let keadaan;
+    if (h.terang < 45) keadaan = 'gelap';
+    else if (h.padat < PANTAU.padat) keadaan = 'cari';
+    else if (h.gerak > PANTAU.goyang) keadaan = 'goyang';
+    else keadaan = 'baik';
+    baik = keadaan === 'baik' ? baik + 1 : 0;
+    if (baik >= PANTAU.perlu) { navigator.vibrate?.(60); jepret(); return; }
+    if (keadaan === akhir && keadaan !== 'baik') return;
+    akhir = keadaan;
+    if (keadaan === 'gelap') petunjuk('Terlalu gelap.', 'Cari tempat lebih terang atau nyalakan lampu.');
+    else if (keadaan === 'cari') petunjuk('Dekatkan KTP ke dalam kotak.', 'Tulisan KTP harus memenuhi kotak dan tidak kabur.');
+    else if (keadaan === 'goyang') petunjuk('Tahan HP agar diam.', 'Foto diambil otomatis saat gambar tidak goyang.');
+    else petunjuk('Tahan sebentar…', 'Sedang mengambil foto.', true);
+  }, PANTAU.jeda);
+}
+function hentiPantau() { clearInterval(pantau); pantau = null; $('bingkai').classList.remove('siap'); }
 function tutupKamera() {
+  hentiPantau();
   aliran?.getTracks().forEach((t) => t.stop()); aliran = null;
   $('video').srcObject = null;
   $('kamera-layar').hidden = true;
@@ -90,13 +151,12 @@ function tutupKamera() {
   $('buka-kamera').focus();
 }
 function jepret() {
-  const v = $('video'), b = $('bingkai').getBoundingClientRect(), l = v.getBoundingClientRect();
+  const v = $('video');
   if (!v.videoWidth) return;
+  hentiPantau();
   // video tampil "cover": hitung bagian video yang ada di dalam bingkai
-  const skala = Math.max(l.width / v.videoWidth, l.height / v.videoHeight);
-  const geserX = (v.videoWidth * skala - l.width) / 2, geserY = (v.videoHeight * skala - l.height) / 2;
-  const sx = (b.left - l.left + geserX) / skala, sy = (b.top - l.top + geserY) / skala;
-  const sw = (b.width / skala) * 0.72, sh = b.height / skala; // kiri 72%: tulisan KTP; foto di kanan tidak perlu dibaca
+  const { sx, sy, sw: lebar, sh } = kotakBingkai(v);
+  const sw = lebar * 0.72; // kiri 72%: tulisan KTP; foto di kanan tidak perlu dibaca
   const k = document.createElement('canvas');
   k.width = Math.round(sw); k.height = Math.round(sh);
   k.getContext('2d').drawImage(v, sx, sy, sw, sh, 0, 0, k.width, k.height);

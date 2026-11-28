@@ -296,6 +296,8 @@ footer{text-align:center;padding:20px 16px 32px;color:var(--abu);font-size:var(-
 .kamera-bingkai i:nth-child(1){left:-5px;top:-5px;border-right:0;border-bottom:0;border-top-left-radius:22px}
 .kamera-bingkai i:nth-child(2){right:-5px;top:-5px;border-left:0;border-bottom:0;border-top-right-radius:22px}
 .kamera-bingkai i:nth-child(3){left:-5px;bottom:-5px;border-right:0;border-top:0;border-bottom-left-radius:22px}
+.kamera-bingkai.siap i{border-color:var(--hijau-daun)}
+.kamera-bingkai i{transition:border-color .2s}
 .kamera-bingkai i:nth-child(4){right:-5px;bottom:-5px;border-left:0;border-top:0;border-bottom-right-radius:22px}
 .kamera-petunjuk{position:absolute;left:16px;right:16px;top:max(20px,env(safe-area-inset-top));margin:0;text-align:center;color:#FFFFFF;font-weight:600}
 .kamera-petunjuk span{font-weight:400;font-size:var(--fs-kecil);opacity:.85}
