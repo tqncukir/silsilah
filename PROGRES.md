@@ -3,7 +3,8 @@
 ## POSISI TERAKHIR (baca ini dulu) — diperbarui 2026-11-27
 - **Semua 10 tahap selesai dan disetujui Kang** (Tahap 10 Pemeriksaan disetujui 2026-11-27): 14 modul terbangun (Tahap 9 Kesehatan disetujui 2026-11-27). Versi cache terakhir **v112**. Migrasi terakhir yang sudah dijalankan Kang: `20261127110000_kecepatan_rls.sql` (Tahap 10). Advisors terakhir: 0 error, 49 peringatan, 11 info (semua jenis yang disengaja).
 - **Serah terima 2026-11-27 (malam):** proyek diteruskan ke akun Claude **goindotea** (perintah Kang). Akun baru tidak membawa skill/memori akun lama: semua aturan ada di `CLAUDE.md` (termasuk "Cara kerja agen" dan "Cara uji") dan riwayat ada di file ini. Cara uji database lokal terbukti jalan (stub di CLAUDE.md; data wilayah contoh diisi langsung karena ekstensi `http` tidak ada).
-- **Tahap 11 Backup harian ke Google Drive: dimulai 2026-11-28** (akun goindotea). **Terpasang & backup pertama berhasil 2026-11-28 07.12 WIB**; menunggu Kang cek & setujui.
+- **Tahap 11 Backup harian ke Google Drive: selesai & disetujui Kang 2026-11-28.** Backup otomatis tiap 01.15 WIB ke Drive jtccukir2022 folder "Backup SILSILAH".
+- **Langkah berikutnya: tunggu Kang memilih tahap baru.**
 
 ## Tahap 1: Data Jamaah, Pendaftaran, KTA, Portal Anggota, Hak Akses
 Mulai: 2026-11-25 (Kang Salman: "Bismillah").
@@ -481,7 +482,7 @@ Dipilih Kang 2026-11-27 (dari 4 pilihan: backup, notifikasi, berita, pemeriksaan
 
 
 ## Tahap 11: Backup harian ke Google Drive
-Mulai: 2026-11-28 (Kang: "mulai").
+Mulai: 2026-11-28 (Kang: "mulai"). **Disetujui Kang 2026-11-28.**
 
 **Keputusan Kang:** backup disimpan di Google Drive akun organisasi jtccukir2022@gmail.com (seperti aplikasi Kang yang lain), **setiap hari jam 01.15 WIB** (bukan bulanan).
 **Usulan Claude (berlaku kecuali Kang ubah):** simpan 30 backup harian terakhir + 1 per bulan selama 12 bulan (±42 file, masing-masing beberapa ratus KB–MB); file dikunci kata sandi (7z AES-256, nama file isi ikut tersembunyi) yang hanya Kang pegang; penjadwal GitHub Actions (gratis); email peringatan bila 30 jam tidak ada backup baru. R2 Cloudflare tidak dipakai (perlu kartu pembayaran).
