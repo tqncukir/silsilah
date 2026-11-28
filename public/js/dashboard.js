@@ -357,6 +357,26 @@ async function muatZiarah(ini, dari, sampai) {
   } catch { if (ini === nomorMuat) $('p-ziarah').hidden = true; }
 }
 
+// Daftar ulang KTA lama (rpc dashboard_daftar_ulang, ikut RLS): semua peran Dashboard. Ikut saringan wilayah, tidak ikut periode.
+async function muatDaftarUlang(ini) {
+  try {
+    const d = await dbKirim('POST', 'rpc/dashboard_daftar_ulang', { p_kab: f.kab || null, p_kec: f.kec || null, p_desa: f.desa || null });
+    if (ini !== nomorMuat) return;
+    $('du-ket').textContent = `${teksWilayah()} · semua waktu. Jamaah pemegang KTA lama yang datanya belum ada lalu didaftarkan dengan nomor kartunya.`;
+    $('du-ulang').textContent = angka(d.daftar_ulang);
+    $('du-impor').textContent = angka(d.impor);
+    $('du-baru').textContent = angka(d.baru);
+    $('du-judul').textContent = `Daftar ulang per ${TINGKAT[d.tingkat]}`;
+    batang($('du-sebaran'), d.sebaran.map((w) => ({ label: w.nama, n: w.n, teks: angka(w.n) })), d.sebaran[0]?.n || 0, { nomor: true });
+    if (!d.sebaran.length) $('du-sebaran').innerHTML = '<li class="dsb-ket">Belum ada jamaah daftar ulang di pilihan ini.</li>';
+    const q = new URLSearchParams({ asal: 'daftar_ulang' });
+    if (f.kab) q.set('kabupaten', f.kab); if (f.kec) q.set('kecamatan', f.kec); if (f.desa) q.set('desa', f.desa);
+    $('du-daftar').href = `/jamaah.html?${q}`;
+    $('du-daftar').parentElement.hidden = !d.daftar_ulang;
+    $('p-daftar-ulang').hidden = false;
+  } catch { if (ini === nomorMuat) $('p-daftar-ulang').hidden = true; }
+}
+
 // Keuangan (rpc saldo_kas + laporan_kas kas utama tahun ini). Tidak ikut saringan wilayah/periode: angka kas apa adanya.
 // Kas utama = Kas Pusat bila terlihat, selain itu kas pertama (koordinator: kas kecamatannya). Bisyaroh ikut aturan database.
 // Bantuan Sosial (rpc ringkas_bantuan, tanpa nama): admin pusat, ketua, bendahara semua; koordinator wilayahnya (database).
@@ -495,6 +515,7 @@ async function muat() {
     muatHadir(ini, dari, sampai);
     muatMursyid(ini, dari, sampai);
     muatZiarah(ini, dari, sampai);
+    muatDaftarUlang(ini);
     muatBantuanDsb(ini, dari, sampai);
     muatEkonomiDsb(ini);
     muatUsahaDsb(ini);

@@ -5,7 +5,7 @@ const UKURAN = [10, 20, 50, 100];
 let PER_HALAMAN = (() => { let n = Number(q.get('n')); try { n ||= Number(localStorage.getItem('silsilah.perHalaman')); } catch {} return UKURAN.includes(n) ? n : 20; })();
 let halaman = Math.max(1, Number(q.get('h')) || 1);
 let semuaDesa = [], semuaKec = [];
-const SARING = ['cari', 'kabupaten', 'kecamatan', 'desa', 'mursyid', 'status'];
+const SARING = ['cari', 'kabupaten', 'kecamatan', 'desa', 'mursyid', 'status', 'asal'];
 let tunda;
 
 const pesan = (t) => { $('pesan').textContent = t; };
@@ -38,7 +38,7 @@ function isiDesa() {
 }
 
 function jalurData() {
-  const p = ['select=id,nomor_anggota,nama,aktif,wafat,alamat,rt_rw,umur_daftar,tanggal_lahir,pekerjaan,tanggal_daftar,mursyid(nama),desa!inner(nama,kecamatan_id,kecamatan!inner(nama,kabupaten_id,kabupaten(nama)))', 'order=nama.asc,id.asc'];
+  const p = ['select=id,nomor_anggota,nama,aktif,wafat,asal,alamat,rt_rw,umur_daftar,tanggal_lahir,pekerjaan,tanggal_daftar,mursyid(nama),desa!inner(nama,kecamatan_id,kecamatan!inner(nama,kabupaten_id,kabupaten(nama)))', 'order=nama.asc,id.asc'];
   const cari = $('cari').value.trim();
   if (/^\d{10}$/.test(cari)) p.push(`nomor_anggota=eq.${cari}`);
   else if (cari) p.push(`nama=ilike.${encodeURIComponent('*' + cari.replace(/[*,()]/g, ' ') + '*')}`);
@@ -51,6 +51,8 @@ function jalurData() {
   if (s === 'aktif') p.push('aktif=is.true', 'wafat=is.false');
   if (s === 'tidak') p.push('aktif=is.false', 'wafat=is.false');
   if (s === 'wafat') p.push('wafat=is.true');
+  const a = $('asal').value;
+  if (['impor', 'baru', 'daftar_ulang'].includes(a)) p.push(`asal=eq.${a}`);
   return 'jamaah?' + p.join('&');
 }
 
@@ -73,7 +75,7 @@ async function muat() {
       const [teks, kelas] = STATUS(j);
       return `<tr data-id="${j.id}" tabindex="0">
         <td data-l="No" class="angka kol-no">${(dari + i + 1).toLocaleString('id-ID')}</td>
-        <td data-l="Nomor" class="angka"><a href="/jamaah-isi.html?id=${j.id}">${j.nomor_anggota}</a></td>
+        <td data-l="Nomor" class="angka"><a href="/jamaah-isi.html?id=${j.id}">${j.nomor_anggota}</a>${j.asal === 'daftar_ulang' ? '<br><span class="kecil">Daftar ulang KTA lama</span>' : ''}</td>
         <td data-l="Nama" class="tabel-nama">${hurufAman(j.nama)}</td>
         <td data-l="Desa"><span class="hp-saja">${hurufAman([j.alamat, j.rt_rw && 'RT/RW ' + j.rt_rw].filter(Boolean).join(' ') + (j.alamat || j.rt_rw ? ', ' : ''))}</span>${hurufAman(j.desa.nama)}<span class="hp-saja"> · Kec. ${hurufAman(j.desa.kecamatan.nama)} · ${hurufAman(j.desa.kecamatan.kabupaten?.nama || '')}</span></td>
         <td data-l="Kecamatan">${hurufAman(j.desa.kecamatan.nama)}</td>
@@ -113,7 +115,7 @@ function hapusSaring() { for (const k of SARING) $(k).value = ''; isiKec(); isiD
 $('saring-ulang').onclick = hapusSaring;
 $('kabupaten').addEventListener('change', () => { isiKec(); isiDesa(); halaman = 1; muat(); });
 $('kecamatan').addEventListener('change', () => { isiDesa(); halaman = 1; muat(); });
-for (const k of ['desa', 'mursyid', 'status']) $(k).addEventListener('change', () => { halaman = 1; muat(); });
+for (const k of ['desa', 'mursyid', 'status', 'asal']) $(k).addEventListener('change', () => { halaman = 1; muat(); });
 $('sebelum').onclick = () => { halaman--; muat(); scrollTo({ top: 0 }); };
 $('sesudah').onclick = () => { halaman++; muat(); scrollTo({ top: 0 }); };
 $('per-halaman').value = String(PER_HALAMAN);
@@ -145,6 +147,7 @@ $('keluar').onclick = keluar;
     isiDesa(); $('desa').value = q.get('desa') || '';
     $('mursyid').value = q.get('mursyid') || '';
     $('status').value = q.get('status') || '';
+    $('asal').value = ['impor', 'baru', 'daftar_ulang'].includes(q.get('asal')) ? q.get('asal') : '';
     muat();
   } catch (e) { tanganiGalat(e, pesan); }
 })();

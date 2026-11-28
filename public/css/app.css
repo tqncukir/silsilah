@@ -147,7 +147,7 @@ footer{text-align:center;padding:20px 16px 32px;color:var(--abu);font-size:var(-
 .saring-ulang{justify-self:start;min-height:44px}
 .saring-pilih label{display:grid;gap:2px;font-size:var(--fs-kecil);font-weight:600}
 .saring input:focus,.saring select:focus,.form select:focus{outline:none;border-color:var(--hijau-jamiyyah);box-shadow:0 0 0 4px rgba(11,107,46,.18)}
-@media (max-width:480px){.saring-pilih{grid-template-columns:1fr 1fr}.saring-pilih label:last-child{grid-column:1 / -1}}
+@media (max-width:480px){.saring-pilih{grid-template-columns:1fr 1fr}.saring-pilih label:last-child:nth-child(odd){grid-column:1 / -1}}
 @media (min-width:1024px){.saring-pilih{grid-template-columns:repeat(5,minmax(0,1fr))}}
 
 /* Tabel: jadi kartu di HP */
@@ -1435,3 +1435,4 @@ main.depan{max-width:none;padding:0 0 32px}
 .ket.ket-salah a{color:#A4161A;font-weight:700}
 #selesai-pin{max-width:52ch;margin:12px auto 0;text-align:center}
 .selesai .stat{margin-top:6px}
+.du-tautan{display:inline-flex;align-items:center}
