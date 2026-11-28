@@ -120,8 +120,10 @@ async function simpan(kirim) {
     unggahan = null; // sudah tersimpan: foto jangan dihapus walau langkah berikutnya gagal
     if (hasil.foto_lama) hapusFotoBerita(hasil.foto_lama);
     history.replaceState(null, '', `?id=${hasil.id}`);
-    data = await muatData(hasil.id);
-    if (!data) throw new Error('tersimpan-tidak-terbaca');
+    const baru = await muatData(hasil.id).catch(() => null);
+    // Gagal dimuat ulang: tetap pegang id-nya supaya simpan lagi memperbarui, bukan membuat berita dobel.
+    if (!baru) { data = { ...(data || {}), id: hasil.id, status: hasil.status, foto }; fotoBaru = null; fotoDibuang = false; throw new Error('tersimpan-tidak-terbaca'); }
+    data = baru;
     fotoBaru = null; pesanForm('');
     tampilLihat();
     pesan({ terbit: sudahTerbit ? 'Perubahan tersimpan.' : 'Berita sudah terbit.', diajukan: 'Berita diajukan. Tampil setelah disetujui ketua.',
