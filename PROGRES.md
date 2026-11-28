@@ -617,3 +617,24 @@ Mulai: 2026-11-28 (Kang: "mulai tahap 14: berita"). Setelah ini Kang ingin Tahap
 - **Jendela konfirmasi serasi (Kang 2026-11-28, v125):** jendela `confirm()` bawaan browser (tombol ungu, tidak bisa diwarnai) diganti fungsi bersama `yakin(teks, labelYa)` di `supa.js` + gaya `.tanya` di `app.css`: kartu putih bersudut 16px, judul hijau, keterangan abu, tombol "Tidak jadi" (`btn-kedua`) + tombol utama hijau (default "Ya, lanjutkan"; berita: "Terbitkan" / "Tarik berita"). Ketuk di luar atau Esc = tidak jadi. Dipasang di **semua 19 konfirmasi** (berita, KTA PIN/QR, absensi, kegiatan, perjalanan, kas, bantuan, sakit, usaha, aset, PIN pengurus). Nama `yakin` dipilih karena `cek-kta.js` sudah punya fungsi `tanya`. Uji 360/768/1280: jendela tampil, Tidak jadi & Esc tidak mengirim, Terbitkan & Tarik mengirim, tombol ≥44px, tanpa geser & galat, tanpa jendela bawaan browser. Menunggu uji Kang.
 - **Foto berita hilang (laporan Kang 2026-11-28, v126):** di halaman depan berita no. 1 tampil kotak kosong. Penyebab: sisa kerusakan data dari bug v122 (foto no. 1 sudah terhapus; no. 2 memang tanpa foto), bukan bug baru. Pengaman: `supa.js` menangkap foto berita (`.berita-kecil`, `.berita-foto`, kecuali pratinjau unggahan) yang gagal dimuat → kartu jadi tanpa foto / foto disembunyikan; di `berita-isi.js` pengurus diberi pesan "Foto sampul berita ini tidak ditemukan. Tekan Ubah, lalu pilih foto lagi." Uji tiruan (ada foto / tanpa foto / foto 404) di depan & halaman baca 360/768/1280 + halaman pengurus: lulus. **Perlu Kang:** tarik berita no. 1 (dobel), lalu Ubah berita no. 2 dan pilih fotonya lagi. **Dicek Kang 10.14 WIB: foto sudah tampil** (unggah foto ke Supabase asli berhasil).
 - **Status Ditarik merah (Kang 2026-11-28, v127):** `STATUS_BERITA.ditarik` di `supa.js` memakai pil merah `stat-wafat` (sama dengan Ditolak; dulu teks abu). Dicek 360/1280 di Kelola Berita.
+
+## Tahap 15: Beranda baru (ringkas, hidup, tanpa menu dobel)
+Diusulkan 2026-11-28 (Kang: "beranda bagusnya apa saja, agar tidak tumpuk/dobel dengan menu"). **Belum dimulai: menunggu Kang bilang "mulai"** (dan Tahap 14 disetujui).
+
+**Keputusan Kang (2026-11-28):**
+1. Tanggal Hijriah di salam: **pakai**.
+2. Bagian **Haul pekan ini**: **pakai**.
+3. **Kehadiran saya** untuk anggota: **pakai**.
+4. Pengurus: **"Perlu ditindaklanjuti" + 4 pintasan**.
+
+**Usulan Claude (berlaku kecuali Kang ubah):**
+- Prinsip: yang terikat waktu di atas; pribadi; terasa jamaah (Hijriah, haul, foto); bagian kosong tidak tampil; maks. 5 bagian; **ubin semua menu dihapus dari Beranda** (sudah ada di menu bawah/atas); angka ringkasan tetap di Dashboard; tanpa data ekonomi/kesehatan/bantuan bernama; amalan/talqin tidak pernah tampil.
+- Urutan: (1) Salam + nama + tanggal Masehi & Hijriah; (2) **Kegiatan terdekat** sebagai kartu utama + hitung mundur ("3 hari lagi"/"Hari ini 19.30 WIB"), hari ini → anggota "Tunjukkan KTA", petugas "Buka Absensi", tautan "N kegiatan lain pekan ini"; (3) **Haul pekan ini** (masyayikh + jumlah almarhum jamaah, ke halaman Haul; data `tanggal_ahli_kubur`, semua yang login boleh); (4) **Berita**: 1 besar berfoto + 2 kecil; (5) per pemakai:
+  - Anggota: kartu mini **KTA Saya** + **"Hadir N kali bulan ini"** (dari `kehadiran`, RLS miliknya) + ajakan ziarah/umroh yang buka pendaftaran (bila ada); "Data saya" jadi satu tautan, tidak tampil penuh.
+  - Pengurus: **Perlu ditindaklanjuti** (kartu kuning, hanya bila ada, hanya jumlah tanpa nama, sesuai hak peran; mis. berita menunggu persetujuan, bantuan belum diputuskan, peserta ziarah belum lunas) + **4 pintasan per peran** (mis. admin/ketua: Cari Jamaah, Pendaftaran, Absensi, Tulis Berita; koordinator: Jamaah, Pendaftaran, Absensi, Tulis Berita; bendahara: Buku Kas, Laporan Kas, Kegiatan, Dashboard).
+
+**Rencana langkah:**
+1. Database: fungsi `tindak_lanjut()` (jumlah per jenis sesuai hak peran, sesi KTA lama ditolak). Uji per peran di Postgres lokal. Kang menjalankan migrasi.
+2. Beranda anggota (salam Hijriah, kegiatan terdekat, haul, berita, KTA mini + hadir bulan ini, ziarah buka).
+3. Beranda pengurus (perlu ditindaklanjuti, kegiatan + Buka Absensi, haul, berita, 4 pintasan); hapus ubin menu lengkap, pastikan semua menu tetap terjangkau dari menu bawah/atas.
+4. Uji menyeluruh (360/768/1280, semua peran, sesi KTA lama) + laporan.
