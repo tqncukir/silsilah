@@ -113,7 +113,7 @@ $('batal-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const alasan = $('alasan').value.trim();
   if (alasan.length < 3) { $('alasan').setAttribute('aria-invalid', 'true'); $('alasan').focus(); pesan('Tulis alasan pembatalan (minimal 3 huruf).'); return; }
-  if (!confirm(`Batalkan transaksi ${data.kategori_kas.nama} ${rupiah(data.jumlah)}?\n\nTransaksi tetap tersimpan dengan tanda "Dibatalkan" dan tidak dihitung di saldo. Pembatalan TIDAK bisa diurungkan; bila perlu, catat ulang yang benar.`)) return;
+  if (!await yakin(`Batalkan transaksi ${data.kategori_kas.nama} ${rupiah(data.jumlah)}?\n\nTransaksi tetap tersimpan dengan tanda "Dibatalkan" dan tidak dihitung di saldo. Pembatalan TIDAK bisa diurungkan; bila perlu, catat ulang yang benar.`)) return;
   $('batalkan').disabled = true;
   try {
     const [hasil] = await dbKirim('PATCH', `transaksi_kas?id=eq.${data.id}&select=${PILIH}`, { dibatalkan: true, alasan_batal: alasan });

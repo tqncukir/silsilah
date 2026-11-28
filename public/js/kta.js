@@ -66,7 +66,7 @@ function cetak() { setTimeout(() => window.print(), 150); }
 $('cetak').onclick = () => { $('kta-pin').hidden = true; cetak(); };
 
 $('buat-pin').onclick = async () => {
-  if (!confirm('Buat PIN baru untuk kartu ini?\n\nPIN lama (kalau ada) langsung tidak berlaku. PIN baru hanya tampil sekali, jadi langsung dicetak.')) return;
+  if (!await yakin('Buat PIN baru untuk kartu ini?\n\nPIN lama (kalau ada) langsung tidak berlaku. PIN baru hanya tampil sekali, jadi langsung dicetak.')) return;
   const btn = $('buat-pin'); btn.disabled = true; btn.classList.add('sibuk');
   pesanAksi('');
   try {
@@ -81,7 +81,7 @@ $('buat-pin').onclick = async () => {
 };
 
 $('ganti').onclick = async () => {
-  if (!confirm('Batalkan QR di kartu lama?\n\nPakai ini kalau KTA hilang atau dicuri. QR di kartu lama langsung tidak berlaku, lalu cetak kartu baru.')) return;
+  if (!await yakin('Batalkan QR di kartu lama?\n\nPakai ini kalau KTA hilang atau dicuri. QR di kartu lama langsung tidak berlaku, lalu cetak kartu baru.')) return;
   try {
     const v = await dbKirim('POST', 'rpc/ganti_kta', { p_jamaah_id: j.id });
     await muatQr();

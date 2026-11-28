@@ -118,7 +118,7 @@ $('form').addEventListener('submit', async (e) => {
 // Kegiatan tidak dihapus: dibatalkan (bisa diaktifkan lagi). Absen tidak bisa dicatat selama dibatalkan.
 $('batalkan').onclick = async () => {
   const batal = !data.dibatalkan;
-  if (batal && !confirm(`Batalkan "${data.nama}"?\n\nKegiatan hilang dari agenda umum dan absen tidak bisa dicatat. Bisa diaktifkan lagi.`)) return;
+  if (batal && !await yakin(`Batalkan "${data.nama}"?\n\nKegiatan hilang dari agenda umum dan absen tidak bisa dicatat. Bisa diaktifkan lagi.`)) return;
   const btn = $('batalkan'); btn.disabled = true;
   try {
     const [hasil] = await dbKirim('PATCH', `kegiatan?id=eq.${data.id}&select=${PILIH}`, { dibatalkan: batal });

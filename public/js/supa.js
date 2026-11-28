@@ -502,3 +502,27 @@ function nilaiBackup(baris) {
   return { jenis: 'ok', terakhir: t, judul: 'Backup terakhir berhasil',
     ket: `${kapan} · ${ukuranTeks(t.ukuran_byte)}${t.jumlah_tabel != null ? ` · ${t.jumlah_tabel} tabel` : ''}` };
 }
+
+// Konfirmasi serasi dengan tampilan aplikasi (pengganti confirm() bawaan browser).
+// Teks: pertanyaan, baris kosong, lalu keterangan. Hasil: Promise<boolean> (true = setuju).
+function yakin(teks, ya = 'Ya, lanjutkan') {
+  return new Promise((selesai) => {
+    const [judul, ...ket] = String(teks).split('\n\n');
+    const d = document.createElement('dialog');
+    d.className = 'tanya';
+    d.setAttribute('aria-labelledby', 'tanya-judul');
+    d.innerHTML = '<h2 id="tanya-judul" class="tanya-judul"></h2><p class="tanya-ket"></p>' +
+      '<div class="tanya-aksi"><button type="button" class="btn btn-kedua btn-pas" value="0">Tidak jadi</button>' +
+      '<button type="button" class="btn btn-utama btn-pas" value="1"></button></div>';
+    d.querySelector('.tanya-judul').textContent = judul;
+    const k = d.querySelector('.tanya-ket');
+    if (ket.length) k.textContent = ket.join('\n\n'); else k.remove();
+    d.querySelector('[value="1"]').textContent = ya;
+    d.querySelectorAll('button').forEach((b) => { b.onclick = () => d.close(b.value); });
+    d.addEventListener('click', (e) => { if (e.target === d) d.close('0'); }); // ketuk di luar = tidak jadi
+    d.addEventListener('close', () => { selesai(d.returnValue === '1'); d.remove(); }); // Esc = tidak jadi
+    document.body.append(d);
+    d.showModal();
+    d.querySelector('[value="1"]').focus();
+  });
+}

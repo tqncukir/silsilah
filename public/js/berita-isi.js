@@ -104,7 +104,7 @@ async function simpan(kirim) {
   if (/[0-9]{10,}/.test(judul + ' ' + isi)) return salah('isi', 'Jangan menulis nomor HP atau NIK di berita.');
   if (!$('wilayah').value) return salah('wilayah', 'Wilayah belum dipilih.');
   const sudahTerbit = data && ['terbit', 'ditarik'].includes(data.status);
-  if (kirim && pimpinan && !sudahTerbit && !confirm('Terbitkan berita sekarang?\n\nBerita langsung tampil untuk pembaca yang dipilih. Bisa ditarik lagi bila perlu.')) return;
+  if (kirim && pimpinan && !sudahTerbit && !await yakin('Terbitkan berita sekarang?\n\nBerita langsung tampil untuk pembaca yang dipilih. Bisa ditarik lagi bila perlu.', 'Terbitkan')) return;
   const tombol = kirim ? $('kirim') : $('simpan-draf');
   $('kirim').disabled = true; $('simpan-draf').disabled = true; tombol.classList.add('sibuk');
   let unggahan = null;
@@ -160,7 +160,7 @@ $('pt-tolak').onclick = async () => {
 $('pt-alasan').addEventListener('input', () => $('pt-alasan').removeAttribute('aria-invalid'));
 $('tarik').onclick = async () => {
   const tarik = data.status === 'terbit';
-  if (tarik && !confirm(`Tarik "${data.judul}"?\n\nBerita disembunyikan dari pembaca. Bisa diterbitkan lagi.`)) return;
+  if (tarik && !await yakin(`Tarik "${data.judul}"?\n\nBerita disembunyikan dari pembaca. Bisa diterbitkan lagi.`, 'Tarik berita')) return;
   $('tarik').disabled = true;
   try { await dbKirim('POST', 'rpc/tarik_berita', { p_id: data.id, p_tarik: tarik }, 'return=minimal'); await segarkan(tarik ? 'Berita ditarik.' : 'Berita terbit lagi.'); }
   catch (err) { if (!keMasuk(err)) pesan(galatTeks(err, 'Belum berhasil. Coba lagi.')); }

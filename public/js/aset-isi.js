@@ -173,7 +173,7 @@ $('lepas').addEventListener('submit', async (e) => {
   const tgl = $('lp-tanggal').value, alasan = $('lp-alasan').value.trim().replace(/\s+/g, ' ');
   if (!tgl) { $('lp-tanggal').focus(); pesan('Tanggal dilepas belum diisi.'); return; }
   if (alasan.length < 3) { $('lp-alasan').setAttribute('aria-invalid', 'true'); $('lp-alasan').focus(); pesan('Tulis alasan dilepas (minimal 3 huruf).'); return; }
-  if (!confirm(`Tandai "${data.nama}" sudah dilepas?\n\nData tetap tersimpan dan tidak dihitung lagi sebagai aset aktif. Bila keliru, bisa diaktifkan kembali.`)) return;
+  if (!await yakin(`Tandai "${data.nama}" sudah dilepas?\n\nData tetap tersimpan dan tidak dihitung lagi sebagai aset aktif. Bila keliru, bisa diaktifkan kembali.`)) return;
   $('lp-kirim').disabled = true;
   try { await ubahStatus({ status: 'dilepas', dilepas_tgl: tgl, alasan_lepas: alasan }, 'Aset ditandai dilepas.'); }
   catch (err) { if (!keMasuk(err)) pesan(galatTeks(err, 'Belum tersimpan. Coba lagi.')); }
@@ -181,7 +181,7 @@ $('lepas').addEventListener('submit', async (e) => {
 });
 $('lp-alasan').addEventListener('input', () => $('lp-alasan').removeAttribute('aria-invalid'));
 $('aktifkan').onclick = async () => {
-  if (!confirm(`Aktifkan kembali "${data.nama}"?\n\nTanggal dan alasan dilepas akan dihapus dari data (tetap tercatat di riwayat perubahan).`)) return;
+  if (!await yakin(`Aktifkan kembali "${data.nama}"?\n\nTanggal dan alasan dilepas akan dihapus dari data (tetap tercatat di riwayat perubahan).`)) return;
   $('aktifkan').disabled = true;
   try { await ubahStatus({ status: 'aktif', dilepas_tgl: null, alasan_lepas: null }, 'Aset aktif kembali.'); }
   catch (err) { if (!keMasuk(err)) pesan(galatTeks(err, 'Belum tersimpan. Coba lagi.')); }

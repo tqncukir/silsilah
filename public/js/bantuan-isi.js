@@ -89,7 +89,7 @@ $('putus').addEventListener('submit', async (e) => {
 $('pt-tolak').onclick = async () => {
   const alasan = $('pt-alasan').value.trim();
   if (alasan.length < 3) { $('pt-alasan').setAttribute('aria-invalid', 'true'); $('pt-alasan').focus(); pesan('Tulis alasan penolakan (minimal 3 huruf).'); return; }
-  if (!confirm(`Tolak pengajuan bantuan untuk ${data.nama}?\n\nKeputusan ini tidak bisa diubah. Bila perlu, ajukan ulang nanti.`)) return;
+  if (!await yakin(`Tolak pengajuan bantuan untuk ${data.nama}?\n\nKeputusan ini tidak bisa diubah. Bila perlu, ajukan ulang nanti.`)) return;
   $('pt-tolak').disabled = true;
   try {
     await dbKirim('POST', 'rpc/putuskan_bantuan', { p_id: data.id, p_setuju: false, p_alasan: alasan }, 'return=minimal');
@@ -106,7 +106,7 @@ $('salur').addEventListener('submit', async (e) => {
   if (!tgl) { $('sl-tanggal').focus(); pesan('Tanggal disalurkan belum diisi.'); return; }
   if (data.bentuk === 'uang' && !kas) { pesan('Akun ini belum punya kas untuk mencatat. Buka Buku Kas dulu.'); return; }
   const namaKas = $('sl-kas').selectedOptions[0]?.textContent;
-  if (!confirm(data.bentuk === 'uang'
+  if (!await yakin(data.bentuk === 'uang'
     ? `Tandai sudah disalurkan?\n\n${rupiah(data.nilai)} akan tercatat sebagai pengeluaran "Bantuan sosial" di ${namaKas}. Bila salah, batalkan transaksinya di Buku Kas.`
     : `Tandai ${data.barang} sudah disalurkan ke ${data.nama}?`)) return;
   $('sl-kirim').disabled = true;
@@ -121,7 +121,7 @@ $('batal-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const alasan = $('bt-alasan').value.trim();
   if (alasan.length < 3) { $('bt-alasan').setAttribute('aria-invalid', 'true'); $('bt-alasan').focus(); pesan('Tulis alasan pembatalan (minimal 3 huruf).'); return; }
-  if (!confirm(`Batalkan pengajuan bantuan untuk ${data.nama}?\n\nData tetap tersimpan dengan tanda "Dibatalkan" dan tidak bisa diaktifkan lagi.`)) return;
+  if (!await yakin(`Batalkan pengajuan bantuan untuk ${data.nama}?\n\nData tetap tersimpan dengan tanda "Dibatalkan" dan tidak bisa diaktifkan lagi.`)) return;
   $('bt-kirim').disabled = true;
   try {
     await dbKirim('POST', 'rpc/batalkan_bantuan', { p_id: data.id, p_alasan: alasan }, 'return=minimal');

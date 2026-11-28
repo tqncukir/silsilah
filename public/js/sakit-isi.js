@@ -82,7 +82,7 @@ $('selesai').addEventListener('submit', async (e) => {
   e.preventDefault();
   const st = pilihan('akhir'), tgl = $('sl-tanggal').value;
   if (!tgl) { $('sl-tanggal').focus(); pesan('Tanggal belum diisi.'); return; }
-  if (!confirm(st === 'wafat'
+  if (!await yakin(st === 'wafat'
     ? `Tandai ${data.nama} wafat pada ${tglPanjang(tgl)}?\n\nCatatan sakit ditutup. Status jamaah di Data Jamaah TIDAK berubah otomatis; ubah di sana agar masuk Daftar Ahli Kubur.`
     : `Tandai ${data.nama} sudah sembuh pada ${tglPanjang(tgl)}?\n\nBila salah, catatan bisa dikembalikan ke "sedang sakit".`)) return;
   $('sl-kirim').disabled = true;
@@ -95,7 +95,7 @@ $('selesai').addEventListener('submit', async (e) => {
 });
 
 $('bl-kirim').onclick = async () => {
-  if (!confirm(`Kembalikan catatan ${data.nama} ke "sedang sakit"?\n\nTanggal ${data.status === 'wafat' ? 'wafat' : 'sembuh'} dihapus dari catatan ini (tetap tercatat di riwayat perubahan).`)) return;
+  if (!await yakin(`Kembalikan catatan ${data.nama} ke "sedang sakit"?\n\nTanggal ${data.status === 'wafat' ? 'wafat' : 'sembuh'} dihapus dari catatan ini (tetap tercatat di riwayat perubahan).`)) return;
   $('bl-kirim').disabled = true;
   try {
     await dbKirim('POST', 'rpc/atur_status_sakit', { p_id: data.id, p_status: 'sakit', p_tanggal: null }, 'return=minimal');

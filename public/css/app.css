@@ -1245,3 +1245,13 @@ body:not(.hal-masuk):not(.hal-poster)>main{flex:1 0 auto;width:100%}
 @media (max-width:479px){.berita-kartu{grid-template-columns:88px minmax(0,1fr)}.berita-kecil{width:88px;height:66px}}
 @media (min-width:1024px){main.berita-hal .berita-daftar{grid-template-columns:repeat(auto-fill,minmax(420px,1fr))}main.berita-baca{max-width:860px}}
 .berita-hal .kecil a,.berita-baca .berita-isi a{color:var(--hijau-jamiyyah);font-weight:600}
+
+/* jendela konfirmasi bersama (yakin() di supa.js) */
+.tanya{width:calc(100% - 32px);max-width:440px;padding:24px 22px 20px;border:1px solid var(--garis);border-radius:16px;
+  background:#FFFFFF;color:var(--hitam);box-shadow:0 12px 40px rgba(0,0,0,.2)}
+.tanya::backdrop{background:rgba(26,26,26,.45)}
+.tanya-judul{margin:0 0 8px;font-size:var(--fs-sub);font-weight:700;line-height:1.4;color:var(--hijau-jamiyyah)}
+.tanya-ket{margin:0;font-size:var(--fs-isi);line-height:1.55;color:var(--abu);white-space:pre-line}
+.tanya-aksi{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
+.tanya-aksi .btn{margin:0}
+@media (max-width:479px){.tanya-aksi .btn{flex:1 1 0}}

@@ -140,7 +140,7 @@ $('form').addEventListener('submit', async (e) => {
 // Perjalanan tidak dihapus: dibatalkan (bisa diaktifkan lagi). Peserta tidak bisa ditambah selama dibatalkan.
 $('batalkan').onclick = async () => {
   const batal = !data.dibatalkan;
-  if (batal && !confirm(`Batalkan "${data.nama}"?\n\nPeserta tidak bisa ditambah dan anggota melihat perjalanan ini dibatalkan. Daftar peserta tetap tersimpan. Bisa diaktifkan lagi.`)) return;
+  if (batal && !await yakin(`Batalkan "${data.nama}"?\n\nPeserta tidak bisa ditambah dan anggota melihat perjalanan ini dibatalkan. Daftar peserta tetap tersimpan. Bisa diaktifkan lagi.`)) return;
   const btn = $('batalkan'); btn.disabled = true;
   try {
     const [hasil] = await dbKirim('PATCH', `perjalanan?id=eq.${data.id}&select=${PILIH}`, { dibatalkan: batal });
@@ -309,8 +309,8 @@ $('ps-isi').addEventListener('click', async (e) => {
   if (!b) return;
   const nama = b.closest('tr').dataset.nama, nilai = b.dataset.nilai === 'true';
   const lunas = 'lunas' in b.dataset;
-  if (lunas && !nilai && !confirm(`Batalkan tanda lunas ${nama}?\n\nStatusnya kembali "Belum lunas". Bisa ditandai lunas lagi.`)) return;
-  if (!lunas && nilai && !confirm(`${nama} batal ikut?\n\nNamanya tetap tersimpan dengan tanda "Batal ikut" dan tidak dihitung peserta. Bisa diikutkan lagi.`)) return;
+  if (lunas && !nilai && !await yakin(`Batalkan tanda lunas ${nama}?\n\nStatusnya kembali "Belum lunas". Bisa ditandai lunas lagi.`)) return;
+  if (!lunas && nilai && !await yakin(`${nama} batal ikut?\n\nNamanya tetap tersimpan dengan tanda "Batal ikut" dan tidak dihitung peserta. Bisa diikutkan lagi.`)) return;
   b.disabled = true;
   try {
     await dbKirim('POST', lunas ? 'rpc/atur_lunas' : 'rpc/atur_batal_peserta',

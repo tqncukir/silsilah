@@ -93,7 +93,7 @@ $('d-daftar').addEventListener('click', async (e) => {
   const b = e.target.closest('[data-batal]');
   if (!b) return;
   const c = catatan.find((x) => String(x.jamaah_id) === b.dataset.batal);
-  if (!c || !confirm(`Batalkan hadir ${c.nama}?\n\nNamanya dihapus dari daftar hadir kegiatan ini. Bisa dicatat lagi dengan memindai ulang.`)) return;
+  if (!c || !await yakin(`Batalkan hadir ${c.nama}?\n\nNamanya dihapus dari daftar hadir kegiatan ini. Bisa dicatat lagi dengan memindai ulang.`)) return;
   b.disabled = true;
   try {
     await dbKirim('POST', 'rpc/batal_hadir', { p_kegiatan_id: Number(kegId), p_jamaah_id: c.jamaah_id }, 'return=minimal');

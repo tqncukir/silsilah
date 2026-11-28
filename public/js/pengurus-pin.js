@@ -189,7 +189,7 @@ $('daftar').addEventListener('click', async (e) => {
   }
   const m = e.target.closest('[data-mati]');
   if (!m) return;
-  if (!confirm(`Nonaktifkan PIN ${m.dataset.nama}? Akun pengurusnya langsung tidak bisa dipakai. Bisa diaktifkan lagi dengan memasang PIN baru.`)) return;
+  if (!await yakin(`Nonaktifkan PIN ${m.dataset.nama}?\n\nAkun pengurusnya langsung tidak bisa dipakai. Bisa diaktifkan lagi dengan memasang PIN baru.`)) return;
   m.disabled = true;
   try {
     await dbKirim('POST', 'rpc/nonaktifkan_pin_pengurus', { p_nomor: Number(m.dataset.mati) });

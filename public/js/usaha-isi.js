@@ -136,7 +136,7 @@ $('form').addEventListener('submit', async (e) => {
 
 $('tutup').onclick = async () => {
   const tutup = data.status !== 'tutup';
-  if (!confirm(tutup ? `Tandai "${data.nama}" tutup?\n\nUsaha tidak tampil lagi untuk anggota. Data tetap tersimpan dan bisa dibuka lagi.`
+  if (!await yakin(tutup ? `Tandai "${data.nama}" tutup?\n\nUsaha tidak tampil lagi untuk anggota. Data tetap tersimpan dan bisa dibuka lagi.`
     : `Buka lagi "${data.nama}"?\n\nUsaha akan tampil lagi untuk anggota.`)) return;
   $('tutup').disabled = true;
   try {
