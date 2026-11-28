@@ -1,49 +1,7 @@
-// Beranda setelah masuk: menu sesuai peran.
+// Beranda setelah masuk. Anggota (Tahap 15): salam + Hijriah, kegiatan terdekat, haul pekan ini, berita, kartu saya, ziarah dibuka.
+// Pengurus: menu sesuai peran (diganti Tahap 15 Langkah 3).
 const $ = (id) => document.getElementById(id);
 $('keluar').onclick = keluar;
-
-// Portal Anggota: riwayat hadir sendiri (RLS: hanya baris milik anggota; sesi KTA lama tidak punya jamaah_id).
-async function muatRiwayat(terbatas) {
-  if (terbatas) { $('riwayat-ket').textContent = 'Masuk dengan KTA lama: riwayat hadir belum bisa ditampilkan. Minta KTA baru ke pengurus.'; return; }
-  try {
-    const { baris, total } = await dbHalaman('kehadiran?select=waktu,cara,kegiatan(nama,jenis,tempat)&order=waktu.desc', 0, 9);
-    $('riwayat-ket').textContent = total ? `${total.toLocaleString('id-ID')} kali hadir tercatat${total > 10 ? ' · 10 terakhir' : ''}.` : 'Belum ada kehadiran tercatat. Tunjukkan KTA ke petugas saat kegiatan.';
-    $('riwayat-isi').innerHTML = baris.map((h) => `<li><strong>${hurufAman(h.kegiatan?.nama || 'Kegiatan pengurus')}</strong>
-      <span class="ket">${tglWib(h.waktu)} · jam ${jamWib(h.waktu)} WIB${h.kegiatan ? ` · ${hurufAman(h.kegiatan.tempat)}` : ''}</span></li>`).join('');
-  } catch { $('riwayat-ket').textContent = 'Riwayat hadir belum bisa dimuat. Coba muat ulang.'; }
-}
-// Portal Anggota: Ziarah & Umroh. Perjalanan saya = baris peserta milik saya + keluarga yang saya daftarkan (RLS);
-// sesi KTA lama tidak punya jamaah_id. Rombongan dibuka = perjalanan tampil untuk anggota yang belum lewat.
-async function muatZiarah(terbatas) {
-  const hari = hariIniWib();
-  const pBuka = dbGet(`perjalanan?select=id,jenis,nama,tujuan,berangkat,pulang,tempat_kumpul&dibatalkan=is.false&publik=is.true&or=${encodeURIComponent(`(berangkat.gte.${isoWib(hari, '00:00')},pulang.gte.${hari})`)}&order=berangkat.asc&limit=5`).catch(() => null);
-  const pSaya = terbatas ? Promise.resolve([]) : dbGet('peserta_perjalanan?select=id,jamaah_id,nama,hubungan,lunas,batal,perjalanan(id,jenis,nama,tujuan,berangkat,pulang,tempat_kumpul,dibatalkan)&order=id.desc&limit=50').catch(() => null);
-  const [buka, saya] = await Promise.all([pBuka, pSaya]);
-  const jenis = (p) => JENIS_PERJALANAN[p.jenis] || p.jenis;
-  // Kelompokkan per perjalanan, terbaru berangkat di atas (maks 10 perjalanan)
-  const per = new Map();
-  for (const s of saya || []) if (s.perjalanan) { if (!per.has(s.perjalanan.id)) per.set(s.perjalanan.id, { p: s.perjalanan, orang: [] }); per.get(s.perjalanan.id).orang.push(s); }
-  const daftar = [...per.values()].sort((a, b) => b.p.berangkat.localeCompare(a.p.berangkat)).slice(0, 10);
-  const statusOrang = (s) => `${s.jamaah_id ? 'Anda' : `${hurufAman(s.nama)}${s.hubungan ? ` (${hurufAman(s.hubungan)})` : ''}`}: ${s.batal ? 'batal ikut' : s.lunas ? '<strong>lunas</strong>' : 'belum lunas'}`;
-  if (terbatas) $('zs-ket').textContent = 'Masuk dengan KTA lama: perjalanan Anda belum bisa ditampilkan. Minta KTA baru ke pengurus.';
-  else if (saya === null) $('zs-ket').textContent = 'Perjalanan Anda belum bisa dimuat. Coba muat ulang.';
-  else $('zs-ket').textContent = daftar.length ? `Terdaftar di ${daftar.length.toLocaleString('id-ID')} perjalanan.` : 'Anda belum terdaftar di perjalanan mana pun. Ingin ikut? Hubungi pengurus atau koordinator wilayah.';
-  $('zs-isi').innerHTML = daftar.map(({ p, orang }) => {
-    const [st] = statusPerjalanan(p);
-    return `<li><strong>${hurufAman(p.nama)}</strong>
-      <span class="ket">${jenis(p)} · ${waktuPerjalanan(p)}${p.tempat_kumpul ? ` · ${hurufAman(p.tempat_kumpul)}` : ''}</span>
-      <span class="ket">${p.dibatalkan ? '<strong>Perjalanan dibatalkan</strong>' : st === 'Selesai' ? 'Sudah selesai' : orang.map(statusOrang).join(' · ')}</span></li>`;
-  }).join('');
-  const sudah = new Set(daftar.map((d) => d.p.id));
-  const lain = (buka || []).filter((p) => !sudah.has(p.id));
-  $('zb-ket').textContent = buka === null ? 'Belum bisa dimuat. Coba muat ulang.'
-    : lain.length ? 'Ingin ikut? Hubungi pengurus atau koordinator wilayah untuk didaftarkan.' : 'Belum ada rombongan lain yang dibuka.';
-  $('zb-isi').innerHTML = lain.map((p) => `<li><strong>${hurufAman(p.nama)}</strong>
-    <span class="ket">${jenis(p)} · ${waktuPerjalanan(p)}</span>
-    ${p.tujuan || p.tempat_kumpul ? `<span class="ket">${[p.tujuan, p.tempat_kumpul && `kumpul di ${p.tempat_kumpul}`].filter(Boolean).map(hurufAman).join(' · ')}</span>` : ''}</li>`).join('');
-  const akan = daftar.filter(({ p }) => !p.dibatalkan && statusPerjalanan(p)[0] !== 'Selesai');
-  $('a-ziarah-ket').textContent = akan.length ? `Anda terdaftar: ${akan[0].p.nama}` : lain.length ? `${lain.length} rombongan dibuka` : 'Perjalanan Anda dan rombongan yang dibuka';
-}
 
 // Jumlah usaha jamaah yang buka (rpc ringkas_usaha; semua yang login).
 function ketUsaha(id) {
@@ -66,10 +24,6 @@ function ketBackup() {
   }).catch(() => { $('m-backup-ket').textContent = 'Status backup belum bisa dimuat'; });
 }
 
-function ketAgenda() {
-  ambilAgenda(1).then((d) => { if (d[0]) $('m-agenda-ket').textContent = `Terdekat: ${d[0].nama}, ${tglWib(d[0].mulai, { day: 'numeric', month: 'short' })}`; }).catch(() => {});
-}
-
 // Haul terdekat (Hijriah) untuk keterangan ubin Haul. Ringkas: tanggal Hijriah hari ini sampai akhir bulan depan.
 function ketHaul(id) {
   dbKirim('POST', 'rpc/tanggal_ahli_kubur', {}).then((rows) => {
@@ -81,6 +35,87 @@ function ketHaul(id) {
     const el = document.getElementById(id); if (!el) return;
     el.textContent = calon.length ? `Terdekat: ${calon[0].a.nama}, ${calon[0].h.d} ${BULAN_HIJRIAH[calon[0].h.m - 1]}${calon.length > 1 ? ` · ${calon.length} haul sampai bulan depan` : ''}` : 'Tidak ada haul sampai bulan depan';
   }).catch(() => {});
+}
+
+// ===== Beranda baru (Tahap 15) =====
+// Tanggal hari ini: Masehi · Hijriah (perkiraan Ummul Qura).
+function tanggalSalam() {
+  const hari = hariIniWib();
+  $('tanggal').textContent = `${tglWib(isoWib(hari, '12:00'))} · ${teksHijriah(hari)}`;
+}
+const selisihHari = (iso) => Math.round((Date.parse(new Date(iso).toLocaleDateString('sv-SE', { timeZone: ZONA })) - Date.parse(hariIniWib())) / 864e5);
+
+// Kegiatan terdekat (agenda umum): kartu utama + hitung mundur; hari ini → tombol aksi sesuai pemakai.
+async function muatKegiatanDekat(aksi) {
+  try {
+    const daftar = await ambilAgenda(10);
+    if (!daftar.length) return;
+    const k = daftar[0], n = selisihHari(k.mulai), kini = Date.now();
+    const berlangsung = n <= 0 && kini >= Date.parse(k.mulai) && (!k.selesai || kini <= Date.parse(k.selesai));
+    $('dekat-hari').textContent = tglWib(k.mulai, { day: 'numeric' });
+    $('dekat-bulan').textContent = tglWib(k.mulai, { month: 'short' });
+    $('dekat-hitung').innerHTML = berlangsung ? '<span class="stat stat-aktif">Sedang berlangsung</span>'
+      : n <= 0 ? '<span class="stat stat-aktif">Hari ini</span>' : `<span class="dekat-sisa">${n === 1 ? 'Besok' : `${n} hari lagi`}</span>`;
+    $('dekat-jenis').textContent = JENIS_KEGIATAN[k.jenis] || k.jenis;
+    $('dekat-nama').textContent = k.nama;
+    $('dekat-waktu').textContent = `${tglWib(k.mulai)} · ${rentangJam(k.mulai, k.selesai)}`;
+    $('dekat-tempat').textContent = [k.tempat, k.wilayah].filter(Boolean).join(' · ');
+    if (n <= 0 && aksi) { $('dekat-aksi').textContent = aksi[0]; $('dekat-aksi').href = aksi[1]; $('dekat-aksi').hidden = false; }
+    const lain = daftar.slice(1).filter((x) => selisihHari(x.mulai) <= 6).length;
+    $('dekat-lain').textContent = lain ? `${lain} kegiatan lain pekan ini` : 'Semua agenda';
+    $('dekat').hidden = false;
+  } catch { /* agenda gagal dimuat: bagian tetap tersembunyi */ }
+}
+
+// Haul pekan ini (7 hari mulai hari ini, tanggal wafat Hijriah, minimal 1 tahun). Masyayikh didahulukan.
+async function muatHaulPekan() {
+  try {
+    const rows = await dbKirim('POST', 'rpc/tanggal_ahli_kubur', {});
+    const pekan = new Map();
+    for (let i = 0; i < 7; i++) {
+      const iso = new Date(Date.parse(hariIniWib()) + i * 864e5).toISOString().slice(0, 10), h = hijriah(iso);
+      if (!pekan.has(`${h.m}-${h.d}`)) pekan.set(`${h.m}-${h.d}`, { iso, h, i });
+    }
+    const haul = rows.map((a) => ({ a, w: hijriah(a.tanggal_wafat) }))
+      .map(({ a, w }) => ({ a, t: pekan.get(`${w.m}-${w.d}`), w }))
+      .filter(({ t, w }) => t && t.h.y - w.y >= 1)
+      .sort((x, y) => (x.a.jenis === 'masyayikh' ? 0 : 1) - (y.a.jenis === 'masyayikh' ? 0 : 1) || x.t.i - y.t.i);
+    if (!haul.length) return;
+    const hariTeks = (t) => (t.i === 0 ? 'Hari ini' : t.i === 1 ? 'Besok' : tglWib(isoWib(t.iso, '12:00'), { weekday: 'long' }));
+    $('haul-isi').innerHTML = haul.slice(0, 3).map(({ a, t }) => `<li><strong>${hurufAman(a.nama)}</strong>${a.bin_binti ? ` <span class="ket">${hurufAman(a.bin_binti)}</span>` : ''}
+      <span class="ket">${a.jenis === 'masyayikh' ? 'Masyayikh · ' : ''}${hariTeks(t)}, ${t.h.d} ${BULAN_HIJRIAH[t.h.m - 1]}</span></li>`).join('');
+    $('haul-ket').textContent = haul.length > 3 ? `dan ${haul.length - 3} almarhum lainnya. Mari kirimkan doa.` : 'Mari kirimkan doa untuk beliau-beliau.';
+    $('haul-pekan').hidden = false;
+  } catch { /* tanpa hak / gagal: bagian tetap tersembunyi */ }
+}
+
+// Anggota: kartu mini KTA + jumlah hadir bulan ini (RLS: hanya kehadiran miliknya; sesi KTA lama tidak bisa).
+async function muatKartuSaya(k, terbatas) {
+  if (k) {
+    $('km-nama').textContent = k.nama || '–';
+    $('km-nomor').textContent = `No. ${k.nomor_anggota || '–'}`;
+    $('km-desa').textContent = [k.desa, k.kecamatan].filter(Boolean).join(', ');
+  }
+  $('anggota').hidden = false;
+  if (terbatas) { $('hadir-n').textContent = '–'; $('hadir-ket').textContent = 'Masuk dengan KTA lama: kehadiran belum bisa ditampilkan. Minta KTA baru ke pengurus.'; return; }
+  try {
+    const awal = `${hariIniWib().slice(0, 8)}01`;
+    const { total } = await dbHalaman(`kehadiran?select=waktu&waktu=gte.${encodeURIComponent(isoWib(awal, '00:00'))}`, 0, 0);
+    $('hadir-n').textContent = total.toLocaleString('id-ID');
+    $('hadir-ket').textContent = total ? `${tglWib(isoWib(awal, '12:00'), { month: 'long', year: 'numeric' })} · lihat riwayat` : 'Belum ada yang tercatat. Tunjukkan KTA ke petugas saat kegiatan.';
+  } catch { $('hadir-ket').textContent = 'Kehadiran belum bisa dimuat. Coba muat ulang.'; }
+}
+
+// Anggota: rombongan ziarah/umroh yang dibuka dan belum berangkat (maks 2); tersembunyi bila tidak ada.
+async function muatZiarahAjak() {
+  try {
+    const hari = hariIniWib();
+    const buka = await dbGet(`perjalanan?select=id,jenis,nama,tujuan,berangkat,pulang&dibatalkan=is.false&publik=is.true&berangkat=gte.${encodeURIComponent(isoWib(hari, '00:00'))}&order=berangkat.asc&limit=2`);
+    if (!buka.length) return;
+    $('ziarah-isi').innerHTML = buka.map((p) => `<li><strong>${hurufAman(p.nama)}</strong>
+      <span class="ket">${JENIS_PERJALANAN[p.jenis] || p.jenis} · ${waktuPerjalanan(p)}${p.tujuan ? ` · ${hurufAman(p.tujuan)}` : ''}</span></li>`).join('');
+    $('ziarah-ajak').hidden = false;
+  } catch { /* gagal: tersembunyi */ }
 }
 
 // Berita terbaru (3; yang sudah masuk juga melihat Khusus anggota) + pemberitahuan berita menunggu persetujuan untuk pimpinan.
@@ -102,6 +137,7 @@ function muatBeritaBeranda(p) {
       return;
     }
     $('salam').textContent = p.nama;
+    tanggalSalam();
     $('peran').textContent = NAMA_PERAN[p.peran] || p.peran;
     muatBeritaBeranda(p);
     if (PERAN_LIHAT_JAMAAH.includes(p.peran)) {
@@ -179,37 +215,10 @@ function muatBeritaBeranda(p) {
         $('m-kegiatan-ket').textContent = total ? `${total.toLocaleString('id-ID')} kegiatan akan datang` : 'Buat dan lihat jadwal kegiatan';
       }).catch(() => {});
     }
-    if (p.peran === 'anggota' && p.jamaah_id) {
-      const k = (await kartuAwal?.janji) ?? await dbKirim('POST', 'rpc/kartu_saya', {});
-      if (k?.terbatas) {
-        const tglK = (d) => d ? new Date(d + 'T00:00:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
-        $('rincian').innerHTML = [
-          ['Nomor Anggota', k.nomor_anggota], ['Status', k.wafat ? 'Wafat' : k.aktif ? 'Aktif' : 'Tidak aktif'], ['Mursyid', k.mursyid],
-          ['Tanggal daftar', tglK(k.tanggal_daftar)], ['Umur saat daftar', k.umur_daftar ? `${k.umur_daftar} tahun` : ''], ['Pekerjaan', k.pekerjaan],
-          ['Kab/Kota', k.kabupaten], ['Kecamatan', k.kecamatan], ['Kel/Desa', k.desa],
-        ].map(([a, v]) => `<div${String(v ?? '').length > 28 ? ' class="penuh"' : ''}><dt>${a}</dt><dd>${v ? hurufAman(String(v)) : '–'}</dd></div>`).join('');
-        document.querySelector('.data-saya-ket').textContent = 'Masuk dengan KTA lama: yang tampil hanya data yang tercetak di kartu. Data lengkap bisa dilihat di pengurus.';
-        $('anggota').hidden = false;
-        muatRiwayat(true); ketAgenda(); ketHaul('a-haul-ket'); ketUsaha('a-usaha-ket'); muatZiarah(true);
-        return;
-      }
-      const pilih = 'nomor_anggota,nama,tempat_lahir,tanggal_lahir,jenis_kelamin,status_kawin,kewarganegaraan,pekerjaan,alamat,rt_rw,tanggal_daftar,aktif,wafat,desa(nama,kecamatan(nama,kabupaten(nama))),mursyid(nama)';
-      const [j] = await dbGet(`jamaah?select=${pilih}&id=eq.${p.jamaah_id}`);
-      if (j) {
-        const tgl = (d) => d ? new Date(d + 'T00:00:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
-        const status = j.wafat ? 'Wafat' : j.aktif ? 'Aktif' : 'Tidak aktif';
-        $('rincian').innerHTML = [
-          ['Nomor Anggota', j.nomor_anggota], ['Status', status], ['Mursyid', j.mursyid?.nama], ['Tanggal daftar', tgl(j.tanggal_daftar)],
-          ['Tempat, tanggal lahir', [j.tempat_lahir, tgl(j.tanggal_lahir)].filter(Boolean).join(', ')],
-          ['Umur', j.tanggal_lahir ? `${hitungUmur(j.tanggal_lahir)} tahun` : ''],
-          ['Jenis kelamin', { L: 'Laki-laki', P: 'Perempuan' }[j.jenis_kelamin]], ['Status perkawinan', j.status_kawin],
-          ['Kewarganegaraan', j.kewarganegaraan], ['Pekerjaan', j.pekerjaan],
-          ['Kab/Kota', j.desa.kecamatan.kabupaten?.nama], ['Kecamatan', j.desa.kecamatan.nama], ['Kel/Desa', j.desa.nama],
-          ['Dusun/Jalan', j.alamat], ['RT/RW', j.rt_rw],
-        ].map(([k, v]) => `<div${String(v ?? '').length > 28 ? ' class="penuh"' : ''}><dt>${k}</dt><dd>${v ? hurufAman(v) : '–'}</dd></div>`).join('');
-        $('anggota').hidden = false;
-        muatRiwayat(false); ketAgenda(); ketHaul('a-haul-ket'); ketUsaha('a-usaha-ket'); muatZiarah(false);
-      }
+    if (p.peran === 'anggota') {
+      const k = p.jamaah_id ? ((await kartuAwal?.janji) ?? await dbKirim('POST', 'rpc/kartu_saya', {}).catch(() => null)) : null;
+      document.body.classList.add('beranda-baru');
+      muatKegiatanDekat(['Tunjukkan KTA', '/kta.html']); muatHaulPekan(); muatKartuSaya(k, !!k?.terbatas); muatZiarahAjak();
     }
   } catch (e) { tanganiGalat(e, (t) => { $('pesan').textContent = t; }); }
 })();

@@ -133,6 +133,7 @@ async function profilSaya() {
 // HP & tablet (<1024px): menu bawah 4 tombol + "Lainnya" berisi ubin ikon per kelompok warna.
 // Laptop & komputer (>=1024px): menu samping kiri dengan kelompok yang sama. Satu daftar untuk keduanya.
 const IKON_MENU = {
+  saya: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 20c0-3.3 3.6-6 8-6s8 2.7 8 6',
   beranda: 'M3 11l9-7 9 7M5 10v10h5v-6h4v6h5V10',
   jamaah: 'M9 11.2a3.2 3.2 0 100-6.4 3.2 3.2 0 000 6.4zM3.5 19c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M16 5.5a3 3 0 010 5.6M17.5 14.3c1.7.6 2.7 2.2 3 4.7',
   kegiatan: 'M6 5h12a2.5 2.5 0 012.5 2.5V18a2.5 2.5 0 01-2.5 2.5H6A2.5 2.5 0 013.5 18V7.5A2.5 2.5 0 016 5zM3.5 10h17M8 3v4M16 3v4',
@@ -166,7 +167,9 @@ function daftarMenu(p) {
   // [ikon, label, alamat, kelompok]; kelompok '' = menu utama (menu bawah HP / atas menu samping)
   const semua = anggota
     ? [['beranda', 'Beranda', '/beranda.html', ''], ['kta', 'KTA', '/kta.html', ''], ['kegiatan', 'Agenda', '/agenda.html', ''],
-      ['ahli', 'Ahli Kubur', '/ahli-kubur.html', 'ruhani'], ['haul', 'Haul', '/haul.html', 'ruhani'], ['usaha', 'Usaha Jamaah', '/usaha.html', 'kepedulian']]
+      ['saya', 'Data Saya', '/saya.html', 'pondasi'],
+      ['ahli', 'Ahli Kubur', '/ahli-kubur.html', 'ruhani'], ['haul', 'Haul', '/haul.html', 'ruhani'], ['ziarah', 'Ziarah & Umroh', '/saya.html#ziarah', 'ruhani'],
+      ['usaha', 'Usaha Jamaah', '/usaha.html', 'kepedulian']]
     : [['beranda', 'Beranda', '/beranda.html', '', null], ['jamaah', 'Jamaah', '/jamaah.html', '', PERAN_LIHAT_JAMAAH],
       ['kegiatan', 'Kegiatan', '/kegiatan.html', '', PERAN_LIHAT_KEGIATAN],
       ['dasbor', 'Dashboard', '/dashboard.html', 'pondasi', PERAN_LIHAT_JAMAAH], ['daftar', 'Pendaftaran', '/pendaftaran.html', 'pondasi', PERAN_UBAH_JAMAAH],

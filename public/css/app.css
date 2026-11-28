@@ -1255,3 +1255,55 @@ body:not(.hal-masuk):not(.hal-poster)>main{flex:1 0 auto;width:100%}
 .tanya-aksi{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
 .tanya-aksi .btn{margin:0}
 @media (max-width:479px){.tanya-aksi .btn{flex:1 1 0}}
+
+/* ===== Beranda baru (Tahap 15) ===== */
+.sambut-tgl{margin:6px 0 0;font-size:var(--fs-kecil);color:var(--abu)}
+.bagian-beranda{margin:8px 0 var(--gap);min-width:0}
+.bagian-beranda h2{margin:0 0 8px}
+.dekat-kartu{display:grid;grid-template-columns:64px minmax(0,1fr);gap:14px;align-items:start;padding:16px;background:#FFFFFF;
+  border:1px solid var(--garis);border-radius:16px;box-shadow:var(--bayang)}
+.dekat-tgl{display:grid;place-items:center;margin:0;padding:8px 0;border-radius:12px;background:var(--hijau-pupus);color:var(--hijau-jamiyyah);
+  font-size:var(--fs-kecil);font-weight:600;line-height:1.2}
+.dekat-tgl strong{font-size:1.625rem}
+.dekat-isi{min-width:0}
+.dekat-isi .ket{margin:0}
+.dekat-hitung{margin:0 0 4px;font-size:var(--fs-kecil);color:var(--abu)}
+.dekat-sisa{color:var(--hijau-jamiyyah);font-weight:700}
+.dekat-nama{margin:0 0 4px;font-size:var(--fs-sub);line-height:1.35;color:var(--hitam)}
+.dekat-aksi{margin-top:12px}
+.dekat-aksi[hidden]{display:none}
+.haul-kartu{padding:14px 16px;background:#FFFFFF;border:1px solid var(--garis);border-radius:16px;box-shadow:var(--bayang)}
+.haul-daftar{list-style:none;margin:0 0 10px;padding:0;display:grid;gap:10px}
+.haul-daftar li{padding:0 0 10px;border-bottom:1px solid var(--garis-lembut)}
+.haul-daftar strong{color:var(--hijau-jamiyyah)}
+.haul-daftar .ket{display:block;margin:2px 0 0}
+.haul-kartu>.ket{margin:0}
+.berita-sorot li:first-child .berita-kartu{grid-template-columns:minmax(0,1fr)}
+.berita-sorot li:first-child .berita-kecil{width:100%;height:auto;aspect-ratio:16/9}
+.kta-mini{display:flex;align-items:center;gap:14px;min-height:44px;padding:14px 16px;border-radius:16px;background:var(--hijau-jamiyyah);
+  border-bottom:3px solid var(--kuning-rosyid);color:#FFFFFF;text-decoration:none;box-shadow:var(--bayang)}
+.kta-mini img{flex:none;border-radius:50%;background:#FFFFFF}
+.kta-mini-teks{display:grid;gap:2px;flex:1;min-width:0}
+.kta-mini-teks strong{font-size:var(--fs-sub);overflow-wrap:anywhere}
+.kta-mini-teks span{font-size:var(--fs-kecil)}
+#km-nomor{color:var(--kuning-rosyid);font-weight:600}
+.kta-mini-buka{flex:none;font-size:var(--fs-kecil);font-weight:600;padding:6px 12px;border:1px solid #FFFFFF;border-radius:999px}
+.kta-mini:focus-visible,.hadir-bulan:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:2px}
+.hadir-bulan{display:flex;align-items:center;gap:14px;margin:10px 0 0;padding:12px 16px;background:#FFFFFF;border:1px solid var(--garis);
+  border-radius:16px;box-shadow:var(--bayang);color:var(--hitam);text-decoration:none}
+.hadir-bulan:hover{border-color:var(--garis-kuat)}
+.hadir-angka{flex:none;min-width:56px;padding:8px 10px;border-radius:12px;background:var(--mint);color:var(--hijau-jamiyyah);
+  font-size:1.625rem;font-weight:700;text-align:center;line-height:1.1}
+.hadir-teks{display:grid;gap:2px;min-width:0}
+.hadir-teks .ket{margin:0}
+.saya-tautan{margin:6px 0 0}
+#ziarah-isi{margin:0 0 6px;padding:4px 16px}
+@media (min-width:1024px){
+  .beranda-baru .app-isi{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px;align-content:start}
+  .beranda-baru .app-isi>*{grid-column:1/-1}
+  .beranda-baru .app-isi>.bagian-beranda{grid-column:auto}
+  .beranda-baru .berita-sorot{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .beranda-baru .berita-sorot .berita-kartu{grid-template-columns:minmax(0,1fr);height:100%}
+  .beranda-baru .berita-sorot .berita-kecil{width:100%;height:auto;aspect-ratio:16/9}
+}
+.dekat-jenis{margin:0 0 2px;font-size:var(--fs-kecil);font-weight:600;color:var(--abu)}

@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=127">
-<link rel="stylesheet" href="/css/app.css?v=127">
+<link rel="stylesheet" href="/css/tokens.css?v=128">
+<link rel="stylesheet" href="/css/app.css?v=128">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -42,13 +42,35 @@
     <p class="sambut-salam">Assalamu'alaikum</p>
     <h1 id="salam">Memuat...</h1>
     <p class="judul-sub" id="peran"></p>
+    <p class="sambut-tgl" id="tanggal"></p>
   </section>
   <p id="pesan" class="pesan" role="alert"></p>
   <p id="pesan-backup" class="pesan" role="status"></p>
   <p id="berita-menunggu" class="berita-menunggu" hidden></p>
+  <section id="dekat" class="bagian-beranda" hidden aria-labelledby="dekat-judul">
+    <div class="berita-kepala"><h2 class="bagian-judul" id="dekat-judul">Kegiatan terdekat</h2><a href="/agenda.html" class="tautan" id="dekat-lain">Semua agenda</a></div>
+    <div class="dekat-kartu">
+      <p class="dekat-tgl" aria-hidden="true"><strong id="dekat-hari"></strong><span id="dekat-bulan"></span></p>
+      <div class="dekat-isi">
+        <p class="dekat-hitung" id="dekat-hitung"></p>
+        <p class="dekat-jenis" id="dekat-jenis"></p>
+        <h3 class="dekat-nama" id="dekat-nama"></h3>
+        <p class="ket" id="dekat-waktu"></p>
+        <p class="ket" id="dekat-tempat"></p>
+        <a class="btn btn-utama btn-pas dekat-aksi" id="dekat-aksi" hidden></a>
+      </div>
+    </div>
+  </section>
+  <section id="haul-pekan" class="bagian-beranda" hidden aria-labelledby="haul-judul">
+    <div class="berita-kepala"><h2 class="bagian-judul" id="haul-judul">Haul pekan ini</h2><a href="/haul.html" class="tautan">Semua haul</a></div>
+    <div class="haul-kartu">
+      <ul class="haul-daftar" id="haul-isi"></ul>
+      <p class="ket" id="haul-ket">Mari kirimkan doa untuk beliau-beliau.</p>
+    </div>
+  </section>
   <section id="berita-beranda" class="berita-bagian" hidden aria-labelledby="bb-judul">
     <div class="berita-kepala"><h2 class="bagian-judul" id="bb-judul">Berita terbaru</h2><a href="/berita.html" class="tautan">Semua berita</a></div>
-    <ol class="berita-daftar" id="berita-beranda-isi"></ol>
+    <ol class="berita-daftar berita-sorot" id="berita-beranda-isi"></ol>
   </section>
 
   <section id="menu" hidden aria-label="Menu">
@@ -134,53 +156,23 @@
     </div>
   </section>
 
-  <section id="anggota" hidden aria-label="Portal Anggota">
-    <h2 class="bagian-judul">Portal Anggota</h2>
-    <div class="menu-kisi">
-      <a class="menu-ubin" href="/kta.html">
-        <span class="menu-ikon grup-pondasi" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><rect x="2.5" y="5" width="19" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="8.5" cy="11" r="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5.5 16c.5-1.5 1.6-2.3 3-2.3s2.5.8 3 2.3M14 10h4.5M14 13.5h3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
-        <span><strong>KTA Saya</strong><span class="menu-ket">Kartu anggota digital dengan QR keaslian</span></span>
-      </a>
-      <a class="menu-ubin" href="/agenda.html">
-        <span class="menu-ikon grup-ruhani" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h3M8 17h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
-        <span><strong>Agenda Kegiatan</strong><span class="menu-ket" id="m-agenda-ket">Jadwal khususiyah, manaqiban, haul, pengajian</span></span>
-      </a>
-      <a class="menu-ubin" href="/haul.html">
-        <span class="menu-ikon grup-ruhani" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/></svg></span>
-        <span><strong>Haul</strong><span class="menu-ket" id="a-haul-ket">Haul bulan ini dan bulan depan (Hijriah)</span></span>
-      </a>
-      <a class="menu-ubin" href="/ahli-kubur.html">
-        <span class="menu-ikon grup-ruhani" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20V10a5 5 0 0110 0v10M4 20h16M12 9v5M10 11h4"/></svg></span>
-        <span><strong>Ahli Kubur</strong><span class="menu-ket">Daftar almarhum untuk dikirimi doa</span></span>
-      </a>
-      <a class="menu-ubin" href="/usaha.html">
-        <span class="menu-ikon grup-kepedulian" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l1.5-4.5h13L20 9M4 9h16v1.5a2.5 2.5 0 01-5 0 2.5 2.5 0 01-5 0 2.5 2.5 0 01-5 0zM5 13v7h14v-7M10 20v-4h4v4"/></svg></span>
-        <span><strong>Usaha Jamaah</strong><span class="menu-ket" id="a-usaha-ket">Usaha milik sesama jamaah, mari saling belanja</span></span>
-      </a>
-      <a class="menu-ubin" href="#ziarah">
-        <span class="menu-ikon grup-ruhani" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V9l7-5 7 5v11M3 20h18M10 20v-5h4v5M12 4V2"/></svg></span>
-        <span><strong>Ziarah &amp; Umroh</strong><span class="menu-ket" id="a-ziarah-ket">Perjalanan Anda dan rombongan yang dibuka</span></span>
-      </a>
-    </div>
-    <div class="panel data-saya" id="ziarah" tabindex="-1">
-      <h2 class="form-judul">Ziarah &amp; Umroh</h2>
-      <h3 class="bagian-judul">Perjalanan saya</h3>
-      <p class="ket" id="zs-ket">Memuat...</p>
-      <ol class="riwayat-daftar" id="zs-isi"></ol>
-      <h3 class="bagian-judul">Rombongan yang dibuka</h3>
-      <p class="ket" id="zb-ket">Memuat...</p>
-      <ol class="riwayat-daftar" id="zb-isi"></ol>
-    </div>
-    <div class="panel data-saya" id="riwayat">
-      <h2 class="form-judul">Riwayat hadir saya</h2>
-      <p class="ket" id="riwayat-ket">Memuat...</p>
-      <ol class="riwayat-daftar" id="riwayat-isi"></ol>
-    </div>
-    <div class="panel data-saya">
-      <h2 class="form-judul">Data saya</h2>
-      <dl class="rincian" id="rincian"></dl>
-      <p class="ket data-saya-ket">Ada data yang keliru? Hubungi pengurus atau koordinator wilayah untuk membetulkannya.</p>
-    </div>
+  <section id="anggota" class="bagian-beranda" hidden aria-labelledby="saya-judul">
+    <h2 class="bagian-judul" id="saya-judul">Kartu saya</h2>
+    <a class="kta-mini" href="/kta.html">
+      <img src="/icons/logo-96.png" alt="" width="44" height="44">
+      <span class="kta-mini-teks"><strong id="km-nama">–</strong><span id="km-nomor">No. –</span><span id="km-desa"></span></span>
+      <span class="kta-mini-buka">Buka KTA</span>
+    </a>
+    <a class="hadir-bulan" href="/saya.html#riwayat">
+      <span class="hadir-angka" id="hadir-n">–</span>
+      <span class="hadir-teks"><strong id="hadir-judul">kali hadir bulan ini</strong><span class="ket" id="hadir-ket">Memuat...</span></span>
+    </a>
+    <p class="saya-tautan"><a class="tautan" href="/saya.html">Data saya, riwayat hadir &amp; ziarah</a></p>
+  </section>
+  <section id="ziarah-ajak" class="bagian-beranda" hidden aria-labelledby="ziarah-judul">
+    <div class="berita-kepala"><h2 class="bagian-judul" id="ziarah-judul">Ziarah &amp; umroh dibuka</h2><a href="/saya.html#ziarah" class="tautan">Selengkapnya</a></div>
+    <ol class="riwayat-daftar panel" id="ziarah-isi"></ol>
+    <p class="ket">Ingin ikut? Hubungi pengurus atau koordinator wilayah untuk didaftarkan.</p>
   </section>
 </main>
 <footer class="kaki">
@@ -189,9 +181,9 @@
   </div>
   <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
 </footer>
-<script src="/js/supa.js?v=127" defer></script>
-<script src="/js/agenda.js?v=127" defer></script>
-<script src="/js/berita.js?v=127" defer></script>
-<script src="/js/beranda.js?v=127" defer></script>
+<script src="/js/supa.js?v=128" defer></script>
+<script src="/js/agenda.js?v=128" defer></script>
+<script src="/js/berita.js?v=128" defer></script>
+<script src="/js/beranda.js?v=128" defer></script>
 </body>
 </html>
