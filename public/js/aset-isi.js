@@ -191,7 +191,7 @@ $('aktifkan').onclick = async () => {
 $('ubah').onclick = bukaForm;
 $('batal').onclick = () => { if (data) { tampilLihat(); pesan(''); } else location.assign($('kembali').href); };
 $('keluar').onclick = keluar;
-$('kembali').onclick = (e) => { if (document.referrer.includes('/aset.html')) { e.preventDefault(); history.back(); } };
+$('kembali').onclick = (e) => { if (/\/aset(\.html)?([?#]|$)/.test(document.referrer)) { e.preventDefault(); history.back(); } };
 
 (async () => {
   try {

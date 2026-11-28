@@ -184,10 +184,11 @@ function daftarMenu(p) {
 }
 function pasangMenuBawah(p) {
   if (!document.body.classList.contains('hal-app') || document.getElementById('menu-bawah')) return;
-  const { utama, grup } = daftarMenu(p), jalur = location.pathname;
-  const aktif = (u) => jalur === u || (u === '/jamaah.html' && jalur.startsWith('/jamaah')) || (u === '/kegiatan.html' && /^\/(kegiatan|absensi)/.test(jalur))
-    || (u !== '/beranda.html' && u.endsWith('.html') && jalur === u.replace('.html', '-isi.html'))
-    || (u === '/berita-kelola.html' && jalur === '/berita-isi.html');
+  // Cloudflare Pages menampilkan alamat tanpa ".html" (/haul, bukan /haul.html): bandingkan tanpa akhiran.
+  const { utama, grup } = daftarMenu(p), jalur = location.pathname.replace(/\.html$/, '');
+  const aktif = (alamat) => { const u = alamat.replace(/\.html$/, '');
+    return jalur === u || (u === '/jamaah' && jalur.startsWith('/jamaah')) || (u === '/kegiatan' && /^\/(kegiatan|absensi)/.test(jalur))
+      || (u !== '/beranda' && jalur === `${u}-isi`) || (u === '/berita-kelola' && jalur === '/berita-isi'); };
   const cur = (u) => (aktif(u) ? ' aria-current="page"' : '');
   const diLain = !utama.some(([, , u]) => aktif(u));
   // Menu bawah (HP & tablet)

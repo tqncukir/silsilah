@@ -88,7 +88,7 @@ $('form').addEventListener('submit', async (e) => {
 });
 
 $('keluar').onclick = keluar;
-$('kembali').onclick = (e) => { if (document.referrer.includes('/ekonomi.html')) { e.preventDefault(); history.back(); } };
+$('kembali').onclick = (e) => { if (/\/ekonomi(\.html)?([?#]|$)/.test(document.referrer)) { e.preventDefault(); history.back(); } };
 
 (async () => {
   try {

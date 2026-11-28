@@ -149,7 +149,7 @@ $('tutup').onclick = async () => {
 };
 
 $('keluar').onclick = keluar;
-$('kembali').onclick = (e) => { if (document.referrer.includes('/usaha.html')) { e.preventDefault(); history.back(); } };
+$('kembali').onclick = (e) => { if (/\/usaha(\.html)?([?#]|$)/.test(document.referrer)) { e.preventDefault(); history.back(); } };
 
 (async () => {
   try {

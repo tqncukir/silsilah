@@ -90,7 +90,7 @@ $('kuota').addEventListener('input', (e) => { const v = e.target.value.replace(/
 $('ubah').onclick = tampilForm;
 $('batal').onclick = () => (data ? tampilLihat() : location.assign('/perjalanan.html'));
 $('keluar').onclick = keluar;
-$('kembali').onclick = (e) => { if (document.referrer.includes('/perjalanan.html')) { e.preventDefault(); history.back(); } };
+$('kembali').onclick = (e) => { if (/\/perjalanan(\.html)?([?#]|$)/.test(document.referrer)) { e.preventDefault(); history.back(); } };
 
 $('form').addEventListener('submit', async (e) => {
   e.preventDefault();

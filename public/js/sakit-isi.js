@@ -185,7 +185,7 @@ $('form').addEventListener('submit', async (e) => {
 });
 
 $('keluar').onclick = keluar;
-$('kembali').onclick = (e) => { if (document.referrer.includes('/sakit.html')) { e.preventDefault(); history.back(); } };
+$('kembali').onclick = (e) => { if (/\/sakit(\.html)?([?#]|$)/.test(document.referrer)) { e.preventDefault(); history.back(); } };
 
 (async () => {
   try {

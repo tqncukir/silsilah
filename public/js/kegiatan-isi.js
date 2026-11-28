@@ -75,7 +75,7 @@ $('form').addEventListener('input', (e) => e.target.removeAttribute?.('aria-inva
 $('ubah').onclick = tampilForm;
 $('batal').onclick = () => (data ? tampilLihat() : location.assign('/kegiatan.html'));
 $('keluar').onclick = keluar;
-$('kembali').onclick = (e) => { if (document.referrer.includes('/kegiatan.html')) { e.preventDefault(); history.back(); } };
+$('kembali').onclick = (e) => { if (/\/kegiatan(\.html)?([?#]|$)/.test(document.referrer)) { e.preventDefault(); history.back(); } };
 
 $('form').addEventListener('submit', async (e) => {
   e.preventDefault();

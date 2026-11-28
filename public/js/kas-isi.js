@@ -78,7 +78,7 @@ $('jumlah').addEventListener('input', () => {
 $('ubah').onclick = tampilForm;
 $('batal').onclick = () => (data ? tampilLihat() : location.assign('/kas.html'));
 $('keluar').onclick = keluar;
-$('kembali').onclick = (e) => { if (document.referrer.includes('/kas.html')) { e.preventDefault(); history.back(); } };
+$('kembali').onclick = (e) => { if (/\/kas(\.html)?([?#]|$)/.test(document.referrer)) { e.preventDefault(); history.back(); } };
 
 $('form').addEventListener('submit', async (e) => {
   e.preventDefault();

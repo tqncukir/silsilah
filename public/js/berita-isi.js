@@ -133,7 +133,7 @@ $('simpan-draf').onclick = () => simpan(false);
 $('ubah').onclick = () => { pesan(''); tampilForm(); };
 $('batal').onclick = () => (data ? tampilLihat() : location.assign('/berita-kelola.html'));
 $('keluar').onclick = keluar;
-$('kembali').onclick = (e) => { if (document.referrer.includes('/berita-kelola.html')) { e.preventDefault(); history.back(); } };
+$('kembali').onclick = (e) => { if (/\/berita-kelola(\.html)?([?#]|$)/.test(document.referrer)) { e.preventDefault(); history.back(); } };
 
 async function segarkan(t) { data = await muatData(); tampilLihat(); pesan(t, true); }
 $('putus').addEventListener('submit', async (e) => {

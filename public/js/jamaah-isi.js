@@ -116,7 +116,7 @@ document.querySelectorAll('[name=status]').forEach((r) => r.addEventListener('ch
 $('ubah').onclick = tampilForm;
 $('batal').onclick = () => (data ? tampilLihat() : location.assign('/jamaah.html'));
 $('keluar').onclick = keluar;
-$('kembali').onclick = (e) => { if (document.referrer.includes('/jamaah.html')) { e.preventDefault(); history.back(); } };
+$('kembali').onclick = (e) => { if (/\/jamaah(\.html)?([?#]|$)/.test(document.referrer)) { e.preventDefault(); history.back(); } };
 
 $('form').addEventListener('submit', async (e) => {
   e.preventDefault();

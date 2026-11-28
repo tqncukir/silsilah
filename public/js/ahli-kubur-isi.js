@@ -94,7 +94,7 @@ document.querySelectorAll('[name=jenis]').forEach((r) => r.addEventListener('cha
 $('ubah').onclick = tampilForm;
 $('batal').onclick = () => (d ? tampilLihat() : location.assign('/ahli-kubur.html'));
 $('keluar').onclick = keluar;
-$('kembali').onclick = (e) => { if (document.referrer.includes('/ahli-kubur.html')) { e.preventDefault(); history.back(); } };
+$('kembali').onclick = (e) => { if (/\/ahli-kubur(\.html)?([?#]|$)/.test(document.referrer)) { e.preventDefault(); history.back(); } };
 
 $('form').addEventListener('submit', async (e) => {
   e.preventDefault();

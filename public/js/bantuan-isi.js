@@ -177,7 +177,7 @@ function salah(idEl, t) { const el = $(idEl) || document.querySelector(`[name=${
 $('form').addEventListener('input', (e) => e.target.removeAttribute?.('aria-invalid'));
 $('batal').onclick = () => location.assign('/bantuan.html');
 $('keluar').onclick = keluar;
-$('kembali').onclick = (e) => { if (document.referrer.includes('/bantuan.html')) { e.preventDefault(); history.back(); } };
+$('kembali').onclick = (e) => { if (/\/bantuan(\.html)?([?#]|$)/.test(document.referrer)) { e.preventDefault(); history.back(); } };
 
 $('form').addEventListener('submit', async (e) => {
   e.preventDefault();
