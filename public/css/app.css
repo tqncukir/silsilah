@@ -989,6 +989,9 @@ a.tautan{display:inline-flex;align-items:center}
    HP & tablet (<1024px): menu bawah + lembar "Lainnya" berupa ubin ikon per kelompok.
    Laptop & komputer (>=1024px): menu atas dengan daftar per kelompok. Teks putih (emas hanya untuk ikon, titik, dan judul besar: kontras). */
 .menu-bawah,.menu-lain,.menu-atas{display:none}
+/* Halaman aplikasi: menu lama di kepala tidak pernah tampil (diganti menu bawah/atas buatan supa.js); sebelumnya sempat muncul
+   sebentar saat dimuat sehingga kepala memanjang lalu memendek ("garis melintas", Kang 2026-11-28). */
+.hal-app .app-nav{display:none}
 @media (max-width:1023px){
   .ada-menu-bawah .app-nav{display:none}
   .ada-menu-bawah{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
