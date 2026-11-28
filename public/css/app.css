@@ -1563,3 +1563,9 @@ main.depan{max-width:none;padding:0 0 32px}
   #k-jamaah .dsb-bulan{grid-column:1 / -1;order:0}
 }
 @media (min-width:768px) and (max-width:1023px){#k-jamaah .dsb-sektor{grid-column:1 / -1}}
+
+/* Daftar catatan pengecekan: tombol "Sudah benar" (Kang 2026-11-28) */
+.dd-baris-cek{display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--garis-lembut)}
+.dd-baris-cek:last-child{border-bottom:0}
+.dd-baris-cek a{flex:1;min-width:0}
+.dd-benar{flex:none;margin-right:4px}

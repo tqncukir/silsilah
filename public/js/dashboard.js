@@ -280,17 +280,34 @@ async function bukaDaftar(c) {
     const [dari, sampai] = rentang();
     const rows = await dbKirim('POST', 'rpc/dashboard_catatan_daftar', {
       p_catatan: c.catatan, p_kab: f.kab || null, p_kec: f.kec || null, p_desa: f.desa || null, p_dari: dari, p_sampai: sampai });
-    $('daftar-isi').innerHTML = rows.length ? rows.map((r) => `<li><a href="/jamaah-isi.html?id=${r.id}">
+    if (bolehUbah) $('daftar-ket').textContent += '. Perbaiki lewat data jamaahnya (catatan selesai otomatis setelah disimpan), atau tekan "Sudah benar" bila datanya sudah tepat.';
+    $('daftar-isi').innerHTML = rows.length ? rows.map((r) => `<li class="dd-baris-cek"><a href="/jamaah-isi.html?id=${r.id}">
         <span class="dd-nama">${hurufAman(r.nama)}</span>
         <span class="dd-nomor">${r.nomor_anggota}</span>
         <span class="dd-alamat">${hurufAman(`${r.desa} · Kec. ${r.kecamatan} · ${r.kabupaten}`)}</span>
-        <span class="dd-catatan">${hurufAman(r.catatan)}</span></a></li>`).join('')
-      : '<li class="dsb-kosong-kecil">Tidak ada anggota yang boleh dilihat akun ini.</li>';
+        <span class="dd-catatan">${hurufAman(r.catatan)}</span></a>${bolehUbah ? `<button type="button" class="pin-tombol dd-benar" data-benar="${r.id}">Sudah benar</button>` : ''}</li>`).join('')
+      : '<li class="dsb-kosong-kecil">Tidak ada catatan yang perlu diperiksa di pilihan ini.</li>';
   } catch {
     $('daftar-isi').innerHTML = '<li class="dsb-kosong-kecil">Data gagal dimuat. Tutup lalu coba lagi.</li>';
   }
 }
 $('daftar-tutup').onclick = () => $('daftar').close();
+// Tombol "Sudah benar": catatan ditandai selesai (tidak dihapus); angka Dashboard dimuat ulang saat jendela ditutup.
+let catatanBerubah = false;
+$('daftar-isi').addEventListener('click', async (e) => {
+  const b = e.target.closest('[data-benar]');
+  if (!b) return;
+  b.disabled = true; b.textContent = 'Menyimpan...';
+  try {
+    await dbKirim('POST', 'rpc/catatan_selesai', { p_jamaah: Number(b.dataset.benar) });
+    catatanBerubah = true;
+    const li = b.closest('li'); li.remove();
+    if (!$('daftar-isi').children.length) $('daftar-isi').innerHTML = '<li class="dsb-kosong-kecil">Semua catatan di daftar ini sudah selesai.</li>';
+  } catch {
+    b.disabled = false; b.textContent = 'Gagal, coba lagi';
+  }
+});
+$('daftar').addEventListener('close', () => { if (catatanBerubah) { catatanBerubah = false; muat(); } });
 $('daftar').addEventListener('click', (e) => { if (e.target === $('daftar')) $('daftar').close(); });
 
 // ---------- Muat ----------
