@@ -560,3 +560,4 @@ Mulai: 2026-11-28 (Kang: "mulai B"). **Disetujui Kang 2026-11-28 ("Tahap 13 dise
 - `sw.js`: halaman (navigate) tetap coba jaringan dulu, tapi bila tidak menjawab 2 detik atau putus langsung pakai simpanan (cocok tanpa query, `ignoreSearch`); jaringan tetap diselesaikan di belakang layar untuk memperbarui simpanan. Dulu menunggu jaringan sampai gagal.
 - `profilSaya()`: profil terakhir (nama, peran, jamaah_id; per akun) disimpan di `localStorage['silsilah.profil']`; halaman & menu langsung tampil dari simpanan, lalu dicek ke server di belakang layar; bila berubah → muat ulang; 401 → ke Masuk. Simpanan dihapus saat keluar (`sesi.hapus`). Hak akses tetap RLS.
 - Uji: profil simpanan → menu & nama tampil sebelum server menjawab; peran diubah → dimuat ulang dengan menu baru; server tidak menjawab → halaman tampil 2,1 dtk dari simpanan; menu HP/laptop 4 peran tetap lolos.
+- Dicek Kang di HP 2026-11-28: "sudah cepat".
