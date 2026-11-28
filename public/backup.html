@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=152">
-<link rel="stylesheet" href="/css/app.css?v=152">
+<link rel="stylesheet" href="/css/tokens.css?v=153">
+<link rel="stylesheet" href="/css/app.css?v=153">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -48,25 +48,34 @@
 
   <div id="isi" hidden>
     <section class="panel bk-status" id="status" aria-live="polite">
-      <h2 class="bk-judul" id="st-judul">Memuat...</h2>
-      <p class="ket" id="st-ket"></p>
+      <span class="bk-ikon" id="st-ikon" aria-hidden="true"></span>
+      <div class="bk-status-isi">
+        <h2 class="bk-judul" id="st-judul">Memuat...</h2>
+        <p class="ket" id="st-ket"></p>
+        <p class="ket bk-berikut" id="st-berikut"></p>
+        <div class="bk-tautan">
+          <a class="bk-lihat" href="https://drive.google.com/drive/search?q=Backup%20SILSILAH" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Buka Google Drive<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a class="bk-lihat" href="https://github.com/tqncukir/silsilah/actions/workflows/backup.yml" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h11M9 12h11M9 19h11M4 5h.01M4 12h.01M4 19h.01"/></svg>Catatan GitHub<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+        <p class="ket bk-akun">Google Drive: pilih akun jtccukir2022@gmail.com. File backup terkunci kata sandi BACKUP_SANDI.</p>
+      </div>
     </section>
 
-    <ul class="angka-baris" id="angka" aria-label="Ringkasan 30 hari terakhir"></ul>
+    <section class="panel bk-pita-panel" aria-labelledby="pita-judul">
+      <h2 class="bk-sub" id="pita-judul">30 hari terakhir</h2>
+      <ol class="bk-pita" id="pita" aria-label="Hasil backup per hari, 30 hari terakhir"></ol>
+      <ul class="bk-legenda" aria-hidden="true"><li><span class="bk-kotak ok"></span>Berhasil</li><li><span class="bk-kotak gagal"></span>Gagal</li><li><span class="bk-kotak kosong"></span>Tidak ada catatan</li></ul>
+      <dl class="bk-angka" id="angka"></dl>
+    </section>
 
-    <div class="bk-tautan">
-      <a class="btn btn-kedua" href="https://github.com/tqncukir/silsilah/actions/workflows/backup.yml" target="_blank" rel="noopener">Buka catatan GitHub</a>
-      <a class="btn btn-kedua" href="https://drive.google.com/drive/search?q=Backup%20SILSILAH" target="_blank" rel="noopener">Buka folder Google Drive</a>
-    </div>
-    <p class="ket">Google Drive: pilih akun jtccukir2022@gmail.com. File backup terkunci kata sandi BACKUP_SANDI.</p>
-
-    <h2 class="bagian-judul">Riwayat 90 hari</h2>
+    <h2 class="bagian-judul">Riwayat backup</h2>
     <div class="tabel-bungkus">
-      <table class="tabel">
-        <thead><tr><th scope="col">Tanggal</th><th scope="col">Jam</th><th scope="col">Hasil</th><th scope="col">Ukuran</th><th scope="col" class="kol-luas">Tabel</th><th scope="col" class="kol-luas">File lama dirapikan</th><th scope="col">Catatan</th></tr></thead>
-        <tbody id="isi-tabel"><tr><td colspan="7" class="tabel-kosong">Memuat...</td></tr></tbody>
+      <table class="tabel bk-tabel">
+        <thead><tr><th scope="col">Tanggal</th><th scope="col">Jam</th><th scope="col">Hasil</th><th scope="col">Ukuran</th><th scope="col">Catatan</th></tr></thead>
+        <tbody id="isi-tabel"><tr><td colspan="5" class="tabel-kosong">Memuat...</td></tr></tbody>
       </table>
     </div>
+    <button type="button" class="btn btn-kedua btn-pas bk-semua" id="semua" hidden></button>
   </div>
 </main>
 <footer class="kaki">
@@ -75,7 +84,7 @@
   </div>
   <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
 </footer>
-<script src="/js/supa.js?v=152" defer></script>
-<script src="/js/backup.js?v=152" defer></script>
+<script src="/js/supa.js?v=153" defer></script>
+<script src="/js/backup.js?v=153" defer></script>
 </body>
 </html>

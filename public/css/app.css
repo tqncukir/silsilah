@@ -1612,3 +1612,43 @@ a.dsb-kartu-tautan:focus-visible{outline:3px solid var(--kuning-rosyid);outline-
 #p-sebaran,#p-catatan{scroll-margin-top:84px}
 /* f. Keterangan Usia ringkas + tautan */
 .dsb-tautan-kecil{display:inline-flex;align-items:center;min-height:44px;padding:0;font-size:inherit}
+
+/* ===== Poles Pantau Backup (Kang 2026-11-28: "kerjakan semua", temuan a–f) ===== */
+.bk-status{display:flex;align-items:flex-start;gap:14px}
+.bk-status-isi{flex:1;min-width:0}
+.bk-ikon{flex:none;display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:var(--mint);color:var(--hijau-jamiyyah)}
+.bk-status[data-jenis=gagal] .bk-ikon,.bk-status[data-jenis=telat] .bk-ikon{background:#F8D7D3;color:#8C1D18}
+.bk-status[data-jenis=kosong] .bk-ikon{background:#FFEFB0;color:#6E5200}
+.bk-status .bk-berikut{margin:6px 0 0;color:var(--abu)}
+.bk-status .bk-akun{margin:4px 0 0;font-size:13px;color:var(--abu)}
+.bk-tautan{display:flex;flex-wrap:wrap;gap:4px 16px;margin:8px 0 0}
+.bk-lihat{gap:6px;text-decoration:none;font-size:var(--fs-kecil)}
+.bk-lihat:hover{text-decoration:underline}
+.bk-lihat:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:2px;border-radius:6px}
+.bk-pita-panel{margin-top:16px}
+.bk-sub{margin:0 0 10px;font-size:var(--fs-sub);color:var(--hitam)}
+.bk-pita{display:grid;grid-template-columns:repeat(15,minmax(0,1fr));gap:4px;margin:0;padding:0;list-style:none}
+@media (min-width:768px){.bk-pita{grid-template-columns:repeat(30,minmax(0,1fr))}}
+.bk-kotak{display:block;aspect-ratio:1;max-height:28px;border-radius:5px;background:#DDE4DF}
+.bk-kotak.ok{background:var(--hijau-daun)}
+.bk-kotak.gagal{background:#C62828}
+.bk-legenda{display:flex;flex-wrap:wrap;gap:4px 16px;margin:10px 0 0;padding:0;list-style:none;font-size:13px;color:var(--abu)}
+.bk-legenda li{display:flex;align-items:center;gap:6px}
+.bk-legenda .bk-kotak{width:12px;height:12px;border-radius:3px}
+.bk-angka{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:14px 0 0;padding:10px 0 0;border-top:1px solid var(--garis-lembut)}
+.bk-angka div{padding:6px 12px 6px 0}
+.bk-angka dt{font-size:var(--fs-kecil);color:var(--abu)}
+.bk-angka dd{margin:2px 0 0;font-size:1.375rem;font-weight:700;color:var(--hijau-jamiyyah);font-variant-numeric:tabular-nums}
+.bk-angka .bk-merah dd{color:#A4161A}
+@media (min-width:640px){.bk-angka{grid-template-columns:repeat(4,minmax(0,1fr))}.bk-angka div+div{padding-left:12px;border-left:1px solid var(--garis-lembut)}}
+.bk-tabel tr.bk-baris-gagal,.bk-tabel tr.bk-baris-gagal td{background:#FDF3F2}
+.bk-cat{display:block}
+.bk-strip{color:#9AA894}
+.bk-gh{display:inline-flex;align-items:center;min-height:44px;color:#A4161A;font-weight:600}
+.bk-semua{margin:12px auto 0;display:flex}
+.bk-semua[hidden]{display:none}
+@media (max-width:767px){
+  .tabel tr.bk-baris td[data-l="Catatan"]:has(.bk-strip:only-child){display:none}
+}
+.bk-status,.bk-status[data-jenis]{border-left:1px solid var(--garis)}
+.bk-pita-panel+.bagian-judul{margin-top:24px}
