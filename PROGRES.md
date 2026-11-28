@@ -670,3 +670,29 @@ Diusulkan 2026-11-28 (Kang: "beranda bagusnya apa saja, agar tidak tumpuk/dobel 
 - `kta.html`: tombol `#simpan-png`, dialog `#dlg-simpan` (gaya `.tanya` bersama). `app.css`: `.kta-simpan`, `.hanya-laptop`; tombol jendela di HP tidak turun baris.
 - Uji tiruan: **18 pemeriksaan lulus** (anggota 360 & 1280, ketua 768: label tombol, Cetak tersembunyi di HP/tampil di laptop, pratinjau 1579 px, tombol Tutup + Simpan ke HP/Unduh gambar, unduhan `KTA-1165100001.png` 1579×996, pesan tersimpan + Tutup→Selesai, **QR di PNG terbaca jsQR = alamat cek-kta yang benar**, tanpa galat & geser). Letak isian di PNG dibandingkan dengan kartu di layar: sejajar. Menunggu uji Kang di HP asli.
 - **Perbaikan (laporan Kang "tidak bisa langsung masuk ke galeri", v131):** halaman web memang tidak boleh menulis langsung ke Galeri/Foto (aturan semua browser); yang boleh hanya unduh atau menu Bagikan. Menu Bagikan Android sering tanpa pilihan simpan → kini **Android: unduh langsung** ke folder Download (tampil di Galeri, album Download); **iPhone/iPad: menu Bagikan** dengan petunjuk "pilih “Simpan Gambar”" (masuk ke Foto); laptop: unduh. Keterangan & pesan di jendela menyesuaikan HP. Uji tiruan Android/iPhone/laptop **6 lulus** + uji PNG **18 lulus**. **Dicek Kang di HP 2026-11-28 11.28: "sudah bisa".**
+
+## Tahap 16: Notifikasi ke HP (Web Push)
+Mulai: 2026-11-28 (Kang: "mulai tahap notifikasi"). Keputusan diambil; **menunggu Kang "lanjut langkah 1"**.
+
+**Keputusan Kang (2026-11-28):**
+1. Anggota menerima: **pengingat kegiatan, berita baru, haul pekan ini, ziarah/umroh dibuka**.
+2. Pengurus menerima: **ringkasan pagi "Perlu ditindaklanjuti", tugas langsung (mis. berita/bantuan diajukan), backup gagal (admin pusat)**, dan **juga semua notifikasi anggota** (pilihan "sama seperti anggota" ditafsirkan sebagai tambahan).
+3. Pengingat kegiatan **sesuai wilayah**: kegiatan Pusat → semua; kegiatan kecamatan → jamaah kecamatan itu.
+4. Waktu & jumlah: **hanya 06.00-21.00 WIB, maksimal 2 notifikasi per orang per hari**.
+
+**Usulan Claude (berlaku kecuali Kang ubah):**
+- Teknologi: **Web Push** bawaan PWA (gratis, tanpa Play Store/aplikasi lain). Android langsung bisa; iPhone minimal iOS 16.4 dan SILSILAH harus dipasang di layar utama. Jamaah menekan "Izinkan" sekali (tombol **Aktifkan pemberitahuan** di Beranda); bisa dimatikan kapan saja di halaman **Pengaturan Notifikasi** (semua atau per jenis).
+- **Dua jadwal kirim tetap** supaya batas 2/hari terpenuhi, isi digabung bila lebih dari satu kabar:
+  - **Pagi 06.00:** kegiatan hari ini + (pengurus) ringkasan "Perlu ditindaklanjuti".
+  - **Sore 16.00:** kegiatan besok + berita baru hari itu + ziarah/umroh dibuka; **Kamis sore** ditambah "Haul pekan ini" (menjelang malam Jumat).
+  - **Tugas langsung pengurus** dikirim saat itu juga bila jatah hari itu masih ada (dan jam 06-21); bila habis → masuk ringkasan pagi berikutnya.
+  - **Backup gagal** (admin pusat saja, jarang): selalu dikirim, di luar batas 2/hari, karena data keamanan.
+- Privasi: isi notifikasi tidak memuat nama jamaah sakit/bantuan/ekonomi (hanya jumlah); berita "Khusus anggota" ditulis "Ada berita khusus anggota" tanpa judul (layar kunci bisa dilihat orang lain). Amalan/talqin tidak pernah.
+- Kunci notifikasi (VAPID): **kunci rahasia dibuat dan dipasang Kang sendiri** di rahasia Supabase lewat halaman khusus admin (dibuat di HP/laptop Kang, tidak lewat Claude); kunci publik boleh di kode.
+- Pengirim: Edge Function `notif` dijadwalkan dengan **pg_cron + pg_net** bawaan Supabase (gratis); langganan yang sudah mati (HP ganti/aplikasi dihapus) otomatis dibuang. Tabel langganan & catatan kirim tertutup total (hanya lewat fungsi).
+
+**Rencana langkah:**
+1. Database + kunci: tabel langganan & catatan kirim (tertutup), fungsi daftar/hapus langganan & pengaturan per jenis, fungsi penyusun isi per jadwal (sesuai wilayah & hak, batas 2/hari, jam 06-21); halaman admin pembuat kunci VAPID. Uji per peran di Postgres lokal. Kang menjalankan migrasi & memasang kunci rahasia.
+2. Aplikasi: tombol **Aktifkan pemberitahuan** di Beranda, halaman **Pengaturan Notifikasi**, `sw.js` menerima & membuka notifikasi ke halaman terkait.
+3. Pengirim: Edge Function `notif` + jadwal pagi/sore (pg_cron) + pemicu tugas langsung & backup gagal. Deploy (lewat Kang bila perlu). Uji kirim ke HP Kang.
+4. Uji menyeluruh (Android, iPhone, laptop; semua peran; batas & jam) + laporan.
