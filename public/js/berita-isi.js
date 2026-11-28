@@ -13,11 +13,13 @@ function galatTeks(err, dasar) {
   if (err.message === 'bukan-gambar') return 'File ini bukan foto. Pilih foto JPG atau PNG.';
   if (err.message === 'foto-besar') return 'Foto terlalu besar meski sudah dikecilkan. Pilih foto lain.';
   if (err.message.startsWith('gagal-unggah')) return 'Foto belum terunggah. Periksa sinyal lalu coba lagi.';
+  if (err.message === 'tersimpan-tidak-terbaca') return 'Berita sudah tersimpan, tapi belum bisa ditampilkan. Buka Kelola Berita untuk melihatnya.';
+  if (err.detail?.message) return `${dasar} (${err.detail.code || ''} ${err.detail.message})`;
   return err.message === 'Failed to fetch' ? 'Sinyal terputus. Berita belum tersimpan, coba lagi.' : dasar;
 }
 
-async function muatData() {
-  const [b] = await dbKirim('POST', 'rpc/daftar_berita_kelola', { p_id: Number(id) });
+async function muatData(bid) {
+  const [b] = await dbKirim('POST', 'rpc/daftar_berita_kelola', { p_id: Number(bid) });
   return b || null;
 }
 
@@ -115,9 +117,11 @@ async function simpan(kirim) {
       p_id: data?.id ?? null, p_judul: judul, p_isi: isi, p_foto: foto,
       p_khusus_anggota: document.querySelector('[name=pembaca]:checked').value === 'anggota',
       p_kecamatan_id: wil === 'pusat' ? null : Number(wil), p_kirim: kirim });
+    unggahan = null; // sudah tersimpan: foto jangan dihapus walau langkah berikutnya gagal
     if (hasil.foto_lama) hapusFotoBerita(hasil.foto_lama);
     history.replaceState(null, '', `?id=${hasil.id}`);
-    data = await muatData();
+    data = await muatData(hasil.id);
+    if (!data) throw new Error('tersimpan-tidak-terbaca');
     fotoBaru = null; pesanForm('');
     tampilLihat();
     pesan({ terbit: sudahTerbit ? 'Perubahan tersimpan.' : 'Berita sudah terbit.', diajukan: 'Berita diajukan. Tampil setelah disetujui ketua.',
@@ -135,7 +139,7 @@ $('batal').onclick = () => (data ? tampilLihat() : location.assign('/berita-kelo
 $('keluar').onclick = keluar;
 $('kembali').onclick = (e) => { if (/\/berita-kelola(\.html)?([?#]|$)/.test(document.referrer)) { e.preventDefault(); history.back(); } };
 
-async function segarkan(t) { data = await muatData(); tampilLihat(); pesan(t, true); }
+async function segarkan(t) { data = await muatData(data.id); tampilLihat(); pesan(t, true); }
 $('putus').addEventListener('submit', async (e) => {
   e.preventDefault();
   $('pt-setuju').disabled = true;
@@ -168,7 +172,7 @@ $('tarik').onclick = async () => {
     pimpinan = PERAN_PIMPINAN_BERITA.includes(p.peran);
     const tugas = [dbGet('kecamatan?select=id,nama,kabupaten(nama)&order=nama')];
     if (!pimpinan) tugas.push(dbGet(`pengguna_wilayah?select=kecamatan_id&user_id=eq.${await idSaya()}`));
-    if (id) tugas.push(muatData());
+    if (id) tugas.push(muatData(id));
     const [kec, ...lain] = await Promise.all(tugas);
     if (!pimpinan) kecBoleh = new Set(lain.shift().map((w) => w.kecamatan_id));
     // Wilayah: pimpinan = Pusat + semua kecamatan (per Kab/Kota); koordinator = kecamatannya saja.

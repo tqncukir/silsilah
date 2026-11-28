@@ -1,7 +1,7 @@
 // Service worker: simpan kerangka aplikasi agar tetap terbuka saat sinyal putus.
 // Setiap ganti CSS/JS: naikkan VERSI di sini DAN angka ?v= di semua halaman HTML.
-const VERSI = 'silsilah-v122';
-const INTI = ['/', '/index.html', '/css/tokens.css?v=122', '/css/app.css?v=122', '/js/app.js?v=122', '/js/supa.js?v=122', '/masuk.html', '/js/masuk.js?v=122', '/manifest.webmanifest',
+const VERSI = 'silsilah-v123';
+const INTI = ['/', '/index.html', '/css/tokens.css?v=123', '/css/app.css?v=123', '/js/app.js?v=123', '/js/supa.js?v=123', '/masuk.html', '/js/masuk.js?v=123', '/manifest.webmanifest',
   '/fonts/plus-jakarta-sans.woff2', '/icons/logo-96.png', '/icons/icon-192-v2.png'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(VERSI).then((c) => c.addAll(INTI.map((u) => new Request(u, { cache: 'reload' }))))); self.skipWaiting(); });
 self.addEventListener('activate', (e) => {
