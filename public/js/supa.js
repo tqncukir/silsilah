@@ -190,9 +190,18 @@ function pasangMenuBawah(p) {
   s.id = 'menu-atas'; s.className = 'menu-atas'; s.setAttribute('aria-label', 'Menu utama');
   const PENDEK = { pondasi: 'Pondasi', ruhani: 'Ruhani', kepedulian: 'Kepedulian', amanah: 'Amanah' };
   const panah = '<svg class="ma-panah" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
+  // Menu admin di kanan atas, sebelah Keluar (Kang 2026-11-28): dikeluarkan dari kelompoknya agar tidak dobel.
+  const ADMIN = ['dasbor', 'pin', 'backup'];
+  const admin = grup.flatMap(([, , isi]) => isi.filter(([i]) => ADMIN.includes(i)));
+  const grupAtas = grup.map(([k, n, isi]) => [k, n, isi.filter(([i]) => !ADMIN.includes(i))]).filter(([, , isi]) => isi.length);
+  const NAMA_ADMIN = { dasbor: 'Dashboard Pengurus', pin: 'Atur PIN Pengurus', backup: 'Pantau Backup' };
+  const tombolAdmin = admin.length > 1
+    ? `<div class="ma-grup ma-admin"><button type="button" class="ma-tombol${admin.some(([, , u]) => aktif(u)) ? ' ma-aktif' : ''}" aria-expanded="false" aria-controls="ma-admin"><span class="ml-ikon">${ikonMenu('pin', 15)}</span>Admin${panah}</button>
+      <div class="ma-panel" id="ma-admin" hidden><p>Admin</p><ul>${admin.map(([i, , u]) => `<li><a href="${u}"${cur(u)}><span class="ml-ikon">${ikonMenu(i, 17)}</span><span>${NAMA_ADMIN[i]}</span></a></li>`).join('')}</ul></div></div>`
+    : admin.map(([, , u]) => `<a href="${u}" class="ma-utama ma-admin"${cur(u)}>Dashboard</a>`).join('');
   s.innerHTML = utama.map(([, t, u]) => `<a href="${u}" class="ma-utama"${cur(u)}>${t}</a>`).join('')
-    + grup.map(([k, n, isi]) => `<div class="ma-grup"><button type="button" class="ma-tombol${isi.some(([, , u]) => aktif(u)) ? ' ma-aktif' : ''}" aria-expanded="false" aria-controls="ma-${k}">${PENDEK[k]}${panah}</button>
-      <div class="ma-panel" id="ma-${k}" hidden><p>${n}</p><ul>${isi.map(([i, t, u]) => `<li><a href="${u}"${cur(u)}><span class="ml-ikon">${ikonMenu(i, 17)}</span><span>${t}</span></a></li>`).join('')}</ul></div></div>`).join('');
+    + grupAtas.map(([k, n, isi]) => `<div class="ma-grup"><button type="button" class="ma-tombol${isi.some(([, , u]) => aktif(u)) ? ' ma-aktif' : ''}" aria-expanded="false" aria-controls="ma-${k}">${PENDEK[k]}${panah}</button>
+      <div class="ma-panel" id="ma-${k}" hidden><p>${n}</p><ul>${isi.map(([i, t, u]) => `<li><a href="${u}"${cur(u)}><span class="ml-ikon">${ikonMenu(i, 17)}</span><span>${t}</span></a></li>`).join('')}</ul></div></div>`).join('') + tombolAdmin;
   const tutupSemua = (kecuali) => s.querySelectorAll('.ma-tombol[aria-expanded="true"]').forEach((t) => {
     if (t === kecuali) return;
     t.setAttribute('aria-expanded', 'false'); document.getElementById(t.getAttribute('aria-controls')).hidden = true;

@@ -1013,7 +1013,17 @@ a.tautan{display:inline-flex;align-items:center}
   .ma-panel a:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:-3px}
   .ma-panel .ml-ikon{display:flex;align-items:center;justify-content:center;width:32px;height:32px;flex:none;border-radius:50%;
     background:rgba(255,255,255,.12);color:var(--kuning-rosyid)}
-  .ma-grup:last-child .ma-panel{left:auto;right:0}
+  .ma-grup:last-child .ma-panel,.ma-grup:has(+ .ma-admin) .ma-panel{left:auto;right:0}
+  .ma-admin{margin-left:auto}
+  .ma-admin .ma-tombol{gap:8px;padding:0 12px 0 6px;border:1.5px solid rgba(255,255,255,.35)}
+  .ma-tombol .ml-ikon{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;
+    background:rgba(255,255,255,.12);color:var(--kuning-rosyid)}
+}
+@media (min-width:1024px) and (max-width:1279px){
+  .menu-atas{margin-left:8px}
+  .ma-utama,.ma-tombol{padding:0 8px}
+  .ma-admin .ma-tombol{padding:0 8px}
+  .ma-admin .ma-tombol .ml-ikon{display:none}
 }
 @media (prefers-reduced-motion:reduce){.ma-panah{transition:none}}
 
