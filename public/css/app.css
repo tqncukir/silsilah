@@ -749,15 +749,41 @@ li:nth-child(-n+3)>.bt-baris .bt-no{background:var(--hijau-jamiyyah);color:#FFFF
 .pin-tata{display:grid;gap:16px;align-items:start}
 @media (min-width:900px){.pin-tata{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)}}
 .pin-tata[hidden]{display:none}
-.pin-hasil{margin:16px 0 0;padding:16px;border-radius:12px;background:var(--hijau-pupus);border-left:5px solid var(--hijau-daun)}
+.pin-hasil{margin:16px 0 0;padding:16px;border-radius:16px;background:#FFFFFF;border:1.5px solid var(--garis-kuat);box-shadow:var(--bayang);text-align:center}
+.pin-hasil-judul{color:var(--hijau-jamiyyah)}
+.pin-hasil .ket{text-align:center}
 .pin-hasil[hidden]{display:none}
 .pin-hasil p{margin:0 0 6px}
-.pin-hasil-angka{font-size:2rem;font-weight:700;letter-spacing:.12em;color:var(--hijau-jamiyyah);font-variant-numeric:tabular-nums}
+.pin-hasil-angka{margin:8px 0 10px!important;padding:12px 8px;border-radius:12px;background:var(--mint);font-size:clamp(1.625rem,8vw,2.25rem);font-weight:800;letter-spacing:.12em;white-space:nowrap;color:var(--hijau-jamiyyah);font-variant-numeric:tabular-nums}
 .pin-hasil .btn{margin:10px 0 0}
 .pin-daftar{list-style:none;margin:0;padding:0}
 .pin-daftar li{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px 16px;padding:12px 0;border-bottom:1px solid var(--garis-lembut)}
 .pin-daftar li:last-child{border-bottom:0}
 .pin-daftar li .ket{display:block;margin:2px 0 0}
+/* Poles Atur PIN Pengurus (Kang 2026-11-28: "kerjakan semua", temuan a–g) */
+.pin-tata .btn-pindai{margin:6px 0 4px}
+.pin-atau{margin:0 0 14px;text-align:center}
+@media (min-width:900px){.pin-atau{text-align:left}}
+#pin-isian #pin{font-size:1.25rem;font-weight:600;letter-spacing:.35em;font-variant-numeric:tabular-nums}
+#pin-isian #pin::placeholder{letter-spacing:normal;font-weight:400;font-size:var(--fs-isi)}
+.pin-acak{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:0 14px}
+.pin-daftar li{align-items:flex-start;padding:14px 0}
+.pin-orang{min-width:0;flex:1 1 220px}
+.pin-orang p{margin:0}
+.pin-nama{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.pin-peran{margin:2px 0 4px!important;color:var(--hijau-jamiyyah);font-weight:600;font-size:var(--fs-kecil);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pin-peran .stat{margin:0}
+.pin-tgl{font-size:13px!important}
+.pin-daftar li.mati .pin-peran{color:var(--abu)}
+.pin-anda{display:inline-block;padding:1px 8px;border-radius:999px;background:var(--mint);color:var(--hijau-jamiyyah);font-size:13px;font-weight:600}
+.pin-aksi{display:flex;flex-wrap:wrap;gap:8px;align-items:center;flex:0 1 auto}
+.pin-tombol{min-height:44px;padding:0 14px;border-radius:10px;border:1.5px solid var(--garis-kuat);background:#FFFFFF;color:var(--hijau-jamiyyah);font:inherit;font-size:var(--fs-kecil);font-weight:600;cursor:pointer;white-space:nowrap}
+.pin-tombol:hover{background:var(--latar-sorot)}
+.pin-tombol:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:2px}
+.pin-tombol:disabled{opacity:.6;cursor:default}
+.pin-tombol-bahaya{color:#A4161A;border-color:#E7B4B5}
+.pin-tombol-bahaya:hover{background:#FDF1F1}
+@media (max-width:899px){.pin-aksi{width:100%}.pin-tombol-bahaya{margin-left:auto}}
 .pin-daftar li.mati strong{color:var(--abu)}
 .pin-aksi{display:flex;flex-wrap:wrap;gap:4px 16px}
 .pin-aksi .tautan{white-space:nowrap}

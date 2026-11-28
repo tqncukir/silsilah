@@ -149,17 +149,23 @@ function tanggal(t) {
 async function muatDaftar() {
   const d = await dbKirim('POST', 'rpc/daftar_pin_pengurus', {});
   barisPengurus.clear(); d.forEach((r) => barisPengurus.set(String(r.nomor_anggota), r));
-  $('daftar').innerHTML = d.length ? d.map((r) => {
+  const urut = [...d].sort((x, y) => Number(y.aktif) - Number(x.aktif)); // nonaktif paling bawah
+  const aktif = d.filter((r) => r.aktif).length;
+  $('d-judul').textContent = d.length ? `Pengurus ber-PIN · ${d.length.toLocaleString('id-ID')} orang (${aktif.toLocaleString('id-ID')} aktif)` : 'Pengurus ber-PIN';
+  $('daftar').innerHTML = urut.length ? urut.map((r) => {
     const saya = String(r.nomor_anggota) === nomorSaya;
     return `<li class="${r.aktif ? '' : 'mati'}">
-      <div><strong>${hurufAman(r.nama)}</strong>${saya ? ' <span class="lencana">Anda</span>' : ''}
-        <span class="ket">${r.nomor_anggota} · ${hurufAman(r.desa)}</span>
-        <span class="ket">${NAMA_PERAN[r.peran] || r.peran} · ${r.aktif ? 'Aktif' : 'Nonaktif'} · diubah ${tanggal(r.diubah_pada)}</span>
-        ${r.peran === 'koordinator_wilayah' ? `<span class="ket">Wilayah: ${r.wilayah ? hurufAman(r.wilayah) : 'belum diatur'}</span>` : ''}</div>
+      <div class="pin-orang">
+        <p class="pin-nama"><strong>${hurufAman(r.nama)}</strong>${saya ? ' <span class="pin-anda">Anda</span>' : ''}</p>
+        <p class="pin-peran">${hurufAman(NAMA_PERAN[r.peran] || r.peran)}${r.aktif ? '' : ' <span class="stat stat-wafat">Nonaktif</span>'}</p>
+        <p class="ket">${r.nomor_anggota} · ${hurufAman(r.desa)}</p>
+        ${r.peran === 'koordinator_wilayah' ? `<p class="ket">Wilayah: ${r.wilayah ? hurufAman(r.wilayah) : 'belum diatur'}</p>` : ''}
+        <p class="ket pin-tgl">Diubah ${tanggal(r.diubah_pada)}</p>
+      </div>
       <div class="pin-aksi">
-        ${r.aktif && r.peran === 'koordinator_wilayah' ? `<button type="button" class="tautan" data-wilayah="${r.nomor_anggota}">Ubah wilayah</button>` : ''}
-        <button type="button" class="tautan" data-ganti="${r.nomor_anggota}" data-peran="${r.peran}">${r.aktif ? 'Ganti PIN' : 'Aktifkan lagi'}</button>
-        ${r.aktif && !saya ? `<button type="button" class="tautan tautan-bahaya" data-mati="${r.nomor_anggota}" data-nama="${hurufAman(r.nama)}">Nonaktifkan</button>` : ''}
+        ${r.aktif && r.peran === 'koordinator_wilayah' ? `<button type="button" class="pin-tombol" data-wilayah="${r.nomor_anggota}">Ubah wilayah</button>` : ''}
+        <button type="button" class="pin-tombol" data-ganti="${r.nomor_anggota}" data-peran="${r.peran}">${r.aktif ? 'Ganti PIN' : 'Aktifkan lagi'}</button>
+        ${r.aktif && !saya ? `<button type="button" class="pin-tombol pin-tombol-bahaya" data-mati="${r.nomor_anggota}" data-nama="${hurufAman(r.nama)}">Nonaktifkan</button>` : ''}
       </div></li>`;
   }).join('') : '<li class="ket">Belum ada pengurus ber-PIN.</li>';
 }
