@@ -983,7 +983,7 @@ a.tautan{display:inline-flex;align-items:center}
   .menu-keluar{background:none;border:1.5px solid rgba(255,255,255,.45)}
   .menu-lain a:focus-visible,.menu-lain button:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:2px}
 }
-.menu-grup h3 span,.menu-samping h3 span{width:7px;height:7px;border-radius:50%;background:var(--kuning-rosyid)}
+.menu-grup h3 span,.ms-grup>span{width:7px;height:7px;border-radius:50%;background:var(--kuning-rosyid)}
 @media (min-width:1024px){
   .ada-menu-samping{padding-left:256px}
   .ada-menu-samping .app-atas{margin-left:-256px}
@@ -992,8 +992,15 @@ a.tautan{display:inline-flex;align-items:center}
   .menu-samping{display:block;position:fixed;top:0;left:0;bottom:0;z-index:15;width:256px;overflow-y:auto;box-sizing:border-box;
     padding:80px 12px 24px;background:var(--hijau-jamiyyah);color:#FFFFFF}
   .menu-samping ul{list-style:none;margin:0 0 14px;padding:0;display:flex;flex-direction:column;gap:2px}
-  .menu-samping h3{display:flex;align-items:center;gap:8px;margin:0 0 4px;padding:0 10px;font-size:.8125rem;font-weight:700;
-    letter-spacing:.04em;text-transform:uppercase;color:#FFFFFF}
+  .menu-samping h3{margin:0 0 4px}
+  .ms-grup{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;padding:0 10px;border:0;border-radius:10px;background:none;
+    font:inherit;font-size:.8125rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#FFFFFF;text-align:left;cursor:pointer}
+  .ms-grup:hover{background:rgba(255,255,255,.08)}
+  .ms-grup:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:-3px}
+  .ms-panah{margin-left:auto;color:var(--kuning-rosyid);transition:transform .2s ease-out}
+  .ms-grup[aria-expanded="true"] .ms-panah{transform:rotate(180deg)}
+  .menu-samping ul[hidden]{display:none}
+  @media (prefers-reduced-motion:reduce){.ms-panah{transition:none}}
   .menu-samping a{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 10px;border-radius:10px;color:#FFFFFF;
     text-decoration:none;font-size:.9375rem;font-weight:500}
   .menu-samping a:hover{background:rgba(255,255,255,.08)}

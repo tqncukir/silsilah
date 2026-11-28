@@ -188,10 +188,28 @@ function pasangMenuBawah(p) {
   // Menu samping (laptop & komputer)
   const s = document.createElement('nav');
   s.id = 'menu-samping'; s.className = 'menu-samping'; s.setAttribute('aria-label', 'Menu utama');
+  // Kelompok menu samping bisa dibuka/tutup (Kang 2026-11-28); pilihan diingat di perangkat ini.
+  const KUNCI_BUKA = 'silsilah.menu-buka';
+  let terbuka = new Set();
+  try { terbuka = new Set(JSON.parse(localStorage.getItem(KUNCI_BUKA)) || []); } catch {}
   const baris = ([i, t, u]) => `<li><a href="${u}"${cur(u)}><span class="ml-ikon">${ikonMenu(i, 17)}</span><span>${t}</span></a></li>`;
   s.innerHTML = `<ul>${utama.map(baris).join('')}</ul>`
-    + grup.map(([k, n, isi]) => `<h3><span class="titik-${k}" aria-hidden="true"></span>${n}</h3><ul>${isi.map(baris).join('')}</ul>`).join('')
+    + grup.map(([k, n, isi]) => {
+      const b = terbuka.has(k) || isi.some(([, , u]) => aktif(u));
+      return `<h3><button type="button" class="ms-grup" data-grup="${k}" aria-expanded="${b}" aria-controls="ms-${k}"><span class="titik-${k}" aria-hidden="true"></span>${n}`
+        + `<svg class="ms-panah" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button></h3>`
+        + `<ul id="ms-${k}"${b ? '' : ' hidden'}>${isi.map(baris).join('')}</ul>`;
+    }).join('')
     + `<ul class="menu-samping-kaki">${baris(['pasang', 'Cara pasang di HP', '/pasang.html'])}</ul>`;
+  s.addEventListener('click', (e) => {
+    const t = e.target.closest('.ms-grup');
+    if (!t) return;
+    const buka = t.getAttribute('aria-expanded') !== 'true';
+    t.setAttribute('aria-expanded', buka);
+    document.getElementById(`ms-${t.dataset.grup}`).hidden = !buka;
+    if (buka) terbuka.add(t.dataset.grup); else terbuka.delete(t.dataset.grup);
+    try { localStorage.setItem(KUNCI_BUKA, JSON.stringify([...terbuka])); } catch {}
+  });
   document.body.append(nav, d, s);
   document.body.classList.add('ada-menu-bawah', 'ada-menu-samping');
   // Saat mengetik, keyboard HP bisa mengangkat menu bawah sehingga menutup isian/tombol Simpan: sembunyikan sementara.

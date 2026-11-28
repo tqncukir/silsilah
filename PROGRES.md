@@ -549,3 +549,4 @@ Mulai: 2026-11-28 (Kang: "mulai B"). Menunggu dicek Kang.
 - Kontras: teks kecil putih di hijau (6,6:1); emas hanya untuk ikon, titik kelompok, dan judul besar (emas di hijau 4,46:1, tidak cukup untuk teks kecil).
 - `app.css`: blok menu lama diganti; kelas baru `ml-ubin`/`ml-ikon` (tidak bentrok dengan `menu-ubin` Beranda). Link `nav-*` di HTML tetap ada (dipakai bila menu belum terpasang), disembunyikan saat menu samping aktif.
 - Uji: admin pusat, ketua, anggota × 360/768/1280 px: tanpa geser samping, tanpa galat konsol, semua target ≥44px, tangkapan layar dilihat.
+- **Tambahan (Kang 2026-11-28, v115):** di laptop/komputer judul kelompok menu samping bisa diklik untuk buka/tutup (panah emas). Kelompok berisi halaman yang sedang dibuka otomatis terbuka; pilihan buka/tutup diingat di perangkat (`localStorage['silsilah.menu-buka']`). Tombol `aria-expanded`, 44px. HP & tablet tidak berubah. Uji: buka, tutup, pindah halaman (pilihan tetap), tanpa galat.
