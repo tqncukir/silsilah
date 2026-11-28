@@ -118,6 +118,18 @@ $('an-aktifkan').onclick = () => {
 };
 $('an-nanti').onclick = () => { try { localStorage.setItem(NANTI_NOTIF, String(Date.now())); } catch {} $('ajak-notif').hidden = true; };
 
+// Ajakan "Panduan Peran" (Tahap 19): tampil sampai ditutup atau panduan dibuka (diingat di HP ini).
+const PANDUAN_TUTUP = 'silsilah.panduan.tutup';
+function ajakPanduan(p) {
+  let tutup = false; try { tutup = localStorage.getItem(PANDUAN_TUTUP) === '1'; } catch {}
+  if (tutup) return;
+  $('ap-ket').textContent = `Baca Panduan Peran: cara memakai SILSILAH sebagai ${NAMA_PERAN[p.peran] || 'pengguna'}, lengkap dengan gambar.`;
+  $('ajak-panduan').hidden = false;
+}
+const ingatPanduan = () => { try { localStorage.setItem(PANDUAN_TUTUP, '1'); } catch {} };
+$('ap-tutup').onclick = () => { ingatPanduan(); $('ajak-panduan').hidden = true; };
+$('ap-baca').addEventListener('click', ingatPanduan);
+
 // Berita terbaru (3; yang sudah masuk juga melihat Khusus anggota).
 function muatBeritaBeranda() {
   gambarBerita($('berita-beranda-isi'), 3).then((n) => { $('berita-beranda').hidden = n <= 0; });
@@ -183,6 +195,7 @@ function pasangPintasan(p) {
     $('salam').textContent = p.nama;
     tanggalSalam();
     ajakNotif();
+    ajakPanduan(p);
     $('peran').textContent = NAMA_PERAN[p.peran] || p.peran;
     muatBeritaBeranda();
     if (p.peran !== 'anggota') {

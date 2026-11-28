@@ -1790,3 +1790,42 @@ a.dsb-kartu-tautan:focus-visible{outline:3px solid var(--kuning-rosyid);outline-
 .ks-ringkas.ks-baik{background:var(--latar-sorot);border-color:var(--garis-kuat)}
 .ks-ringkas.ks-baik .ks-ringkas-ikon{background:var(--hijau-jamiyyah);color:#FFFFFF}
 .ks-ringkas .ks-berikut{margin:6px 0 0;font-size:13px;color:var(--abu)}
+
+/* ===== Panduan Peran (Tahap 19) ===== */
+.pd-daftar ol{margin:0;padding:0 0 0 22px;display:grid;gap:2px}
+.pd-daftar li::marker{color:var(--abu);font-weight:600}
+.pd-daftar a{display:inline-flex;align-items:center;gap:8px;min-height:44px;color:var(--hijau-jamiyyah);font-weight:600;text-decoration:none}
+.pd-daftar a:hover{text-decoration:underline}
+.pd-anda{padding:2px 8px;border-radius:999px;background:var(--mint);color:var(--hijau-jamiyyah);font-size:var(--fs-kecil);font-weight:700}
+.pd-bagian-daftar{display:grid;gap:12px;margin-top:var(--gap)}
+.pd-bagian{padding:0;overflow:hidden;scroll-margin-top:84px}
+.pd-bagian summary{display:flex;align-items:center;gap:14px;min-height:64px;padding:12px 16px;cursor:pointer;list-style:none}
+.pd-bagian summary::-webkit-details-marker{display:none}
+.pd-bagian summary::after{content:"";flex:none;margin-left:auto;width:10px;height:10px;border-right:2.5px solid var(--hijau-jamiyyah);border-bottom:2.5px solid var(--hijau-jamiyyah);transform:rotate(45deg);transition:transform .2s}
+.pd-bagian[open] summary::after{transform:rotate(225deg)}
+.pd-bagian summary:focus-visible{outline:3px solid var(--hijau-jamiyyah);outline-offset:-3px;border-radius:16px}
+.pd-no{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--mint);color:var(--hijau-jamiyyah);font-weight:800}
+.pd-judul{display:grid;gap:2px;min-width:0}
+.pd-judul strong{font-size:var(--fs-sub);color:var(--hitam)}
+.pd-judul span{font-size:var(--fs-kecil);color:var(--abu)}
+.pd-utama summary{background:var(--hijau-jamiyyah) url(/img/motif.svg);border-bottom:4px solid var(--kuning-rosyid)}
+.pd-utama .pd-no{background:var(--kuning-rosyid);color:var(--hijau-jamiyyah)}
+.pd-utama .pd-judul strong{color:#FFFFFF}
+.pd-utama .pd-judul span{color:#FFFFFF}
+.pd-utama summary::after{border-color:var(--kuning-rosyid)}
+.pd-utama summary:focus-visible{outline-color:var(--kuning-rosyid)}
+.pd-teks{padding:4px 18px 20px;line-height:1.6}
+.pd-teks h3{margin:22px 0 8px;font-size:var(--fs-sub);color:var(--hijau-jamiyyah)}
+.pd-teks p{margin:0 0 12px}
+.pd-teks ol,.pd-teks ul{margin:0 0 12px;padding-left:22px}
+.pd-teks li{margin:0 0 6px}
+.pd-teks a{color:var(--hijau-jamiyyah);font-weight:600}
+.pd-gambar{margin:8px 0 18px;text-align:center}
+.pd-gambar img{display:block;width:100%;max-width:300px;height:auto;margin:0 auto;border:1px solid var(--garis);border-radius:16px;box-shadow:var(--bayang);background:var(--latar)}
+.pd-gambar figcaption{margin-top:8px;font-size:var(--fs-kecil);color:var(--abu)}
+.pd-tabel-bungkus{overflow-x:auto;margin:0 0 12px}
+.pd-tabel{width:100%;border-collapse:collapse;font-size:var(--fs-kecil)}
+.pd-tabel th,.pd-tabel td{padding:10px;border-bottom:1px solid var(--garis-lembut);text-align:left;vertical-align:top}
+.pd-tabel th{background:var(--latar-sorot);color:var(--hijau-jamiyyah)}
+.pd-catatan{margin-top:var(--gap)}
+@media (min-width:1024px){.pd-daftar ol{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px}.pd-teks{padding:4px 28px 24px;max-width:900px}}

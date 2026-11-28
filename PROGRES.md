@@ -11,6 +11,7 @@
 - **Tahap 16 Notifikasi: selesai & disetujui Kang 2026-11-28.** Uji kirim ke HP Kang berhasil; kiriman jadwal pertama sore 28 Nov 16.00 **berhasil** (Cron Succeeded, Function POST 200) & pagi 29 Nov 06.00. Versi cache v134.
 - **Tahap 18 Kesehatan Sistem: selesai & disetujui Kang 2026-11-28.** Versi cache v156; migrasi terakhir `20261128120000_peringatan_sistem.sql` (sudah dijalankan); Edge Function `notif` sudah dideploy ulang. Pemeriksaan otomatis pertama 29 Nov 06.30 WIB.
 - **Tahap 17 Daftar ulang KTA lama: selesai & disetujui Kang 2026-11-28.** Versi cache v142 (v141 = saran wilayah bisa digeser di HP; v142 = pindai KTP otomatis; v143 = penyetelan + mode uji; v144 = poles halaman Pasang; v145 = poles Poster; v146 = kepala tidak berkedip saat dimuat; v147 = poles Atur PIN Pengurus; v148 = poles Dashboard; v150 = Dashboard tanpa Komposisi pekerjaan + tata ulang; v151 = catatan pengecekan bisa selesai; v152 = poles Dashboard tahap 2; v153 = poles Pantau Backup), migrasi terakhir `20261128070000_dashboard_daftar_ulang.sql` (sudah dijalankan). Sesudahnya (usulan): tahap "Bagikan PIN per desa".
+- **Tahap 19 Panduan Peran: Langkah 1 selesai 2026-11-28, menunggu dicek Kang.** Versi cache **v158**, tanpa perubahan database. Lihat akhir Tahap 19.
 - **Halaman depan baru "Gerbang Hijau Berkah" (Arah A, Kang 2026-11-28): selesai, menunggu dicek Kang.** Versi cache **v140** (v140 = Tahap 17 Langkah 3; v136 = poles Masuk & Notifikasi; v137 = motif bintang di kepala semua halaman; v138 = motif di kaki halaman; v139 = Pendaftaran nomor KTA lama).
 
 ## Tahap 1: Data Jamaah, Pendaftaran, KTA, Portal Anggota, Hak Akses
@@ -843,3 +844,19 @@ Mulai: 2026-11-28 (Kang: "mulai tahap kesehatan sistem"), terinspirasi halaman k
 - **Poles Kesehatan Sistem (Kang 2026-11-28: "kerjakan semua", temuan a–f, v157):** (a) HP: kartu **sehat dilipat** (kepala + pil, ketuk/Enter membuka, `aria-expanded`), kartu bermasalah tetap terbuka — HP 5.086 → 2.220 px; (b) tablet/laptop: kartu sebaris sama tinggi, tautan/kotak/catatan di dasar kartu; (c) Tugas keamanan: tanda kiri (✓/jam), "Selesai … · berikutnya …" atau "**Jatuh tempo**", tombol besar hanya untuk yang perlu, yang belum jatuh tempo cukup tautan "Tandai lagi"; (d) "Periksa ulang" jadi tombol kecil berikon di samping "Diperiksa …"; (e) Aktivitas: periode & akun sebaris di layar lebar, keterangan dipendekkan; (f) ringkasan sehat berlatar hijau muda + "Pemeriksaan otomatis berikutnya: …". Tampilan saja. Uji tiruan **45 lulus**.
 - **Usulan tahap berikutnya (belum dimulai):** "Bagikan PIN per desa" (slip PIN massal untuk anggota per desa).
 
+
+## Tahap 19: Panduan Peran (menu di aplikasi)
+Mulai: 2026-11-28 (Kang: "apa bisa tugas dan panduan peran per akun kamu masukkan ke masing2 peran akun di aplikasi dengan nama menu panduan peran").
+Sumber isi: dokumen "Panduan SILSILAH TQN Cukir" (Claude Docs, gambar layar data contoh).
+**Keputusan Kang (2026-11-28):**
+1. Isi: teks + gambar layar (dikecilkan, dimuat saat bagiannya dibuka).
+2. Cakupan: panduan peran sendiri + fitur yang memang bisa dibuka peran itu.
+3. Letak: menu Lainnya (kelompok Pondasi) + kartu "Baru di SILSILAH?" di Beranda, bisa ditutup.
+**Rencana langkah:** 1. Halaman, isi, menu, kartu Beranda + uji. 2. Cek Kang di HP asli, poles bila ada temuan.
+
+**Langkah 1** (2026-11-28), tanpa perubahan database, versi cache **v158**:
+- `panduan.html` + `js/panduan.js` + `js/panduan-isi.js` (isi statis: `BAGIAN` = 21 bagian, `BAGIAN_PERAN` = urutan bagian per peran, panduan peran sendiri pertama & terbuka, kepala hijau bermotif). Bagian lain berupa `<details>` (gambar `loading=lazy`, dimuat saat dibuka). Daftar isi bertautan (#pd-<id>), tautan antarbagian (`a.pd-ke`) jadi teks biasa bila bagian itu bukan untuk peran tersebut.
+- Gambar: 49 file `img/panduan/*.webp` (560 px, ±38 KB, total ±1,8 MB, data contoh, tidak di-cache INTI).
+- Menu: `['panduan','Panduan Peran','/panduan.html','pondasi']` untuk anggota & semua pengurus (`daftarMenu` di `supa.js`, ikon `panduan`).
+- Beranda: kartu `#ajak-panduan` (gaya `.ajak-notif`) untuk semua peran; "Tutup" atau "Baca panduan" = tidak tampil lagi di HP itu (`localStorage silsilah.panduan.tutup`).
+- Uji tiruan Playwright: 9 peran di 390 px + koordinator 768/1280 + bendahara 360: jumlah bagian sesuai peran (anggota 7, ketua 17, koordinator 16, petugas 10, bendahara 13, nadzir 6, khodim 7, dokter 8, admin 15), bagian pertama = peran sendiri & terbuka, gambar termuat, tanpa geser samping & galat konsol, menu Lainnya berisi Panduan Peran; daftar isi & tautan antarbagian membuka bagian tujuan; buka lewat #pd-ziarah; kartu Beranda tertutup & tetap tertutup setelah muat ulang. **Menunggu cek Kang.**

@@ -178,6 +178,7 @@ const IKON_MENU = {
   keluar: 'M10 4H5v16h5M14 8l4 4-4 4M18 12H9',
   tutup: 'M6 6l12 12M18 6L6 18',
   berita: 'M5 4h11a2 2 0 012 2v13a1 1 0 001 1H6a2 2 0 01-2-2V5a1 1 0 011-1zM18 8h2v10a2 2 0 01-2 2M8 8h6M8 12h6M8 16h3',
+  panduan: 'M12 6.5C10.5 5 8.2 4.5 4 4.5v14c4.2 0 6.5.5 8 2 1.5-1.5 3.8-2 8-2v-14c-4.2 0-6.5.5-8 2zM12 6.5v14',
 };
 const GRUP_MENU = [['pondasi', 'Pondasi Jamaah'], ['ruhani', 'Ruhani & Kegiatan'], ['kepedulian', 'Kepedulian'], ['amanah', 'Amanah & Tata Kelola']];
 const ikonMenu = (k, u = 20) => `<svg viewBox="0 0 24 24" width="${u}" height="${u}" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${IKON_MENU[k]}"/></svg>`;
@@ -186,13 +187,14 @@ function daftarMenu(p) {
   // [ikon, label, alamat, kelompok]; kelompok '' = menu utama (menu bawah HP / atas menu samping)
   const semua = anggota
     ? [['beranda', 'Beranda', '/beranda.html', ''], ['kta', 'KTA', '/kta.html', ''], ['kegiatan', 'Agenda', '/agenda.html', ''],
-      ['saya', 'Data Saya', '/saya.html', 'pondasi'], ['notif', 'Notifikasi', '/notif.html', 'pondasi'],
+      ['saya', 'Data Saya', '/saya.html', 'pondasi'], ['notif', 'Notifikasi', '/notif.html', 'pondasi'], ['panduan', 'Panduan Peran', '/panduan.html', 'pondasi'],
       ['ahli', 'Ahli Kubur', '/ahli-kubur.html', 'ruhani'], ['haul', 'Haul', '/haul.html', 'ruhani'], ['ziarah', 'Ziarah & Umroh', '/saya.html#ziarah', 'ruhani'],
       ['usaha', 'Usaha Jamaah', '/usaha.html', 'kepedulian']]
     : [['beranda', 'Beranda', '/beranda.html', '', null], ['jamaah', 'Jamaah', '/jamaah.html', '', PERAN_LIHAT_JAMAAH],
       ['kegiatan', 'Kegiatan', '/kegiatan.html', '', PERAN_LIHAT_KEGIATAN],
       ['dasbor', 'Dashboard', '/dashboard.html', 'pondasi', PERAN_LIHAT_JAMAAH], ['daftar', 'Pendaftaran', '/pendaftaran.html', 'pondasi', PERAN_UBAH_JAMAAH],
       ['pin', 'Atur PIN', '/pengurus-pin.html', 'pondasi', ['admin_pusat']], ['notif', 'Notifikasi', '/notif.html', 'pondasi', null],
+      ['panduan', 'Panduan Peran', '/panduan.html', 'pondasi', null],
       ['absensi', 'Absensi', '/absensi.html', 'ruhani', PERAN_ABSEN], ['ahli', 'Ahli Kubur', '/ahli-kubur.html', 'ruhani', PERAN_LIHAT_JAMAAH],
       ['haul', 'Haul', '/haul.html', 'ruhani', PERAN_LIHAT_JAMAAH], ['ziarah', 'Ziarah & Umroh', '/perjalanan.html', 'ruhani', PERAN_LIHAT_PERJALANAN],
       ['agenda', 'Agenda umum', '/agenda.html', 'ruhani', null],
