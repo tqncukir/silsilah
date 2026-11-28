@@ -85,7 +85,8 @@ async function nyalakanLampu() {
 $('lampu').onclick = () => aturLampu($('lampu').getAttribute('aria-pressed') !== 'true');
 // ===== Pindai otomatis (Kang 2026-11-28): foto diambil sendiri bila KTP di bingkai terlihat tajam & diam ±1 detik.
 // Gambar kecil isi bingkai diperiksa di HP saja (tidak dikirim/disimpan). Tombol foto manual tetap ada.
-const PANTAU = { jeda: 200, perlu: 5, mulaiMs: 900, tepi: 22, padat: 0.07, goyang: 7 };
+const PANTAU = { jeda: 200, perlu: 4, mulaiMs: 900, tepi: 18, padat: 0.045, goyang: 9 };
+const UJI_PINDAI = new URLSearchParams(location.search).has('uji'); // ?uji=1: tampilkan angka pemeriksaan (penyetelan di HP asli)
 let pantau = null;
 function kotakBingkai(v) {
   const b = $('bingkai').getBoundingClientRect(), l = v.getBoundingClientRect();
@@ -107,8 +108,11 @@ function nilaiCuplikan(v, k, ctx, lalu) {
     if (Math.abs(abu[i + 1] - abu[i - 1]) + Math.abs(abu[i + W] - abu[i - W]) > PANTAU.tepi) tepi++;
     n++;
   }
-  if (lalu) { for (let i = 0; i < W * H; i += 3) gerak += Math.abs(abu[i] - lalu[i]); gerak /= W * H / 3; }
-  return { padat: tepi / n, gerak, terang: terang / (W * H), abu };
+  // gerak: rata-rata blok 8x8 (bintik/derau kamera tidak dihitung sebagai goyang)
+  const B = 8, bw = Math.floor(W / B), bh = Math.floor(H / B), blok = new Float32Array(bw * bh);
+  for (let y = 0; y < bh * B; y++) for (let x = 0; x < bw * B; x++) blok[Math.floor(y / B) * bw + Math.floor(x / B)] += abu[y * W + x] / (B * B);
+  if (lalu) { for (let i = 0; i < blok.length; i++) gerak += Math.abs(blok[i] - lalu[i]); gerak /= blok.length; }
+  return { padat: tepi / n, gerak, terang: terang / (W * H), abu: blok };
 }
 function petunjuk(teks, sub, siap = false) {
   $('kamera-judul').innerHTML = `${teks}<br><span>${sub}</span>`;
@@ -132,6 +136,7 @@ function mulaiPantau() {
     else if (h.gerak > PANTAU.goyang) keadaan = 'goyang';
     else keadaan = 'baik';
     baik = keadaan === 'baik' ? baik + 1 : 0;
+    if (UJI_PINDAI) $('kamera-judul').dataset.uji = `tulisan ${h.padat.toFixed(3)} (≥${PANTAU.padat}) · goyang ${h.gerak.toFixed(1)} (≤${PANTAU.goyang}) · terang ${Math.round(h.terang)} · ${keadaan} ${baik}/${PANTAU.perlu}`;
     if (baik >= PANTAU.perlu) { navigator.vibrate?.(60); jepret(); return; }
     if (keadaan === akhir && keadaan !== 'baik') return;
     akhir = keadaan;
