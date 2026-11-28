@@ -741,8 +741,15 @@ Temuan & perbaikan (tampilan saja): **Masuk** — (a) "Masuk dengan PIN (penguru
 `.app-atas` (kepala bersama semua halaman aplikasi) memakai latar `var(--hijau-jamiyyah) url(/img/motif.svg)`, senada dengan halaman depan & Masuk; `/img/motif.svg` masuk daftar `INTI` sw.js (tampil saat offline). Uji Beranda 8 peran: 72 lulus; menu atas/bawah & Keluar tetap jelas.
 - **v138 (Kang):** kaki halaman `.kaki` (semua halaman yang punya footer) juga memakai motif bintang yang sama. Uji halaman depan 26 lulus.
 
-## Usulan tahap berikutnya: Daftar ulang KTA lama (belum dimulai, menunggu Kang "mulai")
+## Tahap 17: Daftar ulang KTA lama
+Mulai: 2026-11-28 (Kang: "mulai tahap daftar ulang"). **Menunggu Kang "lanjut langkah 1".**
 **Temuan Kang (2026-11-28):** jamaah pemegang **KTA lama tanpa QR tidak ada di data 5.528** (impor Excel). Nomornya berformat sama (10 angka 1165…), sebagian **di atas 1165105644**; tidak ada daftar/berkas datanya; jumlahnya **lebih dari 1.000**. Belum ada pendaftaran jamaah baru sejak impor (nomor 1165105645 ke atas belum terpakai).
 **Keputusan Kang:** nomor jamaah baru **tetap 1165105645 dst** (tidak pindah blok), walau sudah dijelaskan risiko nomor kembar dengan kartu lama yang belum didaftarkan.
 **Usulan Claude:** (1) nomor otomatis melompati nomor yang sudah terpakai; (2) Pendaftaran menerima "Nomor di KTA lama (bila ada)" khusus admin pusat/ketua/koordinator, tolak bila sudah dipakai + tampilkan pemiliknya; (3) utamakan daftar ulang pemegang KTA lama per desa sebelum menerima anggota baru; (4) setelah tersimpan langsung Buat PIN → jamaah masuk sendiri & simpan/cetak KTA baru ber-QR ("PIN sekali, lalu cetak sendiri"). Anggota **tidak** boleh menerbitkan KTA baru sendiri tanpa dikenali pengurus (QR lama & nomor mudah ditiru).
-**Rencana langkah:** 1) Database (nomor lompat, terima nomor lama + cek bentrok, hak peran) + uji lokal; 2) Halaman Pendaftaran (isian nomor lama, pesan bentrok, tombol Buat PIN setelah simpan); 3) Uji menyeluruh & laporan. Sesudahnya: tahap "Bagikan PIN per desa" (slip PIN massal).
+**Keputusan Kang (2026-11-28, saat mulai):** (5) yang boleh mengetik Nomor KTA lama: **admin pusat, ketua, koordinator** (koordinator hanya wilayahnya, seperti hak tambah jamaah); (6) jamaah hasil daftar ulang **ditandai** dan bisa dipantau: saringan "Daftar ulang KTA lama" di Data Jamaah + jumlahnya di Dashboard.
+**Rencana langkah:**
+1. Database: tanda asal data jamaah (impor / baru / daftar ulang), nomor otomatis melompati yang terpakai, terima nomor KTA lama (10 angka 1165…, hanya 3 peran) + tolak bila terpakai dengan info pemilik sesuai hak, catat di log. Uji per peran di Postgres lokal. Kang menjalankan migrasi.
+2. Halaman Pendaftaran: isian "Nomor di KTA lama (bila ada)", pesan bentrok yang jelas, setelah simpan tombol **Buat PIN & lihat KTA**.
+3. Data Jamaah (saringan "Daftar ulang KTA lama") + Dashboard (jumlah daftar ulang per kecamatan/desa).
+4. Uji menyeluruh (360/768/1280, semua peran) + laporan.
+Sesudah tahap ini: "Bagikan PIN per desa" (slip PIN massal).
