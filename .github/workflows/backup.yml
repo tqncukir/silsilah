@@ -1,6 +1,6 @@
 # Backup harian SILSILAH: tiap hari 01.15 WIB (18.15 UTC), bisa telat 5-30 menit bila GitHub ramai.
 # Rahasia (diisi Kang di Settings > Secrets and variables > Actions, tidak pernah di repo):
-#   SUPABASE_DB_URL  alamat Session pooler Supabase (berisi kata sandi database)
+#   SUPABASE_DB_SANDI kata sandi database Supabase (alamat Session pooler ada di bawah, bukan rahasia)
 #   BACKUP_SANDI     kata sandi pembuka file .7z (hanya Kang yang tahu)
 #   DRIVE_URL        alamat Web app Apps Script (backup/drive-penerima.gs)
 #   DRIVE_TOKEN      token dari fungsi pasang() di Apps Script
@@ -22,23 +22,21 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
-      DB: ${{ secrets.SUPABASE_DB_URL }}
+      DB_SANDI: ${{ secrets.SUPABASE_DB_SANDI }}
       SANDI: ${{ secrets.BACKUP_SANDI }}
       DRIVE_URL: ${{ secrets.DRIVE_URL }}
       DRIVE_TOKEN: ${{ secrets.DRIVE_TOKEN }}
     steps:
       - name: Cek rahasia lengkap
         run: |
-          for v in DB SANDI DRIVE_URL DRIVE_TOKEN; do
+          for v in DB_SANDI SANDI DRIVE_URL DRIVE_TOKEN; do
             [ -n "${!v}" ] || { echo "::error::Rahasia $v belum diisi"; exit 1; }
           done
           [ ${#SANDI} -ge 12 ] || { echo "::error::BACKUP_SANDI minimal 12 huruf"; exit 1; }
-          # Alamat database: buang spasi/baris baru; cek bentuknya tanpa menampilkan kata sandi
-          DB=$(printf '%s' "$DB" | tr -d '[:space:]')
-          echo "DB=$DB" >> "$GITHUB_ENV"
-          case "$DB" in postgresql://*|postgres://*) ;; *) echo "::error::SUPABASE_DB_URL harus diawali postgresql://"; exit 1;; esac
-          echo "$DB" | grep -q '^postgres[a-z]*://postgres\.tuthgclhrzvvlcnpjxiv:[^@]\+@aws-0-ap-southeast-1\.pooler\.supabase\.com:5432/postgres$' \
-            || { echo "::error::SUPABASE_DB_URL bentuknya keliru. Pola: postgresql://postgres.tuthgclhrzvvlcnpjxiv:SANDI@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres (jumlah tanda @: $(echo "$DB" | tr -cd @ | wc -c))"; exit 1; }
+          # Alamat Session pooler (IPv4) + kata sandi yang di-encode (aman untuk simbol apa pun)
+          S=$(python3 -c 'import os,urllib.parse;print(urllib.parse.quote(os.environ["DB_SANDI"].strip(),safe=""))')
+          echo "::add-mask::$S"
+          echo "DB=postgresql://postgres.tuthgclhrzvvlcnpjxiv:$S@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres?sslmode=require" >> "$GITHUB_ENV"
 
       - name: Pasang pg_dump 17 dan 7-Zip
         run: |
