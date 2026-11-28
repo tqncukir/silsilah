@@ -1,8 +1,8 @@
 // Service worker: simpan kerangka aplikasi agar tetap terbuka saat sinyal putus.
 // Setiap ganti CSS/JS: naikkan VERSI di sini DAN angka ?v= di semua halaman HTML.
-const VERSI = 'silsilah-v136';
-const INTI = ['/', '/index.html', '/css/tokens.css?v=136', '/css/app.css?v=136', '/js/app.js?v=136', '/js/supa.js?v=136', '/masuk.html', '/js/masuk.js?v=136', '/manifest.webmanifest',
-  '/fonts/plus-jakarta-sans.woff2', '/icons/logo-96.png', '/icons/icon-192-v2.png'];
+const VERSI = 'silsilah-v137';
+const INTI = ['/', '/index.html', '/css/tokens.css?v=137', '/css/app.css?v=137', '/js/app.js?v=137', '/js/supa.js?v=137', '/masuk.html', '/js/masuk.js?v=137', '/manifest.webmanifest',
+  '/fonts/plus-jakarta-sans.woff2', '/img/motif.svg', '/icons/logo-96.png', '/icons/icon-192-v2.png'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(VERSI).then((c) => c.addAll(INTI.map((u) => new Request(u, { cache: 'reload' }))))); self.skipWaiting(); });
 self.addEventListener('activate', (e) => {
   e.waitUntil(caches.keys().then((k) => Promise.all(k.filter((n) => n !== VERSI).map((n) => caches.delete(n)))));
