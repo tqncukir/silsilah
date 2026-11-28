@@ -523,4 +523,4 @@ Mulai: 2026-11-28 (Kang: "mulai").
 
 **Langkah 1, Database** (2026-11-28): migrasi `20261128010000_pantau_backup.sql` — tabel `private.catatan_backup` (tertutup total), `private.catat_backup(...)` (hanya peran postgres/GitHub; hapus catatan >90 hari), `public.status_backup()` (riwayat 90 hari, hanya admin pusat sesi penuh). Link catatan hanya boleh `https://github.com/tqncukir/silsilah/actions/runs/<angka>`.
 - Uji lokal (semua migrasi + data tiruan): admin pusat bisa membaca; ketua, bendahara, nadzir, koordinator, petugas, khodim, dokter, dan tamu ditolak; tabel tidak bisa dibaca langsung; aplikasi tidak bisa menulis catatan; catatan >90 hari terhapus; link aneh ditolak.
-- **Perlu Kang:** jalankan file migrasi ini di SQL Editor Supabase.
+- Migrasi sudah dijalankan Kang (2026-11-28). Advisors keamanan (Rerun linter): 0 error, 50 peringatan (+1: `status_backup` bisa dipanggil pengguna masuk — sama seperti fungsi lain, hak dicek di dalam), 12 info (+1: `catatan_backup` RLS tanpa aturan — memang sengaja tertutup total). Tidak ada temuan baru yang perlu dibetulkan.
