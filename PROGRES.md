@@ -6,7 +6,7 @@
 - **Tahap 11 Backup harian ke Google Drive: selesai & disetujui Kang 2026-11-28.** Backup otomatis tiap 01.15 WIB ke Drive jtccukir2022 folder "Backup SILSILAH".
 - **Tahap 12 Dashboard Pantau Backup (khusus Admin Pusat): selesai & disetujui Kang 2026-11-28.** `backup.html` + ubin Beranda; GitHub mencatat setiap backup ke `private.catatan_backup`.
 - **Tahap 13 Menu ringkas (Alternatif B): selesai & disetujui Kang 2026-11-28.** HP/tablet: lembar Lainnya berubin per kelompok; laptop: menu atas + daftar per kelompok + tombol Admin. Perbaikan "aplikasi lambat" (v119) dicek Kang: sudah cepat. **Versi cache terakhir v119.**
-- **Tahap 14 Berita: 4 langkah selesai 2026-11-28, menunggu dicek & disetujui Kang.** Versi cache **v127** (v123 & v124 = perbaikan simpan berita; v125 = jendela konfirmasi serasi; v126 = foto hilang tidak tampil kotak kosong; v127 = status Ditarik merah, lihat akhir Tahap 14). Tahap berikutnya yang diminta Kang: Notifikasi ke HP jamaah & pengurus. Sisa kecil Tahap 1 (Turnstile di Cek KTA lama, kecamatan Koordinator di Atur PIN) sudah selesai 2026-11-26. Yang tersisa adalah tugas Kang sendiri (lihat Tahap 10 Langkah 5: uji akun asli, lengkapi data, cek Advisors bulanan) dan rencana website profil di tqncukir.id.
+- **Tahap 14 Berita: selesai & disetujui Kang 2026-11-28.** Versi cache **v127** (v123 & v124 = perbaikan simpan berita; v125 = jendela konfirmasi serasi; v126 = foto hilang tidak tampil kotak kosong; v127 = status Ditarik merah, lihat akhir Tahap 14). Tahap berikutnya yang diminta Kang: Notifikasi ke HP jamaah & pengurus. Sisa kecil Tahap 1 (Turnstile di Cek KTA lama, kecamatan Koordinator di Atur PIN) sudah selesai 2026-11-26. Yang tersisa adalah tugas Kang sendiri (lihat Tahap 10 Langkah 5: uji akun asli, lengkapi data, cek Advisors bulanan) dan rencana website profil di tqncukir.id.
 
 ## Tahap 1: Data Jamaah, Pendaftaran, KTA, Portal Anggota, Hak Akses
 Mulai: 2026-11-25 (Kang Salman: "Bismillah").
@@ -564,7 +564,7 @@ Mulai: 2026-11-28 (Kang: "mulai B"). **Disetujui Kang 2026-11-28 ("Tahap 13 dise
 - Dicek Kang di HP 2026-11-28: "sudah cepat".
 
 ## Tahap 14: Berita di halaman publik
-Mulai: 2026-11-28 (Kang: "mulai tahap 14: berita"). Setelah ini Kang ingin Tahap Notifikasi ke HP.
+Mulai: 2026-11-28 (Kang: "mulai tahap 14: berita"). **Disetujui Kang 2026-11-28.** Setelah ini Kang ingin Tahap Notifikasi ke HP.
 
 **Keputusan Kang (2026-11-28):**
 1. Penulis: admin pusat & ketua menerbitkan langsung; **koordinator boleh menulis, tampil setelah disetujui ketua**.
@@ -619,7 +619,7 @@ Mulai: 2026-11-28 (Kang: "mulai tahap 14: berita"). Setelah ini Kang ingin Tahap
 - **Status Ditarik merah (Kang 2026-11-28, v127):** `STATUS_BERITA.ditarik` di `supa.js` memakai pil merah `stat-wafat` (sama dengan Ditolak; dulu teks abu). Dicek 360/1280 di Kelola Berita.
 
 ## Tahap 15: Beranda baru (ringkas, hidup, tanpa menu dobel)
-Diusulkan 2026-11-28 (Kang: "beranda bagusnya apa saja, agar tidak tumpuk/dobel dengan menu"). **Belum dimulai: menunggu Kang bilang "mulai"** (dan Tahap 14 disetujui).
+Diusulkan 2026-11-28 (Kang: "beranda bagusnya apa saja, agar tidak tumpuk/dobel dengan menu"). **Belum dimulai: menunggu Kang bilang "mulai"** (Tahap 14 sudah disetujui).
 
 **Keputusan Kang (2026-11-28):**
 1. Tanggal Hijriah di salam: **pakai**.
