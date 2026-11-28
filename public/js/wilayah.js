@@ -137,7 +137,10 @@ const Wilayah = (() => {
       else if (e.key === 'Enter' && aktif >= 0) { e.preventDefault(); pilih(aktif); }
       else if (e.key === 'Escape') tutup();
     });
-    ul.addEventListener('pointerdown', (e) => { e.preventDefault(); const li = e.target.closest('li'); if (li) pilih([...ul.children].indexOf(li)); });
+    // Pilih saat diketuk (click), bukan saat jari menyentuh: menggeser daftar di HP tidak memilih (Kang 2026-11-28).
+    // mousedown dicegah agar isian tetap fokus (daftar tidak tertutup sebelum ketukan selesai).
+    ul.addEventListener('mousedown', (e) => e.preventDefault());
+    ul.addEventListener('click', (e) => { const li = e.target.closest('li'); if (li) pilih([...ul.children].indexOf(li)); });
   }
 
   // Nama provinsi tampil di bawah Kab/Kota sebagai keterangan (tidak disimpan).
