@@ -3,11 +3,12 @@ const SB_URL = 'https://tuthgclhrzvvlcnpjxiv.supabase.co';
 const SB_KEY = 'sb_publishable_IWIH_9fvK7E3WvimMrz_vQ_3so84UC6'; // kunci publik (aman di website)
 const TS_SITE = '0x4AAAAAAGRsXDXsYWPJ3-z-';                          // kunci publik Turnstile
 const SIMPAN = 'silsilah.sesi';
+const SIMPAN_PROFIL = 'silsilah.profil'; // nama, peran, jamaah_id terakhir: agar nama & menu langsung tampil (Kang 2026-11-28, aplikasi lambat)
 
 const sesi = {
   ambil() { try { return JSON.parse(localStorage.getItem(SIMPAN)); } catch { return null; } },
   simpan(s) { try { localStorage.setItem(SIMPAN, JSON.stringify(s)); } catch {} },
-  hapus() { try { localStorage.removeItem(SIMPAN); } catch {} },
+  hapus() { try { localStorage.removeItem(SIMPAN); localStorage.removeItem(SIMPAN_PROFIL); } catch {} },
 };
 
 // Ambil sesi dari tautan email admin (#access_token=...)
@@ -93,7 +94,22 @@ async function dbHalaman(jalur, dari, sampai) {
 
 // Profil akun yang sedang masuk: { nama, peran, jamaah_id }
 async function profilSaya() {
-  const [p] = await dbGet(`pengguna?select=nama,peran,jamaah_id&user_id=eq.${await idSaya()}`);
+  // Cepat: pakai profil simpanan (akun yang sama) agar halaman langsung tampil, lalu cek ke server di belakang layar.
+  // Bila peran/nama berubah, halaman dimuat ulang. Hak akses tetap ditegakkan RLS di server.
+  const id = await idSaya();
+  let simpan = null;
+  try { const s = JSON.parse(localStorage.getItem(SIMPAN_PROFIL)); if (s && s.id === id) simpan = s.p; } catch {}
+  const segar = dbGet(`pengguna?select=nama,peran,jamaah_id&user_id=eq.${id}`).then(([b]) => {
+    const baru = b || null;
+    try { if (baru) localStorage.setItem(SIMPAN_PROFIL, JSON.stringify({ id, p: baru })); else localStorage.removeItem(SIMPAN_PROFIL); } catch {}
+    return baru;
+  });
+  let p;
+  if (simpan) {
+    p = simpan;
+    segar.then((baru) => { if (JSON.stringify(baru) !== JSON.stringify(simpan)) location.reload(); })
+      .catch((e) => { if (e.message === 'belum-masuk' || e.message === 'gagal-401') { sesi.hapus(); location.replace('/masuk.html'); } });
+  } else p = await segar;
   // tampilkan menu sesuai peran
   const nav = (id, boleh) => { const el = document.getElementById(id); if (el) el.hidden = !boleh; };
   nav('nav-jamaah', p && PERAN_LIHAT_JAMAAH.includes(p.peran));
