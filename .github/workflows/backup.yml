@@ -28,6 +28,7 @@ jobs:
       DRIVE_TOKEN: ${{ secrets.DRIVE_TOKEN }}
     steps:
       - name: Cek rahasia lengkap
+        id: rahasia
         run: |
           for v in DB_SANDI SANDI DRIVE_URL DRIVE_TOKEN; do
             [ -n "${!v}" ] || { echo "::error::Rahasia $v belum diisi"; exit 1; }
@@ -39,11 +40,13 @@ jobs:
           echo "DB=postgresql://postgres.tuthgclhrzvvlcnpjxiv:$S@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres?sslmode=require" >> "$GITHUB_ENV"
 
       - name: Pasang pg_dump 17 dan 7-Zip
+        id: pasang
         run: |
           sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y >/dev/null
           sudo apt-get install -y -qq postgresql-client-17 7zip >/dev/null
 
       - name: Salin database
+        id: salin
         run: |
           umask 077
           export PATH=/usr/lib/postgresql/17/bin:$PATH PGCONNECT_TIMEOUT=30
@@ -52,9 +55,11 @@ jobs:
           pg_dump --dbname="$DB" -Fc --data-only -t auth.users -t auth.identities -f out/auth.dump
           n=$(pg_restore -l out/silsilah.dump | grep -c 'TABLE DATA')
           echo "Isi tabel tersalin: $n"
+          echo "JUMLAH_TABEL=$n" >> "$GITHUB_ENV"
           [ "$n" -ge 20 ] || { echo "::error::Backup terlalu sedikit isinya ($n tabel)"; exit 1; }
 
       - name: Kunci dengan kata sandi
+        id: kunci
         run: |
           umask 077
           TGL=$(TZ=Asia/Jakarta date +%F)
@@ -65,6 +70,7 @@ jobs:
           ls -l "silsilah-$TGL.7z"
 
       - name: Kirim ke Google Drive
+        id: drive
         run: |
           umask 077
           base64 -w0 "$NAMA" > data.b64
@@ -72,7 +78,33 @@ jobs:
           jawab=$(curl -sS -L --max-time 300 -H 'Content-Type: application/json' --data-binary @isi.json "$DRIVE_URL")
           rm -f isi.json data.b64
           echo "$jawab" | jq -e '.ok == true' >/dev/null || { echo "::error::Drive menolak: $(echo "$jawab" | head -c 300)"; exit 1; }
+          echo "UKURAN=$(echo "$jawab" | jq -r '.ukuran // empty')" >> "$GITHUB_ENV"
+          echo "DIRAPIKAN=$(echo "$jawab" | jq -r '.dihapus // empty')" >> "$GITHUB_ENV"
           echo "Tersimpan di Drive: $NAMA ($(echo "$jawab" | jq -r .ukuran) byte), file lama dirapikan: $(echo "$jawab" | jq -r .dihapus)"
+
+      # Catatan untuk halaman Pantau Backup (khusus Admin Pusat). Gagal mencatat tidak membuat backup gagal;
+      # bila catatan tidak masuk >30 jam, halaman itu menampilkan peringatan merah.
+      - name: Catat hasil untuk dashboard
+        if: always()
+        env:
+          GAGAL_DI: >-
+            ${{ steps.rahasia.outcome == 'failure' && 'Cek rahasia' ||
+                steps.pasang.outcome == 'failure' && 'Pasang alat' ||
+                steps.salin.outcome == 'failure' && 'Salin database' ||
+                steps.kunci.outcome == 'failure' && 'Kunci file' ||
+                steps.drive.outcome == 'failure' && 'Kirim ke Google Drive' ||
+                steps.drive.outcome != 'success' && 'Dibatalkan' || '' }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          [ -n "${DB:-}" ] || { echo "::warning::Alamat database belum ada, hasil tidak dicatat"; exit 0; }
+          export PATH=/usr/lib/postgresql/17/bin:$PATH PGCONNECT_TIMEOUT=30
+          [ -z "$GAGAL_DI" ] && OK=true || OK=false
+          psql "$DB" -q -o /dev/null -v ON_ERROR_STOP=1 -v ok="$OK" -v gagal="$GAGAL_DI" -v tabel="${JUMLAH_TABEL:-}" \
+            -v ukuran="${UKURAN:-}" -v rapi="${DIRAPIKAN:-}" -v nama="${NAMA:-}" -v url="$RUN_URL" <<'SQL' \
+            && echo "Tercatat: berhasil=$OK ${GAGAL_DI}" || echo "::warning::Hasil backup tidak bisa dicatat ke database"
+          select private.catat_backup(:'ok'::boolean, :'gagal', nullif(:'tabel','')::integer,
+            nullif(:'ukuran','')::bigint, nullif(:'rapi','')::integer, :'nama', :'url');
+          SQL
 
       - name: Jaga jadwal tetap hidup
         if: always()
