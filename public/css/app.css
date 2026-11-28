@@ -948,8 +948,8 @@ a.tautan{display:inline-flex;align-items:center}
 
 /* ===== Menu: Alternatif B "Emas di atas Hijau" (Kang 2026-11-28) =====
    HP & tablet (<1024px): menu bawah + lembar "Lainnya" berupa ubin ikon per kelompok.
-   Laptop & komputer (>=1024px): menu samping kiri. Teks putih (emas hanya untuk ikon, titik, dan judul besar: kontras). */
-.menu-bawah,.menu-lain,.menu-samping{display:none}
+   Laptop & komputer (>=1024px): menu atas dengan daftar per kelompok. Teks putih (emas hanya untuk ikon, titik, dan judul besar: kontras). */
+.menu-bawah,.menu-lain,.menu-atas{display:none}
 @media (max-width:1023px){
   .ada-menu-bawah .app-nav{display:none}
   .ada-menu-bawah{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
@@ -983,34 +983,39 @@ a.tautan{display:inline-flex;align-items:center}
   .menu-keluar{background:none;border:1.5px solid rgba(255,255,255,.45)}
   .menu-lain a:focus-visible,.menu-lain button:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:2px}
 }
-.menu-grup h3 span,.ms-grup>span{width:7px;height:7px;border-radius:50%;background:var(--kuning-rosyid)}
+.menu-grup h3 span{width:7px;height:7px;border-radius:50%;background:var(--kuning-rosyid)}
+/* Laptop & komputer: menu atas di header hijau; tombol kelompok membuka daftar di bawahnya (Kang 2026-11-28) */
 @media (min-width:1024px){
-  .ada-menu-samping{padding-left:256px}
-  .ada-menu-samping .app-atas{margin-left:-256px}
-  .ada-menu-samping .app-atas-isi{max-width:none}
-  .ada-menu-samping .app-nav{display:none}
-  .menu-samping{display:block;position:fixed;top:0;left:0;bottom:0;z-index:15;width:256px;overflow-y:auto;box-sizing:border-box;
-    padding:80px 12px 24px;background:var(--hijau-jamiyyah);color:#FFFFFF}
-  .menu-samping ul{list-style:none;margin:0 0 14px;padding:0;display:flex;flex-direction:column;gap:2px}
-  .menu-samping h3{margin:0 0 4px}
-  .ms-grup{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;padding:0 10px;border:0;border-radius:10px;background:none;
-    font:inherit;font-size:.8125rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#FFFFFF;text-align:left;cursor:pointer}
-  .ms-grup:hover{background:rgba(255,255,255,.08)}
-  .ms-grup:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:-3px}
-  .ms-panah{margin-left:auto;color:var(--kuning-rosyid);transition:transform .2s ease-out}
-  .ms-grup[aria-expanded="true"] .ms-panah{transform:rotate(180deg)}
-  .menu-samping ul[hidden]{display:none}
-  @media (prefers-reduced-motion:reduce){.ms-panah{transition:none}}
-  .menu-samping a{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 10px;border-radius:10px;color:#FFFFFF;
-    text-decoration:none;font-size:.9375rem;font-weight:500}
-  .menu-samping a:hover{background:rgba(255,255,255,.08)}
-  .menu-samping a[aria-current="page"]{background:rgba(242,211,0,.16);box-shadow:inset 0 0 0 1.5px var(--kuning-rosyid);font-weight:700}
-  .menu-samping a:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:-3px}
-  .menu-samping .ml-ikon{display:flex;align-items:center;justify-content:center;width:32px;height:32px;flex:none;border-radius:50%;
+  .ada-menu-atas .app-nav{display:none}
+  .menu-atas{display:flex;align-items:center;gap:2px;flex:1 1 0;min-width:0;margin:0 0 0 16px}
+  .ma-utama,.ma-tombol{display:flex;align-items:center;gap:4px;min-height:44px;padding:0 12px;border:0;border-radius:10px;background:none;
+    color:#FFFFFF;font:inherit;font-size:var(--fs-kecil);font-weight:500;text-decoration:none;white-space:nowrap;cursor:pointer}
+  .ma-utama:hover,.ma-tombol:hover{background:rgba(255,255,255,.1)}
+  .ma-utama[aria-current="page"],.ma-aktif{background:rgba(255,255,255,.14);font-weight:700}
+  .ma-utama[aria-current="page"]{box-shadow:inset 0 -3px 0 var(--kuning-rosyid)}
+  .ma-aktif{box-shadow:inset 0 -3px 0 var(--kuning-rosyid)}
+  .ma-utama:focus-visible,.ma-tombol:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:2px}
+  .ma-panah{color:var(--kuning-rosyid);transition:transform .2s ease-out}
+  .ma-tombol[aria-expanded="true"]{background:rgba(255,255,255,.14)}
+  .ma-tombol[aria-expanded="true"] .ma-panah{transform:rotate(180deg)}
+  .ma-grup{position:relative}
+  .ma-panel{position:absolute;top:calc(100% + 10px);left:0;z-index:40;min-width:240px;padding:10px;border-radius:16px;
+    background:var(--hijau-jamiyyah);border:1px solid rgba(255,255,255,.16);box-shadow:0 12px 32px rgba(0,0,0,.28)}
+  .ma-panel[hidden]{display:none}
+  .ma-panel p{display:flex;align-items:center;gap:8px;margin:0 0 6px;padding:4px 10px;font-size:.8125rem;font-weight:700;
+    letter-spacing:.04em;text-transform:uppercase;color:#FFFFFF}
+  .ma-panel p::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--kuning-rosyid)}
+  .ma-panel ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+  .ma-panel a{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 10px;border-radius:10px;color:#FFFFFF;text-decoration:none;
+    font-size:.9375rem;font-weight:500;white-space:nowrap}
+  .ma-panel a:hover{background:rgba(255,255,255,.08)}
+  .ma-panel a[aria-current="page"]{background:rgba(242,211,0,.16);box-shadow:inset 0 0 0 1.5px var(--kuning-rosyid);font-weight:700}
+  .ma-panel a:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:-3px}
+  .ma-panel .ml-ikon{display:flex;align-items:center;justify-content:center;width:32px;height:32px;flex:none;border-radius:50%;
     background:rgba(255,255,255,.12);color:var(--kuning-rosyid)}
-  .menu-samping-kaki{padding-top:12px!important;border-top:1px solid rgba(255,255,255,.14)}
+  .ma-grup:last-child .ma-panel{left:auto;right:0}
 }
-@media print{.menu-samping{display:none}.ada-menu-samping{padding-left:0}.ada-menu-samping .app-atas{margin-left:0}}
+@media (prefers-reduced-motion:reduce){.ma-panah{transition:none}}
 
 /* ===== Footer bersama halaman web (permintaan Kang 2026-11-27) =====
    Tampil di semua halaman; di HP, halaman aplikasi (menu bawah) tidak memakai footer. */

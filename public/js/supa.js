@@ -185,33 +185,35 @@ function pasangMenuBawah(p) {
       <ul class="ml-ubin">${isi.map(([i, t, u]) => `<li><a href="${u}"${cur(u)}><span class="ml-ikon">${ikonMenu(i)}</span><span>${t}</span></a></li>`).join('')}</ul></section>`).join('')}
     <div class="menu-lain-kaki"><a href="/pasang.html" class="menu-pasang">${ikonMenu('pasang')}Cara pasang di HP</a>
       <button type="button" class="menu-keluar" id="menu-lain-keluar">${ikonMenu('keluar')}Keluar</button></div>`;
-  // Menu samping (laptop & komputer)
+  // Menu atas (laptop & komputer, Kang 2026-11-28): menu utama + tombol kelompok; klik kelompok = daftar menu muncul di bawahnya.
   const s = document.createElement('nav');
-  s.id = 'menu-samping'; s.className = 'menu-samping'; s.setAttribute('aria-label', 'Menu utama');
-  // Kelompok menu samping bisa dibuka/tutup (Kang 2026-11-28); pilihan diingat di perangkat ini.
-  const KUNCI_BUKA = 'silsilah.menu-buka';
-  let terbuka = new Set();
-  try { terbuka = new Set(JSON.parse(localStorage.getItem(KUNCI_BUKA)) || []); } catch {}
-  const baris = ([i, t, u]) => `<li><a href="${u}"${cur(u)}><span class="ml-ikon">${ikonMenu(i, 17)}</span><span>${t}</span></a></li>`;
-  s.innerHTML = `<ul>${utama.map(baris).join('')}</ul>`
-    + grup.map(([k, n, isi]) => {
-      const b = terbuka.has(k) || isi.some(([, , u]) => aktif(u));
-      return `<h3><button type="button" class="ms-grup" data-grup="${k}" aria-expanded="${b}" aria-controls="ms-${k}"><span class="titik-${k}" aria-hidden="true"></span>${n}`
-        + `<svg class="ms-panah" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button></h3>`
-        + `<ul id="ms-${k}"${b ? '' : ' hidden'}>${isi.map(baris).join('')}</ul>`;
-    }).join('')
-    + `<ul class="menu-samping-kaki">${baris(['pasang', 'Cara pasang di HP', '/pasang.html'])}</ul>`;
+  s.id = 'menu-atas'; s.className = 'menu-atas'; s.setAttribute('aria-label', 'Menu utama');
+  const PENDEK = { pondasi: 'Pondasi', ruhani: 'Ruhani', kepedulian: 'Kepedulian', amanah: 'Amanah' };
+  const panah = '<svg class="ma-panah" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
+  s.innerHTML = utama.map(([, t, u]) => `<a href="${u}" class="ma-utama"${cur(u)}>${t}</a>`).join('')
+    + grup.map(([k, n, isi]) => `<div class="ma-grup"><button type="button" class="ma-tombol${isi.some(([, , u]) => aktif(u)) ? ' ma-aktif' : ''}" aria-expanded="false" aria-controls="ma-${k}">${PENDEK[k]}${panah}</button>
+      <div class="ma-panel" id="ma-${k}" hidden><p>${n}</p><ul>${isi.map(([i, t, u]) => `<li><a href="${u}"${cur(u)}><span class="ml-ikon">${ikonMenu(i, 17)}</span><span>${t}</span></a></li>`).join('')}</ul></div></div>`).join('');
+  const tutupSemua = (kecuali) => s.querySelectorAll('.ma-tombol[aria-expanded="true"]').forEach((t) => {
+    if (t === kecuali) return;
+    t.setAttribute('aria-expanded', 'false'); document.getElementById(t.getAttribute('aria-controls')).hidden = true;
+  });
   s.addEventListener('click', (e) => {
-    const t = e.target.closest('.ms-grup');
+    const t = e.target.closest('.ma-tombol');
     if (!t) return;
     const buka = t.getAttribute('aria-expanded') !== 'true';
-    t.setAttribute('aria-expanded', buka);
-    document.getElementById(`ms-${t.dataset.grup}`).hidden = !buka;
-    if (buka) terbuka.add(t.dataset.grup); else terbuka.delete(t.dataset.grup);
-    try { localStorage.setItem(KUNCI_BUKA, JSON.stringify([...terbuka])); } catch {}
+    tutupSemua(t);
+    t.setAttribute('aria-expanded', buka); document.getElementById(t.getAttribute('aria-controls')).hidden = !buka;
   });
-  document.body.append(nav, d, s);
-  document.body.classList.add('ada-menu-bawah', 'ada-menu-samping');
+  document.addEventListener('click', (e) => { if (!s.contains(e.target)) tutupSemua(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const t = s.querySelector('.ma-tombol[aria-expanded="true"]');
+    if (t) { tutupSemua(); t.focus(); }
+  });
+  const isiAtas = document.querySelector('.app-atas-isi');
+  if (isiAtas) isiAtas.insertBefore(s, isiAtas.querySelector('.app-keluar'));
+  document.body.append(nav, d);
+  document.body.classList.add('ada-menu-bawah', 'ada-menu-atas');
   // Saat mengetik, keyboard HP bisa mengangkat menu bawah sehingga menutup isian/tombol Simpan: sembunyikan sementara.
   const ketik = (el) => el && (el.tagName === 'TEXTAREA' || el.tagName === 'SELECT'
     || (el.tagName === 'INPUT' && !/^(radio|checkbox|button|submit|reset|range|color|file)$/.test(el.type)));
