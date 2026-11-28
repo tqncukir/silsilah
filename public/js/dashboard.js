@@ -135,7 +135,9 @@ function gambarUsia() {
   kolom($('usia'), kel.map(([l, n], i) => ({ label: l, n, sorot: i >= 3, judul: `Usia ${l} tahun: ${angka(n)} jamaah` })));
   const valid = kel.reduce((a, [, n]) => a + n, 0);
   $('usia-ringkas').textContent = valid ? `${persen(u.u69 + u.u70, valid)} jamaah berusia 60 tahun ke atas saat mendaftar` : 'Belum ada umur yang tercatat.';
-  $('usia-kosong').textContent = `Dihitung dari ${angka(valid)} jamaah dengan umur valid. Umur kosong atau tidak valid: ${angka(u.tidak_valid)}.`;
+  $('usia-kosong').innerHTML = `Dari ${angka(valid)} jamaah` + (u.tidak_valid
+    ? ` · <button type="button" class="tautan dsb-tautan-kecil" id="umur-kosong">${angka(u.tidak_valid)} umur belum diisi</button>` : '');
+  $('umur-kosong')?.addEventListener('click', bukaUmurKosong);
 }
 
 function gambarBulan() {
@@ -267,6 +269,34 @@ function gambarJk() {
   if (j.kosong) ket.push(`${angka(j.kosong)} belum diisi.`);
   $('jk-ket').textContent = ket.join(' ');
   $('jk-lengkapi').hidden = !(j.kosong && bolehUbah);
+}
+
+// ---------- Daftar jamaah yang umurnya kosong / tidak wajar (panel Usia) ----------
+async function bukaUmurKosong() {
+  const d = $('daftar');
+  $('daftar-judul').textContent = 'Umur belum diisi';
+  $('daftar-ket').textContent = `Umur saat daftar kosong atau di luar 10–110 tahun · ${teksWilayah()} · ${teksPeriode()}. Ketuk nama untuk melengkapi lewat Ubah Data.`;
+  $('daftar-isi').innerHTML = '<li class="dsb-kosong-kecil">Memuat...</li>';
+  d.showModal();
+  try {
+    const p = ['select=id,nomor_anggota,nama,umur_daftar,desa!inner(nama,kecamatan_id,kecamatan!inner(nama,kabupaten_id,kabupaten(nama)))',
+      'or=(umur_daftar.is.null,umur_daftar.lt.10,umur_daftar.gt.110)', 'order=nomor_anggota', 'limit=300'];
+    if (f.desa) p.push(`desa_id=eq.${Number(f.desa)}`);
+    else if (f.kec) p.push(`desa.kecamatan_id=eq.${Number(f.kec)}`);
+    else if (f.kab) p.push(`desa.kecamatan.kabupaten_id=eq.${Number(f.kab)}`);
+    const [dari, sampai] = rentang();
+    if (dari) p.push(`tanggal_daftar=gte.${dari}`);
+    if (sampai) p.push(`tanggal_daftar=lte.${sampai}`);
+    const rows = await dbGet('jamaah?' + p.join('&'));
+    $('daftar-isi').innerHTML = rows.length ? rows.map((r) => `<li><a href="/jamaah-isi.html?id=${r.id}">
+        <span class="dd-nama">${hurufAman(r.nama)}</span>
+        <span class="dd-nomor">${r.nomor_anggota}</span>
+        <span class="dd-alamat">${hurufAman(`${r.desa.nama} · Kec. ${r.desa.kecamatan.nama} · ${r.desa.kecamatan.kabupaten?.nama || ''}`)}</span>
+        <span class="dd-catatan">${r.umur_daftar == null ? 'Umur kosong' : `Umur tertulis ${r.umur_daftar} tahun`}</span></a></li>`).join('')
+      : '<li class="dsb-kosong-kecil">Semua umur di pilihan ini sudah terisi.</li>';
+  } catch {
+    $('daftar-isi').innerHTML = '<li class="dsb-kosong-kecil">Data gagal dimuat. Tutup lalu coba lagi.</li>';
+  }
 }
 
 // ---------- Daftar anggota untuk satu catatan ----------
