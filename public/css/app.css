@@ -1254,7 +1254,7 @@ body:not(.hal-masuk):not(.hal-poster)>main{flex:1 0 auto;width:100%}
 .tanya-ket{margin:0;font-size:var(--fs-isi);line-height:1.55;color:var(--abu);white-space:pre-line}
 .tanya-aksi{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
 .tanya-aksi .btn{margin:0}
-@media (max-width:479px){.tanya-aksi .btn{flex:1 1 0}}
+@media (max-width:479px){.tanya-aksi .btn{flex:1 1 0;padding-left:10px;padding-right:10px;white-space:nowrap}}
 
 /* ===== Beranda baru (Tahap 15) ===== */
 .sambut-tgl{margin:6px 0 0;font-size:var(--fs-kecil);color:var(--abu)}
@@ -1326,3 +1326,8 @@ body:not(.hal-masuk):not(.hal-poster)>main{flex:1 0 auto;width:100%}
 @media (min-width:1024px){.tindak-daftar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px}
   .tindak-daftar li+li{border-top:0}.tindak-daftar li:nth-child(n+3){border-top:1px solid #E3C443}}
 @media (min-width:1024px){.beranda-baru .app-isi>.bagian-penuh{grid-column:1/-1}}
+/* Simpan KTA sebagai gambar (kta.js) */
+.kta-simpan{max-width:560px}
+.kta-simpan-gambar{display:block;width:100%;height:auto;margin:14px 0 10px;border-radius:10px;border:1px solid var(--garis);box-shadow:var(--bayang)}
+.kta-simpan .pesan:not(:empty){margin:0}
+@media (max-width:1023px){.hanya-laptop{display:none!important}}

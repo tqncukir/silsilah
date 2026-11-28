@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=129">
-<link rel="stylesheet" href="/css/app.css?v=129">
+<link rel="stylesheet" href="/css/tokens.css?v=130">
+<link rel="stylesheet" href="/css/app.css?v=130">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -91,13 +91,24 @@
       <div class="tombol-baris kolom">
         <button type="button" class="btn btn-utama" id="buat-pin" hidden><span class="putar" aria-hidden="true"></span><span class="teks">Buat PIN baru lalu cetak</span></button>
         <button type="button" class="btn btn-kedua" id="perbesar">Perbesar QR untuk dipindai</button>
-        <button type="button" class="btn btn-kedua" id="cetak">Cetak tanpa PIN</button>
+        <button type="button" class="btn btn-kedua" id="simpan-png">Simpan KTA ke HP</button>
+        <button type="button" class="btn btn-kedua hanya-laptop" id="cetak">Cetak tanpa PIN</button>
         <button type="button" class="btn btn-bahaya" id="ganti" hidden>KTA hilang: batalkan QR lama</button>
       </div>
       <p id="pesan-aksi" class="pesan" role="alert"></p>
     </section>
   </div>
 </main>
+<dialog class="tanya kta-simpan" id="dlg-simpan" aria-labelledby="simpan-judul">
+  <h2 class="tanya-judul" id="simpan-judul">Simpan KTA</h2>
+  <p class="tanya-ket">Gambar kartu tanpa PIN, ukuran tajam untuk dicetak seukuran KTA.</p>
+  <img id="simpan-gambar" class="kta-simpan-gambar" alt="Gambar KTA yang akan disimpan">
+  <p id="simpan-pesan" class="pesan" role="status"></p>
+  <div class="tanya-aksi">
+    <button type="button" class="btn btn-kedua btn-pas" id="simpan-tutup">Tutup</button>
+    <button type="button" class="btn btn-utama btn-pas" id="simpan-ok">Simpan ke HP</button>
+  </div>
+</dialog>
 <footer class="kaki">
   <div class="kaki-isi">
     <address class="kaki-alamat">TQN Pusat Cukir Jombang<br>Jl. Masjid No. 110 Cukir, Diwek, Jombang 61471</address>
@@ -111,8 +122,8 @@
   <p class="qr-besar-ket">Tunjukkan ke petugas untuk dipindai</p>
   <button type="button" class="btn btn-kedua" id="tutup-qr">Tutup</button>
 </div>
-<script src="/js/supa.js?v=129" defer></script>
-<script src="/js/qrcode.js?v=129" defer></script>
-<script src="/js/kta.js?v=129" defer></script>
+<script src="/js/supa.js?v=130" defer></script>
+<script src="/js/qrcode.js?v=130" defer></script>
+<script src="/js/kta.js?v=130" defer></script>
 </body>
 </html>

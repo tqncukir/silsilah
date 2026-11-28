@@ -1,7 +1,7 @@
 // KTA Digital: kartu seperti asli, QR keaslian (ditandatangani di server dengan kunci admin pusat), PIN, cetak.
 const $ = (id) => document.getElementById(id);
 let id = new URLSearchParams(location.search).get('id');
-let j = null, peran = '', terbatas = false;
+let j = null, peran = '', terbatas = false, qrAktif = null;
 
 const pesan = (t) => { $('pesan').textContent = t; };
 const pesanAksi = (t, ok) => { $('pesan-aksi').textContent = t; $('pesan-aksi').className = 'pesan' + (ok ? ' ok' : ''); };
@@ -41,7 +41,7 @@ function qrLama() {
   const kab = j.desa.kecamatan.kabupaten?.nama || '';
   const qr = qrcode(0, 'M');
   qr.addData(`${j.nomor_anggota}  ${[j.nama, j.desa.nama, j.desa.kecamatan.nama, kab].join(' ').toUpperCase()}`);
-  qr.make();
+  qr.make(); qrAktif = qr;
   $('kta-qr').innerHTML = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
 }
 
@@ -52,7 +52,7 @@ async function muatQr() {
     const { kode, versi } = await panggilKta({ aksi: 'qr', jamaah_id: j.id });
     const qr = qrcode(0, 'M');
     qr.addData(`${location.origin}/cek-kta.html#${kode}`);
-    qr.make();
+    qr.make(); qrAktif = qr;
     $('kta-qr').innerHTML = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
     $('kta-versi').textContent = versi > 1 ? `Kartu ke-${versi}` : '';
   } catch (e) {
@@ -92,6 +92,84 @@ $('ganti').onclick = async () => {
 };
 
 $('keluar').onclick = keluar;
+// ===== Simpan KTA sebagai gambar PNG (Kang 2026-11-28) =====
+// Digambar ulang di kanvas dengan posisi yang sama seperti kartu di layar (CSS .kta-master, 1cqw = 1% lebar),
+// di atas gambar master ukuran asli 1579x996 (cukup tajam untuk dicetak 85,6x54 mm). PIN TIDAK PERNAH ikut.
+const HURUF_KTA = "Roboto, Arial, 'Helvetica Neue', Helvetica, sans-serif";
+const diHp = () => matchMedia('(max-width: 1023px)').matches;
+const muatGambar = (src) => new Promise((ok, gagal) => { const g = new Image(); g.onload = () => ok(g); g.onerror = gagal; g.src = src; });
+async function buatPngKta() {
+  const master = await muatGambar('/img/kta-master.webp');
+  const W = master.naturalWidth || 1579, H = master.naturalHeight || 996, cq = W / 100;
+  const kv = document.createElement('canvas'); kv.width = W; kv.height = H;
+  const c = kv.getContext('2d');
+  c.fillStyle = '#FFFFFF'; c.fillRect(0, 0, W, H);
+  c.drawImage(master, 0, 0, W, H);
+  // QR: kotak putih bersudut 1cqw, padding 0,9cqw, di (8cqw, 19,6cqw) selebar 18cqw
+  const qx = 8 * cq, qy = 19.6 * cq, qs = 18 * cq, pad = 0.9 * cq;
+  c.fillStyle = '#FFFFFF';
+  if (c.roundRect) { c.beginPath(); c.roundRect(qx, qy, qs, qs, cq); c.fill(); } else c.fillRect(qx, qy, qs, qs); // iOS 15 belum punya roundRect
+  const n = qrAktif.getModuleCount(), sel = (qs - 2 * pad) / n;
+  c.fillStyle = '#000000';
+  for (let r = 0; r < n; r++) for (let k = 0; k < n; k++) {
+    if (qrAktif.isDark(r, k)) c.fillRect(Math.floor(qx + pad + k * sel), Math.floor(qy + pad + r * sel), Math.ceil(sel), Math.ceil(sel));
+  }
+  c.fillStyle = '#111111'; c.textBaseline = 'middle';
+  const versi = $('kta-versi').textContent;
+  if (versi) { c.font = `700 ${2 * cq}px ${HURUF_KTA}`; c.textAlign = 'center'; c.fillText(versi, qx + qs / 2, qy + qs + 0.3 * cq + cq * 1.1); }
+  // Isian: mulai 47,8cqw, puncak 19,12cqw, tinggi baris 3,357cqw, huruf 2,84cqw tebal KAPITAL; terlalu panjang dikecilkan (min 70%), lalu "…"
+  c.textAlign = 'left';
+  const geserX = 0.2 * cq, geserY = 0.32 * cq; // samakan dengan letak teks di layar (CSS memusatkan baris sedikit lebih rendah)
+  const kiri = 47.8 * cq + geserX, lebar = W - 3 * cq - kiri, lh = 3.357 * cq;
+  [...$('kta-data').querySelectorAll('dd')].forEach((dd, i) => {
+    let teks = dd.textContent.toUpperCase(), k = 1;
+    const set = () => { c.font = `700 ${2.84 * cq * k}px ${HURUF_KTA}`; };
+    set();
+    while (c.measureText(teks).width > lebar && k > 0.7) { k -= 0.05; set(); }
+    while (c.measureText(teks).width > lebar && teks.length > 1) teks = `${teks.slice(0, -2)}…`;
+    c.fillText(teks, kiri, 19.12 * cq + i * lh + lh / 2 + geserY);
+  });
+  c.font = `700 ${2.84 * cq}px ${HURUF_KTA}`;
+  c.fillText($('kta-tgl').textContent, 69 * cq + geserX, 47.23 * cq + lh / 2 + geserY);
+  return new Promise((ok, gagal) => kv.toBlob((b) => (b ? ok(b) : gagal(new Error('png-gagal'))), 'image/png'));
+}
+
+let pngKta = null, urlPng = '';
+const pesanSimpan = (t, ok) => { $('simpan-pesan').textContent = t; $('simpan-pesan').className = 'pesan' + (ok ? ' ok' : ''); };
+$('simpan-png').onclick = async () => {
+  if (!qrAktif) { pesanAksi('QR belum tersedia. Periksa sinyal lalu buka ulang halaman ini.'); return; }
+  const btn = $('simpan-png'); btn.disabled = true;
+  try {
+    pngKta = await buatPngKta();
+    if (urlPng) URL.revokeObjectURL(urlPng);
+    urlPng = URL.createObjectURL(pngKta);
+    $('simpan-gambar').src = urlPng;
+    pesanSimpan(''); $('simpan-tutup').textContent = 'Tutup';
+    $('simpan-ok').textContent = diHp() ? 'Simpan ke HP' : 'Unduh gambar';
+    $('dlg-simpan').showModal(); $('simpan-ok').focus();
+  } catch { pesanAksi('Gambar KTA belum bisa dibuat. Coba muat ulang halaman ini.'); }
+  finally { btn.disabled = false; }
+};
+$('simpan-ok').onclick = async () => {
+  const nama = `KTA-${j.nomor_anggota}.png`;
+  const berkas = new File([pngKta], nama, { type: 'image/png' });
+  try {
+    // HP: lembar bagikan bawaan (Simpan ke Galeri/Foto, WhatsApp, dll.). Laptop atau HP lama: unduh langsung.
+    if (matchMedia('(pointer: coarse)').matches && navigator.canShare?.({ files: [berkas] })) {
+      await navigator.share({ files: [berkas], title: `KTA ${j.nama}` });
+    } else {
+      const a = document.createElement('a'); a.href = urlPng; a.download = nama;
+      document.body.append(a); a.click(); a.remove();
+    }
+    pesanSimpan('KTA tersimpan. Cek di Galeri/Foto atau folder Unduhan.', true);
+    $('simpan-tutup').textContent = 'Selesai';
+  } catch (e) {
+    if (e?.name !== 'AbortError') pesanSimpan('Gambar belum tersimpan. Coba lagi.');
+  }
+};
+$('simpan-tutup').onclick = () => $('dlg-simpan').close();
+$('dlg-simpan').addEventListener('click', (e) => { if (e.target === $('dlg-simpan')) $('dlg-simpan').close(); });
+$('dlg-simpan').addEventListener('close', () => $('simpan-png').focus());
 
 let fokusSebelum = null;
 function tutupQr() { $('qr-besar').hidden = true; document.body.classList.remove('terkunci'); fokusSebelum?.focus(); }
@@ -119,7 +197,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('qr-b
       id = String(p.jamaah_id);
       $('kembali').href = '/beranda.html'; $('kembali').lastChild.textContent = ' Beranda';
       $('aksi-judul').textContent = 'Kartu saya';
-      $('aksi-ket').textContent = 'Tunjukkan QR ini saat kegiatan, atau cetak kartunya. PIN tidak ikut tercetak dari sini.';
+      $('aksi-ket').textContent = 'Tunjukkan QR ini saat kegiatan, atau simpan kartunya ke HP. PIN tidak ikut tersimpan atau tercetak dari sini.';
       $('perbesar').className = 'btn btn-utama'; $('cetak').textContent = 'Cetak kartu';
     }
     if (!id) { pesan('Jamaah belum dipilih.'); return; }
@@ -131,6 +209,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('qr-b
     } else j = (await dbGet(`jamaah?select=${PILIH}&id=eq.${encodeURIComponent(id)}`))[0];
     if (!j) { pesan('Data jamaah tidak ditemukan atau akun ini tidak punya izin melihatnya.'); return; }
     gambarKartu();
+    $('simpan-png').textContent = diHp() ? 'Simpan KTA ke HP' : 'Simpan gambar KTA';
     $('aksi').hidden = false;
     $('buat-pin').hidden = !PERAN_UBAH_JAMAAH.includes(peran) || j.wafat;
     $('ganti').hidden = !['admin_pusat', 'ketua'].includes(peran);
