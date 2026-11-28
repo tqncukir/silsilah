@@ -1,9 +1,10 @@
 # PROGRES SILSILAH TQN Cukir
 
-## POSISI TERAKHIR (baca ini dulu) — diperbarui 2026-11-27
-- **Semua 10 tahap selesai dan disetujui Kang** (Tahap 10 Pemeriksaan disetujui 2026-11-27): 14 modul terbangun (Tahap 9 Kesehatan disetujui 2026-11-27). Versi cache terakhir **v112**. Migrasi terakhir yang sudah dijalankan Kang: `20261127110000_kecepatan_rls.sql` (Tahap 10). Advisors terakhir: 0 error, 49 peringatan, 11 info (semua jenis yang disengaja).
+## POSISI TERAKHIR (baca ini dulu) — diperbarui 2026-11-28
+- **Semua 10 tahap selesai dan disetujui Kang** (Tahap 10 Pemeriksaan disetujui 2026-11-27): 14 modul terbangun (Tahap 9 Kesehatan disetujui 2026-11-27). Versi cache terakhir **v113**. Migrasi terakhir yang sudah dijalankan Kang: `20261128010000_pantau_backup.sql` (Tahap 12). Advisors terakhir: 0 error, 50 peringatan, 12 info (semua jenis yang disengaja).
 - **Serah terima 2026-11-27 (malam):** proyek diteruskan ke akun Claude **goindotea** (perintah Kang). Akun baru tidak membawa skill/memori akun lama: semua aturan ada di `CLAUDE.md` (termasuk "Cara kerja agen" dan "Cara uji") dan riwayat ada di file ini. Cara uji database lokal terbukti jalan (stub di CLAUDE.md; data wilayah contoh diisi langsung karena ekstensi `http` tidak ada).
 - **Tahap 11 Backup harian ke Google Drive: selesai & disetujui Kang 2026-11-28.** Backup otomatis tiap 01.15 WIB ke Drive jtccukir2022 folder "Backup SILSILAH".
+- **Tahap 12 Dashboard Pantau Backup (khusus Admin Pusat): selesai & disetujui Kang 2026-11-28.** `backup.html` + ubin Beranda; GitHub mencatat setiap backup ke `private.catatan_backup`.
 - **Langkah berikutnya: tunggu Kang memilih tahap baru.**
 
 ## Tahap 1: Data Jamaah, Pendaftaran, KTA, Portal Anggota, Hak Akses
@@ -510,7 +511,7 @@ Mulai: 2026-11-28 (Kang: "mulai"). **Disetujui Kang 2026-11-28.**
 - Proyek Apps Script kosong yang sempat terbuat di akun celupherbal sudah dipindah ke sampah (2026-11-28).
 
 ## Tahap 12: Dashboard Pantau Backup (khusus Admin Pusat)
-Mulai: 2026-11-28 (Kang: "mulai").
+Mulai: 2026-11-28 (Kang: "mulai"). **Disetujui Kang 2026-11-28.**
 
 **Keputusan Kang (2026-11-28):** kartu status backup di Beranda Admin Pusat + halaman riwayat; riwayat 90 hari. Hanya Admin Pusat yang bisa melihat (peran lain tidak melihat menu dan ditolak database).
 **Usulan Claude:** setiap kali backup jalan (berhasil atau gagal), GitHub menulis satu baris ke tabel tertutup `private.catatan_backup` (waktu, berhasil/gagal, langkah yang gagal, jumlah tabel, ukuran file, file lama dirapikan, link ke catatan GitHub) memakai kata sandi database yang sudah ada — tanpa rahasia baru, gratis. Dibaca lewat fungsi `status_backup()` yang menolak selain admin pusat. Bila tidak ada catatan >30 jam (mis. Supabase dijeda / kata sandi salah) dashboard menampilkan peringatan merah. Baris >90 hari dihapus otomatis saat backup.
@@ -534,4 +535,4 @@ Mulai: 2026-11-28 (Kang: "mulai").
 - `supa.js`: `nilaiBackup()` + `ukuranTeks()` dipakai bersama Beranda & halaman.
 - Uji: 4 keadaan (berhasil, gagal, telat, kosong) × 360/768/1024/1280 px: tanpa geser samping, tanpa galat konsol, target sentuh ≥44 px, tangkapan layar dilihat. 8 peran lain: tidak ada ubin, tidak ada menu, fungsi tidak dipanggil, halaman dialihkan.
 
-**Langkah 4, Uji sungguhan** (2026-11-28 07.44 WIB): Run workflow manual (run 46089456345) berhasil: 35 tabel, `silsilah-2026-11-28.7z` ±1,0 MB ke Drive, langkah "Catat hasil" → "Tercatat: berhasil=true". Halaman sudah tayang (tanpa login dialihkan ke Masuk). Pengecekan di HP dengan akun Admin Pusat oleh Kang (login hanya oleh Kang). **Menunggu Kang cek & setujui Tahap 12.**
+**Langkah 4, Uji sungguhan** (2026-11-28 07.44 WIB): Run workflow manual (run 46089456345) berhasil: 35 tabel, `silsilah-2026-11-28.7z` ±1,0 MB ke Drive, langkah "Catat hasil" → "Tercatat: berhasil=true". Halaman sudah tayang (tanpa login dialihkan ke Masuk). Pengecekan di HP dengan akun Admin Pusat oleh Kang (login hanya oleh Kang). **Disetujui Kang 2026-11-28 ("Tahap 12 disetujui").**
