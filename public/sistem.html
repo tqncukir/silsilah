@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=154">
-<link rel="stylesheet" href="/css/app.css?v=154">
+<link rel="stylesheet" href="/css/tokens.css?v=155">
+<link rel="stylesheet" href="/css/app.css?v=155">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -57,6 +57,19 @@
       <section class="panel ks-kartu" id="k-kapasitas" aria-labelledby="j-kapasitas"></section>
       <section class="panel ks-kartu" id="k-aman" aria-labelledby="j-aman"></section>
       <section class="panel ks-kartu ks-lebar" id="k-tugas" aria-labelledby="j-tugas"></section>
+      <section class="panel ks-kartu ks-lebar" id="k-aktivitas" aria-labelledby="j-aktivitas">
+        <div class="ks-kepala"><span class="ks-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11a3.5 3.5 0 100-7 3.5 3.5 0 000 7zM3 20a6 6 0 0112 0M16 4a3.5 3.5 0 010 7M18 14a5 5 0 013 6"/></svg></span>
+          <h2 id="j-aktivitas">Aktivitas pengurus</h2></div>
+        <p class="ket">Siapa memakai SILSILAH, kapan masuk, menu yang dibuka, dan data yang ditambah atau diubah. Catatan masuk dan menu disimpan 1 tahun (dimulai 28 Nov 2026); perubahan data disimpan selamanya. Anggota tidak dicatat.</p>
+        <div class="ks-periode" role="group" aria-label="Periode">
+          <button type="button" class="ks-chip" data-p="hari" aria-pressed="true">Hari ini</button>
+          <button type="button" class="ks-chip" data-p="kemarin" aria-pressed="false">Kemarin</button>
+          <button type="button" class="ks-chip" data-p="7" aria-pressed="false">7 hari</button>
+          <button type="button" class="ks-chip" data-p="30" aria-pressed="false">30 hari</button>
+        </div>
+        <label class="ks-akun-pilih"><span>Akun</span><select id="ak-akun"><option value="">Semua pengurus</option></select></label>
+        <div id="ak-isi" aria-live="polite"><p class="ket">Memuat...</p></div>
+      </section>
     </div>
   </div>
 </main>
@@ -66,7 +79,7 @@
   </div>
   <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
 </footer>
-<script src="/js/supa.js?v=154" defer></script>
-<script src="/js/sistem.js?v=154" defer></script>
+<script src="/js/supa.js?v=155" defer></script>
+<script src="/js/sistem.js?v=155" defer></script>
 </body>
 </html>

@@ -1726,3 +1726,31 @@ a.dsb-kartu-tautan:focus-visible{outline:3px solid var(--kuning-rosyid);outline-
 .sistem-ringkas[hidden]{display:none}
 .sistem-ringkas:hover{text-decoration:underline}
 .sistem-ringkas.ks-perhatian{color:#6E5200}
+
+/* Kesehatan Sistem: Aktivitas pengurus (Tahap 18 Langkah 3) */
+.ks-periode{display:flex;flex-wrap:wrap;gap:8px}
+.ks-chip{min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--garis-kuat);background:#FFFFFF;color:var(--hitam);font:inherit;font-size:var(--fs-kecil);font-weight:600;cursor:pointer}
+.ks-chip[aria-pressed=true]{background:var(--mint);border-color:var(--hijau-jamiyyah);color:var(--hijau-jamiyyah)}
+.ks-chip:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:2px}
+.ks-akun-pilih{display:grid;gap:4px;max-width:340px;font-size:var(--fs-kecil);font-weight:600}
+.ks-penting{display:flex;gap:12px;padding:12px 14px;margin:0 0 12px;border-radius:12px;background:#FFF6CC;border:1px solid #E3C443}
+.ks-penting>span{flex:none;display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:#FFFFFF;font-weight:800;color:#6E5200}
+.ks-penting p{margin:0 0 4px}
+.ks-penting ul{margin:0;padding:0 0 0 18px;font-size:var(--fs-kecil)}
+.ks-akun{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.ks-akun>li{padding:12px 14px;border-radius:12px;border:1px solid var(--garis)}
+.ks-akun-nama{display:grid;gap:2px;margin:0 0 8px}
+.ks-akun-nama span{font-size:var(--fs-kecil);color:var(--abu)}
+.ks-akun-nama .ks-kini{color:var(--hijau-jamiyyah);font-weight:600}
+.ks-akun dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px;margin:0}
+.ks-akun dt{font-size:13px;color:var(--abu)}
+.ks-akun dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums}
+.ks-tambah{color:var(--hijau-jamiyyah)}.ks-ubah{color:#1E6FB8}
+.ks-menu{margin:8px 0 0;font-size:13px}
+@media (min-width:900px){
+  .ks-akun>li{display:grid;grid-template-columns:minmax(160px,1.2fr) 4fr;column-gap:16px;align-items:center}
+  .ks-akun-nama{margin:0}
+  .ks-akun dl{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .ks-menu{grid-column:2}
+}
+.ks-akun-pilih select{width:100%;min-height:44px;padding:8px 12px;border:1.5px solid var(--garis-isian);border-radius:10px;font:inherit;font-size:var(--fs-isian);font-weight:400;background:#FFFFFF;color:var(--hitam);cursor:pointer}

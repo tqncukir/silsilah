@@ -151,7 +151,61 @@ async function muat() {
   } finally { t.disabled = false; t.querySelector('.teks').textContent = 'Periksa ulang'; }
 }
 
-$('periksa').onclick = muat;
+$('periksa').onclick = () => { muat(); muatAktivitas(); };
+
+// ===== Aktivitas pengurus (Tahap 18 Langkah 3) =====
+let periode = 'hari', daftarPengurus = null;
+const LABEL_HAL = { '/beranda': 'Beranda', '/jamaah': 'Data Jamaah', '/jamaah-isi': 'Rincian jamaah', '/pendaftaran': 'Pendaftaran', '/dashboard': 'Dashboard',
+  '/kegiatan': 'Kegiatan', '/kegiatan-isi': 'Rincian kegiatan', '/absensi': 'Absensi', '/kta': 'KTA', '/pengurus-pin': 'Atur PIN', '/backup': 'Pantau Backup',
+  '/sistem': 'Kesehatan Sistem', '/kas': 'Buku Kas', '/kas-laporan': 'Laporan Kas', '/bantuan': 'Bantuan Sosial', '/berita-kelola': 'Kelola Berita',
+  '/berita-isi': 'Tulis berita', '/perjalanan': 'Ziarah & Umroh', '/ahli-kubur': 'Ahli Kubur', '/haul': 'Haul', '/aset': 'Aset & Wakaf', '/sakit': 'Jamaah Sakit',
+  '/ekonomi': 'Ekonomi', '/usaha': 'Usaha', '/notif': 'Notifikasi', '/agenda': 'Agenda', '/kebutuhan': 'Kebutuhan Khusus', '/lengkapi-jk': 'Lengkapi jenis kelamin' };
+const labelHal = (h) => LABEL_HAL[h] || (h || '').replace(/^\//, '').replace(/-/g, ' ') || 'Halaman lain';
+const AKSI = { delete: 'Menghapus data', batal_hadir: 'Membatalkan kehadiran', atur_pin: 'Memasang PIN pengurus', nonaktifkan_pin: 'Menonaktifkan PIN pengurus',
+  atur_wilayah: 'Mengubah wilayah koordinator', ganti_kartu: 'Mengganti QR KTA' };
+const awalHariWib = (geser = 0) => new Date(Date.parse(hariIniWib() + 'T00:00:00+07:00') - geser * 864e5);
+function rentangAktivitas() {
+  const besok = new Date(Date.parse(hariIniWib() + 'T00:00:00+07:00') + 864e5);
+  if (periode === 'kemarin') return [awalHariWib(1), awalHariWib(0)];
+  if (periode === '7') return [awalHariWib(6), besok];
+  if (periode === '30') return [awalHariWib(29), besok];
+  return [awalHariWib(0), besok];
+}
+const lamaTeks = (m) => !m ? '–' : m < 60 ? `± ${m} menit` : `± ${Math.floor(m / 60)} jam${m % 60 ? ` ${m % 60} menit` : ''}`;
+const jamAtauTgl = (iso) => (periode === 'hari' || periode === 'kemarin') ? jamWib(iso) : `${tglWib(iso, { day: 'numeric', month: 'short' })} ${jamWib(iso)}`;
+
+async function muatAktivitas() {
+  const [dari, sampai] = rentangAktivitas();
+  $('ak-isi').innerHTML = '<p class="ket">Memuat...</p>';
+  try {
+    const r = await dbKirim('POST', 'rpc/aktivitas_pengurus', { p_dari: dari.toISOString(), p_sampai: sampai.toISOString(), p_user: $('ak-akun').value || null });
+    if (!daftarPengurus) {
+      daftarPengurus = r.pengurus || [];
+      $('ak-akun').innerHTML = '<option value="">Semua pengurus</option>' + daftarPengurus.map((p) => `<option value="${hurufAman(p.user_id)}">${hurufAman(p.nama)} · ${hurufAman(NAMA_PERAN[p.peran] || p.peran)}</option>`).join('');
+    }
+    const penting = r.penting || [], akun = r.akun || [];
+    $('ak-isi').innerHTML = (penting.length ? `<div class="ks-penting"><span aria-hidden="true">!</span><div><p><strong>Perubahan penting pada periode ini: ${a(penting.length)}</strong></p>
+        <ul>${penting.map((x) => `<li>${tglWib(x.waktu, { day: 'numeric', month: 'short' })} ${jamWib(x.waktu)}, ${hurufAman(x.nama)}: ${hurufAman(AKSI[x.aksi] || x.aksi)}</li>`).join('')}</ul></div></div>` : '')
+      + (akun.length ? `<ul class="ks-akun">${akun.map((x) => { const kini = Date.now() - new Date(x.terakhir).getTime() < 10 * 60e3;
+        return `<li><div class="ks-akun-nama"><strong>${hurufAman(x.nama)}</strong><span class="${kini ? 'ks-kini' : ''}">${hurufAman(NAMA_PERAN[x.peran] || x.peran)}${kini ? ', sedang memakai' : ''}</span></div>
+          <dl><div><dt>Masuk</dt><dd>${a(x.masuk)} kali</dd></div><div><dt>Pertama aktif</dt><dd>${jamAtauTgl(x.pertama)}</dd></div>
+          <div><dt>Terakhir aktif</dt><dd>${jamAtauTgl(x.terakhir)}</dd></div><div><dt>Lama memakai</dt><dd>${lamaTeks(n(x.menit))}</dd></div>
+          <div><dt>Data</dt><dd><span class="ks-tambah" title="ditambah">+${a(x.tambah)}</span> <span class="ks-ubah" title="diubah">~${a(x.ubah)}</span></dd></div></dl>
+          ${x.halaman?.length ? `<p class="ket ks-menu">Sering dibuka: ${x.halaman.map((h) => `${hurufAman(labelHal(h.h))} (${a(h.n)})`).join(' · ')}</p>` : ''}</li>`; }).join('')}</ul>`
+        : '<p class="ket ks-kosong-ak">Belum ada aktivitas pengurus pada periode ini.</p>')
+      + (n(r.tidak_aktif) && !$('ak-akun').value ? `<p class="ket">${a(r.tidak_aktif)} pengurus aktif tidak memakai SILSILAH pada periode ini.</p>` : '');
+  } catch {
+    $('ak-isi').innerHTML = '<p class="ket">Aktivitas belum bisa dimuat. Tekan Periksa ulang.</p>';
+  }
+}
+$('k-aktivitas').addEventListener('click', (e) => {
+  const c = e.target.closest('.ks-chip');
+  if (!c) return;
+  periode = c.dataset.p;
+  for (const b of document.querySelectorAll('.ks-chip')) b.setAttribute('aria-pressed', String(b === c));
+  muatAktivitas();
+});
+$('ak-akun').addEventListener('change', muatAktivitas);
 $('k-tugas').addEventListener('click', async (e) => {
   const b = e.target.closest('[data-kode]');
   if (!b) return;
@@ -168,6 +222,7 @@ $('k-tugas').addEventListener('click', async (e) => {
     const p = await profilSaya();
     if (!p || p.peran !== 'admin_pusat') { location.replace('/beranda.html'); return; }
     await muat();
+    muatAktivitas();
   } catch (e) {
     if (e.message === 'belum-masuk' || e.message === 'gagal-401') { location.replace('/masuk.html'); return; }
     $('pesan').textContent = 'Halaman belum bisa dimuat. Coba muat ulang.';

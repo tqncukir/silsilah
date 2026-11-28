@@ -3,6 +3,7 @@ const SB_URL = 'https://tuthgclhrzvvlcnpjxiv.supabase.co';
 const SB_KEY = 'sb_publishable_IWIH_9fvK7E3WvimMrz_vQ_3so84UC6'; // kunci publik (aman di website)
 const TS_SITE = '0x4AAAAAAGRsXDXsYWPJ3-z-';                          // kunci publik Turnstile
 const SIMPAN = 'silsilah.sesi';
+const BARU_MASUK = 'silsilah.baru_masuk'; // ditandai saat login: halaman berikutnya mencatat 'masuk' (aktivitas pengurus, Tahap 18)
 const SIMPAN_PROFIL = 'silsilah.profil'; // nama, peran, jamaah_id terakhir: agar nama & menu langsung tampil (Kang 2026-11-28, aplikasi lambat)
 
 const sesi = {
@@ -16,6 +17,7 @@ function sesiDariTautan() {
   if (!location.hash.includes('access_token')) return;
   const p = new URLSearchParams(location.hash.slice(1));
   sesi.simpan({ access_token: p.get('access_token'), refresh_token: p.get('refresh_token'), expires_at: Number(p.get('expires_at')) });
+  try { localStorage.setItem(BARU_MASUK, '1'); } catch {}
   history.replaceState(null, '', location.pathname);
 }
 
@@ -127,7 +129,21 @@ async function profilSaya() {
   nav('nav-kebutuhan', p && PERAN_KEBUTUHAN.includes(p.peran));
   nav('nav-aset', p && PERAN_LIHAT_ASET.includes(p.peran));
   if (p) pasangMenuBawah(p);
+  if (p && p.peran !== 'anggota') catatAktivitas();
   return p || null;
+}
+
+// Aktivitas pengurus (Tahap 18): catat masuk & halaman yang dibuka. Server mengabaikan anggota/sesi KTA lama
+// dan halaman yang sama dalam 10 menit; di HP juga ditahan 10 menit per halaman agar hemat panggilan. Tidak pernah mengganggu halaman.
+function catatAktivitas() {
+  const kirim = (jenis, halaman) => dbKirim('POST', 'rpc/catat_aktivitas', { p_jenis: jenis, p_halaman: halaman }).catch(() => {});
+  try {
+    if (localStorage.getItem(BARU_MASUK)) { localStorage.removeItem(BARU_MASUK); kirim('masuk', '/masuk'); }
+    const h = location.pathname.replace(/\.html$/, '') || '/', k = `silsilah.buka:${h}`;
+    if (Date.now() - Number(sessionStorage.getItem(k) || 0) < 10 * 60e3) return;
+    sessionStorage.setItem(k, String(Date.now()));
+    kirim('buka', h);
+  } catch {}
 }
 
 // ===== Menu (Alternatif B "Emas di atas Hijau", Kang 2026-11-28) =====

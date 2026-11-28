@@ -77,6 +77,7 @@ async function masuk(isi, tombol, teksAwal) {
     const b = await r.json().catch(() => ({}));
     if (!r.ok) throw new Error(b.pesan || 'Terjadi gangguan. Coba lagi.');
     sesi.simpan({ access_token: b.access_token, refresh_token: b.refresh_token, expires_at: b.expires_at });
+    try { localStorage.setItem(BARU_MASUK, '1'); } catch {}
     tombol.querySelector('.teks').textContent = 'Berhasil, membuka...';
     location.replace('/beranda.html');
     return;
