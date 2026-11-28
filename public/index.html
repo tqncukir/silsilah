@@ -12,8 +12,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="SILSILAH">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=134">
-<link rel="stylesheet" href="/css/app.css?v=134">
+<link rel="stylesheet" href="/css/tokens.css?v=135">
+<link rel="stylesheet" href="/css/app.css?v=135">
 </head>
 <body>
 <header class="app-atas">
@@ -23,32 +23,44 @@
   </div>
 </header>
 <main class="depan">
- <div class="depan-sambut">
-  <span class="lencana">Uji coba</span>
-  <h1>Assalamu'alaikum, jamaah TQN Cukir</h1>
-  <p>SILSILAH adalah Sistem Layanan dan Silaturahim Jamaah Thoriqoh Qodiriyah wa Naqsyabandiyah Pusat Cukir Jombang.</p>
-
-  <a href="/masuk.html" class="btn btn-utama">Masuk</a>
-  <button id="pasang" class="btn btn-kedua" hidden>Pasang di layar HP</button>
-  <a href="/pasang.html" class="tautan">Cara pasang SILSILAH di HP</a>
-  <div id="panduan-ios" class="kartu" hidden>
+ <section class="depan-hero" aria-labelledby="depan-judul">
+  <div class="depan-hero-isi">
+   <img src="/icons/icon-512-v2.png" alt="Logo Jam'iyyah Ahlith Thoriqoh Al Mu'tabaroh An Nahdliyah" class="depan-logo" width="168" height="168">
+   <div class="depan-hero-teks">
+    <p class="depan-salam">Assalamu'alaikum warahmatullah</p>
+    <h1 id="depan-judul">Selamat datang, jamaah TQN Pusat Cukir</h1>
+    <p class="depan-tgl" id="depan-tgl" hidden></p>
+    <p class="depan-ket">Sistem Layanan dan Silaturahim Jamaah Thoriqoh Qodiriyah wa Naqsyabandiyah Pusat Cukir Jombang.</p>
+    <div class="depan-aksi">
+     <a href="/masuk.html" class="btn depan-masuk">Masuk</a>
+     <button id="pasang" type="button" class="btn depan-pasang" hidden>Pasang di layar HP</button>
+    </div>
+    <p class="depan-cara">Jamaah masuk cukup memindai QR di KTA.</p>
+   </div>
+  </div>
+ </section>
+ <nav class="depan-pintas" aria-label="Pintasan">
+  <ul>
+   <li><a href="/agenda.html"><span class="depan-ik grup-ruhani"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 5h12a2.5 2.5 0 012.5 2.5V18a2.5 2.5 0 01-2.5 2.5H6A2.5 2.5 0 013.5 18V7.5A2.5 2.5 0 016 5zM3.5 10h17M8 3v4M16 3v4"/></svg></span><span>Agenda</span></a></li>
+   <li><a href="/berita.html"><span class="depan-ik grup-pondasi"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11a2 2 0 012 2v13a1 1 0 001 1H6a2 2 0 01-2-2V5a1 1 0 011-1zM18 8h2v10a2 2 0 01-2 2M8 8h6M8 12h6M8 16h3"/></svg></span><span>Berita</span></a></li>
+   <li><a href="/cek-kta.html"><span class="depan-ik grup-amanah"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 5h13A2.5 2.5 0 0121 7.5v9a2.5 2.5 0 01-2.5 2.5h-13A2.5 2.5 0 013 16.5v-9A2.5 2.5 0 015.5 5zM8.5 13a2 2 0 100-4 2 2 0 000 4zM5.5 16c.6-1.5 1.6-2.2 3-2.2s2.4.7 3 2.2M14 10h4M14 13.5h4"/></svg></span><span>Cek keaslian KTA</span></a></li>
+   <li><a href="/pasang.html"><span class="depan-ik grup-kepedulian"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h10v18H7zM11 18h2"/></svg></span><span>Pasang di HP</span></a></li>
+  </ul>
+ </nav>
+ <div class="depan-isi">
+  <div id="panduan-ios" class="kartu depan-ios" hidden>
     <h2>Cara memasang di iPhone</h2>
     <p>Tekan tombol Bagikan di bawah layar, lalu pilih "Tambah ke Layar Utama".</p>
   </div>
- </div>
- <div class="depan-kanan">
   <section class="berita-bagian" id="berita-depan" hidden aria-labelledby="berita-judul">
-    <h2 id="berita-judul">Berita terbaru</h2>
+    <div class="berita-kepala"><h2 id="berita-judul">Berita terbaru</h2><a href="/berita.html" class="tautan">Semua berita</a></div>
     <ol class="berita-daftar" id="berita"></ol>
-    <a href="/berita.html" class="tautan agenda-semua">Lihat semua berita</a>
   </section>
   <section class="agenda-bagian" aria-labelledby="agenda-judul">
-    <h2 id="agenda-judul">Agenda terdekat</h2>
+    <div class="berita-kepala"><h2 id="agenda-judul">Agenda terdekat</h2><a href="/agenda.html" class="tautan">Semua agenda</a></div>
     <ol class="agenda-daftar" id="agenda"></ol>
-    <a href="/agenda.html" class="tautan agenda-semua">Lihat semua agenda</a>
   </section>
-  <a href="/cek-kta.html" class="tautan">Cek keaslian KTA</a>
-  <p class="kecil">Jamaah masuk cukup dengan memindai QR di KTA. Belum punya KTA atau ada data yang keliru? Hubungi pengurus.</p>
+  <p class="kecil depan-bantu">Belum punya KTA atau ada data yang keliru? Hubungi pengurus atau koordinator wilayah.</p>
  </div>
 </main>
 <footer class="kaki">
@@ -58,9 +70,9 @@
   <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
 </footer>
 <div id="status" class="status" role="status" aria-live="polite"></div>
-<script src="/js/supa.js?v=134" defer></script>
-<script src="/js/agenda.js?v=134" defer></script>
-<script src="/js/berita.js?v=134" defer></script>
-<script src="/js/app.js?v=134" defer></script>
+<script src="/js/supa.js?v=135" defer></script>
+<script src="/js/agenda.js?v=135" defer></script>
+<script src="/js/berita.js?v=135" defer></script>
+<script src="/js/app.js?v=135" defer></script>
 </body>
 </html>
