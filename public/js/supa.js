@@ -61,6 +61,7 @@ async function kartuSayaAwal() {
 }
 
 async function keluar() {
+  await matikanNotif().catch(() => {}); // HP bersama: notifikasi akun ini berhenti di perangkat ini
   const t = await tokenAktif();
   if (t) await fetch(`${SB_URL}/auth/v1/logout`, { method: 'POST', headers: { apikey: SB_KEY, Authorization: `Bearer ${t}` } }).catch(() => {});
   sesi.hapus();
@@ -133,6 +134,7 @@ async function profilSaya() {
 // HP & tablet (<1024px): menu bawah 4 tombol + "Lainnya" berisi ubin ikon per kelompok warna.
 // Laptop & komputer (>=1024px): menu samping kiri dengan kelompok yang sama. Satu daftar untuk keduanya.
 const IKON_MENU = {
+  notif: 'M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0',
   saya: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 20c0-3.3 3.6-6 8-6s8 2.7 8 6',
   beranda: 'M3 11l9-7 9 7M5 10v10h5v-6h4v6h5V10',
   jamaah: 'M9 11.2a3.2 3.2 0 100-6.4 3.2 3.2 0 000 6.4zM3.5 19c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M16 5.5a3 3 0 010 5.6M17.5 14.3c1.7.6 2.7 2.2 3 4.7',
@@ -167,13 +169,13 @@ function daftarMenu(p) {
   // [ikon, label, alamat, kelompok]; kelompok '' = menu utama (menu bawah HP / atas menu samping)
   const semua = anggota
     ? [['beranda', 'Beranda', '/beranda.html', ''], ['kta', 'KTA', '/kta.html', ''], ['kegiatan', 'Agenda', '/agenda.html', ''],
-      ['saya', 'Data Saya', '/saya.html', 'pondasi'],
+      ['saya', 'Data Saya', '/saya.html', 'pondasi'], ['notif', 'Notifikasi', '/notif.html', 'pondasi'],
       ['ahli', 'Ahli Kubur', '/ahli-kubur.html', 'ruhani'], ['haul', 'Haul', '/haul.html', 'ruhani'], ['ziarah', 'Ziarah & Umroh', '/saya.html#ziarah', 'ruhani'],
       ['usaha', 'Usaha Jamaah', '/usaha.html', 'kepedulian']]
     : [['beranda', 'Beranda', '/beranda.html', '', null], ['jamaah', 'Jamaah', '/jamaah.html', '', PERAN_LIHAT_JAMAAH],
       ['kegiatan', 'Kegiatan', '/kegiatan.html', '', PERAN_LIHAT_KEGIATAN],
       ['dasbor', 'Dashboard', '/dashboard.html', 'pondasi', PERAN_LIHAT_JAMAAH], ['daftar', 'Pendaftaran', '/pendaftaran.html', 'pondasi', PERAN_UBAH_JAMAAH],
-      ['pin', 'Atur PIN', '/pengurus-pin.html', 'pondasi', ['admin_pusat']],
+      ['pin', 'Atur PIN', '/pengurus-pin.html', 'pondasi', ['admin_pusat']], ['notif', 'Notifikasi', '/notif.html', 'pondasi', null],
       ['absensi', 'Absensi', '/absensi.html', 'ruhani', PERAN_ABSEN], ['ahli', 'Ahli Kubur', '/ahli-kubur.html', 'ruhani', PERAN_LIHAT_JAMAAH],
       ['haul', 'Haul', '/haul.html', 'ruhani', PERAN_LIHAT_JAMAAH], ['ziarah', 'Ziarah & Umroh', '/perjalanan.html', 'ruhani', PERAN_LIHAT_PERJALANAN],
       ['agenda', 'Agenda umum', '/agenda.html', 'ruhani', null],
@@ -537,3 +539,47 @@ document.addEventListener('error', (e) => {
   const kartu = g.closest('.berita-kartu');
   if (kartu) { kartu.classList.add('tanpa-foto'); g.remove(); } else g.hidden = true;
 }, true);
+
+// ===== Notifikasi ke HP (Tahap 16, Web Push) =====
+// Kunci publik VAPID (boleh di kode; pasangan rahasianya hanya di Supabase Secrets, dipasang Kang 2026-11-28).
+const VAPID_PUBLIK = 'BNQ34-ZnTm3-IYHJJ2_Lzliu4OQbpvyJ0NSlfDTh6-gXfq4pM9D-6GNYmIplKX8dADUrko_u7HkgJy6Dq0bmnCI';
+const b64keU8 = (s) => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - (s.length % 4)) % 4)), (c) => c.charCodeAt(0));
+const u8keB64 = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+const diIphone = () => /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const terpasangDiLayar = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+// Status di perangkat ini: 'aktif' | 'belum' | 'diblokir' | 'pasang-dulu' (iPhone: pasang di layar utama dulu) | 'tidak-didukung'
+async function statusNotif() {
+  if (!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window)) return diIphone() && !terpasangDiLayar() ? 'pasang-dulu' : 'tidak-didukung';
+  if (Notification.permission === 'denied') return 'diblokir';
+  const sub = await (await navigator.serviceWorker.getRegistration())?.pushManager.getSubscription();
+  return sub && Notification.permission === 'granted' ? 'aktif' : 'belum';
+}
+// Panggil LANGSUNG dari ketukan tombol (iPhone mewajibkan izin diminta dari ketukan).
+async function aktifkanNotif() {
+  const izin = await Notification.requestPermission();
+  if (izin !== 'granted') throw new Error(izin === 'denied' ? 'notif-diblokir' : 'notif-batal');
+  await navigator.serviceWorker.register('/sw.js');
+  const reg = await navigator.serviceWorker.ready;
+  let sub = await reg.pushManager.getSubscription();
+  if (sub && sub.options?.applicationServerKey && u8keB64(sub.options.applicationServerKey) !== VAPID_PUBLIK) { await sub.unsubscribe(); sub = null; } // kunci diganti
+  sub ||= await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64keU8(VAPID_PUBLIK) });
+  await simpanLangganan(sub);
+}
+const simpanLangganan = (sub) => dbKirim('POST', 'rpc/simpan_langganan',
+  { p_endpoint: sub.endpoint, p_p256dh: u8keB64(sub.getKey('p256dh')), p_auth: u8keB64(sub.getKey('auth')) }, 'return=minimal');
+// Perangkat sudah aktif: perbarui di server tanpa bertanya (mis. akun lain pernah masuk di HP ini).
+async function segarkanNotif() {
+  if (await statusNotif() !== 'aktif') return;
+  const sub = await (await navigator.serviceWorker.getRegistration()).pushManager.getSubscription();
+  await simpanLangganan(sub);
+}
+async function matikanNotif() {
+  if (!('serviceWorker' in navigator)) return;
+  const sub = await (await navigator.serviceWorker.getRegistration())?.pushManager.getSubscription();
+  if (!sub) return;
+  await dbKirim('POST', 'rpc/hapus_langganan', { p_endpoint: sub.endpoint }, 'return=minimal').catch(() => {});
+  await sub.unsubscribe();
+}
+const pesanNotifGagal = (e) => ({ 'notif-diblokir': 'Pemberitahuan diblokir. Buka pengaturan situs di browser/HP, izinkan Notifikasi, lalu coba lagi.',
+  'notif-batal': 'Belum diizinkan. Tekan Aktifkan lagi lalu pilih Izinkan.' }[e.message]
+  || (e.message === 'Failed to fetch' ? 'Sinyal terputus. Coba lagi.' : 'Pemberitahuan belum bisa diaktifkan. Coba lagi.'));

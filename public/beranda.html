@@ -10,8 +10,8 @@
 <link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
 <link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css?v=132">
-<link rel="stylesheet" href="/css/app.css?v=132">
+<link rel="stylesheet" href="/css/tokens.css?v=133">
+<link rel="stylesheet" href="/css/app.css?v=133">
 </head>
 <body class="hal-app">
 <header class="app-atas">
@@ -45,6 +45,19 @@
     <p class="sambut-tgl" id="tanggal"></p>
   </section>
   <p id="pesan" class="pesan" role="alert"></p>
+  <section id="ajak-notif" class="ajak-notif" hidden aria-labelledby="an-judul">
+    <span class="ajak-notif-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>
+    <div class="ajak-notif-teks">
+      <h2 id="an-judul">Aktifkan pemberitahuan</h2>
+      <p id="an-ket">Kabar kegiatan, haul, dan berita langsung ke HP. Paling banyak 2 kali sehari, tidak pada malam hari.</p>
+      <div class="ajak-notif-aksi">
+        <button type="button" class="btn btn-utama btn-pas" id="an-aktifkan">Aktifkan</button>
+        <a class="btn btn-utama btn-pas" id="an-pasang" href="/pasang.html" hidden>Cara pasang di HP</a>
+        <button type="button" class="btn btn-kedua btn-pas" id="an-nanti">Nanti saja</button>
+      </div>
+      <p id="an-pesan" class="pesan" role="status"></p>
+    </div>
+  </section>
   <section id="tindak" class="bagian-beranda bagian-penuh" hidden aria-labelledby="tindak-judul">
     <h2 class="bagian-judul" id="tindak-judul">Perlu ditindaklanjuti</h2>
     <ul class="tindak-daftar" id="tindak-isi"></ul>
@@ -105,9 +118,9 @@
   </div>
   <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
 </footer>
-<script src="/js/supa.js?v=132" defer></script>
-<script src="/js/agenda.js?v=132" defer></script>
-<script src="/js/berita.js?v=132" defer></script>
-<script src="/js/beranda.js?v=132" defer></script>
+<script src="/js/supa.js?v=133" defer></script>
+<script src="/js/agenda.js?v=133" defer></script>
+<script src="/js/berita.js?v=133" defer></script>
+<script src="/js/beranda.js?v=133" defer></script>
 </body>
 </html>

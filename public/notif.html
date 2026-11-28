@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Notifikasi · SILSILAH TQN Cukir</title>
+<meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=133">
+<link rel="stylesheet" href="/css/app.css?v=133">
+</head>
+<body class="hal-app">
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <a href="/beranda.html">Beranda</a>
+      <a href="/dashboard.html" id="nav-dasbor" hidden>Dashboard Pengurus</a>
+      <a href="/jamaah.html" id="nav-jamaah" hidden>Data Jamaah</a>
+      <a href="/pendaftaran.html" id="nav-daftar" hidden>Pendaftaran</a>
+      <a href="/kegiatan.html" id="nav-kegiatan" hidden>Kegiatan</a>
+      <a href="/ahli-kubur.html" id="nav-ahli" hidden>Ahli Kubur</a>
+      <a href="/perjalanan.html" id="nav-perjalanan" hidden>Ziarah &amp; Umroh</a>
+      <a href="/bantuan.html" id="nav-bantuan" hidden>Bantuan Sosial</a>
+      <a href="/ekonomi.html" id="nav-ekonomi" hidden>Ekonomi Jamaah</a>
+      <a href="/usaha.html" id="nav-usaha" hidden>Usaha Jamaah</a>
+      <a href="/sakit.html" id="nav-sakit" hidden>Jamaah Sakit</a>
+      <a href="/kebutuhan.html" id="nav-kebutuhan" hidden>Kebutuhan Khusus</a>
+      <a href="/kas.html" id="nav-kas" hidden>Buku Kas</a>
+      <a href="/aset.html" id="nav-aset" hidden>Aset &amp; Wakaf</a>
+    </nav>
+    <button class="app-keluar" id="keluar" type="button">Keluar</button>
+  </div>
+</header>
+
+<main class="app-isi">
+  <a href="/beranda.html" class="kembali">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Beranda
+  </a>
+  <div class="judul-baris"><div><h1>Notifikasi</h1><p class="judul-sub">Dikirim paling banyak 2 kali sehari, pagi (06.00) dan sore (16.00). Tidak ada pemberitahuan malam.</p></div></div>
+  <p id="pesan" class="pesan" role="alert"></p>
+  <section class="panel" id="p-perangkat" hidden aria-labelledby="pp-judul">
+    <h2 class="form-judul" id="pp-judul">Perangkat ini</h2>
+    <p class="notif-status" id="st-teks">Memuat...</p>
+    <p class="ket" id="st-ket"></p>
+    <div class="tombol-baris">
+      <a class="btn btn-utama btn-pas" id="st-pasang" href="/pasang.html" hidden>Cara pasang di HP</a>
+      <button type="button" class="btn btn-kedua btn-pas" id="st-matikan" hidden>Matikan di perangkat ini</button>
+      <button type="button" class="btn btn-utama btn-pas" id="st-aktifkan" hidden>Aktifkan di perangkat ini</button>
+    </div>
+    <p id="st-pesan" class="pesan" role="status"></p>
+  </section>
+  <form class="panel form" id="p-jenis" hidden aria-labelledby="pj-judul">
+    <h2 class="form-judul" id="pj-judul">Kabar yang ingin diterima</h2>
+    <fieldset class="notif-jenis">
+      <legend>Untuk semua jamaah</legend>
+      <label class="notif-pil" id="pil-kegiatan"><input type="checkbox" name="jenis" value="kegiatan" checked><span><strong>Pengingat kegiatan</strong><span class="ket">Kegiatan hari ini (pagi) dan besok (sore) di wilayah Anda dan Pusat</span></span></label>
+      <label class="notif-pil" id="pil-berita"><input type="checkbox" name="jenis" value="berita" checked><span><strong>Berita baru</strong><span class="ket">Berita yang terbit hari itu</span></span></label>
+      <label class="notif-pil" id="pil-haul"><input type="checkbox" name="jenis" value="haul" checked><span><strong>Haul pekan ini</strong><span class="ket">Ajakan doa setiap Kamis sore</span></span></label>
+      <label class="notif-pil" id="pil-ziarah"><input type="checkbox" name="jenis" value="ziarah" checked><span><strong>Ziarah & umroh dibuka</strong><span class="ket">Rombongan baru yang dibuka pendaftarannya</span></span></label>
+    </fieldset>
+    <fieldset class="notif-jenis" id="jenis-pengurus" hidden>
+      <legend>Khusus pengurus</legend>
+      <label class="notif-pil" id="pil-tugas"><input type="checkbox" name="jenis" value="tugas" checked><span><strong>Perlu ditindaklanjuti</strong><span class="ket">Ringkasan pagi dan tugas baru (hanya jumlah, tanpa nama)</span></span></label>
+      <label class="notif-pil" id="pil-backup" hidden><input type="checkbox" name="jenis" value="backup" checked><span><strong>Backup bermasalah</strong><span class="ket">Khusus Admin Pusat, dikirim pagi bila backup harian gagal</span></span></label>
+    </fieldset>
+    <p class="ket" id="jenis-ket"></p>
+    <p id="pesan-jenis" class="pesan" role="status"></p>
+    <div class="tombol-baris"><button type="submit" class="btn btn-utama btn-pas" id="simpan-jenis">Simpan pilihan</button></div>
+  </form>
+</main>
+<footer class="kaki">
+  <div class="kaki-isi">
+    <address class="kaki-alamat">TQN Pusat Cukir Jombang<br>Jl. Masjid No. 110 Cukir, Diwek, Jombang 61471</address>
+  </div>
+  <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
+</footer>
+<script src="/js/supa.js?v=133" defer></script>
+<script src="/js/notif.js?v=133" defer></script>
+</body>
+</html>

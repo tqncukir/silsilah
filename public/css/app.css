@@ -1342,3 +1342,30 @@ body:not(.hal-masuk):not(.hal-poster)>main{flex:1 0 auto;width:100%}
 .kunci-nama .ket{display:block;font-weight:400}
 .kunci-rahasia{color:#A4161A}
 .kunci-isi{display:block;min-width:0;padding:8px 10px;border-radius:8px;background:var(--latar-sorot);font-size:var(--fs-kecil);overflow-wrap:anywhere;user-select:all}
+/* Ajakan aktifkan pemberitahuan (Beranda, Tahap 16) */
+.ajak-notif{display:flex;gap:14px;align-items:flex-start;margin:0 0 var(--gap);padding:16px;background:#FFFFFF;border:1px solid var(--garis-kuat);
+  border-radius:16px;box-shadow:var(--bayang)}
+.ajak-notif[hidden]{display:none}
+.ajak-notif-ikon{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:var(--mint);color:var(--hijau-jamiyyah)}
+.ajak-notif-teks{min-width:0;flex:1}
+.ajak-notif-teks h2{margin:0 0 4px;font-size:var(--fs-sub)}
+.ajak-notif-teks p{margin:0}
+.ajak-notif-teks p a{color:var(--hijau-jamiyyah);font-weight:600}
+.ajak-notif-aksi{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
+.ajak-notif-aksi .btn{margin:0}
+.ajak-notif-aksi [hidden]{display:none}
+.ajak-notif-teks .pesan:not(:empty){margin:10px 0 0}
+.ajak-notif-ok{background:var(--hijau-pupus);border-color:var(--garis)}
+@media (min-width:1024px){.beranda-baru .app-isi>.ajak-notif{grid-column:1/-1}}
+/* Pengaturan Notifikasi (notif.html) */
+.notif-status{display:flex;align-items:center;gap:10px;margin:0 0 12px}
+.notif-jenis{display:grid;gap:8px;margin:0 0 16px;padding:0;border:0}
+.notif-jenis legend{padding:0;margin:0 0 8px;font-weight:700}
+.notif-pil{display:flex;gap:12px;align-items:flex-start;min-height:44px;padding:12px;border:1px solid var(--garis);border-radius:12px;cursor:pointer}
+.notif-pil input{flex:none;width:22px;height:22px;margin:1px 0 0;accent-color:var(--hijau-jamiyyah)}
+.notif-pil strong{display:block}
+.notif-pil[hidden]{display:none}
+.form .notif-pil{display:flex;margin:0;font-size:var(--fs-isi);font-weight:400}
+.form .notif-pil[hidden]{display:none}
+.form .notif-pil input{width:22px;min-height:0;height:22px;padding:0}
+.notif-pil strong{font-weight:600}

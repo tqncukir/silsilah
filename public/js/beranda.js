@@ -92,6 +92,32 @@ async function muatZiarahAjak() {
   } catch { /* gagal: tersembunyi */ }
 }
 
+// Ajakan "Aktifkan pemberitahuan" (Tahap 16): tampil sampai aktif; "Nanti saja" = sembunyi 14 hari.
+// Sudah aktif → perbarui langganan di server tanpa bertanya. Diblokir/tidak didukung → tidak mengganggu (lihat halaman Notifikasi).
+const NANTI_NOTIF = 'silsilah.notif.nanti';
+async function ajakNotif() {
+  const st = await statusNotif().catch(() => 'tidak-didukung');
+  if (st === 'aktif') { segarkanNotif().catch(() => {}); return; }
+  let nanti = 0; try { nanti = Number(localStorage.getItem(NANTI_NOTIF)) || 0; } catch {}
+  if (!['belum', 'pasang-dulu'].includes(st) || Date.now() - nanti < 14 * 864e5) return;
+  if (st === 'pasang-dulu') {
+    $('an-ket').textContent = 'Di iPhone, pasang SILSILAH di layar utama dulu (Bagikan → Tambahkan ke Layar Utama), lalu buka dari ikonnya dan tekan Aktifkan.';
+    $('an-aktifkan').hidden = true; $('an-pasang').hidden = false;
+  }
+  $('ajak-notif').hidden = false;
+}
+$('an-aktifkan').onclick = () => {
+  const btn = $('an-aktifkan'); btn.disabled = true;
+  aktifkanNotif().then(() => {
+    $('ajak-notif').classList.add('ajak-notif-ok');
+    $('an-judul').textContent = 'Pemberitahuan aktif';
+    $('an-ket').innerHTML = 'Kabar akan dikirim pagi dan sore. Jenis kabar bisa diatur di <a href="/notif.html">Pengaturan Notifikasi</a>.';
+    btn.hidden = true; $('an-nanti').hidden = true; $('an-pesan').textContent = '';
+  }).catch((e) => { $('an-pesan').textContent = pesanNotifGagal(e); })
+    .finally(() => { btn.disabled = false; });
+};
+$('an-nanti').onclick = () => { try { localStorage.setItem(NANTI_NOTIF, String(Date.now())); } catch {} $('ajak-notif').hidden = true; };
+
 // Berita terbaru (3; yang sudah masuk juga melihat Khusus anggota).
 function muatBeritaBeranda() {
   gambarBerita($('berita-beranda-isi'), 3).then((n) => { $('berita-beranda').hidden = n <= 0; });
@@ -149,6 +175,7 @@ function pasangPintasan(p) {
     }
     $('salam').textContent = p.nama;
     tanggalSalam();
+    ajakNotif();
     $('peran').textContent = NAMA_PERAN[p.peran] || p.peran;
     muatBeritaBeranda();
     if (p.peran !== 'anggota') {
