@@ -264,7 +264,7 @@ function pasangMenuBawah(p) {
 const PERAN_BERITA = ['admin_pusat', 'ketua', 'koordinator_wilayah'];
 const PERAN_PIMPINAN_BERITA = ['admin_pusat', 'ketua'];
 const STATUS_BERITA = { draf: ['Draf', 'stat-biasa eko-belum'], diajukan: ['Menunggu persetujuan', 'stat-tidak'], terbit: ['Terbit', 'stat-aktif'],
-  ditolak: ['Ditolak', 'stat-wafat'], ditarik: ['Ditarik', 'stat-biasa eko-belum'] };
+  ditolak: ['Ditolak', 'stat-wafat'], ditarik: ['Ditarik', 'stat-wafat'] };
 const statusBeritaHtml = (s) => { const [t, k] = STATUS_BERITA[s] || [s, 'stat-biasa']; return `<span class="stat ${k}">${t}</span>`; };
 const fotoBerita = (nama) => (nama ? `${SB_URL}/storage/v1/object/public/berita/${encodeURIComponent(nama)}` : '');
 // Isi berita (teks biasa) -> paragraf aman
