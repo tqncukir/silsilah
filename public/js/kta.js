@@ -97,6 +97,9 @@ $('keluar').onclick = keluar;
 // di atas gambar master ukuran asli 1579x996 (cukup tajam untuk dicetak 85,6x54 mm). PIN TIDAK PERNAH ikut.
 const HURUF_KTA = "Roboto, Arial, 'Helvetica Neue', Helvetica, sans-serif";
 const diHp = () => matchMedia('(max-width: 1023px)').matches;
+// iPhone/iPad (termasuk iPad yang mengaku Mac): menu Bagikan punya "Simpan Gambar" → langsung masuk Foto.
+// Android: menu Bagikan sering tanpa pilihan simpan, jadi gambar diunduh ke folder Download (tampil di Galeri, album Download).
+const diIos = () => /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 const muatGambar = (src) => new Promise((ok, gagal) => { const g = new Image(); g.onload = () => ok(g); g.onerror = gagal; g.src = src; });
 async function buatPngKta() {
   const master = await muatGambar('/img/kta-master.webp');
@@ -145,6 +148,9 @@ $('simpan-png').onclick = async () => {
     urlPng = URL.createObjectURL(pngKta);
     $('simpan-gambar').src = urlPng;
     pesanSimpan(''); $('simpan-tutup').textContent = 'Tutup';
+    $('simpan-ket').textContent = diIos() ? 'Tekan Simpan ke HP, lalu pilih “Simpan Gambar” agar masuk ke Foto.'
+      : diHp() ? 'Gambar akan masuk ke Galeri, album Download.'
+      : 'Gambar kartu tanpa PIN, ukuran tajam untuk dicetak seukuran KTA.';
     $('simpan-ok').textContent = diHp() ? 'Simpan ke HP' : 'Unduh gambar';
     $('dlg-simpan').showModal(); $('simpan-ok').focus();
   } catch { pesanAksi('Gambar KTA belum bisa dibuat. Coba muat ulang halaman ini.'); }
@@ -154,14 +160,16 @@ $('simpan-ok').onclick = async () => {
   const nama = `KTA-${j.nomor_anggota}.png`;
   const berkas = new File([pngKta], nama, { type: 'image/png' });
   try {
-    // HP: lembar bagikan bawaan (Simpan ke Galeri/Foto, WhatsApp, dll.). Laptop atau HP lama: unduh langsung.
-    if (matchMedia('(pointer: coarse)').matches && navigator.canShare?.({ files: [berkas] })) {
-      await navigator.share({ files: [berkas], title: `KTA ${j.nama}` });
+    // iPhone: menu Bagikan ("Simpan Gambar" → Foto). Android, laptop, HP lama: unduh langsung.
+    let lewatBagikan = false;
+    if (diIos() && navigator.canShare?.({ files: [berkas] })) {
+      await navigator.share({ files: [berkas], title: `KTA ${j.nama}` }); lewatBagikan = true;
     } else {
       const a = document.createElement('a'); a.href = urlPng; a.download = nama;
       document.body.append(a); a.click(); a.remove();
     }
-    pesanSimpan('KTA tersimpan. Cek di Galeri/Foto atau folder Unduhan.', true);
+    pesanSimpan(lewatBagikan ? 'Selesai. Bila tadi memilih “Simpan Gambar”, KTA ada di aplikasi Foto.'
+      : diHp() ? 'KTA tersimpan. Lihat di Galeri, album Download.' : 'KTA tersimpan di folder Unduhan.', true);
     $('simpan-tutup').textContent = 'Selesai';
   } catch (e) {
     if (e?.name !== 'AbortError') pesanSimpan('Gambar belum tersimpan. Coba lagi.');
