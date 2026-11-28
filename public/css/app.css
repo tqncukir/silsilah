@@ -1652,3 +1652,77 @@ a.dsb-kartu-tautan:focus-visible{outline:3px solid var(--kuning-rosyid);outline-
 }
 .bk-status,.bk-status[data-jenis]{border-left:1px solid var(--garis)}
 .bk-pita-panel+.bagian-judul{margin-top:24px}
+
+/* ===== Kesehatan Sistem (Tahap 18, sistem.html) ===== */
+.ks-ringkas{display:flex;gap:14px;align-items:flex-start;margin:0 0 16px;padding:16px;border-radius:16px;border:1px solid var(--garis);background:#FFFFFF;box-shadow:var(--bayang)}
+.ks-ringkas-ikon{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--mint);color:var(--hijau-jamiyyah)}
+.ks-ringkas.ks-perhatian .ks-ringkas-ikon{background:#FFEFB0;color:#6E5200}
+.ks-ringkas.ks-bahaya{background:#FDF3F2;border-color:#F0C4C0}
+.ks-ringkas.ks-bahaya .ks-ringkas-ikon{background:#F8D7D3;color:#8C1D18}
+.ks-ringkas-judul{margin:0 0 4px;font-weight:700;font-size:var(--fs-sub);color:var(--hijau-jamiyyah)}
+.ks-ringkas.ks-bahaya .ks-ringkas-judul{color:#8C1D18}
+.ks-ringkas.ks-perhatian .ks-ringkas-judul{color:#6E5200}
+.ks-ringkas ul{margin:0;padding:0 0 0 18px}
+.ks-ringkas li{margin:2px 0}
+.ks-ringkas li a{display:inline-flex;align-items:center;min-height:36px;color:var(--hitam)}
+.ks-ringkas .ket{margin:0}
+.ks-kisi{display:grid;gap:16px;align-items:start}
+@media (min-width:768px){.ks-kisi{grid-template-columns:repeat(2,minmax(0,1fr))}.ks-lebar{grid-column:1 / -1}}
+@media (min-width:1200px){.ks-kisi{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.ks-kartu{display:flex;flex-direction:column;gap:12px;min-width:0;scroll-margin-top:84px}
+.ks-kepala{display:flex;align-items:center;gap:12px}
+.ks-kepala h2{flex:1;min-width:0;margin:0;font-size:var(--fs-sub);color:var(--hitam)}
+.ks-ikon{position:relative;flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:var(--mint);color:var(--hijau-jamiyyah)}
+.ks-ikon i{position:absolute;right:-4px;bottom:-4px;display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--hijau-jamiyyah);color:#FFFFFF;border:2px solid #FFFFFF}
+.ks-ikon.ks-perhatian{background:#FFF6CC;color:#6E5200}.ks-ikon.ks-perhatian i{background:#A87400}
+.ks-ikon.ks-bahaya{background:#FBE9E7;color:#8C1D18}.ks-ikon.ks-bahaya i{background:#B3261E}
+.ks-pil{flex:none;padding:3px 10px;border-radius:999px;font-size:13px;font-weight:700;white-space:nowrap}
+.ks-pil-baik{background:var(--mint);color:var(--hijau-jamiyyah)}
+.ks-pil-perhatian{background:#FFF6CC;color:#6E5200}
+.ks-pil-bahaya{background:#FBE9E7;color:#8C1D18}
+.ks-besar{margin:0;font-size:1.375rem;font-weight:700;color:var(--hitam)}
+.ks-kartu>.ket{margin:0}
+.ks-catatan{font-size:13px}
+.ks-hari{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:0;padding:0;list-style:none}
+.ks-hari li{display:grid;justify-items:center;gap:2px;padding:8px 2px;border-radius:10px;background:var(--latar-sorot);color:var(--hijau-jamiyyah);font-size:13px;font-weight:600;text-align:center}
+.ks-hari b{font-weight:700}
+.ks-hari .ks-hari-gagal{background:#FBE9E7;color:#8C1D18}
+.ks-hari .ks-hari-kosong{background:#EEF1EF;color:var(--abu)}
+.ks-daftar{list-style:none;margin:0;padding:0}
+.ks-daftar li+li{border-top:1px solid var(--garis-lembut)}
+.ks-daftar li>a,.ks-daftar li>div{display:flex;align-items:center;gap:10px;min-height:44px;padding:6px 0;color:var(--hitam);text-decoration:none}
+.ks-daftar li>a:hover .ks-label{text-decoration:underline}
+.ks-daftar li>a:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:2px;border-radius:8px}
+.ks-bik{flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:8px;background:var(--latar);color:var(--abu)}
+.ks-label{flex:1;min-width:0;line-height:1.35}
+.ks-label small{display:block;font-size:13px;color:var(--abu)}
+.ks-nilai{flex:none;display:inline-flex;align-items:center;gap:6px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--hitam)}
+.ks-nilai-kurang{color:#A4161A}
+.ks-ok{display:inline-grid;place-items:center;color:var(--hijau-daun)}
+.ks-tautan{display:inline-flex;align-items:center;gap:4px;min-height:44px;align-self:flex-start;color:var(--hijau-jamiyyah);font-weight:600;font-size:var(--fs-kecil);text-decoration:none}
+.ks-tautan:hover{text-decoration:underline}
+.ks-tautan:focus-visible{outline:3px solid var(--kuning-rosyid);outline-offset:2px;border-radius:6px}
+.ks-batang{display:block;height:8px;border-radius:999px;background:var(--garis-lembut);overflow:hidden}
+.ks-batang span{display:block;height:100%;border-radius:999px;background:var(--hijau-daun)}
+.ks-batang-penuh span{background:#C62828}
+.ks-pakai p{margin:0 0 6px;font-size:var(--fs-kecil)}
+.ks-pakai strong{color:var(--hijau-jamiyyah);font-size:1rem}
+.ks-kuota p{display:flex;align-items:center;gap:8px;margin:0 0 6px;font-size:var(--fs-kecil)}
+.ks-kuota p>span:last-child{margin-left:auto;text-align:right;color:var(--abu)}
+.ks-kuota strong{color:var(--hitam)}
+.ks-kotak{padding:12px 14px;border-radius:12px;background:var(--latar-sorot)}
+.ks-kotak p{margin:0 0 4px}
+.ks-tugas{list-style:none;margin:0;padding:0}
+.ks-tugas li{display:flex;align-items:center;gap:12px;padding:10px 0}
+.ks-tugas li+li{border-top:1px solid var(--garis-lembut)}
+.ks-tugas li>div{flex:1;min-width:0}
+.ks-tugas p{margin:0}
+.ks-tugas .ket{font-size:13px}
+.ks-tugas-perlu .ket strong{color:#A4161A}
+.ks-tandai{display:inline-flex;align-items:center;gap:6px;flex:none}
+@media (max-width:599px){.ks-tugas li{flex-wrap:wrap}.ks-tugas li>div{flex:1 1 100%}.ks-tandai,.ks-tugas .ks-ok{margin-left:auto}}
+/* Beranda admin: ringkasan kesehatan sistem satu baris */
+.sistem-ringkas{display:flex;align-items:center;gap:8px;min-height:44px;margin:10px 0 0;color:var(--hijau-jamiyyah);font-weight:600;text-decoration:none}
+.sistem-ringkas[hidden]{display:none}
+.sistem-ringkas:hover{text-decoration:underline}
+.sistem-ringkas.ks-perhatian{color:#6E5200}

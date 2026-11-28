@@ -157,6 +157,7 @@ const IKON_MENU = {
   kas: 'M4 7h15a1 1 0 011 1v11H4zM4 7l12-3v3M16 13h2',
   aset: 'M3 20h18M5 20V10l7-5 7 5v10M10 20v-5h4v5',
   backup: 'M7 18a4 4 0 01-.5-8 5.5 5.5 0 0110.6-1.5A4 4 0 0117 18M12 12v7M9 14l3-3 3 3',
+  sistem: 'M3 12h4l2-5 4 10 2-5h6',
   pasang: 'M7 3h10v18H7zM11 18h2',
   keluar: 'M10 4H5v16h5M14 8l4 4-4 4M18 12H9',
   tutup: 'M6 6l12 12M18 6L6 18',
@@ -184,7 +185,7 @@ function daftarMenu(p) {
       ['usaha', 'Usaha Jamaah', '/usaha.html', 'kepedulian', null], ['sakit', 'Jamaah Sakit', '/sakit.html', 'kepedulian', PERAN_KESEHATAN],
       ['kebutuhan', 'Kebutuhan Khusus', '/kebutuhan.html', 'kepedulian', PERAN_KEBUTUHAN],
       ['kas', 'Buku Kas', '/kas.html', 'amanah', PERAN_LIHAT_KAS], ['aset', 'Aset & Wakaf', '/aset.html', 'amanah', PERAN_LIHAT_ASET],
-      ['backup', 'Pantau Backup', '/backup.html', 'amanah', ['admin_pusat']]].filter((m) => boleh(m[4]));
+      ['backup', 'Pantau Backup', '/backup.html', 'amanah', ['admin_pusat']], ['sistem', 'Kesehatan Sistem', '/sistem.html', 'amanah', ['admin_pusat']]].filter((m) => boleh(m[4]));
   return { utama: semua.filter((m) => !m[3]), grup: GRUP_MENU.map(([k, n]) => [k, n, semua.filter((m) => m[3] === k)]).filter((g) => g[2].length) };
 }
 function pasangMenuBawah(p) {
@@ -216,10 +217,10 @@ function pasangMenuBawah(p) {
   const PENDEK = { pondasi: 'Pondasi', ruhani: 'Ruhani', kepedulian: 'Kepedulian', amanah: 'Amanah' };
   const panah = '<svg class="ma-panah" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
   // Menu admin di kanan atas, sebelah Keluar (Kang 2026-11-28): dikeluarkan dari kelompoknya agar tidak dobel.
-  const ADMIN = ['dasbor', 'pin', 'backup'];
+  const ADMIN = ['dasbor', 'pin', 'backup', 'sistem'];
   const admin = grup.flatMap(([, , isi]) => isi.filter(([i]) => ADMIN.includes(i)));
   const grupAtas = grup.map(([k, n, isi]) => [k, n, isi.filter(([i]) => !ADMIN.includes(i))]).filter(([, , isi]) => isi.length);
-  const NAMA_ADMIN = { dasbor: 'Dashboard Pengurus', pin: 'Atur PIN Pengurus', backup: 'Pantau Backup' };
+  const NAMA_ADMIN = { dasbor: 'Dashboard Pengurus', pin: 'Atur PIN Pengurus', backup: 'Pantau Backup', sistem: 'Kesehatan Sistem' };
   const tombolAdmin = admin.length > 1
     ? `<div class="ma-grup ma-admin"><button type="button" class="ma-tombol${admin.some(([, , u]) => aktif(u)) ? ' ma-aktif' : ''}" aria-expanded="false" aria-controls="ma-admin">Admin${panah}</button>
       <div class="ma-panel" id="ma-admin" hidden><p>Admin</p><ul>${admin.map(([i, , u]) => `<li><a href="${u}"${cur(u)}><span class="ml-ikon">${ikonMenu(i, 18)}</span><span>${NAMA_ADMIN[i]}</span></a></li>`).join('')}</ul></div></div>`
@@ -506,6 +507,38 @@ function nilaiBackup(baris) {
     ket: `${kapan}${t.gagal_di ? `, di langkah "${t.gagal_di}"` : ''}. Buka catatan GitHub untuk melihat sebabnya, atau minta Claude memeriksanya.` };
   return { jenis: 'ok', terakhir: t, judul: 'Backup terakhir berhasil',
     ket: `${kapan} · ${ukuranTeks(t.ukuran_byte)}${t.jumlah_tabel != null ? ` · ${t.jumlah_tabel} tabel` : ''}` };
+}
+
+// Hasil rpc/kesehatan_sistem -> daftar hal yang perlu perhatian: [tingkat, teks, alamat].
+// 'penting' = sistem bisa terganggu (tampil satu per satu di Beranda admin); 'cek' = kerapian/tugas (diringkas jadi satu baris).
+const BATAS_PENUH = 0.8; // 80% kuota paket gratis
+function nilaiKesehatan(k) {
+  const h = [], n = (x) => Number(x || 0), a = (x) => n(x).toLocaleString('id-ID');
+  const b = k.backup?.terakhir;
+  if (!b) h.push(['penting', 'Belum ada catatan backup', '/backup.html']);
+  else if ((Date.now() - new Date(b.waktu).getTime()) / 36e5 > BATAS_BACKUP_JAM) h.push(['penting', `Tidak ada backup baru lebih dari ${BATAS_BACKUP_JAM} jam`, '/backup.html']);
+  else if (!b.berhasil) h.push(['penting', 'Backup terakhir gagal', '/backup.html']);
+  for (const j of k.notif?.jadwal || []) {
+    const w = j.nama === 'notif-pagi' ? 'pagi' : 'sore';
+    if (!j.aktif) h.push(['penting', `Jadwal notifikasi ${w} tidak aktif`, '/sistem.html#k-notif']);
+    else if (j.status && j.status !== 'succeeded') h.push(['penting', `Kiriman notifikasi ${w} terakhir gagal`, '/sistem.html#k-notif']);
+  }
+  const kp = k.kapasitas;
+  if (kp && n(kp.db_byte) / n(kp.db_batas) >= BATAS_PENUH) h.push(['penting', 'Database hampir penuh (paket gratis)', '/sistem.html#k-kapasitas']);
+  if (kp && n(kp.foto_byte) / n(kp.foto_batas) >= BATAS_PENUH) h.push(['penting', 'Tempat foto hampir penuh (paket gratis)', '/sistem.html#k-kapasitas']);
+  const am = k.keamanan;
+  if (am?.tabel_tanpa_rls?.length) h.push(['penting', `${a(am.tabel_tanpa_rls.length)} tabel belum dijaga aturan akses`, '/sistem.html#k-aman']);
+  if (am?.fungsi_tamu?.length) h.push(['penting', `${a(am.fungsi_tamu.length)} fungsi terbuka untuk tamu`, '/sistem.html#k-aman']);
+  const d = k.data || {};
+  if (n(d.wafat_aktif)) h.push(['cek', `${a(d.wafat_aktif)} jamaah wafat masih berstatus aktif`, '/jamaah.html?status=wafat']);
+  if (n(d.koordinator_tanpa_wilayah)) h.push(['cek', `${a(d.koordinator_tanpa_wilayah)} koordinator belum punya wilayah tugas`, '/pengurus-pin.html']);
+  if (n(d.catatan_terbuka)) h.push(['cek', `${a(d.catatan_terbuka)} catatan pengecekan data belum selesai`, '/dashboard.html#p-catatan']);
+  if (n(d.umur_kosong)) h.push(['cek', `${a(d.umur_kosong)} umur jamaah belum diisi`, '/dashboard.html']);
+  if (n(d.jk_kosong)) h.push(['cek', `${a(d.jk_kosong)} jenis kelamin belum diisi`, '/lengkapi-jk.html']);
+  if (n(k.akun?.terkunci)) h.push(['cek', `${a(k.akun.terkunci)} nomor terkunci karena salah PIN`, '/sistem.html#k-akun']);
+  const t = (k.tugas || []).filter((x) => x.perlu).length;
+  if (t) h.push(['cek', `${a(t)} tugas keamanan belum dikerjakan`, '/sistem.html#k-tugas']);
+  return h;
 }
 
 // Konfirmasi serasi dengan tampilan aplikasi (pengganti confirm() bawaan browser).

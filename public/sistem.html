@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Kesehatan Sistem · SILSILAH TQN Cukir</title>
+<meta name="theme-color" content="#0B6B2E">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192-v2.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png">
+<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css?v=154">
+<link rel="stylesheet" href="/css/app.css?v=154">
+</head>
+<body class="hal-app">
+<header class="app-atas">
+  <div class="app-atas-isi">
+    <a href="/beranda.html" class="app-merek"><img src="/icons/logo-96.png" alt="" width="36" height="36"><span>SILSILAH</span></a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <a href="/beranda.html">Beranda</a>
+      <a href="/dashboard.html" id="nav-dasbor" hidden>Dashboard Pengurus</a>
+      <a href="/jamaah.html" id="nav-jamaah" hidden>Data Jamaah</a>
+      <a href="/pendaftaran.html" id="nav-daftar" hidden>Pendaftaran</a>
+      <a href="/kegiatan.html" id="nav-kegiatan" hidden>Kegiatan</a>
+      <a href="/ahli-kubur.html" id="nav-ahli" hidden>Ahli Kubur</a>
+      <a href="/perjalanan.html" id="nav-perjalanan" hidden>Ziarah &amp; Umroh</a>
+      <a href="/bantuan.html" id="nav-bantuan" hidden>Bantuan Sosial</a>
+      <a href="/ekonomi.html" id="nav-ekonomi" hidden>Ekonomi Jamaah</a>
+      <a href="/usaha.html" id="nav-usaha" hidden>Usaha Jamaah</a>
+      <a href="/sakit.html" id="nav-sakit" hidden>Jamaah Sakit</a>
+      <a href="/kebutuhan.html" id="nav-kebutuhan" hidden>Kebutuhan Khusus</a>
+      <a href="/kas.html" id="nav-kas" hidden>Buku Kas</a>
+      <a href="/aset.html" id="nav-aset" hidden>Aset &amp; Wakaf</a>
+    </nav>
+    <button class="app-keluar" id="keluar" type="button">Keluar</button>
+  </div>
+</header>
+
+<main class="app-isi">
+  <div class="judul-baris">
+    <div>
+      <h1>Kesehatan Sistem</h1>
+      <p class="judul-sub" id="waktu-periksa">Keadaan SILSILAH saat ini. Hanya Admin Pusat yang melihat halaman ini.</p>
+    </div>
+    <button type="button" class="btn btn-kedua btn-pas" id="periksa"><span class="teks">Periksa ulang</span></button>
+  </div>
+  <p id="pesan" class="pesan" role="alert"></p>
+
+  <div id="isi" hidden>
+    <section class="ks-ringkas" id="ringkas" aria-live="polite"></section>
+    <div class="ks-kisi">
+      <section class="panel ks-kartu" id="k-backup" aria-labelledby="j-backup"></section>
+      <section class="panel ks-kartu" id="k-notif" aria-labelledby="j-notif"></section>
+      <section class="panel ks-kartu" id="k-data" aria-labelledby="j-data"></section>
+      <section class="panel ks-kartu" id="k-akun" aria-labelledby="j-akun"></section>
+      <section class="panel ks-kartu" id="k-kapasitas" aria-labelledby="j-kapasitas"></section>
+      <section class="panel ks-kartu" id="k-aman" aria-labelledby="j-aman"></section>
+      <section class="panel ks-kartu ks-lebar" id="k-tugas" aria-labelledby="j-tugas"></section>
+    </div>
+  </div>
+</main>
+<footer class="kaki">
+  <div class="kaki-isi">
+    <address class="kaki-alamat">TQN Pusat Cukir Jombang<br>Jl. Masjid No. 110 Cukir, Diwek, Jombang 61471</address>
+  </div>
+  <p class="kaki-hak">&copy; 2026 www.tqncukir.id</p>
+</footer>
+<script src="/js/supa.js?v=154" defer></script>
+<script src="/js/sistem.js?v=154" defer></script>
+</body>
+</html>

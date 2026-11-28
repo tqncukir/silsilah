@@ -133,13 +133,20 @@ const TINDAK = {
   sakit_belum_dijenguk: (n) => [`${n} jamaah sakit belum dijenguk 7 hari terakhir`, '/sakit.html'],
 };
 async function muatTindakLanjut(p) {
-  const [tl, backup] = await Promise.all([
+  const [tl, sehat] = await Promise.all([
     dbKirim('POST', 'rpc/tindak_lanjut', {}).catch(() => null),
-    p.peran === 'admin_pusat' ? dbKirim('POST', 'rpc/status_backup', {}).then(nilaiBackup).catch(() => null) : null,
+    p.peran === 'admin_pusat' ? dbKirim('POST', 'rpc/kesehatan_sistem', {}).then(nilaiKesehatan).catch(() => null) : null,
   ]);
   if (tl === null) return; // gagal dimuat: bagian tetap tersembunyi
   const item = Object.entries(TINDAK).filter(([k]) => Number(tl[k]) > 0).map(([k, f]) => f(Number(tl[k]).toLocaleString('id-ID')));
-  if (backup && (backup.jenis === 'gagal' || backup.jenis === 'telat')) item.unshift([`Backup harian: ${backup.judul.toLowerCase()}`, '/backup.html']);
+  // Admin pusat: hal penting sistem tampil satu per satu; hal kecil diringkas satu baris menuju Kesehatan Sistem (Tahap 18).
+  if (sehat) {
+    item.unshift(...sehat.filter((m) => m[0] === 'penting').map(([, t, u]) => [`Sistem: ${t.charAt(0).toLowerCase()}${t.slice(1)}`, u]));
+    const kecil = sehat.filter((m) => m[0] === 'cek').length;
+    $('sistem-ringkas').textContent = sehat.length ? `Kesehatan sistem: ${kecil ? `${kecil.toLocaleString('id-ID')} hal kecil perlu dicek` : 'perlu perhatian'} ›` : 'Kesehatan sistem: sehat ✓';
+    $('sistem-ringkas').classList.toggle('ks-perhatian', sehat.length > 0);
+    $('sistem-ringkas').hidden = false;
+  }
   $('tindak-isi').innerHTML = item.map(([t, u]) => `<li><a href="${u}">${hurufAman(t).replace(/^([\d.]+)/, '<strong>$1</strong>')}</a></li>`).join('');
   $('tindak-kosong').hidden = item.length > 0;
   $('tindak').hidden = false;
