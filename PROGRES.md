@@ -7,7 +7,7 @@
 - **Tahap 12 Dashboard Pantau Backup (khusus Admin Pusat): selesai & disetujui Kang 2026-11-28.** `backup.html` + ubin Beranda; GitHub mencatat setiap backup ke `private.catatan_backup`.
 - **Tahap 13 Menu ringkas (Alternatif B): selesai & disetujui Kang 2026-11-28.** HP/tablet: lembar Lainnya berubin per kelompok; laptop: menu atas + daftar per kelompok + tombol Admin. Perbaikan "aplikasi lambat" (v119) dicek Kang: sudah cepat. **Versi cache terakhir v119.**
 - **Tahap 14 Berita: selesai & disetujui Kang 2026-11-28.** Versi cache **v127** (v123 & v124 = perbaikan simpan berita; v125 = jendela konfirmasi serasi; v126 = foto hilang tidak tampil kotak kosong; v127 = status Ditarik merah, lihat akhir Tahap 14). Tahap berikutnya yang diminta Kang: Notifikasi ke HP jamaah & pengurus. Sisa kecil Tahap 1 (Turnstile di Cek KTA lama, kecamatan Koordinator di Atur PIN) sudah selesai 2026-11-26. Yang tersisa adalah tugas Kang sendiri (lihat Tahap 10 Langkah 5: uji akun asli, lengkapi data, cek Advisors bulanan) dan rencana website profil di tqncukir.id.
-- **Tahap 15 Beranda baru: 4 langkah selesai 2026-11-28, menunggu dicek & disetujui Kang.** Versi cache **v131** (v130-131 = Simpan KTA sebagai gambar PNG). Migrasi terakhir yang sudah dijalankan Kang: `20261128030000_tindak_lanjut.sql`. Advisors: 0 error, 58 peringatan, 13 info (semua jenis yang disengaja). Tahap berikutnya yang diminta Kang: Notifikasi ke HP.
+- **Tahap 15 Beranda baru: selesai & disetujui Kang 2026-11-28.** Versi cache **v131** (v130-131 = Simpan KTA sebagai gambar PNG). Migrasi terakhir yang sudah dijalankan Kang: `20261128030000_tindak_lanjut.sql`. Advisors: 0 error, 58 peringatan, 13 info (semua jenis yang disengaja). Tahap berikutnya yang diminta Kang: Notifikasi ke HP.
 
 ## Tahap 1: Data Jamaah, Pendaftaran, KTA, Portal Anggota, Hak Akses
 Mulai: 2026-11-25 (Kang Salman: "Bismillah").
@@ -620,7 +620,7 @@ Mulai: 2026-11-28 (Kang: "mulai tahap 14: berita"). **Disetujui Kang 2026-11-28.
 - **Status Ditarik merah (Kang 2026-11-28, v127):** `STATUS_BERITA.ditarik` di `supa.js` memakai pil merah `stat-wafat` (sama dengan Ditolak; dulu teks abu). Dicek 360/1280 di Kelola Berita.
 
 ## Tahap 15: Beranda baru (ringkas, hidup, tanpa menu dobel)
-Diusulkan 2026-11-28 (Kang: "beranda bagusnya apa saja, agar tidak tumpuk/dobel dengan menu"). Mulai: 2026-11-28 (Kang: "mulai tahap 15").
+Diusulkan 2026-11-28 (Kang: "beranda bagusnya apa saja, agar tidak tumpuk/dobel dengan menu"). Mulai: 2026-11-28 (Kang: "mulai tahap 15"). **Disetujui Kang 2026-11-28.**
 
 **Keputusan Kang (2026-11-28):**
 1. Tanggal Hijriah di salam: **pakai**.
@@ -661,7 +661,7 @@ Diusulkan 2026-11-28 (Kang: "beranda bagusnya apa saja, agar tidak tumpuk/dobel 
 **Langkah 4, Uji menyeluruh & laporan** (2026-11-28, Kang: "lanjut langkah 4"), tanpa perubahan kode:
 - Uji tiruan diulang semua: Beranda anggota **38**, Beranda pengurus 8 peran **72**, jendela konfirmasi, foto berita hilang, status berita — lulus. Tambahan: semua tombol/tautan di Beranda (anggota & ketua) dan Data Saya ≥44px di 360 & 1280; penanda menu aktif benar (Beranda; Data Saya → "Lainnya" di HP, "Pondasi" di laptop); urutan judul H1 → H2 → H3 rapi.
 - Situs asli (Chrome Kang, akun Koordinator Wilayah, tanpa mengubah data): v129 tayang; salam + "Sabtu, 28 November 2026 · 18 Jumadilakhir 1448 H"; Perlu ditindaklanjuti kosong → kalimat Alhamdulillah; pintasan Cari Jamaah/Pendaftaran/Absensi/Tulis Berita; kegiatan "Rutinan Senenan Cukir Pusat, 2 hari lagi"; berita berfoto; semua panggilan Supabase 200 (`tindak_lanjut`, `tanggal_ahli_kubur`, `kegiatan`, `baca_berita`, foto), tanpa galat konsol, tanpa geser samping. Haul pekan ini tidak tampil karena data asli baru 1 almarhum bertanggal wafat dan haulnya tidak jatuh pekan ini (dicek langsung) — akan muncul sendiri setelah data Ahli Kubur dilengkapi.
-- **Menunggu Kang:** coba Beranda dengan akun anggota (KTA) & akun admin/ketua di HP; bila sesuai, setujui Tahap 15.
+- **Disetujui Kang 2026-11-28** ("Tahap 15 disetujui").
 
 ## Tambahan 2026-11-28: Simpan KTA sebagai gambar PNG (permintaan Kang, v130)
 **Keputusan Kang:** setuju usulan Claude: tombol **Simpan KTA** → jendela pratinjau gambar kartu + tombol **Tutup** (berbingkai) dan **Simpan ke HP** (utama); setelah tersimpan muncul "KTA tersimpan" dan Tutup berubah jadi **Selesai** ("Batal" tidak dipakai karena tidak ada yang dibatalkan). Di HP (<1024px) tombol "Cetak kartu" disembunyikan, diganti "Simpan KTA ke HP"; di laptop dua-duanya ada ("Cetak kartu"/"Cetak tanpa PIN" + "Simpan gambar KTA", tombol jendela "Unduh gambar").
