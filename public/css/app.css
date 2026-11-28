@@ -918,6 +918,30 @@ li:nth-child(-n+3)>.bt-baris .bt-no{background:var(--hijau-jamiyyah);color:#FFFF
 .langkah-isi p{margin:4px 0 0;justify-self:stretch;font-size:var(--fs-isi);line-height:1.5}
 .langkah-gbr{max-width:100%;height:auto}
 @media (min-width:768px){.langkah-daftar{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Poles pasang.html (Kang 2026-11-28: "kerjakan semua", temuan a–f) */
+.pasang-hero{padding:24px 16px 28px;text-align:center;color:#FFFFFF;background:var(--hijau-jamiyyah) url(/img/motif.svg);border-bottom:4px solid var(--kuning-rosyid)}
+.pasang-hero-logo{display:block;width:72px;height:72px;margin:0 auto 10px;padding:3px;border-radius:50%;background:#FFFFFF;border:3px solid var(--kuning-rosyid)}
+.pasang-hero h1{margin:0 0 6px;color:#FFFFFF;font-size:1.5rem;line-height:1.25}
+.pasang-hero-ket{margin:0 auto 12px;max-width:40ch;line-height:1.5}
+.pasang-hero-ciri{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.pasang-hero-ciri li{padding:4px 12px;border-radius:999px;background:rgba(0,0,0,.22);color:var(--kuning-rosyid);font-size:var(--fs-kecil);font-weight:600}
+main.pasang-isi{max-width:760px;padding-top:12px}
+.pasang-pilih{margin:4px 0 14px}
+.pasang-pilih .pil{position:relative;min-height:56px;gap:10px;border-radius:14px;background:#FFFFFF;border:2px solid var(--garis-kuat);font-weight:600;color:var(--hijau-jamiyyah)}
+.pasang-pilih .pil input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.pasang-pilih .pil:has(input:checked){background:var(--hijau-jamiyyah);border-color:var(--hijau-jamiyyah);color:#FFFFFF}
+.pasang-pilih .pil:has(input:focus-visible){outline:3px solid var(--kuning-rosyid);outline-offset:2px}
+.pasang-langkah .langkah-isi{grid-template-columns:minmax(0,1fr) 88px;align-items:start;gap:10px}
+.pasang-langkah .langkah-gbr{width:88px;height:110px}
+@media (min-width:768px){.pasang-langkah .langkah-isi{grid-template-columns:minmax(0,1fr) 104px}.pasang-langkah .langkah-gbr{width:104px;height:130px}}
+.pasang-lanjut{background:#FFFFFF;border:1px solid var(--garis);border-radius:16px;box-shadow:var(--bayang);padding:16px;margin:0 0 14px}
+.pasang-lanjut h2{margin:0 0 10px;font-size:1.125rem;color:var(--hijau-jamiyyah)}
+.pasang-lanjut ol{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.pasang-lanjut li{display:flex;gap:10px;align-items:flex-start;line-height:1.5}
+.lanjut-no{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--mint);color:var(--hijau-jamiyyah);font-weight:700;font-size:var(--fs-kecil)}
+.pasang-poster{display:flex;align-items:center;gap:12px;min-height:56px;padding:10px 14px;border-radius:14px;background:var(--latar-sorot);border:1px solid var(--garis);color:var(--hijau-jamiyyah);text-decoration:none;font-size:var(--fs-kecil);line-height:1.4}
+.pasang-poster span{flex:1;color:var(--hitam,#1A1A1A)}
+.pasang-poster:hover{border-color:var(--garis-kuat)}
 
 /* ===== Poster A4 pemasangan (poster.html) ===== */
 .hal-poster{background:#E9EDE6;margin:0}
