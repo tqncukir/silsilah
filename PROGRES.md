@@ -510,7 +510,7 @@ Mulai: 2026-11-28 (Kang: "mulai"). **Disetujui Kang 2026-11-28.**
 - Proyek Apps Script kosong yang sempat terbuat di akun celupherbal sudah dipindah ke sampah (2026-11-28).
 
 ## Tahap 12: Dashboard Pantau Backup (khusus Admin Pusat)
-Diminta Kang 2026-11-28. **Menunggu "mulai".**
+Mulai: 2026-11-28 (Kang: "mulai").
 
 **Keputusan Kang (2026-11-28):** kartu status backup di Beranda Admin Pusat + halaman riwayat; riwayat 90 hari. Hanya Admin Pusat yang bisa melihat (peran lain tidak melihat menu dan ditolak database).
 **Usulan Claude:** setiap kali backup jalan (berhasil atau gagal), GitHub menulis satu baris ke tabel tertutup `private.catatan_backup` (waktu, berhasil/gagal, langkah yang gagal, jumlah tabel, ukuran file, file lama dirapikan, link ke catatan GitHub) memakai kata sandi database yang sudah ada — tanpa rahasia baru, gratis. Dibaca lewat fungsi `status_backup()` yang menolak selain admin pusat. Bila tidak ada catatan >30 jam (mis. Supabase dijeda / kata sandi salah) dashboard menampilkan peringatan merah. Baris >90 hari dihapus otomatis saat backup.
@@ -520,3 +520,7 @@ Diminta Kang 2026-11-28. **Menunggu "mulai".**
 2. Workflow `backup.yml`: langkah akhir "Catat hasil" (`if: always()`).
 3. Halaman `backup.html` (status besar + riwayat 90 hari + link GitHub Actions & Drive) + kartu di Beranda admin pusat + menu Lainnya. Uji 360/768/1280, semua peran.
 4. Uji sungguhan: Run workflow sekali, cek dashboard di HP.
+
+**Langkah 1, Database** (2026-11-28): migrasi `20261128010000_pantau_backup.sql` — tabel `private.catatan_backup` (tertutup total), `private.catat_backup(...)` (hanya peran postgres/GitHub; hapus catatan >90 hari), `public.status_backup()` (riwayat 90 hari, hanya admin pusat sesi penuh). Link catatan hanya boleh `https://github.com/tqncukir/silsilah/actions/runs/<angka>`.
+- Uji lokal (semua migrasi + data tiruan): admin pusat bisa membaca; ketua, bendahara, nadzir, koordinator, petugas, khodim, dokter, dan tamu ditolak; tabel tidak bisa dibaca langsung; aplikasi tidak bisa menulis catatan; catatan >90 hari terhapus; link aneh ditolak.
+- **Perlu Kang:** jalankan file migrasi ini di SQL Editor Supabase.
